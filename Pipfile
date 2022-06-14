@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 cookiecutter = "==2.1.1"
 pyramid = "==2.0"
+openpyxl = "*"
 
 [dev-packages]
 
