@@ -2,6 +2,7 @@ import argparse
 import sys
 
 from pyramid.paster import bootstrap, setup_logging
+from sqlalchemy import delete
 from sqlalchemy.exc import OperationalError
 
 from langworld_db_data.langworld_db_data.filetools.csv_xls import read_csv
@@ -15,6 +16,9 @@ def setup_models(dbsession):
     Add or update models / fixtures in the database.
 
     """
+    # delete all existing doculects
+    dbsession.execute(delete(models.Doculect))
+
     doculect_rows = read_csv(FILE_WITH_DOCULECTS, read_as='dicts')
     for row in doculect_rows:
         row['string_id'] = row['id']
