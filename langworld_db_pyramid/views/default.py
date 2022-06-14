@@ -1,18 +1,19 @@
 from pyramid.view import view_config
 from pyramid.response import Response
+from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
 from .. import models
 
 
-@view_config(route_name='home', renderer='langworld_db_pyramid:templates/mytemplate.jinja2')
-def my_view(request):
+@view_config(route_name='all_doculects', renderer='langworld_db_pyramid:templates/all_doculects.jinja2')
+def view_all_doculects(request):
     try:
-        query = request.dbsession.query(models.MyModel)
-        one = query.filter(models.MyModel.name == 'one').one()
+        all_doculects = request.dbsession.scalars(select(models.Doculect).order_by(models.Doculect.name_en)).all()
     except SQLAlchemyError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'one': one, 'project': 'Languages of the World Database'}
+
+    return {'doculects': all_doculects, 'project': 'Languages of the World Database'}
 
 
 db_err_msg = """\
