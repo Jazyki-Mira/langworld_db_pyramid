@@ -16,6 +16,18 @@ def view_all_doculects(request):
     return {'doculects': all_doculects, 'project': 'Languages of the World Database'}
 
 
+@view_config(route_name='doculect_profile', renderer='langworld_db_pyramid:templates/doculect_profile.jinja2')
+def view_doculect_profile(request):
+    try:
+        doculect = request.dbsession.scalars(
+            select(models.Doculect).where(models.Doculect.string_id == request.matchdict['doculect_string_id'])
+        ).one()
+    except SQLAlchemyError:
+        return Response(db_err_msg, content_type='text/plain', status=500)
+
+    return {'doculect': doculect}
+
+
 db_err_msg = """\
 Pyramid is having a problem using your SQL database.  The problem
 might be caused by one of the following things:
