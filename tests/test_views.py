@@ -7,7 +7,7 @@ from langworld_db_pyramid.views.notfound import notfound_view
 #     info = view_all_doculects(app_request)
 #     assert info.status_int == 500
 
-def test_view_all_doculects_success(app_request, dbsession):
+def test_view_all_doculects_success(dummy_request, dbsession):
     model = models.Doculect(
         string_id='english',
         type='language',
@@ -33,13 +33,13 @@ def test_view_all_doculects_success(app_request, dbsession):
     dbsession.add(model)
     dbsession.flush()
 
-    info = view_all_doculects(app_request)
-    assert app_request.response.status_int == 200
+    info = view_all_doculects(dummy_request)
+    assert dummy_request.response.status_int == 200
     assert info['doculects'][0].string_id == 'english'
     assert len(info['doculects']) == 1
     assert info['project'] == 'Languages of the World Database'
 
-def test_notfound_view(app_request):
-    info = notfound_view(app_request)
-    assert app_request.response.status_int == 404
+def test_notfound_view(dummy_request):
+    info = notfound_view(dummy_request)
+    assert dummy_request.response.status_int == 404
     assert info == {}
