@@ -25,3 +25,6 @@ def test_initialize_db(dbsession):
     afg = dbsession.scalars(select(models.Country).where(models.Country.name_en == 'Afghanistan')).one()
     assert len(afg.doculects) == 21
 
+    rom_volume = dbsession.scalars(select(models.EncyclopediaVolume).where(models.EncyclopediaVolume.id == '11')).one()
+    assert len(rom_volume.doculects) == 24
+
