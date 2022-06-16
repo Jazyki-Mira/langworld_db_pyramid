@@ -20,7 +20,7 @@ def view_all_doculects(request):
 def view_doculect_profile(request):
     try:
         doculect = request.dbsession.scalars(
-            select(models.Doculect).where(models.Doculect.string_id == request.matchdict['doculect_string_id'])
+            select(models.Doculect).where(models.Doculect.man_id == request.matchdict['doculect_man_id'])
         ).one()
     except SQLAlchemyError:
         return Response(db_err_msg, content_type='text/plain', status=500)

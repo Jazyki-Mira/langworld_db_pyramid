@@ -9,7 +9,7 @@ from langworld_db_pyramid.views.notfound import notfound_view
 
 def test_view_all_doculects_success(dummy_request, dbsession):
     model = models.Doculect(
-        string_id='english',
+        man_id='english',
         type='language',
         is_extinct=False,
         is_multiple=False,
@@ -35,7 +35,7 @@ def test_view_all_doculects_success(dummy_request, dbsession):
 
     info = view_all_doculects(dummy_request)
     assert dummy_request.response.status_int == 200
-    assert info['doculects'][0].string_id == 'english'
+    assert info['doculects'][0].man_id == 'english'
     assert len(info['doculects']) == 1
     assert info['project'] == 'Languages of the World Database'
 

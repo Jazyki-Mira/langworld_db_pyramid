@@ -17,7 +17,7 @@ def test_initialize_db(dbsession):
     assert len(all_countries) == 283
 
     for item in all_doculects:
-        assert item.string_id
+        assert item.man_id
         assert isinstance(item.main_country, models.Country)
         assert item.main_country.id
         # print(item.main_country.id, item.main_country.man_id)

@@ -13,7 +13,7 @@ from .meta import Base
 class Doculect(Base):
     __tablename__ = 'doculects'
     id = Column(Integer, primary_key=True)
-    string_id = Column(Text)
+    man_id = Column(Text)
     type = Column(Text)
     is_extinct = Column(Boolean)
     is_multiple = Column(Boolean)
