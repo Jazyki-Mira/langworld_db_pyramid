@@ -13,3 +13,5 @@ def test_initialize_db(dbsession):
 
     for item in result:
         assert item.string_id
+        assert isinstance(item.main_country, models.Country)
+        assert item.main_country.id

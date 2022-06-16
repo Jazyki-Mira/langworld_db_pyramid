@@ -1,9 +1,11 @@
 from sqlalchemy import (
     Boolean,
     Column,
+    ForeignKey,
     Integer,
     Text,
 )
+from sqlalchemy.orm import relationship
 
 from .meta import Base
 
@@ -26,8 +28,9 @@ class Doculect(Base):
     glottocode = Column(Text)
     latitude = Column(Text)
     longitude = Column(Text)
-    main_country_id = Column(Text)
+    main_country_id = Column(Integer, ForeignKey('countries.id'))
     encyclopedia_volume_id = Column(Text)
     page = Column(Text)
     has_feature_profile = Column(Boolean)
     comment = Column(Text)
+    main_country = relationship("Country", back_populates="doculects")

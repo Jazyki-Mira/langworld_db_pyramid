@@ -5,6 +5,7 @@ import zope.sqlalchemy
 
 # Import or define all models here to ensure they are attached to the
 # ``Base.metadata`` prior to any initialization routines.
+from .country import Country  # flake8: noqa
 from .doculect import Doculect  # flake8: noqa
 
 # Run ``configure_mappers`` after defining all of the models to ensure
