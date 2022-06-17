@@ -8,7 +8,9 @@
   <p class="lead">Альтернативные названия: <span class="font-normal">{{ doculect.aliases_ru }}</span></p>
     {% endif %}
 
-   <p class="lead">Основная страна: <span class="font-normal">{{ doculect.main_country_id }}</span></p>
+  <p class="lead"><a href="{{ request.static_url('langworld_db_pyramid:static/pdf_volumes/11.pdf') }}" target="_blank">Открыть в энциклопедии</a></p>
+
+  <p class="lead">Основная страна: <span class="font-normal">{{ doculect.main_country.name_ru }}</span></p>
 
 </div>
 {% endblock content %}
