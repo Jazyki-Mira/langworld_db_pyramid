@@ -8,6 +8,7 @@ import zope.sqlalchemy
 from .association_doculect_to_feature_value import doculect_to_value_association_table  # flake8: noqa
 from .country import Country  # flake8: noqa
 from .doculect import Doculect  # flake8: noqa
+from .doculect_type import DoculectType  # flake8: noqa
 from .encyclopedia_volume import EncyclopediaVolume  # flake8: noqa
 from .feature import Feature  # flake8: noqa
 from .feature_category import FeatureCategory  # flake8: noqa

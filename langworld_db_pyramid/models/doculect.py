@@ -15,7 +15,7 @@ class Doculect(Base):
     __tablename__ = 'doculects'
     id = Column(Integer, primary_key=True)
     man_id = Column(Text)
-    type = Column(Text)
+    type_id = Column(ForeignKey('doculect_types.id'))
     is_extinct = Column(Boolean)
     is_multiple = Column(Boolean)
     name_en = Column(Text)
@@ -35,6 +35,7 @@ class Doculect(Base):
     has_feature_profile = Column(Boolean)
     comment = Column(Text)
 
+    type = relationship("DoculectType", back_populates="doculects")
     encyclopedia_volume = relationship("EncyclopediaVolume", back_populates="doculects")
     feature_values = relationship(
         "FeatureValue", secondary=doculect_to_value_association_table, back_populates="doculects"
