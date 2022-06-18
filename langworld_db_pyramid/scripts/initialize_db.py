@@ -1,5 +1,6 @@
 import argparse
 from copy import copy
+from functools import partial
 import sys
 
 from pyramid.paster import bootstrap, setup_logging
@@ -8,9 +9,13 @@ from sqlalchemy.exc import OperationalError
 
 from langworld_db_data.langworld_db_data.filetools.csv_xls import read_csv
 from langworld_db_data.langworld_db_data.constants.paths import (
+    FEATURE_PROFILES_DIR,
+    FILE_WITH_CATEGORIES,
     FILE_WITH_COUNTRIES,
     FILE_WITH_DOCULECTS,
     FILE_WITH_ENCYCLOPEDIA_VOLUMES,
+    FILE_WITH_LISTED_VALUES,
+    FILE_WITH_NAMES_OF_FEATURES,
 )
 
 from .. import models
@@ -22,16 +27,57 @@ def setup_models(dbsession):
 
     """
     # delete all existing data
-    dbsession.execute(delete(models.Country))
-    dbsession.execute(delete(models.Doculect))
-    dbsession.execute(delete(models.EncyclopediaVolume))
+    for model in (
+        models.Country, models.Doculect, models.EncyclopediaVolume,
+        models.FeatureCategory, models.Feature, models.FeatureValue,
+        # models.association_doculect_to_feature_value,
+        # TODO how to delete data from this table?
+    ):
+        dbsession.execute(delete(model))
 
-    country_rows = read_csv(FILE_WITH_COUNTRIES, read_as='dicts')
-    doculect_rows = read_csv(FILE_WITH_DOCULECTS, read_as='dicts')
-    encyclopedia_rows = read_csv(FILE_WITH_ENCYCLOPEDIA_VOLUMES, read_as='dicts')
-    
+    read_dict = partial(read_csv, read_as='dicts')
+
+    country_rows = read_dict(FILE_WITH_COUNTRIES)
+    doculect_rows = read_dict(FILE_WITH_DOCULECTS)
+    encyclopedia_rows = read_dict(FILE_WITH_ENCYCLOPEDIA_VOLUMES)
+
+    feature_category_rows = read_dict(FILE_WITH_CATEGORIES)
+    feature_rows = read_dict(FILE_WITH_NAMES_OF_FEATURES)
+    feature_value_rows = read_dict(FILE_WITH_LISTED_VALUES)
+
+    category_for_man_id = {}
+    for category_row in feature_category_rows:
+        category = models.FeatureCategory(
+            man_id=category_row['id'],
+            name_en=category_row['en'],
+            name_ru=category_row['ru'],
+        )
+        dbsession.add(category)
+        category_for_man_id[category_row['id']] = category
+
+    feature_for_man_id = {}
+    for feature_row in feature_rows:
+        feature = models.Feature(
+            man_id=feature_row['id'],
+            name_en=feature_row['en'],
+            name_ru=feature_row['ru'],
+        )
+        feature.category = category_for_man_id[feature_row['id'].split('-')[0]]  # TODO add column feature_id to CSV?
+        dbsession.add(feature)
+        feature_for_man_id[feature_row['id']] = feature
+
+    value_for_man_id = {}
+    for value_row in feature_value_rows:
+        value = models.FeatureValue(
+            man_id=value_row['id'],
+            name_en=value_row['en'],
+            name_ru=value_row['ru'],
+        )
+        value.feature = feature_for_man_id[value_row['feature_id']]
+        dbsession.add(value)
+        value_for_man_id[value_row['id']] = value
+
     country_for_man_id = {}
-
     for country_row in country_rows:
         country = models.country.Country(
             man_id=country_row['id'],
@@ -75,6 +121,16 @@ def setup_models(dbsession):
 
         if encyclopedia_volume:
             doculect.encyclopedia_volume = encyclopedia_volume
+
+        # TODO some mess in using doculect_row or doculect_row_to_write
+        if doculect_row['has_feature_profile'] == '1':
+            feature_profile_rows = read_dict(FEATURE_PROFILES_DIR / f"{doculect_row['id']}.csv")
+
+            # TODO: for now trying only with listed values, but this must change
+            for feature_profile_row in feature_profile_rows:
+                if feature_profile_row['value_id']:
+                    value = value_for_man_id[feature_profile_row['value_id']]
+                    doculect.feature_values.append(value)
 
         dbsession.add(doculect)
 

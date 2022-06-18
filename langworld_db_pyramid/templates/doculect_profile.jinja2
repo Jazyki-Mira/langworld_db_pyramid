@@ -12,5 +12,15 @@
 
   <p class="lead">Основная страна: <span class="font-normal">{{ doculect.main_country.name_ru }}</span></p>
 
+  <h2>Признаки</h2>
+
+  {% if doculect.feature_values %} <ul> {% endif %}
+
+  {% for value in doculect.feature_values %}
+    <li>{{ value.feature.name_ru }}: {{ value.name_ru}} ({{ value.man_id }}) </li>
+  {% endfor %}
+
+  {% if doculect.feature_values %} </ul> {% endif %}
+
 </div>
 {% endblock content %}
