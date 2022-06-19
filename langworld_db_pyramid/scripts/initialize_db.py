@@ -27,13 +27,12 @@ def setup_models(dbsession):
 
     """
     # delete all existing data
-    for model in (
+    for model_or_table in (
         models.Country, models.Doculect, models.DoculectType, models.EncyclopediaVolume,
         models.FeatureCategory, models.Feature, models.FeatureValue,
-        # models.association_doculect_to_feature_value,
-        # TODO how to delete data from this table?
+        models.association_tables.doculect_to_feature_value,
     ):
-        dbsession.execute(delete(model))
+        dbsession.execute(delete(model_or_table))
 
     read_dict = partial(read_csv, read_as='dicts')
 
