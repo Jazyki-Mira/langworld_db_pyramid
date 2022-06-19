@@ -1,6 +1,7 @@
 import argparse
 from copy import copy
 from functools import partial
+from pathlib import Path
 import sys
 
 from pyramid.paster import bootstrap, setup_logging
@@ -21,128 +22,187 @@ from langworld_db_data.langworld_db_data.constants.paths import (
 from .. import models
 
 
+class CustomModelInitializer:
+    """Class that I created (not Cookiecutter) for (re-)populating
+    the database.
+    
+    Deletes all data from SQL database, then populates it again
+    with data from data files imported from main data repository. 
+    
+    I put the functionality in the separate class 
+    to make the distinction between generated and custom code clear, 
+    to create separate methods for separate tasks, and to enable testing.
+    """
+
+    def __init__(
+        self,
+        dbsession,
+        dir_with_feature_profiles: Path = FEATURE_PROFILES_DIR,
+        file_with_categories: Path = FILE_WITH_CATEGORIES,
+        file_with_countries: Path = FILE_WITH_COUNTRIES,
+        file_with_doculects: Path = FILE_WITH_DOCULECTS,
+        file_with_encyclopedia_volumes: Path = FILE_WITH_ENCYCLOPEDIA_VOLUMES,
+        file_with_listed_values: Path = FILE_WITH_LISTED_VALUES,
+        file_with_names_of_features: Path = FILE_WITH_NAMES_OF_FEATURES,
+    ):
+        self.dbsession = dbsession
+
+        self.read_file = partial(read_csv, read_as='dicts')
+
+        self.dir_with_feature_profiles = dir_with_feature_profiles
+        self.file_with_categories = file_with_categories
+        self.file_with_countries = file_with_countries
+        self.file_with_doculects = file_with_doculects
+        self.file_with_encyclopedia_volumes = file_with_encyclopedia_volumes
+        self.file_with_listed_values = file_with_listed_values
+        self.file_with_names_of_features = file_with_names_of_features
+
+        # Dictionaries mapping identifiers to instances of mapped classes
+
+        self.country_for_id = {}
+        self.encyclopedia_volume_for_id = {}
+
+        self.category_for_id = {}
+        self.feature_for_id = {}
+        self.value_for_id = {}
+
+        self.doculect_type_for_id = {
+            'language': models.DoculectType(name_en='language', name_ru='язык'), 
+            'dialect': models.DoculectType(name_en='dialect', name_ru='диалект'), 
+            'language/dialect': models.DoculectType(name_en='language_dialect', name_ru='язык/диалект')
+        }
+
+    def setup_models(self):
+        self._delete_all_data()
+        self._populate_all()
+    
+    def _delete_all_data(self):
+        for model_or_table in (
+                models.Country, models.Doculect, models.DoculectType, models.EncyclopediaVolume,
+                models.FeatureCategory, models.Feature, models.FeatureValue,
+                models.association_tables.doculect_to_feature_value,
+        ):
+            self.dbsession.execute(delete(model_or_table))
+
+    def _populate_all(self):
+
+        self._populate_categories_features_values()
+        self._populate_countries()
+        self._populate_encyclopedia_volumes()
+
+        # these come last, when everything else is prepared
+        self._populate_doculects()
+
+    def _populate_categories_features_values(self):
+        # Putting these in one method to emphasize tight coupling
+        # between the three operations
+
+        for category_row in self.read_file(self.file_with_categories):
+            category = models.FeatureCategory(
+                man_id=category_row['id'],
+                name_en=category_row['en'],
+                name_ru=category_row['ru'],
+            )
+            self.dbsession.add(category)
+            self.category_for_id[category_row['id']] = category
+
+        for feature_row in self.read_file(self.file_with_names_of_features):
+            feature = models.Feature(
+                man_id=feature_row['id'],
+                name_en=feature_row['en'],
+                name_ru=feature_row['ru'],
+            )
+            feature.category = self.category_for_id[
+                feature_row['id'].split('-')[0]
+            ]  # TODO add column feature_id to CSV?
+            self.dbsession.add(feature)
+            self.feature_for_id[feature_row['id']] = feature
+
+        for value_row in self.read_file(self.file_with_listed_values):
+            value = models.FeatureValue(
+                man_id=value_row['id'],
+                name_en=value_row['en'],
+                name_ru=value_row['ru'],
+            )
+            value.feature = self.feature_for_id[value_row['feature_id']]
+            self.dbsession.add(value)
+            self.value_for_id[value_row['id']] = value
+
+    def _populate_countries(self):
+
+        for country_row in self.read_file(self.file_with_countries):
+            country = models.country.Country(
+                man_id=country_row['id'],
+                iso=country_row['ISO 3166-1 alpha-3'],
+                is_historical=int(country_row['is_historical']),
+                name_en=country_row['en'],
+                name_ru=country_row['ru'],
+            )
+            self.dbsession.add(country)
+            self.country_for_id[country_row['id']] = country
+            
+    def _populate_encyclopedia_volumes(self):
+
+        for encyclopedia_row in self.read_file(self.file_with_encyclopedia_volumes):
+            volume = models.encyclopedia_volume.EncyclopediaVolume(**encyclopedia_row)
+            self.dbsession.add(volume)
+            self.encyclopedia_volume_for_id[volume.id] = volume
+
+    def _populate_doculects(self):
+        doculect_rows = self.read_file(self.file_with_doculects)
+
+        for doculect_type in self.doculect_type_for_id.values():
+            self.dbsession.add(doculect_type)
+
+        for doculect_row in doculect_rows:
+            doculect_row_to_write = copy(doculect_row)
+
+            doculect_row_to_write['man_id'] = doculect_row_to_write['id']
+            del doculect_row_to_write['id']  # ID will be autogenerated integer
+
+            main_country = self.country_for_id[doculect_row_to_write['main_country_id']]
+            del doculect_row_to_write['main_country_id']  # should be autogenerated from ForeignKey
+
+            encyclopedia_volume = None
+            if doculect_row_to_write['encyclopedia_volume_id']:  # should be there for every doculect, actually
+                encyclopedia_volume = self.encyclopedia_volume_for_id[doculect_row_to_write['encyclopedia_volume_id']]
+
+            del doculect_row_to_write['encyclopedia_volume_id']
+
+            for bool_key in ('is_extinct', 'is_multiple', 'has_feature_profile'):
+                doculect_row_to_write[bool_key] = int(doculect_row_to_write[bool_key])
+
+            type_of_this_doculect = self.doculect_type_for_id[doculect_row_to_write['type']]
+            del doculect_row_to_write['type']
+
+            # print(row)
+            doculect = models.doculect.Doculect(**doculect_row_to_write)
+
+            doculect.main_country = main_country
+            doculect.type = type_of_this_doculect
+
+            if encyclopedia_volume:
+                doculect.encyclopedia_volume = encyclopedia_volume
+
+            # TODO some mess in using doculect_row or doculect_row_to_write
+            if doculect_row['has_feature_profile'] == '1':
+                feature_profile_rows = self.read_file(self.dir_with_feature_profiles / f"{doculect_row['id']}.csv")
+
+                # TODO: for now trying only with listed values, but this must change
+                for feature_profile_row in feature_profile_rows:
+                    if feature_profile_row['value_id']:
+                        value = self.value_for_id[feature_profile_row['value_id']]
+                        doculect.feature_values.append(value)
+
+            self.dbsession.add(doculect)
+
+
 def setup_models(dbsession):
     """
     Add or update models / fixtures in the database.
 
     """
-    # delete all existing data
-    for model_or_table in (
-        models.Country, models.Doculect, models.DoculectType, models.EncyclopediaVolume,
-        models.FeatureCategory, models.Feature, models.FeatureValue,
-        models.association_tables.doculect_to_feature_value,
-    ):
-        dbsession.execute(delete(model_or_table))
-
-    read_dict = partial(read_csv, read_as='dicts')
-
-    country_rows = read_dict(FILE_WITH_COUNTRIES)
-    doculect_rows = read_dict(FILE_WITH_DOCULECTS)
-    encyclopedia_rows = read_dict(FILE_WITH_ENCYCLOPEDIA_VOLUMES)
-
-    feature_category_rows = read_dict(FILE_WITH_CATEGORIES)
-    feature_rows = read_dict(FILE_WITH_NAMES_OF_FEATURES)
-    feature_value_rows = read_dict(FILE_WITH_LISTED_VALUES)
-
-    category_for_man_id = {}
-    for category_row in feature_category_rows:
-        category = models.FeatureCategory(
-            man_id=category_row['id'],
-            name_en=category_row['en'],
-            name_ru=category_row['ru'],
-        )
-        dbsession.add(category)
-        category_for_man_id[category_row['id']] = category
-
-    feature_for_man_id = {}
-    for feature_row in feature_rows:
-        feature = models.Feature(
-            man_id=feature_row['id'],
-            name_en=feature_row['en'],
-            name_ru=feature_row['ru'],
-        )
-        feature.category = category_for_man_id[feature_row['id'].split('-')[0]]  # TODO add column feature_id to CSV?
-        dbsession.add(feature)
-        feature_for_man_id[feature_row['id']] = feature
-
-    value_for_man_id = {}
-    for value_row in feature_value_rows:
-        value = models.FeatureValue(
-            man_id=value_row['id'],
-            name_en=value_row['en'],
-            name_ru=value_row['ru'],
-        )
-        value.feature = feature_for_man_id[value_row['feature_id']]
-        dbsession.add(value)
-        value_for_man_id[value_row['id']] = value
-
-    country_for_man_id = {}
-    for country_row in country_rows:
-        country = models.country.Country(
-            man_id=country_row['id'],
-            iso=country_row['ISO 3166-1 alpha-3'],
-            is_historical=int(country_row['is_historical']),
-            name_en=country_row['en'],
-            name_ru=country_row['ru'],
-        )
-        dbsession.add(country)
-        country_for_man_id[country_row['id']] = country
-
-    encyclopedia_volume_for_id = {}
-
-    for encyclopedia_row in encyclopedia_rows:
-        volume = models.encyclopedia_volume.EncyclopediaVolume(**encyclopedia_row)
-        dbsession.add(volume)
-        encyclopedia_volume_for_id[volume.id] = volume
-
-    type_language = models.DoculectType(name_en='language', name_ru='язык')
-    type_dialect = models.DoculectType(name_en='dialect', name_ru='диалект')
-    type_mixed = models.DoculectType(name_en='language_dialect', name_ru='язык/диалект')
-    type_for_name = {'language': type_language, 'dialect': type_dialect, 'language/dialect': type_mixed}
-    for doculect_type in type_for_name.values():
-        dbsession.add(doculect_type)
-
-    for doculect_row in doculect_rows:
-        doculect_row_to_write = copy(doculect_row)
-
-        doculect_row_to_write['man_id'] = doculect_row_to_write['id']
-        del doculect_row_to_write['id']  # ID will be autogenerated integer
-
-        main_country = country_for_man_id[doculect_row_to_write['main_country_id']]
-        del doculect_row_to_write['main_country_id']  # should be autogenerated from ForeignKey
-
-        encyclopedia_volume = None
-        if doculect_row_to_write['encyclopedia_volume_id']:  # should be there for every doculect, actually
-            encyclopedia_volume = encyclopedia_volume_for_id[doculect_row_to_write['encyclopedia_volume_id']]
-
-        del doculect_row_to_write['encyclopedia_volume_id']
-
-        for bool_key in ('is_extinct', 'is_multiple', 'has_feature_profile'):
-            doculect_row_to_write[bool_key] = int(doculect_row_to_write[bool_key])
-
-        type_of_this_doculect = type_for_name[doculect_row_to_write['type']]
-        del doculect_row_to_write['type']
-
-        # print(row)
-        doculect = models.doculect.Doculect(**doculect_row_to_write)
-
-        doculect.main_country = main_country
-        doculect.type = type_of_this_doculect
-
-        if encyclopedia_volume:
-            doculect.encyclopedia_volume = encyclopedia_volume
-
-        # TODO some mess in using doculect_row or doculect_row_to_write
-        if doculect_row['has_feature_profile'] == '1':
-            feature_profile_rows = read_dict(FEATURE_PROFILES_DIR / f"{doculect_row['id']}.csv")
-
-            # TODO: for now trying only with listed values, but this must change
-            for feature_profile_row in feature_profile_rows:
-                if feature_profile_row['value_id']:
-                    value = value_for_man_id[feature_profile_row['value_id']]
-                    doculect.feature_values.append(value)
-
-        dbsession.add(doculect)
+    CustomModelInitializer(dbsession).setup_models()
 
 
 def parse_args(argv):
