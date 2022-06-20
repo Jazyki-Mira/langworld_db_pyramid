@@ -1,7 +1,7 @@
 from sqlalchemy import (
-    Boolean,
     Column,
     Integer,
+    String,
     Text,
 )
 from sqlalchemy.orm import relationship
@@ -12,9 +12,9 @@ from .meta import Base
 class EncyclopediaVolume(Base):
     __tablename__ = 'encyclopedia_volumes'
     id = Column(Integer, primary_key=True)
-    en = Column(Text)
-    ru = Column(Text)
-    file_name = Column(Text)
+    en = Column(String(255))
+    ru = Column(String(255))
+    file_name = Column(String(255))
     pagenum_offset = Column(Integer)
-    comment = Text
+    comment = Column(Text)
     doculects = relationship("Doculect", back_populates="encyclopedia_volume")
