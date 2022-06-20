@@ -17,6 +17,7 @@ from langworld_db_data.langworld_db_data.constants.paths import (
     FILE_WITH_ENCYCLOPEDIA_VOLUMES,
     FILE_WITH_LISTED_VALUES,
     FILE_WITH_NAMES_OF_FEATURES,
+    FILE_WITH_VALUE_TYPES,
 )
 
 from .. import models
@@ -44,6 +45,7 @@ class CustomModelInitializer:
         file_with_encyclopedia_volumes: Path = FILE_WITH_ENCYCLOPEDIA_VOLUMES,
         file_with_listed_values: Path = FILE_WITH_LISTED_VALUES,
         file_with_names_of_features: Path = FILE_WITH_NAMES_OF_FEATURES,
+        file_with_value_types: Path = FILE_WITH_VALUE_TYPES,
     ):
         self.dbsession = dbsession
 
@@ -56,6 +58,7 @@ class CustomModelInitializer:
         self.file_with_encyclopedia_volumes = file_with_encyclopedia_volumes
         self.file_with_listed_values = file_with_listed_values
         self.file_with_names_of_features = file_with_names_of_features
+        self.file_with_value_types = file_with_value_types
 
         # Dictionaries mapping identifiers to instances of mapped classes
 
@@ -117,9 +120,9 @@ class CustomModelInitializer:
             self.dbsession.add(feature)
             self.feature_for_id[feature_row['id']] = feature
 
-        for name_of_value_type in ('listed', 'custom', 'not_stated', 'explicit_gap', 'not_applicable'):
-            value_type = models.FeatureValueType(name=name_of_value_type)
-            self.value_type_for_name[name_of_value_type] = value_type
+        for value_type_row in self.read_file(self.file_with_value_types):
+            value_type = models.FeatureValueType(name=value_type_row['id'])
+            self.value_type_for_name[value_type_row['id']] = value_type
             self.dbsession.add(value_type)
 
         for value_row in self.read_file(self.file_with_listed_values):
