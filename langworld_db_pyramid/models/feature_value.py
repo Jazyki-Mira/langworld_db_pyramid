@@ -3,6 +3,7 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
     String,
+    UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
 
@@ -29,3 +30,5 @@ class FeatureValue(Base):
     doculects = relationship(
         "Doculect", secondary=doculect_to_feature_value, back_populates="feature_values"
     )
+
+    __table_args__ = (UniqueConstraint('feature_id', 'type_id', 'name_en', 'name_ru'),)

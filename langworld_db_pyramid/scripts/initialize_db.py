@@ -70,6 +70,7 @@ class CustomModelInitializer:
 
         self.listed_value_for_id = {}
         self.value_type_for_name = {}
+        self.custom_value_for_feature_id_and_value_ru = {}
         self.empty_value_for_feature_id_and_type_name = {}
 
         self.doculect_type_for_id = {
@@ -219,13 +220,22 @@ class CustomModelInitializer:
                     if value_type == 'listed':
                         value = self.listed_value_for_id[feature_profile_row['value_id']]
                     elif value_type == 'custom':
-                        value = models.FeatureValue(
-                            man_id='',
-                            name_ru=feature_profile_row['value_ru'],
-                            name_en='',
-                            type=self.value_type_for_name['custom'],
-                            feature=self.feature_for_id[feature_profile_row['feature_id']]
-                        )
+                        # if value is already in dictionary, use it, else create
+                        try:
+                            value = self.custom_value_for_feature_id_and_value_ru[
+                                (feature_profile_row['feature_id'], feature_profile_row['value_ru'])
+                            ]
+                        except KeyError:
+                            value = models.FeatureValue(
+                                man_id='',
+                                name_ru=feature_profile_row['value_ru'],
+                                name_en='',
+                                type=self.value_type_for_name['custom'],
+                                feature=self.feature_for_id[feature_profile_row['feature_id']]
+                            )
+                            self.custom_value_for_feature_id_and_value_ru[
+                                (feature_profile_row['feature_id'], feature_profile_row['value_ru'])
+                            ] = value
                     else:
                         value = self.empty_value_for_feature_id_and_type_name[
                             (feature_profile_row['feature_id'], value_type)
