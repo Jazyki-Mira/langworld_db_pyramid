@@ -19,6 +19,9 @@ class FeatureValue(Base):
     man_id = Column(String(20))
     name_en = Column(String(255))
     name_ru = Column(String(255))
+    # Not adding 'comment' attributes here (corresponding to comment field in feature profiles)
+    # because comments relate to an occurrence of a particular value
+    # in a particular doculect - not to the abstract value itself
 
     type = relationship("FeatureValueType", back_populates="values")
     feature = relationship("Feature", back_populates="values")

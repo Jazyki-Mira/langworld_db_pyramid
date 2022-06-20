@@ -60,15 +60,17 @@ class CustomModelInitializer:
         self.file_with_names_of_features = file_with_names_of_features
         self.file_with_value_types = file_with_value_types
 
-        # Dictionaries mapping identifiers to instances of mapped classes
+        # Dictionaries map identifiers to instances of mapped classes:
 
         self.country_for_id = {}
         self.encyclopedia_volume_for_id = {}
 
         self.category_for_id = {}
         self.feature_for_id = {}
-        self.value_for_id = {}
+
+        self.listed_value_for_id = {}
         self.value_type_for_name = {}
+        self.empty_value_for_feature_id_and_type_name = {}
 
         self.doculect_type_for_id = {
             'language': models.DoculectType(name_en='language', name_ru='язык'), 
@@ -94,8 +96,7 @@ class CustomModelInitializer:
         self._populate_countries()
         self._populate_encyclopedia_volumes()
 
-        # these come last, when everything else is prepared
-        self._populate_doculects()
+        self._populate_doculects_and_custom_feature_values()
 
     def _populate_categories_features_values(self):
         # Putting these in one method to emphasize tight coupling
@@ -110,6 +111,11 @@ class CustomModelInitializer:
             self.dbsession.add(category)
             self.category_for_id[category_row['id']] = category
 
+        for value_type_row in self.read_file(self.file_with_value_types):
+            value_type = models.FeatureValueType(name=value_type_row['id'])
+            self.value_type_for_name[value_type_row['id']] = value_type
+            self.dbsession.add(value_type)
+
         for feature_row in self.read_file(self.file_with_names_of_features):
             feature = models.Feature(
                 man_id=feature_row['id'],
@@ -117,14 +123,22 @@ class CustomModelInitializer:
                 name_ru=feature_row['ru'],
                 category=self.category_for_id[feature_row['id'].split('-')[0]]  # TODO add column feature_id to CSV?
             )
+
+            # adding values of 3 empty types for each feature
+            for value_type_name in ('not_stated', 'explicit_gap', 'not_applicable'):
+                empty_value = models.FeatureValue(
+                        man_id='',
+                        name_en='',
+                        name_ru='',
+                        type=self.value_type_for_name[value_type_name],
+                )
+                feature.values.append(empty_value)
+                self.empty_value_for_feature_id_and_type_name[(feature_row['id'], value_type_name)] = empty_value
+
             self.dbsession.add(feature)
             self.feature_for_id[feature_row['id']] = feature
 
-        for value_type_row in self.read_file(self.file_with_value_types):
-            value_type = models.FeatureValueType(name=value_type_row['id'])
-            self.value_type_for_name[value_type_row['id']] = value_type
-            self.dbsession.add(value_type)
-
+        # populating values of type 'listed': from file with listed values
         for value_row in self.read_file(self.file_with_listed_values):
             value = models.FeatureValue(
                 man_id=value_row['id'],
@@ -134,7 +148,7 @@ class CustomModelInitializer:
                 type=self.value_type_for_name['listed']
             )
             self.dbsession.add(value)
-            self.value_for_id[value_row['id']] = value
+            self.listed_value_for_id[value_row['id']] = value
 
     def _populate_countries(self):
 
@@ -156,7 +170,7 @@ class CustomModelInitializer:
             self.dbsession.add(volume)
             self.encyclopedia_volume_for_id[volume.id] = volume
 
-    def _populate_doculects(self):
+    def _populate_doculects_and_custom_feature_values(self):
         doculect_rows = self.read_file(self.file_with_doculects)
 
         for doculect_type in self.doculect_type_for_id.values():
@@ -192,15 +206,31 @@ class CustomModelInitializer:
             if encyclopedia_volume:
                 doculect.encyclopedia_volume = encyclopedia_volume
 
-            # TODO some mess in using doculect_row or doculect_row_to_write
-            if doculect_row['has_feature_profile'] == '1':
+            if doculect_row_to_write['has_feature_profile'] == 1:
                 feature_profile_rows = self.read_file(self.dir_with_feature_profiles / f"{doculect_row['id']}.csv")
 
-                # TODO: for now trying only with listed values, but this must change
                 for feature_profile_row in feature_profile_rows:
-                    if feature_profile_row['value_id']:
-                        value = self.value_for_id[feature_profile_row['value_id']]
-                        doculect.feature_values.append(value)
+
+                    if feature_profile_row['feature_id'] == '_aux':
+                        continue  # TODO: think about comment for entire feature profile
+
+                    value_type = feature_profile_row['value_type']
+
+                    if value_type == 'listed':
+                        value = self.listed_value_for_id[feature_profile_row['value_id']]
+                    elif value_type == 'custom':
+                        value = models.FeatureValue(
+                            man_id='',
+                            name_ru=feature_profile_row['value_ru'],
+                            name_en='',
+                            type=self.value_type_for_name['custom'],
+                            feature=self.feature_for_id[feature_profile_row['feature_id']]
+                        )
+                    else:
+                        value = self.empty_value_for_feature_id_and_type_name[
+                            (feature_profile_row['feature_id'], value_type)
+                        ]
+                    doculect.feature_values.append(value)
 
             self.dbsession.add(doculect)
 
