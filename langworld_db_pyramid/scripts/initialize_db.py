@@ -5,10 +5,11 @@ from pathlib import Path
 import sys
 
 from pyramid.paster import bootstrap, setup_logging
-from sqlalchemy import delete
+from sqlalchemy import delete, select
 from sqlalchemy.exc import OperationalError
 
 from langworld_db_data.langworld_db_data.filetools.csv_xls import read_csv
+from langworld_db_data.langworld_db_data.constants.iterables import LOCALES
 from langworld_db_data.langworld_db_data.constants.paths import (
     FEATURE_PROFILES_DIR,
     FILE_WITH_CATEGORIES,
@@ -84,12 +85,12 @@ class CustomModelInitializer:
         self._populate_all()
     
     def _delete_all_data(self):
-        for model_or_table in (
+        for model in (
                 models.Doculect, models.DoculectType, models.Country, models.EncyclopediaVolume,
                 models.FeatureValue, models.FeatureValueType, models.Feature, models.FeatureCategory,
-                models.association_tables.doculect_to_feature_value,
+                models.association_tables.DoculectToFeatureValue,
         ):
-            self.dbsession.execute(delete(model_or_table))
+            self.dbsession.execute(delete(model))
 
     def _populate_all(self):
 
@@ -240,9 +241,11 @@ class CustomModelInitializer:
                         value = self.empty_value_for_feature_id_and_type_name[
                             (feature_profile_row['feature_id'], value_type)
                         ]
+
                     doculect.feature_values.append(value)
 
             self.dbsession.add(doculect)
+            # TODO add comment to association table
 
 
 def setup_models(dbsession):

@@ -5,7 +5,7 @@ import zope.sqlalchemy
 
 # Import or define all models here to ensure they are attached to the
 # ``Base.metadata`` prior to any initialization routines.
-from .association_tables import doculect_to_feature_value  # flake8: noqa
+from .association_tables import DoculectToFeatureValue  # flake8: noqa
 from .country import Country  # flake8: noqa
 from .doculect import Doculect  # flake8: noqa
 from .doculect_type import DoculectType  # flake8: noqa

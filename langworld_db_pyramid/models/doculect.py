@@ -9,7 +9,6 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 
-from .association_tables import doculect_to_feature_value
 from .meta import Base
 
 
@@ -40,6 +39,6 @@ class Doculect(Base):
     type = relationship("DoculectType", back_populates="doculects")
     encyclopedia_volume = relationship("EncyclopediaVolume", back_populates="doculects")
     feature_values = relationship(
-        "FeatureValue", secondary=doculect_to_feature_value, back_populates="doculects"
+        "FeatureValue", secondary='doculect_to_feature_value', back_populates="doculects"
     )
     main_country = relationship("Country", back_populates="doculects")
