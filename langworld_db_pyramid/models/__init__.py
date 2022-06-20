@@ -13,6 +13,7 @@ from .encyclopedia_volume import EncyclopediaVolume  # flake8: noqa
 from .feature import Feature  # flake8: noqa
 from .feature_category import FeatureCategory  # flake8: noqa
 from .feature_value import FeatureValue  # flake8: noqa
+from .feature_value_type import FeatureValueType  # flake8: noqa
 
 # Run ``configure_mappers`` after defining all of the models to ensure
 # all relationships can be setup.

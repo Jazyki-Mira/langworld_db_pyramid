@@ -65,6 +65,7 @@ class CustomModelInitializer:
         self.category_for_id = {}
         self.feature_for_id = {}
         self.value_for_id = {}
+        self.value_type_for_name = {}
 
         self.doculect_type_for_id = {
             'language': models.DoculectType(name_en='language', name_ru='язык'), 
@@ -78,8 +79,8 @@ class CustomModelInitializer:
     
     def _delete_all_data(self):
         for model_or_table in (
-                models.Country, models.Doculect, models.DoculectType, models.EncyclopediaVolume,
-                models.FeatureCategory, models.Feature, models.FeatureValue,
+                models.Doculect, models.DoculectType, models.Country, models.EncyclopediaVolume,
+                models.FeatureValue, models.FeatureValueType, models.Feature, models.FeatureCategory,
                 models.association_tables.doculect_to_feature_value,
         ):
             self.dbsession.execute(delete(model_or_table))
@@ -118,6 +119,11 @@ class CustomModelInitializer:
             self.dbsession.add(feature)
             self.feature_for_id[feature_row['id']] = feature
 
+        for name_of_value_type in ('listed', 'custom', 'not_stated', 'explicit_gap', 'not_applicable'):
+            value_type = models.FeatureValueType(name=name_of_value_type)
+            self.value_type_for_name[name_of_value_type] = value_type
+            self.dbsession.add(value_type)
+
         for value_row in self.read_file(self.file_with_listed_values):
             value = models.FeatureValue(
                 man_id=value_row['id'],
@@ -125,6 +131,7 @@ class CustomModelInitializer:
                 name_ru=value_row['ru'],
             )
             value.feature = self.feature_for_id[value_row['feature_id']]
+            value.type = self.value_type_for_name['listed']
             self.dbsession.add(value)
             self.value_for_id[value_row['id']] = value
 
