@@ -112,10 +112,8 @@ class CustomModelInitializer:
                 man_id=feature_row['id'],
                 name_en=feature_row['en'],
                 name_ru=feature_row['ru'],
+                category=self.category_for_id[feature_row['id'].split('-')[0]]  # TODO add column feature_id to CSV?
             )
-            feature.category = self.category_for_id[
-                feature_row['id'].split('-')[0]
-            ]  # TODO add column feature_id to CSV?
             self.dbsession.add(feature)
             self.feature_for_id[feature_row['id']] = feature
 
@@ -129,9 +127,9 @@ class CustomModelInitializer:
                 man_id=value_row['id'],
                 name_en=value_row['en'],
                 name_ru=value_row['ru'],
+                feature=self.feature_for_id[value_row['feature_id']],
+                type=self.value_type_for_name['listed']
             )
-            value.feature = self.feature_for_id[value_row['feature_id']]
-            value.type = self.value_type_for_name['listed']
             self.dbsession.add(value)
             self.value_for_id[value_row['id']] = value
 
