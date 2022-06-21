@@ -13,14 +13,28 @@
   <p class="lead">Основная страна: <span class="font-normal">{{ doculect.main_country.name_ru }}</span></p>
 
   <h2>Признаки</h2>
-
-  {% if doculect.feature_values %} <ul> {% endif %}
-
-  {% for value in doculect.feature_values %}
-    <li>{{ value.feature.name_ru }}: {{ value.name_ru}} ({{ value.man_id }}) </li>
+  <ul>
+  {% for value in doculect.feature_values|sort(attribute="feature.id") %}
+    {% if value.type.name in ("custom", "listed") %}
+        <li>
+            {{ value.feature.name_ru }} ({{ value.feature.man_id }}): {{ value.name_ru}} {%if value.man_id %}({{ value.man_id }}){% endif %}
+            {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+        </li>
+    {% endif %}
   {% endfor %}
+  </ul>
 
-  {% if doculect.feature_values %} </ul> {% endif %}
+  <h3>Незаполненные признаки</h3>
+  <ul>
+  {% for value in doculect.feature_values|sort(attribute="feature.id") %}
+    {% if value.type.name not in ("custom", "listed") %}
+        <li>
+            {{ value.feature.name_ru }} ({{ value.feature.man_id }}): {{ value.type.name }}
+            {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+        </li>
+    {% endif %}
+  {% endfor %}
+  </ul>
 
 </div>
 {% endblock content %}
