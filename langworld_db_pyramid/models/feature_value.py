@@ -23,11 +23,10 @@ class FeatureValue(Base):
     # because comments relate to an occurrence of a particular value
     # in a particular doculect - not to the abstract value itself
 
-    type = relationship("FeatureValueType", back_populates="values")
-    feature = relationship("Feature", back_populates="values")
-
     doculects = relationship(
-        "Doculect", secondary='doculect_to_feature_value', back_populates="feature_values"
+        'Doculect', secondary='doculect_to_feature_value', back_populates='feature_values'
     )
+    feature = relationship('Feature', back_populates='values')
+    type = relationship('FeatureValueType', back_populates='values')
 
     __table_args__ = (UniqueConstraint('feature_id', 'type_id', 'name_en', 'name_ru'),)
