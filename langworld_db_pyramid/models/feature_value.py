@@ -26,6 +26,7 @@ class FeatureValue(Base):
     doculects = relationship(
         'Doculect', secondary='doculect_to_feature_value', back_populates='feature_values'
     )
+    doculect_comments = relationship('DoculectFeatureValueComment', back_populates='feature_value')
     feature = relationship('Feature', back_populates='values')
     type = relationship('FeatureValueType', back_populates='values')
 

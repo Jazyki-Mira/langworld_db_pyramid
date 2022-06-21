@@ -5,11 +5,10 @@ from pathlib import Path
 import sys
 
 from pyramid.paster import bootstrap, setup_logging
-from sqlalchemy import delete, select
+from sqlalchemy import delete
 from sqlalchemy.exc import OperationalError
 
 from langworld_db_data.langworld_db_data.filetools.csv_xls import read_csv
-from langworld_db_data.langworld_db_data.constants.iterables import LOCALES
 from langworld_db_data.langworld_db_data.constants.paths import (
     FEATURE_PROFILES_DIR,
     FILE_WITH_CATEGORIES,
@@ -94,13 +93,13 @@ class CustomModelInitializer:
 
     def _populate_all(self):
 
-        self._populate_categories_features_values()
+        self._populate_categories_features_listed_and_empty_values()
         self._populate_countries()
         self._populate_encyclopedia_volumes()
 
-        self._populate_doculects_and_custom_feature_values()
+        self._populate_doculects_custom_feature_values_and_comments()
 
-    def _populate_categories_features_values(self):
+    def _populate_categories_features_listed_and_empty_values(self):
         # Putting these in one method to emphasize tight coupling
         # between the three operations
 
@@ -172,7 +171,7 @@ class CustomModelInitializer:
             self.dbsession.add(volume)
             self.encyclopedia_volume_for_id[volume.id] = volume
 
-    def _populate_doculects_and_custom_feature_values(self):
+    def _populate_doculects_custom_feature_values_and_comments(self):
         doculect_rows = self.read_file(self.file_with_doculects)
 
         for doculect_type in self.doculect_type_for_id.values():
@@ -216,6 +215,7 @@ class CustomModelInitializer:
                     if feature_profile_row['feature_id'] == '_aux':
                         continue  # TODO: think about comment for entire feature profile
 
+                    # 1. Processing value
                     value_type = feature_profile_row['value_type']
 
                     if value_type == 'listed':
@@ -243,6 +243,15 @@ class CustomModelInitializer:
                         ]
 
                     doculect.feature_values.append(value)
+
+                    # 2. Processing comment
+                    if feature_profile_row['comment_ru'] or feature_profile_row['comment_en']:
+                        models.DoculectFeatureValueComment(
+                            doculect=doculect,
+                            feature_value=value,
+                            text_en=feature_profile_row['comment_en'],
+                            text_ru=feature_profile_row['comment_ru'],
+                        )  # should be added to dbsession automatically when doculect gets added
 
             self.dbsession.add(doculect)
             # TODO add comment to association table

@@ -37,6 +37,7 @@ class Doculect(Base):
     comment = Column(Text)
 
     encyclopedia_volume = relationship("EncyclopediaVolume", back_populates="doculects")
+    feature_value_comments = relationship('DoculectFeatureValueComment', back_populates='doculect')
     feature_values = relationship(
         "FeatureValue", secondary='doculect_to_feature_value', back_populates="doculects"
     )
