@@ -36,9 +36,9 @@ class Doculect(Base):
     has_feature_profile = Column(Boolean)
     comment = Column(Text)
 
-    type = relationship("DoculectType", back_populates="doculects")
     encyclopedia_volume = relationship("EncyclopediaVolume", back_populates="doculects")
     feature_values = relationship(
         "FeatureValue", secondary='doculect_to_feature_value', back_populates="doculects"
     )
     main_country = relationship("Country", back_populates="doculects")
+    type = relationship("DoculectType", back_populates="doculects")
