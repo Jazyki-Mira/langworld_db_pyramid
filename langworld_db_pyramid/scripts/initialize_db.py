@@ -47,6 +47,12 @@ class CustomModelInitializer:
         file_with_names_of_features: Path = FILE_WITH_NAMES_OF_FEATURES,
         file_with_value_types: Path = FILE_WITH_VALUE_TYPES,
     ):
+        self.ALL_MODELS = (
+                models.Doculect, models.DoculectType, models.Country, models.EncyclopediaVolume,
+                models.FeatureValue, models.FeatureValueType, models.Feature, models.FeatureCategory,
+                models.association_tables.DoculectToFeatureValue, models.DoculectFeatureValueComment,
+        )
+
         self.dbsession = dbsession
 
         self.read_file = partial(read_csv, read_as='dicts')
@@ -84,11 +90,7 @@ class CustomModelInitializer:
         self._populate_all()
     
     def _delete_all_data(self):
-        for model in (
-                models.Doculect, models.DoculectType, models.Country, models.EncyclopediaVolume,
-                models.FeatureValue, models.FeatureValueType, models.Feature, models.FeatureCategory,
-                models.association_tables.DoculectToFeatureValue, models.DoculectFeatureValueComment,
-        ):
+        for model in self.ALL_MODELS:
             self.dbsession.execute(delete(model))
 
     def _populate_all(self):
