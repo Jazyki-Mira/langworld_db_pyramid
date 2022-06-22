@@ -33,7 +33,8 @@ class Doculect(Base):
     encyclopedia_volume_id = Column(Integer, ForeignKey('encyclopedia_volumes.id'))
     page = Column(Integer)
     has_feature_profile = Column(Boolean)
-    comment = Column(Text)
+    comment_en = Column(Text)
+    comment_ru = Column(Text)
 
     encyclopedia_volume = relationship("EncyclopediaVolume", back_populates="doculects")
     feature_value_comments = relationship('DoculectFeatureValueComment', back_populates='doculect')

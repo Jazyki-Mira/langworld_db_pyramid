@@ -206,6 +206,8 @@ class CustomModelInitializer:
 
             doculect.main_country = main_country
             doculect.type = type_of_this_doculect
+            doculect.comment_en = ''
+            doculect.comment_ru = ''
 
             if encyclopedia_volume:
                 doculect.encyclopedia_volume = encyclopedia_volume
@@ -216,7 +218,11 @@ class CustomModelInitializer:
                 for feature_profile_row in feature_profile_rows:
 
                     if feature_profile_row['feature_id'] == '_aux':
-                        continue  # TODO: think about comment for entire feature profile
+                        if feature_profile_row['comment_en']:
+                            doculect.comment_en += f"Feature profile prepared by {feature_profile_row['comment_en']}"
+                        if feature_profile_row['comment_ru']:
+                            doculect.comment_ru += f"Составитель/редактор реферата: {feature_profile_row['comment_ru']}"
+                        continue
 
                     # 1. Processing value
                     value_type = feature_profile_row['value_type']
