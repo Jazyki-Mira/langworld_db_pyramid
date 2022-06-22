@@ -87,19 +87,19 @@ class CustomModelInitializer:
         for model in (
                 models.Doculect, models.DoculectType, models.Country, models.EncyclopediaVolume,
                 models.FeatureValue, models.FeatureValueType, models.Feature, models.FeatureCategory,
-                models.association_tables.DoculectToFeatureValue,
+                models.association_tables.DoculectToFeatureValue, models.DoculectFeatureValueComment,
         ):
             self.dbsession.execute(delete(model))
 
     def _populate_all(self):
 
-        self._populate_categories_features_listed_and_empty_values()
+        self._populate_categories_features_value_types_listed_and_empty_values()
         self._populate_countries()
         self._populate_encyclopedia_volumes()
 
         self._populate_doculects_custom_feature_values_and_comments()
 
-    def _populate_categories_features_listed_and_empty_values(self):
+    def _populate_categories_features_value_types_listed_and_empty_values(self):
         # Putting these in one method to emphasize tight coupling
         # between the three operations
 
@@ -113,7 +113,10 @@ class CustomModelInitializer:
             self.category_for_id[category_row['id']] = category
 
         for value_type_row in self.read_file(self.file_with_value_types):
-            value_type = models.FeatureValueType(name=value_type_row['id'])
+            value_type = models.FeatureValueType(
+                name=value_type_row['id'],
+                entails_empty_value=int(value_type_row['entails_empty_value']),
+            )
             self.value_type_for_name[value_type_row['id']] = value_type
             self.dbsession.add(value_type)
 
@@ -125,16 +128,16 @@ class CustomModelInitializer:
                 category=self.category_for_id[feature_row['id'].split('-')[0]]  # TODO add column feature_id to CSV?
             )
 
-            # adding values of 3 empty types for each feature
-            for value_type_name in ('not_stated', 'explicit_gap', 'not_applicable'):
+            # adding values of 3 entailing-empty-value types for each feature
+            for value_type in [t for t in self.value_type_for_name.values() if t.entails_empty_value]:
                 empty_value = models.FeatureValue(
                         man_id='',
                         name_en='',
                         name_ru='',
-                        type=self.value_type_for_name[value_type_name],
+                        type=value_type,
                 )
                 feature.values.append(empty_value)
-                self.empty_value_for_feature_id_and_type_name[(feature_row['id'], value_type_name)] = empty_value
+                self.empty_value_for_feature_id_and_type_name[(feature_row['id'], value_type.name)] = empty_value
 
             self.dbsession.add(feature)
             self.feature_for_id[feature_row['id']] = feature

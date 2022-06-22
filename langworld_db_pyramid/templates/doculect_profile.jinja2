@@ -15,7 +15,7 @@
   <h2>Признаки</h2>
   <ul>
   {% for value in doculect.feature_values|sort(attribute="feature.id") %}
-    {% if value.type.name in ("custom", "listed") %}
+    {% if not value.type.entails_empty_value %}
         <li>
             {{ value.feature.name_ru }} ({{ value.feature.man_id }}): {{ value.name_ru}} {%if value.man_id %}({{ value.man_id }}){% endif %}
             {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
@@ -27,7 +27,7 @@
   <h3>Незаполненные признаки</h3>
   <ul>
   {% for value in doculect.feature_values|sort(attribute="feature.id") %}
-    {% if value.type.name not in ("custom", "listed") %}
+    {% if value.type.entails_empty_value %}
         <li>
             {{ value.feature.name_ru }} ({{ value.feature.man_id }}): {{ value.type.name }}
             {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
