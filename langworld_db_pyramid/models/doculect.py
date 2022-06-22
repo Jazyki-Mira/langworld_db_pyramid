@@ -3,7 +3,6 @@ from sqlalchemy import (
     Column,
     ForeignKey,
     Integer,
-    Numeric,
     String,
     Text,
 )
@@ -28,8 +27,8 @@ class Doculect(Base):
     family_id = Column(String(50))
     iso_639_3 = Column(String)
     glottocode = Column(String)
-    latitude = Column(Numeric)
-    longitude = Column(Numeric)
+    latitude = Column(String)
+    longitude = Column(String)
     main_country_id = Column(Integer, ForeignKey('countries.id'))
     encyclopedia_volume_id = Column(Integer, ForeignKey('encyclopedia_volumes.id'))
     page = Column(Integer)
