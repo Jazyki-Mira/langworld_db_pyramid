@@ -12,6 +12,32 @@
 
   <p class="lead">Основная страна: <span class="font-normal">{{ doculect.main_country.name_ru }}</span></p>
 
+  <h2>Идентификаторы</h2>
+
+  {% if doculect.glottocodes or doculect.iso_639p3_codes %}
+  <ul>
+  {% endif %}
+
+  {% if doculect.glottocodes %}
+  <li class="lead">Glottolog:
+    {% for glottocode in doculect.glottocodes|sort(attribute="code") %}
+    <span class="font-normal"><a href="https://glottolog.org/resource/languoid/id/{{ glottocode.code }}" target="_blank">{{ glottocode.code }}</a></span>{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </li>
+  {% endif %}
+
+  {% if doculect.iso_639p3_codes %}
+  <li class="lead">ISO-639-3:
+    {% for iso_code in doculect.iso_639p3_codes|sort(attribute="code") %}
+    <span class="font-normal"><a href="https://iso639-3.sil.org/code/{{ iso_code.code }}" target="_blank">{{ iso_code.code }}</a></span>{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </li>
+  {% endif %}
+
+  {% if doculect.glottocodes or doculect.iso_639p3_codes %}
+  </ul>
+  {% endif %}
+
   <h2>Признаки</h2>
   <ul>
   {% for value in doculect.feature_values|sort(attribute="feature.id") %}

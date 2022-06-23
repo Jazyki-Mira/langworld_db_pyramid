@@ -52,6 +52,8 @@ class TestCustomModelInitializer:
             models.FeatureCategory: 14,
             models.FeatureValue: number_of_listed_values + number_of_empty_values + len(unique_custom_values),
             models.FeatureValueType: 5,
+            models.Glottocode: 427,
+            models.Iso639P3Code: 405,
         }
 
         for model in expected_number_of_items_for_model:

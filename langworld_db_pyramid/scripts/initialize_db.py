@@ -48,9 +48,12 @@ class CustomModelInitializer:
         file_with_value_types: Path = FILE_WITH_VALUE_TYPES,
     ):
         self.ALL_MODELS = (
-                models.Doculect, models.DoculectType, models.Country, models.EncyclopediaVolume,
+                models.association_tables.DoculectToFeatureValue, models.association_tables.DoculectToGlottocode,
+                models.association_tables.DoculectToIso639P3Code,
+                models.Doculect, models.DoculectFeatureValueComment, models.DoculectType, models.Country,
+                models.EncyclopediaVolume,
                 models.FeatureValue, models.FeatureValueType, models.Feature, models.FeatureCategory,
-                models.association_tables.DoculectToFeatureValue, models.DoculectFeatureValueComment,
+                models.Glottocode, models.Iso639P3Code,
         )
 
         self.dbsession = dbsession
@@ -73,6 +76,8 @@ class CustomModelInitializer:
 
         self.category_for_id = {}
         self.feature_for_id = {}
+        self.glottocode_for_id = {}
+        self.iso639p3code_for_id = {}
 
         self.listed_value_for_id = {}
         self.value_type_for_name = {}
@@ -98,6 +103,8 @@ class CustomModelInitializer:
         self._populate_categories_features_value_types_listed_and_empty_values()
         self._populate_countries()
         self._populate_encyclopedia_volumes()
+        self._populate_glottocodes()
+        self._populate_iso639p3_codes()
 
         self._populate_doculects_custom_feature_values_and_comments()
 
@@ -176,6 +183,33 @@ class CustomModelInitializer:
             self.dbsession.add(volume)
             self.encyclopedia_volume_for_id[volume.id] = volume
 
+    def _populate_glottocodes(self):
+        # for now, I see it reasonable to only add codes that are present in file with doculects (same for ISO-639-3)
+        for row in self.read_file(self.file_with_doculects):
+            glottocodes = row['glottocode'].split(', ')
+            for item in glottocodes:
+                if not item:
+                    continue
+                try:
+                    self.glottocode_for_id[item]
+                except KeyError:
+                    glottocode = models.Glottocode(code=item)
+                    self.glottocode_for_id[item] = glottocode
+                    self.dbsession.add(glottocode)
+
+    def _populate_iso639p3_codes(self):
+        for row in self.read_file(self.file_with_doculects):
+            iso_codes = row['iso_639_3'].split(', ')
+            for item in iso_codes:
+                if not item:
+                    continue
+                try:
+                    self.iso639p3code_for_id[item]
+                except KeyError:
+                    iso_code = models.Iso639P3Code(code=item)
+                    self.iso639p3code_for_id[item] = iso_code
+                    self.dbsession.add(iso_code)
+
     def _populate_doculects_custom_feature_values_and_comments(self):
         doculect_rows = self.read_file(self.file_with_doculects)
 
@@ -203,16 +237,33 @@ class CustomModelInitializer:
             type_of_this_doculect = self.doculect_type_for_id[doculect_row_to_write['type']]
             del doculect_row_to_write['type']
 
-            # print(row)
+            # TODO refactor to eliminate repetition
+            glottocodes_for_this_doculect = []
+            for glottocode in doculect_row_to_write['glottocode'].split(', '):
+                if not glottocode:
+                    continue
+                glottocodes_for_this_doculect.append(self.glottocode_for_id[glottocode])
+            del doculect_row_to_write['glottocode']
+
+            iso_639p3_codes_for_this_doculect = []
+            for iso_code in doculect_row_to_write['iso_639_3'].split(', '):
+                if not iso_code:
+                    continue
+                iso_639p3_codes_for_this_doculect.append(self.iso639p3code_for_id[iso_code])
+            del doculect_row_to_write['iso_639_3']
+
             doculect = models.doculect.Doculect(**doculect_row_to_write)
 
-            doculect.main_country = main_country
-            doculect.type = type_of_this_doculect
             doculect.comment_en = ''
             doculect.comment_ru = ''
 
             if encyclopedia_volume:
                 doculect.encyclopedia_volume = encyclopedia_volume
+
+            doculect.glottocodes = glottocodes_for_this_doculect
+            doculect.iso_639p3_codes = iso_639p3_codes_for_this_doculect
+            doculect.main_country = main_country
+            doculect.type = type_of_this_doculect
 
             if doculect_row_to_write['has_feature_profile'] == 1:
                 feature_profile_rows = self.read_file(self.dir_with_feature_profiles / f"{doculect_row['id']}.csv")
