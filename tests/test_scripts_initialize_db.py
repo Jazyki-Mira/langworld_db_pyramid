@@ -3,27 +3,10 @@ from sqlalchemy import select
 
 from langworld_db_data.langworld_db_data.filetools.csv_xls import read_csv
 import langworld_db_pyramid.models as models
-from tests.paths import *
-
-
-@pytest.fixture
-def test_initializer(dbsession):
-    from langworld_db_pyramid.scripts.initialize_db import CustomModelInitializer
-    return CustomModelInitializer(
-        dbsession=dbsession,
-        dir_with_feature_profiles=DIR_WITH_FEATURE_PROFILES_FOR_INITIALIZE_DB,
-        file_with_categories=FILE_WITH_CATEGORIES_FOR_INITIALIZE_DB,
-        file_with_countries=FILE_WITH_COUNTRIES_FOR_INITIALIZE_DB,
-        file_with_doculects=FILE_WITH_DOCULECTS_FOR_INITIALIZE_DB,
-        file_with_encyclopedia_volumes=FILE_WITH_ENCYCLOPEDIA_VOLUMES_FOR_INITIALIZE_DB,
-        file_with_listed_values=FILE_WITH_LISTED_VALUES_FOR_INITIALIZE_DB,
-        file_with_names_of_features=FILE_WITH_FEATURES_FOR_INITIALIZE_DB,
-        file_with_value_types=FILE_WITH_VALUE_TYPES_FOR_INITIALIZE_DB,
-    )
 
 
 class TestCustomModelInitializer:
-    def test_setup_models(self, dbsession, test_initializer):
+    def test_setup_models(self, dbsession, test_db_initializer):
         # dbsession and test_initializer.dbsession is the same object
         # since the dummy dbsession is passed to constructor or CustomModelInitializer
 
@@ -33,7 +16,7 @@ class TestCustomModelInitializer:
         number_of_empty_values = NUMBER_OF_FEATURES * 3  # 3 value types with empty values
 
         unique_custom_values = set()
-        for file in test_initializer.dir_with_feature_profiles.glob('*.csv'):
+        for file in test_db_initializer.dir_with_feature_profiles.glob('*.csv'):
             rows_with_custom_values = {
                 # comment not included because FeatureValue table contains values without comments
                 (row['feature_id'], row['value_ru'])
@@ -41,7 +24,7 @@ class TestCustomModelInitializer:
             }
             unique_custom_values.update(rows_with_custom_values)
 
-        test_initializer.setup_models()
+        test_db_initializer.setup_models()
 
         expected_number_of_items_for_model = {
             models.Country: 283,
@@ -63,7 +46,7 @@ class TestCustomModelInitializer:
         all_doculects = dbsession.scalars(select(models.Doculect)).all()
 
         assert len([d for d in all_doculects if d.has_feature_profile]) == \
-               len(list(test_initializer.dir_with_feature_profiles.glob('*.csv')))
+               len(list(test_db_initializer.dir_with_feature_profiles.glob('*.csv')))
 
         for item in all_doculects:
             assert item.man_id
@@ -81,12 +64,12 @@ class TestCustomModelInitializer:
         rom_volume = dbsession.scalars(select(models.EncyclopediaVolume).where(models.EncyclopediaVolume.id == '11')).one()
         assert len(rom_volume.doculects) == 24
 
-    def test__delete_all_data(self, dbsession, test_initializer):
-        test_initializer.setup_models()
+    def test__delete_all_data(self, dbsession, test_db_initializer):
+        test_db_initializer.setup_models()
 
-        test_initializer._delete_all_data()
+        test_db_initializer._delete_all_data()
 
-        for model in test_initializer.ALL_MODELS:
+        for model in test_db_initializer.ALL_MODELS:
             items = dbsession.scalars(select(model)).all()
             assert not items
 

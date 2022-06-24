@@ -12,6 +12,8 @@ import webtest
 from langworld_db_pyramid import main
 from langworld_db_pyramid import models
 from langworld_db_pyramid.models.meta import Base
+# added by me
+from tests.paths import *
 
 
 def pytest_addoption(parser):
@@ -130,3 +132,21 @@ def dummy_config(dummy_request):
     """
     with testConfig(request=dummy_request) as config:
         yield config
+
+
+# Fixtures added by me
+@pytest.fixture
+def test_db_initializer(dbsession):
+
+    from langworld_db_pyramid.scripts.initialize_db import CustomModelInitializer
+    return CustomModelInitializer(
+        dbsession=dbsession,
+        dir_with_feature_profiles=DIR_WITH_FEATURE_PROFILES_FOR_INITIALIZE_DB,
+        file_with_categories=FILE_WITH_CATEGORIES_FOR_INITIALIZE_DB,
+        file_with_countries=FILE_WITH_COUNTRIES_FOR_INITIALIZE_DB,
+        file_with_doculects=FILE_WITH_DOCULECTS_FOR_INITIALIZE_DB,
+        file_with_encyclopedia_volumes=FILE_WITH_ENCYCLOPEDIA_VOLUMES_FOR_INITIALIZE_DB,
+        file_with_listed_values=FILE_WITH_LISTED_VALUES_FOR_INITIALIZE_DB,
+        file_with_names_of_features=FILE_WITH_FEATURES_FOR_INITIALIZE_DB,
+        file_with_value_types=FILE_WITH_VALUE_TYPES_FOR_INITIALIZE_DB,
+    )
