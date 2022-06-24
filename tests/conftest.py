@@ -6,6 +6,7 @@ from pyramid.paster import get_appsettings
 from pyramid.scripting import prepare
 from pyramid.testing import DummyRequest, testConfig
 import pytest
+from sqlalchemy import select
 import transaction
 import webtest
 
@@ -150,3 +151,8 @@ def test_db_initializer(dbsession):
         file_with_names_of_features=FILE_WITH_FEATURES_FOR_INITIALIZE_DB,
         file_with_value_types=FILE_WITH_VALUE_TYPES_FOR_INITIALIZE_DB,
     )
+
+
+@pytest.fixture
+def setup_models_for_views_testing(test_db_initializer):
+    test_db_initializer.setup_models()
