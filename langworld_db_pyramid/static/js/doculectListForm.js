@@ -29,8 +29,12 @@ function DoculectListForm(props) {
     const handleSubmit = (e) => {
       e.preventDefault();
 //      console.log(query);
-      let url = "/ru/json_api/doculect_by_name/" + query
-      renderListOfMatchingDoculects(retrieve_data(url));
+      if (query === "") {
+        renderListOfMatchingDoculects([]);
+      } else {
+        let url = "/ru/json_api/doculect_by_name/" + query
+        renderListOfMatchingDoculects(retrieve_data(url));
+      }
     }
 
     return React.createElement(
