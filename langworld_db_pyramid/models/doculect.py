@@ -22,7 +22,7 @@ class Doculect(Base):
     name_ru = Column(String(255))
     custom_title_en = Column(String(255))
     custom_title_ru = Column(String(255))
-    aliases_en = Column(String)
+    aliases_en = Column(String)  # TODO aliases to separate table with ForeignKey to make it cleaner, more predictable
     aliases_ru = Column(String)
     family_id = Column(String(50))
     latitude = Column(String)
