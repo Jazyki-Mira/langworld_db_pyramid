@@ -20,7 +20,7 @@ def get_man_ids_of_doculects_containing_substring(request):
         )
     ).all()
 
-    return [
+    data = [
         {
             "id": doculect.man_id,
             "name": getattr(doculect, name_attr),
@@ -30,3 +30,5 @@ def get_man_ids_of_doculects_containing_substring(request):
         }
         for doculect in matching_doculects
     ]
+
+    return sorted(data, key=lambda item: item['name'])
