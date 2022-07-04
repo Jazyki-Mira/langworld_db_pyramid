@@ -7,6 +7,7 @@ from .. import models
 
 
 @view_config(route_name='all_doculects', renderer='langworld_db_pyramid:templates/all_doculects.jinja2')
+@view_config(route_name='all_doculects_localized', renderer='langworld_db_pyramid:templates/all_doculects.jinja2')
 def view_all_doculects(request):
     try:
         all_doculects = request.dbsession.scalars(select(models.Doculect).order_by(models.Doculect.name_en)).all()
@@ -17,6 +18,7 @@ def view_all_doculects(request):
 
 
 @view_config(route_name='doculect_profile', renderer='langworld_db_pyramid:templates/doculect_profile.jinja2')
+@view_config(route_name='doculect_profile_localized', renderer='langworld_db_pyramid:templates/doculect_profile.jinja2')
 def view_doculect_profile(request):
     try:
         doculect = request.dbsession.scalars(

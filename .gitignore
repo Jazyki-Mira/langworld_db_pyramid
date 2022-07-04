@@ -21,3 +21,4 @@ coverage
 test
 *.sqlite
 .idea/
+/langworld_db_pyramid/locale/en/LC_MESSAGES/messages.mo

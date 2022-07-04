@@ -8,7 +8,7 @@
   <div id="doculect-finder-form"></div>
   <div id="doculect-finder-list"></div>
 
-  <h2>List of doculects</h2>
+  <h2>{% trans %}Список языков{% endtrans %}</h2>
   <ul>
   {% for item in doculects %}
       <li><a href="doculect/{{ item.man_id }}">{{ item.name_en }}</a> {% if item.aliases_en %}({{ item.aliases_en }}){% endif %} </li>
