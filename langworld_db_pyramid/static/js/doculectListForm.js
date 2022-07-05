@@ -1,4 +1,5 @@
 import DoculectListItem from "./doculectListItem.js"
+import doculectListFormLabels from "./i18n/doculectListFormLabels.js"
 import getLocale from "./getLocale.js"
 
 const retrieve_data = url => fetch(url)
@@ -31,7 +32,6 @@ function DoculectListForm(props) {
 
     const handleSubmit = (e) => {
       e.preventDefault();
-//      console.log(query);
       if (query === "") {
         renderListOfMatchingDoculects([]);
       } else {
@@ -43,10 +43,10 @@ function DoculectListForm(props) {
     return React.createElement(
         "form",
         { onSubmit: e => {handleSubmit(e)} },
-        React.createElement("label", {}, "Поиск языка"),
+        React.createElement("label", {}, doculectListFormLabels["formLabel"][locale]),
         React.createElement("br"),
         React.createElement("input", {name: "searchText", type: "text", onChange: e => setQuery(e.target.value)}),
-        React.createElement("input", {type: "submit", value: "Поиск подходящих языков"})
+        React.createElement("input", {type: "submit", value: doculectListFormLabels["buttonLabel"][locale]})
     )
 }
 
