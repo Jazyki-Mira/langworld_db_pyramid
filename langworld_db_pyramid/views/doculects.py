@@ -16,7 +16,7 @@ def view_all_doculects(request):
     except SQLAlchemyError:
         return Response(db_err_msg, content_type='text/plain', status=500)
 
-    return {'doculects': all_doculects, 'project': 'Languages of the World Database'}
+    return {'doculects': all_doculects}
 
 
 @view_config(route_name='doculect_profile', renderer='langworld_db_pyramid:templates/doculect_profile.jinja2')

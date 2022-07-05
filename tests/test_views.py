@@ -36,7 +36,6 @@ def test_view_all_doculects_success(dummy_request, setup_models_for_views_testin
     info = view_all_doculects(dummy_request)
     assert dummy_request.response.status_int == 200
     assert len(info['doculects']) == 429
-    assert info['project'] == 'Languages of the World Database'
 
 
 def test_view_doculect_profile(dummy_request, setup_models_for_views_testing):
