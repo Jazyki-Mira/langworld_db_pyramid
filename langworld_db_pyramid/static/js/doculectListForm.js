@@ -1,4 +1,5 @@
 import DoculectListItem from "./doculectListItem.js"
+import getLocale from "./getLocale.js"
 
 const retrieve_data = url => fetch(url)
         .then(res => res.json())
@@ -26,13 +27,15 @@ const renderListOfMatchingDoculects = retrieved_data => {
 function DoculectListForm(props) {
     const [query, setQuery] = React.useState("");
 
+    const locale = getLocale();
+
     const handleSubmit = (e) => {
       e.preventDefault();
 //      console.log(query);
       if (query === "") {
         renderListOfMatchingDoculects([]);
       } else {
-        let url = "/ru/json_api/doculect_by_name/" + query
+        let url = `/${locale}/json_api/doculect_by_name/` + query
         renderListOfMatchingDoculects(retrieve_data(url));
       }
     }
