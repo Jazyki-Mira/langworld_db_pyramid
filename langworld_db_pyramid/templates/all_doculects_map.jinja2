@@ -6,8 +6,8 @@
 {% set aliases_attr = "aliases_" + request.locale_name %}
 
 <div class="content">
-    <h1>Карта языков</h1>
-
+    <h1>{% trans %}Карта языков{% endtrans %}</h1>
+    <div id="test"></div>
       <div id="doculect-profile-map"></div>
 </div>
 
@@ -15,11 +15,9 @@
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>
 
-<script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectProfileMap.js') }}" type="module"></script>
+<script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectMap.js') }}" type="module"></script>
 
 <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-
-<script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectListForm.js') }}" type="module"></script>
 
 {% endblock content %}

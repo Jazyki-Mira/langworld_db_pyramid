@@ -13,4 +13,5 @@ def includeme(config):
     config.add_route('doculect_profile', '/doculect/{doculect_man_id}')
     config.add_route('doculect_profile_localized', '{locale}/doculect/{doculect_man_id}')
 
-    config.add_route('doculect_man_ids_containing_substring', '/{locale}/json_api/doculect_by_name/{query}')
+    config.add_route('doculects_by_substring', '/{locale}/json_api/doculect_by_name/{query}')
+    config.add_route('doculects_for_map', '/{locale}/json_api/doculects_for_map/')

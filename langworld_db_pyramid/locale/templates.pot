@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-06 11:50+0300\n"
+"POT-Creation-Date: 2022-07-06 16:41+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: templates/all_doculects.jinja2:5
+#: templates/all_doculects_list.jinja2:5
 msgid "Список языков"
+msgstr ""
+
+#: templates/all_doculects_map.jinja2:9
+msgid "Карта языков"
 msgstr ""
 
 #: templates/doculect_profile.jinja2:12
