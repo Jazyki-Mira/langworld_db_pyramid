@@ -14,7 +14,10 @@
 
   <p class="lead"><a href="{{ request.static_url('langworld_db_pyramid:static/pdf_volumes/11.pdf') }}" target="_blank">{% trans %}Открыть в энциклопедии{% endtrans %}</a></p>
 
-  <p class="lead">{% trans %}Основная страна{% endtrans %}: <span class="font-normal">{{ doculect.main_country[name_attr] }}</span></p>
+  <p class="lead">
+    {% trans %}Основная страна{% endtrans %}: <span class="font-normal">{{ doculect.main_country[name_attr] }}</span>
+    (<a href="../doculects/map?lat={{ doculect.latitude }}&long={{ doculect.longitude }}&show_doculect={{ doculect.man_id }}">{% trans %}посмотреть на карте{% endtrans %}</a>)
+  </p>
 
   <h2>{% trans %}Идентификаторы{% endtrans %}</h2>
 

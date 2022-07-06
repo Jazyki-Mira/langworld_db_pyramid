@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-06 16:41+0300\n"
+"POT-Creation-Date: 2022-07-06 17:34+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -34,19 +34,23 @@ msgstr "Alternative names"
 msgid "Открыть в энциклопедии"
 msgstr "Open the encyclopedia PDF (in Russian)"
 
-#: templates/doculect_profile.jinja2:17
+#: templates/doculect_profile.jinja2:18
 msgid "Основная страна"
 msgstr "Main country"
 
 #: templates/doculect_profile.jinja2:19
+msgid "посмотреть на карте"
+msgstr "show on the map"
+
+#: templates/doculect_profile.jinja2:22
 msgid "Идентификаторы"
 msgstr "Identifiers"
 
-#: templates/doculect_profile.jinja2:45
+#: templates/doculect_profile.jinja2:48
 msgid "Признаки"
 msgstr "Features"
 
-#: templates/doculect_profile.jinja2:61
+#: templates/doculect_profile.jinja2:64
 msgid "Незаполненные признаки"
 msgstr "Unfilled features"
 

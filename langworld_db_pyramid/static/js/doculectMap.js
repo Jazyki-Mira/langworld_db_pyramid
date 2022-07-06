@@ -1,7 +1,17 @@
 import accessToken from "./leafletAccessToken.js"
 
-const renderMarkers = (centerLatitude = 55.0, centerLongitude = 95.0) => {
-    let doculectMap = L.map('doculect-profile-map').setView([centerLatitude, centerLongitude], 2.5);
+const renderMarkers = () => {
+    let urlParams = new URLSearchParams(location.search);
+
+    let lat = 55.0;
+    let long = 95.0;
+    let zoom = 2.5;
+
+    if (urlParams.has('lat')) lat = urlParams.get('lat');
+    if (urlParams.has('long')) long = urlParams.get('long');
+    if (urlParams.has('show_doculect')) zoom = 4;
+
+    let doculectMap = L.map('doculect-profile-map').setView([lat, long], zoom);
     const titleLayerUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + accessToken;
 
     L.tileLayer(titleLayerUrl,
@@ -22,12 +32,16 @@ const renderMarkers = (centerLatitude = 55.0, centerLongitude = 95.0) => {
 }
 
 const addMarkers = (doculects, doculectMap) => {
+    let urlParams = new URLSearchParams(location.search);
+
     for (let doculect of doculects) {
         let marker = L.marker([doculect["latitude"], doculect["longitude"]], {icon: L.divIcon({className: "div-icon square-with-outline green"})}).addTo(doculectMap);
         let url = `../doculect/${doculect["id"]}`;
         marker.bindPopup("<a href=" + url + ">" + doculect["name"] + "</a>");
         marker.on("mouseover", function (e) { this.openPopup(); });
-        marker.on('click', function (e) { window.open(url, "_self"); });
+        marker.on("click", function (e) { window.open(url, "_self"); });
+
+        if (urlParams.has("show_doculect") && urlParams.get("show_doculect") === doculect["id"]) marker.openPopup();
     }
 }
 

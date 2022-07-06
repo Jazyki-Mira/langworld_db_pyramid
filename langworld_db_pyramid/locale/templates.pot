@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-06 16:41+0300\n"
+"POT-Creation-Date: 2022-07-06 17:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,19 +33,23 @@ msgstr ""
 msgid "Открыть в энциклопедии"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:17
+#: templates/doculect_profile.jinja2:18
 msgid "Основная страна"
 msgstr ""
 
 #: templates/doculect_profile.jinja2:19
+msgid "посмотреть на карте"
+msgstr ""
+
+#: templates/doculect_profile.jinja2:22
 msgid "Идентификаторы"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:45
+#: templates/doculect_profile.jinja2:48
 msgid "Признаки"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:61
+#: templates/doculect_profile.jinja2:64
 msgid "Незаполненные признаки"
 msgstr ""
 
