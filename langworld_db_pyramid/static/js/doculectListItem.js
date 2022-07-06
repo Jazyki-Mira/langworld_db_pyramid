@@ -8,7 +8,7 @@ export default function DoculectListItem({ doculect }) {
     return React.createElement(
         "li",
         { className: "doculect" },
-        React.createElement("a", { href: `doculect/${doculect.id}` }, doculect.name),
+        React.createElement("a", { href: `../doculect/${doculect.id}` }, doculect.name),
         textToDisplay
     );
 }

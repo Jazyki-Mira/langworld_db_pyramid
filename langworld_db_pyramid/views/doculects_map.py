@@ -6,8 +6,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from .. import models
 
 
-@view_config(route_name='all_doculects', renderer='langworld_db_pyramid:templates/all_doculects.jinja2')
-@view_config(route_name='all_doculects_localized', renderer='langworld_db_pyramid:templates/all_doculects.jinja2')
+@view_config(route_name='all_doculects_map', renderer='langworld_db_pyramid:templates/all_doculects_map.jinja2')
+@view_config(route_name='all_doculects_map_localized', renderer='langworld_db_pyramid:templates/all_doculects_map.jinja2')
 def view_all_doculects(request):
     try:
         all_doculects = request.dbsession.scalars(

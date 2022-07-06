@@ -1,0 +1,25 @@
+{% extends "layout.jinja2" %}
+
+{% block content %}
+
+{% set name_attr = "name_" + request.locale_name %}
+{% set aliases_attr = "aliases_" + request.locale_name %}
+
+<div class="content">
+    <h1>Карта языков</h1>
+
+      <div id="doculect-profile-map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin=""></script>
+
+<script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectProfileMap.js') }}" type="module"></script>
+
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+
+<script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectListForm.js') }}" type="module"></script>
+
+{% endblock content %}

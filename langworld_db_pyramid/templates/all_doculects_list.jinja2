@@ -12,7 +12,7 @@
       {% set name_attr = "name_" + request.locale_name %}
       {% set aliases_attr = "aliases_" + request.locale_name %}
 
-      <li><a href="doculect/{{ item.man_id }}">{{ item[name_attr] }}</a> {% if item[aliases_attr] %}({{ item[aliases_attr] }}){% endif %} </li>
+      <li><a href="../doculect/{{ item.man_id }}">{{ item[name_attr] }}</a> {% if item[aliases_attr] %}({{ item[aliases_attr] }}){% endif %} </li>
   {% endfor %}
   </ul>
 

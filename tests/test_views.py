@@ -1,7 +1,7 @@
 import pytest
 
 from langworld_db_pyramid.models.doculect import Doculect
-from langworld_db_pyramid.views.doculects import view_all_doculects, view_doculect_profile
+from langworld_db_pyramid.views.doculects_list import view_all_doculects, view_doculect_profile
 from langworld_db_pyramid.views.json_api import get_man_ids_of_doculects_containing_substring
 from langworld_db_pyramid.views.notfound import notfound_view
 
