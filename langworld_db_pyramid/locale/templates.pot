@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-04 18:19+0300\n"
+"POT-Creation-Date: 2022-07-06 11:50+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: templates/all_doculects.jinja2:11
+#: templates/all_doculects.jinja2:5
 msgid "Список языков"
+msgstr ""
+
+#: templates/doculect_profile.jinja2:12
+msgid "Альтернативные названия"
+msgstr ""
+
+#: templates/doculect_profile.jinja2:15
+msgid "Открыть в энциклопедии"
+msgstr ""
+
+#: templates/doculect_profile.jinja2:17
+msgid "Основная страна"
+msgstr ""
+
+#: templates/doculect_profile.jinja2:19
+msgid "Идентификаторы"
+msgstr ""
+
+#: templates/doculect_profile.jinja2:45
+msgid "Признаки"
+msgstr ""
+
+#: templates/doculect_profile.jinja2:61
+msgid "Незаполненные признаки"
 msgstr ""
 

@@ -1,18 +1,22 @@
 {% extends "layout.jinja2" %}
 
 {% block content %}
-<div class="content">
-  <h1><span class="font-semi-bold">{{ doculect.name_ru }}</span> {{ doculect.type.name_ru }}</h1>
 
-    {% if doculect.aliases_ru %}
-  <p class="lead">Альтернативные названия: <span class="font-normal">{{ doculect.aliases_ru }}</span></p>
+{% set name_attr = "name_" + request.locale_name %}
+{% set aliases_attr = "aliases_" + request.locale_name %}
+
+<div class="content">
+  <h1><span class="font-semi-bold">{{ doculect[name_attr] }}</span> {{ doculect.type[name_attr] }}</h1>
+
+    {% if doculect[aliases_attr] %}
+  <p class="lead">{% trans %}Альтернативные названия{% endtrans %}: <span class="font-normal">{{ doculect[aliases_attr] }}</span></p>
     {% endif %}
 
-  <p class="lead"><a href="{{ request.static_url('langworld_db_pyramid:static/pdf_volumes/11.pdf') }}" target="_blank">Открыть в энциклопедии</a></p>
+  <p class="lead"><a href="{{ request.static_url('langworld_db_pyramid:static/pdf_volumes/11.pdf') }}" target="_blank">{% trans %}Открыть в энциклопедии{% endtrans %}</a></p>
 
-  <p class="lead">Основная страна: <span class="font-normal">{{ doculect.main_country.name_ru }}</span></p>
+  <p class="lead">{% trans %}Основная страна{% endtrans %}: <span class="font-normal">{{ doculect.main_country[name_attr] }}</span></p>
 
-  <h2>Идентификаторы</h2>
+  <h2>{% trans %}Идентификаторы{% endtrans %}</h2>
 
   {% if doculect.glottocodes or doculect.iso_639p3_codes %}
   <ul>
@@ -38,31 +42,39 @@
   </ul>
   {% endif %}
 
-  <h2>Признаки</h2>
+  <h2>{% trans %}Признаки{% endtrans %}</h2>
   <ul>
   {% for value in doculect.feature_values|sort(attribute="feature.id") %}
     {% if not value.type.entails_empty_value %}
         <li>
-            {{ value.feature.name_ru }} ({{ value.feature.man_id }}): {{ value.name_ru}} {%if value.man_id %}({{ value.man_id }}){% endif %}
-            {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+            {{ value.feature[name_attr] }} ({{ value.feature.man_id }}): {{ value[name_attr]}} {%if value.man_id %}({{ value.man_id }}){% endif %}
+
+            {# comments are only available in Russian so far #}
+            {% if request.locale_name == 'ru' %}
+                {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+            {% endif %}
         </li>
     {% endif %}
   {% endfor %}
   </ul>
 
-  <h3>Незаполненные признаки</h3>
+  <h3>{% trans %}Незаполненные признаки{% endtrans %}</h3>
   <ul>
   {% for value in doculect.feature_values|sort(attribute="feature.id") %}
     {% if value.type.entails_empty_value %}
         <li>
-            {{ value.feature.name_ru }} ({{ value.feature.man_id }}): {{ value.type.name }}
-            {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+            {{ value.feature[name_attr] }} ({{ value.feature.man_id }}): {{ value.type.name }}
+            {% if request.locale_name == 'ru' %}
+                {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+            {% endif %}
         </li>
     {% endif %}
   {% endfor %}
   </ul>
 
-  <p class="lead">{{ doculect.comment_ru }}</p>
+  {% if request.locale_name == 'ru' %}
+    <p class="lead">{{ doculect.comment_ru }}</p>
+  {% endif %}
 
 </div>
 {% endblock content %}
