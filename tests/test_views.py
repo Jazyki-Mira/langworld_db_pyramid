@@ -12,7 +12,9 @@ from langworld_db_pyramid.views.notfound import notfound_view
     [
         ('dut', 'en', ('afrikaans', 'dutch')),  # 'dut' is in aliases for Afrikaans and in main name for Dutch
         # the request is in Russian but IDs received are English:
-        ('немец', 'ru', ('dutch', 'german', 'luxembourgian', 'swiss_german', 'yiddish'))
+        ('немец', 'ru', ('dutch', 'german', 'luxembourgian', 'swiss_german', 'yiddish')),
+        # this query produces 7 doculects without 'has_feature_profile' restriction but only 3 with it:
+        ('пар', 'ru', ('parachi', 'parthian', 'middle_persian'))
     ]
 
 )
@@ -41,7 +43,7 @@ def test_view_all_doculects_success(dummy_request, setup_models_for_views_testin
 
     info = view_all_doculects(dummy_request)
     assert dummy_request.response.status_int == 200
-    assert len(info['doculects']) == 429
+    assert len(info['doculects']) == 338  # only those (out of 429) that have has_feature_profile set to '1'
 
 
 def test_view_doculect_profile(dummy_request, setup_models_for_views_testing):

@@ -11,7 +11,9 @@ from .. import models
 def view_all_doculects(request):
     try:
         all_doculects = request.dbsession.scalars(
-            select(models.Doculect).order_by(getattr(models.Doculect, f'name_{request.locale_name}'))
+            select(models.Doculect)
+            .where(models.Doculect.has_feature_profile)
+            .order_by(getattr(models.Doculect, f'name_{request.locale_name}'))
         ).all()
     except SQLAlchemyError:
         return Response('Database error', content_type='text/plain', status=500)

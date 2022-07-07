@@ -7,6 +7,7 @@
   <div id="doculect-finder-form"></div>
   <div id="doculect-finder-list"></div>
 
+  <p>{% trans %}В списке представлены языки и диалекты, для которых заполнены рефераты{% endtrans %} (<strong>{{ doculects|length }}</strong>).</p>
   <ul>
   {% for item in doculects %}
       {% set name_attr = "name_" + request.locale_name %}

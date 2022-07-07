@@ -1,5 +1,5 @@
 from pyramid.view import view_config
-from sqlalchemy import or_, select
+from sqlalchemy import and_, or_, select
 
 import langworld_db_pyramid.models as models
 
@@ -13,11 +13,14 @@ def get_doculects_by_substring(request):
     # TODO Search by ISO, glottocode?
     matching_doculects = request.dbsession.scalars(
         select(models.Doculect).where(
-            or_(
-                getattr(models.Doculect, name_attr).contains(query),
-                getattr(models.Doculect, aliases_attr).contains(query),
+            and_(
+                models.Doculect.has_feature_profile,
+                or_(
+                    getattr(models.Doculect, name_attr).contains(query),
+                    getattr(models.Doculect, aliases_attr).contains(query),
+                )
             )
-        )  # TODO if has feature profile
+        )
     ).all()
 
     data = [
