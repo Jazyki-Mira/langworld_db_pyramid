@@ -1,4 +1,4 @@
-{% extends "layout.jinja2" %}
+{% extends "base.jinja2" %}
 
 {% block content %}
 
@@ -6,7 +6,7 @@
 {% set aliases_attr = "aliases_" + request.locale_name %}
 
 <div class="content">
-    <h1>{% trans %}Карта языков{% endtrans %}</h1>
+    <h1 class="w3-text-teal">{% trans %}Карта языков{% endtrans %}</h1>
     <div id="test"></div>
       <div id="doculect-profile-map"></div>
 </div>

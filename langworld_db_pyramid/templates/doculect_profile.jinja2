@@ -1,4 +1,4 @@
-{% extends "layout.jinja2" %}
+{% extends "base.jinja2" %}
 
 {% block content %}
 
@@ -6,7 +6,7 @@
 {% set aliases_attr = "aliases_" + request.locale_name %}
 
 <div class="content">
-  <h1><span class="font-semi-bold">{{ doculect[name_attr] }}</span> {{ doculect.type[name_attr] }}</h1>
+  <h1 class="w3-text-teal">{{ doculect[name_attr] }} {{ doculect.type[name_attr] }}</h1>
 
     {% if doculect[aliases_attr] %}
   <p class="lead">{% trans %}Альтернативные названия{% endtrans %}: <span class="font-normal">{{ doculect[aliases_attr] }}</span></p>
