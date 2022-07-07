@@ -3,8 +3,10 @@ import pytest
 from langworld_db_pyramid.models.doculect import Doculect
 from langworld_db_pyramid.views.doculects_list import view_all_doculects
 from langworld_db_pyramid.views.doculect_profile import view_doculect_profile
-from langworld_db_pyramid.views.json_api import get_doculects_by_substring
+from langworld_db_pyramid.views.json_api import get_doculects_by_substring, get_doculects_for_map
 from langworld_db_pyramid.views.notfound import notfound_view
+
+NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) that have has_feature_profile set to '1'
 
 
 @pytest.mark.parametrize(
@@ -18,7 +20,7 @@ from langworld_db_pyramid.views.notfound import notfound_view
     ]
 
 )
-def test_get_doculects_by_substring(
+def test_json_api_get_doculects_by_substring(
         dummy_request, setup_models_for_views_testing,
         query, locale, expected_ids,
 ):
@@ -39,11 +41,38 @@ def test_get_doculects_by_substring(
         assert doculect_id in ids
 
 
-def test_view_all_doculects_success(dummy_request, setup_models_for_views_testing):
+@pytest.mark.parametrize(
+    'locale, expected_first_doculect, expected_last_doculect',
+    [
+        (
+            'ru',
+            {'id': 'abaza', 'name': 'абазинский', 'latitude': '44.1556', 'longitude': '41.9368'},
+            {'id': 'yaoure', 'name': 'яурэ', 'latitude': '6.85', 'longitude': '-5.3'},
+        ),
+        (
+            'en',
+            {'id': 'abaza', 'name': 'Abaza', 'latitude': '44.1556', 'longitude': '41.9368'},
+            {'id': 'zefrei', 'name': 'Zefrei', 'latitude': '32.80592', 'longitude': '52.11667'},
+        ),
+    ]
+)
+def test_json_api_get_doculects_for_map(
+        dummy_request, setup_models_for_views_testing, locale, expected_first_doculect, expected_last_doculect
+):
+
+    dummy_request.matchdict['locale'] = locale
+    doculects = get_doculects_for_map(dummy_request)
+
+    assert len(doculects) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
+    assert doculects[0] == expected_first_doculect
+    assert doculects[-1] == expected_last_doculect
+
+
+def test_view_all_doculects(dummy_request, setup_models_for_views_testing):
 
     info = view_all_doculects(dummy_request)
     assert dummy_request.response.status_int == 200
-    assert len(info['doculects']) == 338  # only those (out of 429) that have has_feature_profile set to '1'
+    assert len(info['doculects']) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
 
 
 def test_view_doculect_profile(dummy_request, setup_models_for_views_testing):
