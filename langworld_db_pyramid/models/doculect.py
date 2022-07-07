@@ -22,7 +22,9 @@ class Doculect(Base):
     name_ru = Column(String(255))
     custom_title_en = Column(String(255))
     custom_title_ru = Column(String(255))
-    aliases_en = Column(String)  # TODO aliases to separate table with ForeignKey to make it cleaner, more predictable
+    # Aliases could be in a separate table, but they are not organized as pairs of English and Russian equivalents,
+    # which would mean separate tables (one per locale) or more complex queries. So far I don't think it's worth it.
+    aliases_en = Column(String)
     aliases_ru = Column(String)
     family_id = Column(String(50))
     latitude = Column(String)
