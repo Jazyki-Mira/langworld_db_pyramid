@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-06 17:34+0300\n"
+"POT-Creation-Date: 2022-07-07 19:14+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,13 +18,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: templates/all_doculects_list.jinja2:5
+#: templates/404.jinja2:5
+msgid "Страница не найдена"
+msgstr "Page not found"
+
+#: templates/404.jinja2:6
+msgid "Перейти на главную"
+msgstr "To the main page"
+
+#: templates/all_doculects_list.jinja2:5 templates/base.jinja2:58
 msgid "Список языков"
 msgstr "All languages and dialects"
 
-#: templates/all_doculects_map.jinja2:9
+#: templates/all_doculects_list.jinja2:10
+msgid "В списке представлены языки и диалекты, для которых заполнены рефераты"
+msgstr "This list includes all languages and dialects that have feature profiles"
+
+#: templates/all_doculects_map.jinja2:9 templates/base.jinja2:59
 msgid "Карта языков"
 msgstr "Map of languages and dialects"
+
+#: templates/base.jinja2:11
+msgid "База данных «Языки мира»"
+msgstr "The Languages of the World Database"
 
 #: templates/doculect_profile.jinja2:12
 msgid "Альтернативные названия"
