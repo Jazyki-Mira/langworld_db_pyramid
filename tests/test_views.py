@@ -1,13 +1,14 @@
 import pytest
 
 from langworld_db_pyramid.models.doculect import Doculect
-from langworld_db_pyramid.views.doculects_list import view_all_doculects, view_doculect_profile
-from langworld_db_pyramid.views.json_api import get_man_ids_of_doculects_containing_substring
+from langworld_db_pyramid.views.doculects_list import view_all_doculects
+from langworld_db_pyramid.views.doculect_profile import view_doculect_profile
+from langworld_db_pyramid.views.json_api import get_doculects_by_substring
 from langworld_db_pyramid.views.notfound import notfound_view
 
 
 @pytest.mark.parametrize(
-    'query, locale, expected_items',
+    'query, locale, expected_ids',
     [
         ('dut', 'en', ('afrikaans', 'dutch')),  # 'dut' is in aliases for Afrikaans and in main name for Dutch
         # the request is in Russian but IDs received are English:
@@ -15,20 +16,25 @@ from langworld_db_pyramid.views.notfound import notfound_view
     ]
 
 )
-def test_sample_json_view(
+def test_get_doculects_by_substring(
         dummy_request, setup_models_for_views_testing,
-        query, locale, expected_items,
+        query, locale, expected_ids,
 ):
 
     dummy_request.matchdict['locale'] = locale
     dummy_request.matchdict['query'] = query
 
-    data = get_man_ids_of_doculects_containing_substring(dummy_request)
+    doculects = get_doculects_by_substring(dummy_request)
 
-    assert len(data) == len(expected_items)
+    assert len(doculects) == len(expected_ids)
 
-    for item in expected_items:
-        assert item in data
+    for doculect in doculects:
+        for key in ('id', 'name', 'aliases', 'iso639p3Codes', 'glottocodes'):
+            assert key in doculect.keys()
+
+    for doculect_id in expected_ids:
+        ids = [doculect['id'] for doculect in doculects]
+        assert doculect_id in ids
 
 
 def test_view_all_doculects_success(dummy_request, setup_models_for_views_testing):
