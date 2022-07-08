@@ -147,6 +147,8 @@ def test_db_initializer(dbsession):
         file_with_countries=FILE_WITH_COUNTRIES_FOR_INITIALIZE_DB,
         file_with_doculects=FILE_WITH_DOCULECTS_FOR_INITIALIZE_DB,
         file_with_encyclopedia_volumes=FILE_WITH_ENCYCLOPEDIA_VOLUMES_FOR_INITIALIZE_DB,
+        file_with_genealogy_hierarchy=FILE_WITH_GENEALOGY_HIERARCHY_FOR_INITIALIZE_DB,
+        file_with_genealogy_names=FILE_WITH_GENEALOGY_NAMES_FOR_INITIALIZE_DB,
         file_with_listed_values=FILE_WITH_LISTED_VALUES_FOR_INITIALIZE_DB,
         file_with_names_of_features=FILE_WITH_FEATURES_FOR_INITIALIZE_DB,
         file_with_value_types=FILE_WITH_VALUE_TYPES_FOR_INITIALIZE_DB,

@@ -3,18 +3,22 @@ from copy import copy
 from functools import partial
 from pathlib import Path
 import sys
+from typing import Optional
 
 from pyramid.paster import bootstrap, setup_logging
 from sqlalchemy import delete
 from sqlalchemy.exc import OperationalError
 
 from langworld_db_data.langworld_db_data.filetools.csv_xls import read_csv
+from langworld_db_data.langworld_db_data.filetools.json_toml_yaml import read_json_toml_yaml
 from langworld_db_data.langworld_db_data.constants.paths import (
     FEATURE_PROFILES_DIR,
     FILE_WITH_CATEGORIES,
     FILE_WITH_COUNTRIES,
     FILE_WITH_DOCULECTS,
     FILE_WITH_ENCYCLOPEDIA_VOLUMES,
+    FILE_WITH_GENEALOGY_HIERARCHY,
+    FILE_WITH_GENEALOGY_NAMES,
     FILE_WITH_LISTED_VALUES,
     FILE_WITH_NAMES_OF_FEATURES,
     FILE_WITH_VALUE_TYPES,
@@ -43,6 +47,8 @@ class CustomModelInitializer:
         file_with_countries: Path = FILE_WITH_COUNTRIES,
         file_with_doculects: Path = FILE_WITH_DOCULECTS,
         file_with_encyclopedia_volumes: Path = FILE_WITH_ENCYCLOPEDIA_VOLUMES,
+        file_with_genealogy_hierarchy: Path = FILE_WITH_GENEALOGY_HIERARCHY,
+        file_with_genealogy_names: Path = FILE_WITH_GENEALOGY_NAMES,
         file_with_listed_values: Path = FILE_WITH_LISTED_VALUES,
         file_with_names_of_features: Path = FILE_WITH_NAMES_OF_FEATURES,
         file_with_value_types: Path = FILE_WITH_VALUE_TYPES,
@@ -65,9 +71,15 @@ class CustomModelInitializer:
         self.file_with_countries = file_with_countries
         self.file_with_doculects = file_with_doculects
         self.file_with_encyclopedia_volumes = file_with_encyclopedia_volumes
+        self.file_with_genealogy_hierarchy = file_with_genealogy_hierarchy
         self.file_with_listed_values = file_with_listed_values
         self.file_with_names_of_features = file_with_names_of_features
         self.file_with_value_types = file_with_value_types
+
+        self.genealogy_names_for_id = {
+            row['id']: {'en': row['en'], 'ru': row['ru']}
+            for row in self.read_file(file_with_genealogy_names)
+        }
 
         # Dictionaries map identifiers to instances of mapped classes:
 
@@ -103,6 +115,7 @@ class CustomModelInitializer:
         self._populate_categories_features_value_types_listed_and_empty_values()
         self._populate_countries()
         self._populate_encyclopedia_volumes()
+        self._populate_families()
         self._populate_glottocodes()
         self._populate_iso639p3_codes()
 
@@ -182,6 +195,35 @@ class CustomModelInitializer:
             volume = models.encyclopedia_volume.EncyclopediaVolume(**encyclopedia_row)
             self.dbsession.add(volume)
             self.encyclopedia_volume_for_id[volume.id] = volume
+
+    def _populate_families(self):
+        # make initial call to another function that will recursively call itself until all families are processed
+        self._process_genealogy_hierarchy(read_json_toml_yaml(self.file_with_genealogy_hierarchy))
+
+    def _process_genealogy_hierarchy(self, items: list, parent: Optional[models.family.Family] = None):
+        if not isinstance(items, list):
+            raise TypeError(f'This function cannot be called with {type(items)} ({items})')
+
+        for node in items:
+            if not isinstance(node, (str, dict)):
+                raise TypeError(f'Node cannot be of type {type(node)} ({node})')
+
+            manual_id = list(node.keys())[0] if isinstance(node, dict) else node
+
+            family = models.family.Family(
+                man_id=manual_id,
+                name_en=self.genealogy_names_for_id[manual_id]['en'],
+                name_ru=self.genealogy_names_for_id[manual_id]['ru'],
+            )
+            if parent is not None:
+                family.parent = parent
+
+            self.dbsession.add(family)
+
+            if isinstance(node, dict):
+                # A dictionary in this hierarchy always has only one key,
+                # so the node's children are in the first item of .values()
+                self._process_genealogy_hierarchy(items=list(node.values())[0], parent=family)
 
     def _populate_glottocodes(self):
         # for now, I see it reasonable to only add codes that are present in file with doculects (same for ISO-639-3)

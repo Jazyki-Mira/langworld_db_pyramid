@@ -8,6 +8,8 @@ cookiecutter = "==2.1.1"
 pyramid = "==2.0"
 openpyxl = "*"
 babel = "*"
+pyyaml = "*"
+toml = "*"
 
 [dev-packages]
 

@@ -1,4 +1,3 @@
-import pytest
 from sqlalchemy import select
 
 from langworld_db_data.langworld_db_data.filetools.csv_xls import read_csv
@@ -31,6 +30,7 @@ class TestCustomModelInitializer:
             models.Doculect: 429,
             models.DoculectType: 3,
             models.EncyclopediaVolume: 19,
+            models.Family: 145,
             models.Feature: 126,
             models.FeatureCategory: 14,
             models.FeatureValue: number_of_listed_values + number_of_empty_values + len(unique_custom_values),
@@ -63,6 +63,21 @@ class TestCustomModelInitializer:
 
         rom_volume = dbsession.scalars(select(models.EncyclopediaVolume).where(models.EncyclopediaVolume.id == '11')).one()
         assert len(rom_volume.doculects) == 24
+
+        # family top to bottom
+        mande = dbsession.scalars(select(models.Family).where(models.Family.man_id == 'mande')).one()
+        assert len(mande.children) == 2
+        western = mande.children[0]
+        assert western.name_ru == 'Западные'
+        assert len(western.children) == 6
+        manding = western.children[0]
+        assert len(manding.children) == 2
+        assert manding.children[1].name_en == 'Manding-East'
+
+        # family bottom to top
+        yupik = dbsession.scalars(select(models.Family).where(models.Family.man_id == 'yupik')).one()
+        assert yupik.parent.name_en == 'Eskimo'
+        assert yupik.parent.parent.name_ru == 'Эскимосско-алеутские'
 
     def test__delete_all_data(self, dbsession, test_db_initializer):
         test_db_initializer.setup_models()
