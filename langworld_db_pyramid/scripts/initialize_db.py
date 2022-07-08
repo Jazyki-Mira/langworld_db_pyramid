@@ -51,7 +51,7 @@ class CustomModelInitializer:
                 models.association_tables.DoculectToFeatureValue, models.association_tables.DoculectToGlottocode,
                 models.association_tables.DoculectToIso639P3Code,
                 models.Doculect, models.DoculectFeatureValueComment, models.DoculectType, models.Country,
-                models.EncyclopediaVolume,
+                models.EncyclopediaVolume, models.Family,
                 models.FeatureValue, models.FeatureValueType, models.Feature, models.FeatureCategory,
                 models.Glottocode, models.Iso639P3Code,
         )
