@@ -85,6 +85,7 @@ class CustomModelInitializer:
 
         self.country_for_id = {}
         self.encyclopedia_volume_for_id = {}
+        self.family_for_id = {}
 
         self.category_for_id = {}
         self.feature_for_id = {}
@@ -218,6 +219,7 @@ class CustomModelInitializer:
             if parent is not None:
                 family.parent = parent
 
+            self.family_for_id[manual_id] = family
             self.dbsession.add(family)
 
             if isinstance(node, dict):
@@ -271,6 +273,9 @@ class CustomModelInitializer:
             if doculect_row_to_write['encyclopedia_volume_id']:  # should be there for every doculect, actually
                 encyclopedia_volume = self.encyclopedia_volume_for_id[doculect_row_to_write['encyclopedia_volume_id']]
 
+            family = self.family_for_id[doculect_row_to_write['family_id']]
+            del doculect_row_to_write['family_id']
+
             del doculect_row_to_write['encyclopedia_volume_id']
 
             for bool_key in ('is_extinct', 'is_multiple', 'has_feature_profile'):
@@ -301,7 +306,7 @@ class CustomModelInitializer:
 
             if encyclopedia_volume:
                 doculect.encyclopedia_volume = encyclopedia_volume
-
+            doculect.family = family
             doculect.glottocodes = glottocodes_for_this_doculect
             doculect.iso_639p3_codes = iso_639p3_codes_for_this_doculect
             doculect.main_country = main_country

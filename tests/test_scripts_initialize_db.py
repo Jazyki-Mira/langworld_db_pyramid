@@ -79,6 +79,18 @@ class TestCustomModelInitializer:
         assert yupik.parent.name_en == 'Eskimo'
         assert yupik.parent.parent.name_ru == 'Эскимосско-алеутские'
 
+        # relationship between family and doculects
+        east_rom = dbsession.scalars(select(models.Family).where(models.Family.man_id == 'east_rom')).one()
+        assert len(east_rom.doculects) == 4
+        for doculect in east_rom.doculects:
+            assert doculect.name_en in ('Aromanian', 'Istro-Rumanian', 'Megleno-Romanian', 'Romanian')
+
+        old_russian = dbsession.scalars(select(models.Doculect).where(models.Doculect.name_en == 'Old Russian')).one()
+        assert old_russian.family.name_en == 'East Slavic'
+        assert old_russian.family.parent.name_en == 'Slavic'
+        assert old_russian.family.parent.parent.name_ru == 'Индоевропейские'
+        # TODO can add more tests here (for country, features etc.)
+
     def test__delete_all_data(self, dbsession, test_db_initializer):
         test_db_initializer.setup_models()
 

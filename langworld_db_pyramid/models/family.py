@@ -20,3 +20,4 @@ class Family(Base):
     name_ru = Column(String(255))
 
     children = relationship('Family', backref=backref('parent', remote_side=[id]))
+    doculects = relationship('Doculect', back_populates='family')

@@ -26,7 +26,7 @@ class Doculect(Base):
     # which would mean separate tables (one per locale) or more complex queries. So far I don't think it's worth it.
     aliases_en = Column(String)
     aliases_ru = Column(String)
-    family_id = Column(String(50))
+    family_id = Column(Integer, ForeignKey('families.id'))
     latitude = Column(String)
     longitude = Column(String)
     main_country_id = Column(Integer, ForeignKey('countries.id'))
@@ -37,6 +37,7 @@ class Doculect(Base):
     comment_ru = Column(Text)
 
     encyclopedia_volume = relationship("EncyclopediaVolume", back_populates="doculects")
+    family = relationship("Family", back_populates="doculects")
     feature_value_comments = relationship('DoculectFeatureValueComment', back_populates='doculect')
     main_country = relationship("Country", back_populates="doculects")
     type = relationship("DoculectType", back_populates="doculects")
