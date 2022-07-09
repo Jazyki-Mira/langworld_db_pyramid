@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-07 19:14+0300\n"
+"POT-Creation-Date: 2022-07-09 16:15+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -31,12 +31,21 @@ msgid "Список языков"
 msgstr "All languages and dialects"
 
 #: templates/all_doculects_list.jinja2:10
+msgid "Полный список c сортировкой по названию"
+msgstr "Full list, sorted by name"
+
+#: templates/all_doculects_list.jinja2:11
 msgid "В списке представлены языки и диалекты, для которых заполнены рефераты"
 msgstr "This list includes all languages and dialects that have feature profiles"
 
 #: templates/all_doculects_map.jinja2:9 templates/base.jinja2:59
 msgid "Карта языков"
 msgstr "Map of languages and dialects"
+
+#: templates/all_features_list.jinja2:8 templates/base.jinja2:60
+#: templates/doculect_profile.jinja2:48
+msgid "Признаки"
+msgstr "Features"
 
 #: templates/base.jinja2:11
 msgid "База данных «Языки мира»"
@@ -62,11 +71,23 @@ msgstr "show on the map"
 msgid "Идентификаторы"
 msgstr "Identifiers"
 
-#: templates/doculect_profile.jinja2:48
-msgid "Признаки"
-msgstr "Features"
-
 #: templates/doculect_profile.jinja2:64
 msgid "Незаполненные признаки"
 msgstr "Unfilled features"
+
+#: templates/doculect_profile.jinja2:67
+msgid "В энциклопедии отсутствует информация"
+msgstr "The encyclopedia contains no information"
+
+#: templates/doculect_profile.jinja2:83
+msgid "В энциклопедии присутствует явное указание на отсутствие данных"
+msgstr "The encyclopedia explicitly states lack of data"
+
+#: templates/doculect_profile.jinja2:99
+msgid "Признак неприменим к этому языку"
+msgstr "Feature is not applicable to this language"
+
+#: templates/feature.jinja2:10
+msgid "Значения признака (с сортировкой по убыванию числа языков)"
+msgstr "Values of the feature, sorted by number of languages (descending)"
 

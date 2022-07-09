@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-07 19:14+0300\n"
+"POT-Creation-Date: 2022-07-09 16:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,11 +30,20 @@ msgid "Список языков"
 msgstr ""
 
 #: templates/all_doculects_list.jinja2:10
+msgid "Полный список c сортировкой по названию"
+msgstr ""
+
+#: templates/all_doculects_list.jinja2:11
 msgid "В списке представлены языки и диалекты, для которых заполнены рефераты"
 msgstr ""
 
 #: templates/all_doculects_map.jinja2:9 templates/base.jinja2:59
 msgid "Карта языков"
+msgstr ""
+
+#: templates/all_features_list.jinja2:8 templates/base.jinja2:60
+#: templates/doculect_profile.jinja2:48
+msgid "Признаки"
 msgstr ""
 
 #: templates/base.jinja2:11
@@ -61,11 +70,23 @@ msgstr ""
 msgid "Идентификаторы"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:48
-msgid "Признаки"
-msgstr ""
-
 #: templates/doculect_profile.jinja2:64
 msgid "Незаполненные признаки"
+msgstr ""
+
+#: templates/doculect_profile.jinja2:67
+msgid "В энциклопедии отсутствует информация"
+msgstr ""
+
+#: templates/doculect_profile.jinja2:83
+msgid "В энциклопедии присутствует явное указание на отсутствие данных"
+msgstr ""
+
+#: templates/doculect_profile.jinja2:99
+msgid "Признак неприменим к этому языку"
+msgstr ""
+
+#: templates/feature.jinja2:10
+msgid "Значения признака (с сортировкой по убыванию числа языков)"
 msgstr ""
 
