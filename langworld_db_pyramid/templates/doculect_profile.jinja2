@@ -61,19 +61,55 @@
   {% endfor %}
   </ul>
 
-  <h3>{% trans %}Незаполненные признаки{% endtrans %}</h3>
-  <ul>
-  {% for value in doculect.feature_values|sort(attribute="feature.id") %}
-    {% if value.type.entails_empty_value %}
-        <li>
-            {{ value.feature[name_attr] }} ({{ value.feature.man_id }}): {{ value.type.name }}
-            {% if request.locale_name == 'ru' %}
-                {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
-            {% endif %}
-        </li>
-    {% endif %}
-  {% endfor %}
-  </ul>
+  <h2>{% trans %}Незаполненные признаки{% endtrans %}</h2>
+
+  {% if doculect.feature_values|selectattr("type.name", "eq", "not_stated")|list %}
+      <h3>{% trans %}В энциклопедии отсутствует информация{% endtrans %}</h3>
+      <ul>
+      {% for value in doculect.feature_values|sort(attribute="feature.id") %}
+        {% if value.type.name == 'not_stated' %}
+            <li>
+                {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
+                {% if request.locale_name == 'ru' %}
+                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+                {% endif %}
+            </li>
+        {% endif %}
+      {% endfor %}
+      </ul>
+  {% endif %}
+
+  {% if doculect.feature_values|selectattr("type.name", "eq", "explicit_gap")|list %}
+      <h3>{% trans %}В энциклопедии присутствует явное указание на отсутствие данных{% endtrans %}</h3>
+      <ul>
+      {% for value in doculect.feature_values|sort(attribute="feature.id") %}
+        {% if value.type.name == 'explicit_gap' %}
+            <li>
+                {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
+                {% if request.locale_name == 'ru' %}
+                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+                {% endif %}
+            </li>
+        {% endif %}
+      {% endfor %}
+      </ul>
+  {% endif %}
+
+  {% if doculect.feature_values|selectattr("type.name", "eq", "not_applicable")|list %}
+      <h3>{% trans %}Признак неприменим к этому языку{% endtrans %}</h3>
+      <ul>
+      {% for value in doculect.feature_values|sort(attribute="feature.id") %}
+        {% if value.type.name == 'not_applicable' %}
+            <li>
+                {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
+                {% if request.locale_name == 'ru' %}
+                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+                {% endif %}
+            </li>
+        {% endif %}
+      {% endfor %}
+      </ul>
+  {% endif %}
 
   {% if request.locale_name == 'ru' %}
     <p class="lead">{{ doculect.comment_ru }}</p>
