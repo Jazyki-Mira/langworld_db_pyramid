@@ -1,0 +1,20 @@
+{% extends "base.jinja2" %}
+
+{% block content %}
+
+{% set name_attr = "name_" + request.locale_name %}
+
+<div class="content">
+  <h1 class="w3-text-teal">{% trans %}Признаки{% endtrans %}</h1>
+
+  {% for category in categories %}
+      <h2>{{ category[name_attr] }}</h2>
+      <ul>
+        {% for feature in category.features %}
+        <li><a href="../feature/{{ feature.man_id }}">{{ feature[name_attr] }}</a> ({{ feature.man_id }})</li>
+        {% endfor %}
+      </ul>
+  {% endfor %}
+
+</div>
+{% endblock content %}
