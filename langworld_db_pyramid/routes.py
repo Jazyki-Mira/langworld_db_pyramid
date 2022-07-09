@@ -15,3 +15,6 @@ def includeme(config):
 
     config.add_route('doculects_by_substring', '/{locale}/json_api/doculect_by_name/{query}')
     config.add_route('doculects_for_map', '/{locale}/json_api/doculects_for_map/')
+
+    config.add_route('feature', '/feature/{feature_man_id}')
+    config.add_route('feature_localized', '{locale}/feature/{feature_man_id}')

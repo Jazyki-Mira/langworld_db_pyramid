@@ -50,7 +50,7 @@
   {% for value in doculect.feature_values|sort(attribute="feature.id") %}
     {% if not value.type.entails_empty_value %}
         <li>
-            {{ value.feature[name_attr] }} ({{ value.feature.man_id }}): {{ value[name_attr]}} {%if value.man_id %}({{ value.man_id }}){% endif %}
+            <a href="../feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }} ({{ value.feature.man_id }})</a>: {{ value[name_attr]}} {%if value.man_id %}({{ value.man_id }}){% endif %}
 
             {# comments are only available in Russian so far #}
             {% if request.locale_name == 'ru' %}

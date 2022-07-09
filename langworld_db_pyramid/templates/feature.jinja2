@@ -1,0 +1,28 @@
+{% extends "base.jinja2" %}
+
+{% block content %}
+
+{% set name_attr = "name_" + request.locale_name %}
+
+<div class="content">
+  <h1 class="w3-text-teal">{{ feature_name }} ({{ man_id }})</h1>
+
+  <h2>{% trans %}Значения признака (с сортировкой по убыванию числа языков){% endtrans %}</h2>
+
+  <ul>
+  {% for value in values%}
+    {% if value.doculects|list %}
+        <li>
+            {{ value[name_attr] }} ({{ value.doculects|length }})
+            <ul>
+                {% for doculect in value.doculects|sort(attribute=name_attr) %}
+                <li><a href="../doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endif %}
+  {% endfor %}
+  </ul>
+
+</div>
+{% endblock content %}
