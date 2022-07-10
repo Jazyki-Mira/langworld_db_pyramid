@@ -14,7 +14,8 @@ def includeme(config):
     config.add_route('doculect_profile_localized', '{locale}/doculect/{doculect_man_id}')
 
     config.add_route('doculects_by_substring', '/{locale}/json_api/doculect_by_name/{query}')
-    config.add_route('doculects_for_map', '/{locale}/json_api/doculects_for_map/')
+    config.add_route('doculects_for_map', '/{locale}/json_api/doculects_for_map/')  # TODO rename, remove trailing slash
+    config.add_route('genealogy_json', '/{locale}/json_api/genealogy')
 
     config.add_route('all_features_list', '/features/list')
     config.add_route('all_features_list_localized', '{locale}/features/list')

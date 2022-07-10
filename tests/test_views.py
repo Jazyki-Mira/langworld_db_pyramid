@@ -3,7 +3,7 @@ import pytest
 from langworld_db_pyramid.models.doculect import Doculect
 from langworld_db_pyramid.views.doculects_list import view_all_doculects
 from langworld_db_pyramid.views.doculect_profile import view_doculect_profile
-from langworld_db_pyramid.views.json_api import get_doculects_by_substring, get_doculects_for_map
+from langworld_db_pyramid.views.json_api import get_doculects_by_substring, get_doculects_for_map, get_genealogy
 from langworld_db_pyramid.views.notfound import notfound_view
 
 NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) that have has_feature_profile set to '1'
@@ -66,6 +66,30 @@ def test_json_api_get_doculects_for_map(
     assert len(doculects) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
     assert doculects[0] == expected_first_doculect
     assert doculects[-1] == expected_last_doculect
+
+
+def test_json_api_get_genealogy(dummy_request, setup_models_for_views_testing):
+    dummy_request.matchdict['locale'] = 'en'
+    data = get_genealogy(dummy_request)
+
+    # number of top families
+    assert len(data) == 13
+
+    assert data[0]['name'] == 'Altaic'
+    assert len(data[0]['children']) == 4
+
+    assert data[5]['name'] == 'Indo-European'
+    assert data[5]['children'][1]['name'] == 'Indo-Iranian'
+    assert data[5]['children'][1]['children'][3]['name'] == 'Dardic'
+    dardic_doculects = data[5]['children'][1]['children'][3]['doculects']
+    # only doculects with 'has_feature_profile' set to True can be here (they are 18 in total but 16 have profiles):
+    assert len(dardic_doculects) == 16
+    assert 'Sawi' in [d['name'] for d in dardic_doculects]
+    assert 'Dameli' not in [d['name'] for d in dardic_doculects]
+
+    assert data[-1]['name'] == 'Yukaghir'
+    assert not data[-1]['children']
+    assert len(data[-1]['doculects']) == 0  # there is one doculect but it has no feature profile
 
 
 def test_view_all_doculects(dummy_request, setup_models_for_views_testing):
