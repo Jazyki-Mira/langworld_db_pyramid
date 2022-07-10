@@ -2,25 +2,10 @@
 
 {% block content %}
 <div class="content">
-  <h1 class="w3-text-teal">{% trans %}Список языков{% endtrans %}</h1>
+  <h1 class="w3-text-teal">{% trans %}Генеалогия{% endtrans %}</h1>
 
-  <div id="doculect-finder-form"></div>
-  <div id="doculect-finder-list"></div>
-
-  <h2>{% trans%}Полный список c сортировкой по названию{% endtrans %}</h2>
-  <p>{% trans %}В списке представлены языки и диалекты, для которых заполнены рефераты{% endtrans %} (<strong>{{ doculects|length }}</strong>).</p>
-  <ul>
-  {% for item in doculects %}
-      {% set name_attr = "name_" + request.locale_name %}
-      {% set aliases_attr = "aliases_" + request.locale_name %}
-
-      <li><a href="../doculect/{{ item.man_id }}">{{ item[name_attr] }}</a> {% if item[aliases_attr] %}({{ item[aliases_attr] }}){% endif %} </li>
-  {% endfor %}
-  </ul>
+  <div id="genealogy-tree"></div>
 
 </div>
-
-
-    <script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectListForm.js') }}" type="module"></script>
-
+<script src="{{ request.static_url('langworld_db_pyramid:static/js/genealogy.js') }}" type="module"></script>
 {% endblock content %}

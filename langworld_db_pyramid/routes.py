@@ -22,3 +22,6 @@ def includeme(config):
 
     config.add_route('feature', '/feature/{feature_man_id}')
     config.add_route('feature_localized', '{locale}/feature/{feature_man_id}')
+
+    config.add_route('genealogy', '/genealogy/tree_and_map')
+    config.add_route('genealogy_localized', '{locale}/genealogy/tree_and_map')

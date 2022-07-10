@@ -6,15 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from .. import models
 
 
-@view_config(route_name='all_features_list', renderer='langworld_db_pyramid:templates/all_features_list.jinja2')
-@view_config(
-    route_name='all_features_list_localized', renderer='langworld_db_pyramid:templates/all_features_list.jinja2'
-)
-def view_all_features(request):
-    try:
-        categories = request.dbsession.scalars(select(models.FeatureCategory)).all()
-    except SQLAlchemyError:
-        return Response('Database error', content_type='text/plain', status=500)
-
-    return {'categories': categories}
-    # TODO simple test
+@view_config(route_name='genealogy', renderer='langworld_db_pyramid:templates/genealogy.jinja2')
+@view_config(route_name='genealogy_localized', renderer='langworld_db_pyramid:templates/genealogy.jinja2')
+def view_genealogy(request):
+    return {}
