@@ -11,7 +11,15 @@ const createTree = (items, typeOfItem = "family") => {
             "ul",
             {},
             items.map(item => {
-                let elementContents = [item["name"]];
+                let elementContents  = null;
+                switch (typeOfItem) {
+                    case "family": 
+                        elementContents = [item["name"]];
+                        break;
+                    case "doculect":
+                        elementContents = [React.createElement('a', { href: `../doculect/${item["id"]}` }, item["name"])];
+                        break;
+                }
 
                 if ("children" in item && item["children"].length > 0) elementContents.push(createTree(item["children"]));
                 if ("doculects" in item && item["doculects"].length > 0) elementContents.push(createTree(item["doculects"], "doculect"));
