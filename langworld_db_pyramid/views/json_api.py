@@ -82,7 +82,10 @@ def get_genealogy(request):
             ], key=lambda doculect: doculect['name'])
 
         if family.children:
-            data['children'] = [_get_family_with_children(child) for child in family.children]
+            data['children'] = [
+                _get_family_with_children(child) for child in family.children
+                if child.has_doculects_with_feature_profiles()
+            ]
 
         return data
 
@@ -90,8 +93,11 @@ def get_genealogy(request):
     name_attr = f'name_{locale}'
 
     # Picking only top families (I must use '==' here because SQLAlchemy will not accept 'is')
-    families = request.dbsession.scalars(
+    top_level_families = request.dbsession.scalars(
         select(models.Family).where(models.Family.parent == None)
     ).all()
 
-    return [_get_family_with_children(family) for family in families]
+    return [
+        _get_family_with_children(family) for family in top_level_families
+        if family.has_doculects_with_feature_profiles()
+    ]

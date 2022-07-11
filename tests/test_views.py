@@ -69,27 +69,37 @@ def test_json_api_get_doculects_for_map(
 
 
 def test_json_api_get_genealogy(dummy_request, setup_models_for_views_testing):
+
+    def count_doculects(family_as_dict: dict) -> int:
+        return len(family_as_dict['doculects']) + sum(count_doculects(child) for child in family_as_dict['children'])
+
     dummy_request.matchdict['locale'] = 'en'
     data = get_genealogy(dummy_request)
 
-    # number of top families
-    assert len(data) == 13
+    # make sure no doculect (with feature profile) is lost
+    doculects_count = sum(count_doculects(top_level_family) for top_level_family in data)
+    assert doculects_count == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
 
+    # number of top families: 13 in total but Yenisey and Yukaghir have no doculects with feature profiles
+    assert len(data) == 13 - 2
+
+    # some semi-random checks of particular families
     assert data[0]['name'] == 'Altaic'
     assert len(data[0]['children']) == 4
 
-    assert data[5]['name'] == 'Indo-European'
-    assert data[5]['children'][1]['name'] == 'Indo-Iranian'
-    assert data[5]['children'][1]['children'][3]['name'] == 'Dardic'
-    dardic_doculects = data[5]['children'][1]['children'][3]['doculects']
-    # only doculects with 'has_feature_profile' set to True can be here (they are 18 in total but 16 have profiles):
+    # Indo-European would have index 5 but Yenisey (#4) has no doculects with feature profiles, must be skipped:
+    assert data[4]['name'] == 'Indo-European'
+    assert data[4]['children'][1]['name'] == 'Indo-Iranian'
+    # Dardic would have index 3 but Nuristani has no doculects with feature profiles:
+    assert data[4]['children'][1]['children'][2]['name'] == 'Dardic'
+    dardic_doculects = data[4]['children'][1]['children'][2]['doculects']
+    # only doculects with feature profiles can be here (they are 18 in total but 16 have profiles):
     assert len(dardic_doculects) == 16
     assert 'Sawi' in [d['name'] for d in dardic_doculects]
     assert 'Dameli' not in [d['name'] for d in dardic_doculects]
 
-    assert data[-1]['name'] == 'Yukaghir'
-    assert not data[-1]['children']
-    assert len(data[-1]['doculects']) == 0  # there is one doculect but it has no feature profile
+    # Yukaghir is the last family in hierarchy, but it has no doculects with feature profiles
+    assert data[-1]['name'] == 'Eskimo-Aleut'
 
 
 def test_view_all_doculects(dummy_request, setup_models_for_views_testing):
