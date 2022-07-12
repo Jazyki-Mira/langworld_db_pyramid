@@ -10,6 +10,7 @@ openpyxl = "*"
 babel = "*"
 pyyaml = "*"
 toml = "*"
+clldutils = "*"
 
 [dev-packages]
 

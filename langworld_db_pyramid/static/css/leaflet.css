@@ -2,21 +2,3 @@
   height: 700px;
   width: 100%;
 }
-
-.div-icon {
-  width: 12px;
-  height: 12px;
-  text-align: center;
-  line-height: 12px;
-  color: white;
-}
-
-.square-with-outline {
-  outline-offset: 0px;
-  outline-style: ridge;
-  outline-width: 2px;
-}
-
-.green{
-  background: green;
-}
