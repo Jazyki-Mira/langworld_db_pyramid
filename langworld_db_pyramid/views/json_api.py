@@ -3,6 +3,7 @@ from pyramid.view import view_config
 from sqlalchemy import and_, or_, select
 
 import langworld_db_pyramid.models as models
+from langworld_db_pyramid.maputils.generate_map_icons import generate_fixed_number_of_map_icons
 
 
 @view_config(route_name='doculects_by_substring', renderer='json')
@@ -53,7 +54,7 @@ def get_doculects_for_map(request):
             "name": getattr(doculect, name_attr),
             "latitude": doculect.latitude,
             "longitude": doculect.longitude,
-            "divIconHTML": svg.icon('c008080'),  # teal circle
+            "divIconHTML": generate_fixed_number_of_map_icons(1).svg_tag,
             "divIconSize": [40, 40]
         }
         for doculect in doculects

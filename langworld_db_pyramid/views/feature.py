@@ -23,14 +23,14 @@ def view_feature(request):
             reverse=True
         )
 
-    icon_html_for_value = {}
+    icon_for_value = {}
     for value, icon_html in zip(values, generate_map_icons()):
-        icon_html_for_value[value] = icon_html
+        icon_for_value[value] = icon_html
 
     return {
         'feature_name': getattr(feature, f'name_{request.locale_name}'),
         'man_id': feature.man_id,
         'values': values,
-        'icon_html_for_value': icon_html_for_value
+        'icon_for_value': icon_for_value
     }
     # TODO not adding tests yet because I might use React to do entire feature profile

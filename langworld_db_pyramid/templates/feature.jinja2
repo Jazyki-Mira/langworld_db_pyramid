@@ -13,7 +13,7 @@
   {% for value in values%}
     {% if value.doculects|list %}
         <li>
-            <img src="{{ icon_html_for_value[value]["data_url"] }}"/> {{ value[name_attr] }} ({{ value.doculects|length }})
+            <img src="{{ icon_for_value[value].img_src }}"/> {{ value[name_attr] }} ({{ value.doculects|length }})
             <ul>
                 {% for doculect in value.doculects|sort(attribute=name_attr) %}
                 <li><a href="../doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
