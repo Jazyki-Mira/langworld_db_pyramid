@@ -34,20 +34,19 @@ const renderMarkers = () => {
 const addMarkers = (doculects, doculectMap) => {
     let urlParams = new URLSearchParams(location.search);
 
-    const defaultIcon = L.divIcon({
-       html: `
-       <svg  xmlns="http://www.w3.org/2000/svg"
-       xmlns:xlink="http://www.w3.org/1999/xlink" height="40" width="40">
-       <circle cx="20" cy="20" r="14" style="fill:#008080;stroke:black;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;"/>
-       </svg>
-       `,
-       className: "",
-       iconSize: [40, 40],
-       iconAnchor: [20, 20],
-    });
-
     for (let doculect of doculects) {
-        let marker = L.marker([doculect["latitude"], doculect["longitude"]], {icon: defaultIcon}).addTo(doculectMap);
+
+       let iconSize = [parseInt(doculect["divIconSize"][0]), parseInt(doculect["divIconSize"][1])];
+       let iconAnchor = [iconSize[0] / 2, iconSize[1] / 2];
+
+       const icon = L.divIcon({
+           html: doculect["divIconHTML"],
+           className: "",
+           iconSize: iconSize,
+           iconAnchor: iconAnchor,
+        });
+
+        let marker = L.marker([doculect["latitude"], doculect["longitude"]], {icon: icon}).addTo(doculectMap);
         let url = `../doculect/${doculect["id"]}`;
         marker.bindPopup("<a href=" + url + ">" + doculect["name"] + "</a>");
         marker.on("mouseover", function (e) { this.openPopup(); });

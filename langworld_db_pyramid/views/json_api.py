@@ -1,3 +1,4 @@
+from clldutils import svg
 from pyramid.view import view_config
 from sqlalchemy import and_, or_, select
 
@@ -52,6 +53,8 @@ def get_doculects_for_map(request):
             "name": getattr(doculect, name_attr),
             "latitude": doculect.latitude,
             "longitude": doculect.longitude,
+            "divIconHTML": svg.icon('c008080'),  # teal circle
+            "divIconSize": [40, 40]
         }
         for doculect in doculects
     ]
