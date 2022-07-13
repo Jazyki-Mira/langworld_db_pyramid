@@ -1,15 +1,20 @@
 import accessToken from "./mapboxAccessToken.js"
 
-const renderMap = () => {
+const getUrlParams = () => {
     let urlParams = new URLSearchParams(location.search);
 
     let lat = 55.0;
     let long = 95.0;
     let zoom = 2.5;
 
-    if (urlParams.has('lat')) lat = urlParams.get('lat');
-    if (urlParams.has('long')) long = urlParams.get('long');
+    if (urlParams.has('lat')) lat = parseInt(urlParams.get('lat'));
+    if (urlParams.has('long')) long = parseInt(urlParams.get('long'));
     if (urlParams.has('show_doculect')) zoom = 4;
+
+    return { lat, long, zoom };
+}
+
+const renderMap = ({ lat, long, zoom }) => {
 
     let doculectMap = L.map('doculect-profile-map').setView([lat, long], zoom);
     const titleLayerUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + accessToken;
@@ -25,7 +30,11 @@ const renderMap = () => {
         }
     ).addTo(doculectMap);
 
-    fetch("../json_api/doculects_for_map/")
+    return doculectMap;
+}
+
+const fetchDataAndAddMarkers = (url, doculectMap) => {
+    fetch(url)
     .then(res => res.json())
     .then(doculects => addMarkers(doculects, doculectMap))
     .catch(console.error);
@@ -56,4 +65,11 @@ const addMarkers = (doculects, doculectMap) => {
     }
 }
 
-renderMap();
+const main = () => {
+    const urlParams = getUrlParams(); // TODO: div class, show_doculect
+    let doculectMap = renderMap(urlParams);
+    const url = "../json_api/doculects_for_map/";
+    fetchDataAndAddMarkers(url, doculectMap);
+}
+
+main();
