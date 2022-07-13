@@ -1,6 +1,6 @@
 import accessToken from "./mapboxAccessToken.js"
 
-const getParams = () => {
+const getURLParams = () => {
     let urlParams = new URLSearchParams(location.search);
 
     /* these 3 can be connected (center on a specific doculect),
@@ -12,15 +12,10 @@ const getParams = () => {
 
     let zoom = urlParams.has('show_doculect') ? 4 : 2.5;
 
-    // these parameters may not be directly READ from URL params (after "?" in URL)
-    // but INFERRED from URL
-    let mapDivID = 'map-default';
-    let urlToFetch = '../json_api/doculects_for_map/';
-
-    return { idOfDoculectToShow, mapDivID, mapViewLat, mapViewLong, urlToFetch, zoom };
+    return { idOfDoculectToShow, mapViewLat, mapViewLong, zoom };
 }
 
-const renderMap = ({ mapDivID, mapViewLat, mapViewLong, zoom }) => {
+const renderBase = ({ mapDivID, mapViewLat, mapViewLong, zoom }) => {
 
     let doculectMap = L.map(mapDivID).setView([mapViewLat, mapViewLong], zoom);
     const titleLayerUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + accessToken;
@@ -69,10 +64,9 @@ const addMarkers = (doculects, doculectMap, { idOfDoculectToShow }) => {
     }
 }
 
-const main = () => {
-    const params = getParams();
-    let doculectMap = renderMap(params);
+export default function renderMap ({ mapDivID, urlToFetch }) {
+    const paramsFromURL = getURLParams();
+    const params = { mapDivID, urlToFetch, ...paramsFromURL };
+    let doculectMap = renderBase(params);
     fetchDataAndAddMarkers(doculectMap, params);
-}
-
-main();
+};
