@@ -1,6 +1,6 @@
 import accessToken from "./mapboxAccessToken.js"
 
-const getUrlParams = () => {
+const getParams = () => {
     let urlParams = new URLSearchParams(location.search);
 
     /* these 3 can be connected (center on a specific doculect),
@@ -9,7 +9,6 @@ const getUrlParams = () => {
     let mapViewLat = 55.0;
     let mapViewLong = 95.0;
     let idOfDoculectToShow = null;
-    let mapDivID = 'doculect-profile-map';
 
     let zoom = 2.5;
 
@@ -20,7 +19,12 @@ const getUrlParams = () => {
 
     if (urlParams.has('show_doculect')) idOfDoculectToShow = urlParams.get('show_doculect');
 
-    return { mapDivID, mapViewLat, mapViewLong, zoom, idOfDoculectToShow };
+    // these parameters may not be directly READ from URL params (after "?" in URL)
+    // but INFERRED from URL
+    let mapDivID = 'doculect-profile-map';
+    let urlToFetch = '../json_api/doculects_for_map/';
+
+    return { idOfDoculectToShow, mapDivID, mapViewLat, mapViewLong, urlToFetch, zoom };
 }
 
 const renderMap = ({ mapDivID, mapViewLat, mapViewLong, zoom }) => {
@@ -42,8 +46,8 @@ const renderMap = ({ mapDivID, mapViewLat, mapViewLong, zoom }) => {
     return doculectMap;
 }
 
-const fetchDataAndAddMarkers = (url, doculectMap, urlParams) => {
-    fetch(url)
+const fetchDataAndAddMarkers = (doculectMap, urlParams) => {
+    fetch(urlParams.urlToFetch)
     .then(res => res.json())
     .then(doculects => addMarkers(doculects, doculectMap, urlParams))
     .catch(console.error);
@@ -73,10 +77,9 @@ const addMarkers = (doculects, doculectMap, { idOfDoculectToShow }) => {
 }
 
 const main = () => {
-    const urlParams = getUrlParams();
-    let doculectMap = renderMap(urlParams);
-    const url = "../json_api/doculects_for_map/";
-    fetchDataAndAddMarkers(url, doculectMap, urlParams);
+    const params = getParams();
+    let doculectMap = renderMap(params);
+    fetchDataAndAddMarkers(doculectMap, params);
 }
 
 main();
