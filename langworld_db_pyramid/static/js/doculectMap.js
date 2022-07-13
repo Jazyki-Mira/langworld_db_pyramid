@@ -9,21 +9,23 @@ const getUrlParams = () => {
     let mapViewLat = 55.0;
     let mapViewLong = 95.0;
     let idOfDoculectToShow = null;
+    let mapDivID = 'doculect-profile-map';
 
     let zoom = 2.5;
 
     if (urlParams.has('lat')) mapViewLat = parseInt(urlParams.get('lat'));
     if (urlParams.has('long')) mapViewLong = parseInt(urlParams.get('long'));
     if (urlParams.has('show_doculect')) zoom = 4;
+    // a check can be added here to change default map div id
 
     if (urlParams.has('show_doculect')) idOfDoculectToShow = urlParams.get('show_doculect');
 
-    return { mapViewLat, mapViewLong, zoom, idOfDoculectToShow };
+    return { mapDivID, mapViewLat, mapViewLong, zoom, idOfDoculectToShow };
 }
 
-const renderMap = ({ mapViewLat, mapViewLong, zoom }) => {
+const renderMap = ({ mapDivID, mapViewLat, mapViewLong, zoom }) => {
 
-    let doculectMap = L.map('doculect-profile-map').setView([mapViewLat, mapViewLong], zoom);
+    let doculectMap = L.map(mapDivID).setView([mapViewLat, mapViewLong], zoom);
     const titleLayerUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + accessToken;
 
     L.tileLayer(titleLayerUrl,
@@ -71,7 +73,7 @@ const addMarkers = (doculects, doculectMap, { idOfDoculectToShow }) => {
 }
 
 const main = () => {
-    const urlParams = getUrlParams(); // TODO: div class
+    const urlParams = getUrlParams();
     let doculectMap = renderMap(urlParams);
     const url = "../json_api/doculects_for_map/";
     fetchDataAndAddMarkers(url, doculectMap, urlParams);
