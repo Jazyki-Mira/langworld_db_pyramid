@@ -1,6 +1,6 @@
 import accessToken from "./mapboxAccessToken.js"
 
-const renderMarkers = () => {
+const renderMap = () => {
     let urlParams = new URLSearchParams(location.search);
 
     let lat = 55.0;
@@ -56,4 +56,4 @@ const addMarkers = (doculects, doculectMap) => {
     }
 }
 
-renderMarkers();
+renderMap();
