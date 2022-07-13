@@ -6,18 +6,11 @@ const getParams = () => {
     /* these 3 can be connected (center on a specific doculect),
     but I want to keep the functionality flexible and be able to center on something
     without necessarily showing the doculect */
-    let mapViewLat = 55.0;
-    let mapViewLong = 95.0;
-    let idOfDoculectToShow = null;
+    let idOfDoculectToShow = urlParams.has('show_doculect') ? urlParams.get('show_doculect') : null;
+    let mapViewLat = urlParams.has('lat') ? parseInt(urlParams.get('lat')) : 55.0;
+    let mapViewLong = urlParams.has('long') ? parseInt(urlParams.get('long')) : 95.0;
 
-    let zoom = 2.5;
-
-    if (urlParams.has('lat')) mapViewLat = parseInt(urlParams.get('lat'));
-    if (urlParams.has('long')) mapViewLong = parseInt(urlParams.get('long'));
-    if (urlParams.has('show_doculect')) zoom = 4;
-    // a check can be added here to change default map div id
-
-    if (urlParams.has('show_doculect')) idOfDoculectToShow = urlParams.get('show_doculect');
+    let zoom = urlParams.has('show_doculect') ? 4 : 2.5;
 
     // these parameters may not be directly READ from URL params (after "?" in URL)
     // but INFERRED from URL
