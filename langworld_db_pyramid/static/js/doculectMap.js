@@ -14,7 +14,7 @@ const getParams = () => {
 
     // these parameters may not be directly READ from URL params (after "?" in URL)
     // but INFERRED from URL
-    let mapDivID = 'doculect-profile-map';
+    let mapDivID = 'map-default';
     let urlToFetch = '../json_api/doculects_for_map/';
 
     return { idOfDoculectToShow, mapDivID, mapViewLat, mapViewLong, urlToFetch, zoom };
