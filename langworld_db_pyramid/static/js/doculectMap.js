@@ -3,20 +3,27 @@ import accessToken from "./mapboxAccessToken.js"
 const getUrlParams = () => {
     let urlParams = new URLSearchParams(location.search);
 
-    let lat = 55.0;
-    let long = 95.0;
+    /* these 3 can be connected (center on a specific doculect),
+    but I want to keep the functionality flexible and be able to center on something
+    without necessarily showing the doculect */
+    let mapViewLat = 55.0;
+    let mapViewLong = 95.0;
+    let idOfDoculectToShow = null;
+
     let zoom = 2.5;
 
-    if (urlParams.has('lat')) lat = parseInt(urlParams.get('lat'));
-    if (urlParams.has('long')) long = parseInt(urlParams.get('long'));
+    if (urlParams.has('lat')) mapViewLat = parseInt(urlParams.get('lat'));
+    if (urlParams.has('long')) mapViewLong = parseInt(urlParams.get('long'));
     if (urlParams.has('show_doculect')) zoom = 4;
 
-    return { lat, long, zoom };
+    if (urlParams.has('show_doculect')) idOfDoculectToShow = urlParams.get('show_doculect');
+
+    return { mapViewLat, mapViewLong, zoom, idOfDoculectToShow };
 }
 
-const renderMap = ({ lat, long, zoom }) => {
+const renderMap = ({ mapViewLat, mapViewLong, zoom }) => {
 
-    let doculectMap = L.map('doculect-profile-map').setView([lat, long], zoom);
+    let doculectMap = L.map('doculect-profile-map').setView([mapViewLat, mapViewLong], zoom);
     const titleLayerUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + accessToken;
 
     L.tileLayer(titleLayerUrl,
@@ -33,16 +40,14 @@ const renderMap = ({ lat, long, zoom }) => {
     return doculectMap;
 }
 
-const fetchDataAndAddMarkers = (url, doculectMap) => {
+const fetchDataAndAddMarkers = (url, doculectMap, urlParams) => {
     fetch(url)
     .then(res => res.json())
-    .then(doculects => addMarkers(doculects, doculectMap))
+    .then(doculects => addMarkers(doculects, doculectMap, urlParams))
     .catch(console.error);
 }
 
-const addMarkers = (doculects, doculectMap) => {
-    let urlParams = new URLSearchParams(location.search);
-
+const addMarkers = (doculects, doculectMap, { idOfDoculectToShow }) => {
     for (let doculect of doculects) {
 
        let iconSize = [parseInt(doculect["divIconSize"][0]), parseInt(doculect["divIconSize"][1])];
@@ -61,15 +66,15 @@ const addMarkers = (doculects, doculectMap) => {
         marker.on("mouseover", function (e) { this.openPopup(); });
         marker.on("click", function (e) { window.open(url, "_self"); });
 
-        if (urlParams.has("show_doculect") && urlParams.get("show_doculect") === doculect["id"]) marker.openPopup();
+        if (doculect["id"] === idOfDoculectToShow) marker.openPopup();
     }
 }
 
 const main = () => {
-    const urlParams = getUrlParams(); // TODO: div class, show_doculect
+    const urlParams = getUrlParams(); // TODO: div class
     let doculectMap = renderMap(urlParams);
     const url = "../json_api/doculects_for_map/";
-    fetchDataAndAddMarkers(url, doculectMap);
+    fetchDataAndAddMarkers(url, doculectMap, urlParams);
 }
 
 main();
