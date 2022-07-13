@@ -1,4 +1,4 @@
-import accessToken from "./leafletAccessToken.js"
+import accessToken from "./mapboxAccessToken.js"
 
 const renderMarkers = () => {
     let urlParams = new URLSearchParams(location.search);

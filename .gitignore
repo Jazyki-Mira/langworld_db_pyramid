@@ -22,4 +22,4 @@ test
 *.sqlite
 .idea/
 /langworld_db_pyramid/locale/en/LC_MESSAGES/messages.mo
-/langworld_db_pyramid/static/js/leafletAccessToken.js
+/langworld_db_pyramid/static/js/mapboxAccessToken.js
