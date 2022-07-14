@@ -42,7 +42,12 @@ def view_feature(request):
                         "latitude": doculect.latitude,
                         "longitude": doculect.longitude,
                         "divIconHTML": icon_for_value[value].svg_tag,
-                        "divIconSize": [40, 40]
+                        "divIconSize": [40, 40],
+                        "popupText": (
+                            f'<a href="../doculect/{doculect.man_id}">{getattr(doculect, "name_" + request.locale_name)}'
+                            f'</a><br/>({getattr(feature, "name_" + request.locale_name)}: '
+                            f'{getattr(value, "name_" + request.locale_name)})'
+                        ),
                     }
                 )
         return data
