@@ -15,6 +15,7 @@ def includeme(config):
 
     config.add_route('doculects_by_substring', '/{locale}/json_api/doculect_by_name/{query}')
     config.add_route('doculects_for_map_all', '/{locale}/json_api/doculects_for_map/all')
+    config.add_route('doculects_for_map_feature', '/{locale}/json_api/doculects_for_map/{feature_man_id}')
     config.add_route('genealogy_json', '/{locale}/json_api/genealogy')
 
     config.add_route('all_features_list', '/features/list')

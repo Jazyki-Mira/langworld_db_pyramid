@@ -1,6 +1,6 @@
 from clldutils import svg
 from dataclasses import dataclass
-from typing import Iterator, Union
+from typing import Any, Iterator, Union
 
 COLORS = [
     '1f78b4',
@@ -51,3 +51,10 @@ def generate_fixed_number_of_map_icons(number) -> Union[CLLDIcon, list[CLLDIcon]
 
     icons = [icon for _, icon in zip(range(number), generate_map_icons())]
     return icons[0] if number == 1 else icons
+
+
+def icon_for_object(objects: list) -> dict[Any, CLLDIcon]:
+    """Gets a list of objects and returns a dictionary
+    where each object is mapped to an icon.
+    """
+    return {obj: icon for obj, icon in zip(objects, generate_map_icons())}
