@@ -39,7 +39,7 @@ def get_doculects_by_substring(request):
     return sorted(data, key=lambda item: item['name'])
 
 
-@view_config(route_name='doculects_for_map', renderer='json')
+@view_config(route_name='doculects_for_map_all', renderer='json')
 def get_doculects_for_map(request):
     locale = request.matchdict['locale']
     name_attr = f'name_{locale}'
