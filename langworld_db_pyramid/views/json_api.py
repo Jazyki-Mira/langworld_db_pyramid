@@ -1,4 +1,3 @@
-from clldutils import svg
 from pyramid.view import view_config
 from sqlalchemy import and_, or_, select
 
@@ -60,7 +59,7 @@ def get_doculects_for_map(request):
         for doculect in doculects
     ]
 
-    return sorted(data, key=lambda item: item['name'])
+    return data
 
 
 @view_config(route_name='genealogy_json', renderer='json')
