@@ -1,3 +1,4 @@
+from clldutils import svg
 import pytest
 
 from langworld_db_pyramid.models.doculect import Doculect
@@ -46,13 +47,17 @@ def test_json_api_get_doculects_by_substring(
     [
         (
             'ru',
-            {'id': 'abaza', 'name': 'абазинский', 'latitude': '44.1556', 'longitude': '41.9368'},
-            {'id': 'yaoure', 'name': 'яурэ', 'latitude': '6.85', 'longitude': '-5.3'},
+            {'id': 'abaza', 'name': 'абазинский', 'latitude': '44.1556', 'longitude': '41.9368',
+             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40]},
+            {'id': 'yaoure', 'name': 'яурэ', 'latitude': '6.85', 'longitude': '-5.3',
+             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40]},
         ),
         (
             'en',
-            {'id': 'abaza', 'name': 'Abaza', 'latitude': '44.1556', 'longitude': '41.9368'},
-            {'id': 'zefrei', 'name': 'Zefrei', 'latitude': '32.80592', 'longitude': '52.11667'},
+            {'id': 'abaza', 'name': 'Abaza', 'latitude': '44.1556', 'longitude': '41.9368',
+             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40]},
+            {'id': 'zefrei', 'name': 'Zefrei', 'latitude': '32.80592', 'longitude': '52.11667',
+             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40]},
         ),
     ]
 )
