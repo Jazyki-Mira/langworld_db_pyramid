@@ -54,7 +54,7 @@ const addMarkers = (doculects, doculectMap, { idOfDoculectToShow }) => {
            iconAnchor: iconAnchor,
         });
 
-        let marker = L.marker([doculect["latitude"], doculect["longitude"]], {icon: icon}).addTo(doculectMap);
+        let marker = L.marker([doculect["latitude"], doculect["longitude"]], {icon: icon, riseOnHover: true}).addTo(doculectMap);
         let url = `../doculect/${doculect["id"]}`;
         let popupText = "popupText" in doculect ? doculect["popupText"] : "<a href=" + url + ">" + doculect["name"] + "</a>";
         marker.bindPopup(popupText);
