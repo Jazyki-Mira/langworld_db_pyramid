@@ -27,7 +27,7 @@ def view_families(request):
 
     # TODO return 404 if family ID invalid?
 
-    families_with_doculects_that_have_feature_profiles = [f for f in families if f.has_doculects_with_feature_profiles]
+    families_with_doculects_that_have_feature_profiles = [f for f in families if f.has_doculects_with_feature_profiles()]
 
     # the point is to provide icons only for the top-level children
     icon_for_family = icon_for_object([parent] + families_with_doculects_that_have_feature_profiles)
