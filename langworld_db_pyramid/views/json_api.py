@@ -63,7 +63,7 @@ def get_doculects_for_map(request):
 
 
 @view_config(route_name='genealogy_json', renderer='json')
-def get_genealogy(request):
+def get_genealogy(request):  # TODO delete
 
     def _get_family_with_children(family: models.Family):
         data = {

@@ -15,7 +15,7 @@ def includeme(config):
 
     config.add_route('doculects_by_substring', '/{locale}/json_api/doculect_by_name/{query}')
     config.add_route('doculects_for_map_all', '/{locale}/json_api/doculects_for_map/all')
-    config.add_route('doculects_for_map_feature', '/{locale}/json_api/doculects_for_map/{feature_man_id}')
+    config.add_route('doculects_for_map_feature', '/{locale}/json_api/doculects_for_map/feature/{feature_man_id}')
     config.add_route('genealogy_json', '/{locale}/json_api/genealogy')
 
     config.add_route('all_features_list', '/features/list')
@@ -24,5 +24,6 @@ def includeme(config):
     config.add_route('feature', '/feature/{feature_man_id}')
     config.add_route('feature_localized', '{locale}/feature/{feature_man_id}')
 
-    config.add_route('genealogy', '/families/tree_and_map')
-    config.add_route('genealogy_localized', '{locale}/families/tree_and_map')
+    config.add_route('families', '/family/{family_man_id}')
+    config.add_route('families_localized', '{locale}/family/{family_man_id}')
+    config.add_route('doculects_for_map_family', '/{locale}/json_api/doculects_for_map/family/{family_man_id}')

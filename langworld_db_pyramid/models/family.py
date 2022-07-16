@@ -1,10 +1,8 @@
 from sqlalchemy import (
-    Boolean,
     Column,
     ForeignKey,
     Integer,
     String,
-    Text,
 )
 from sqlalchemy.orm import backref, relationship
 
@@ -22,7 +20,7 @@ class Family(Base):
     children = relationship('Family', backref=backref('parent', remote_side=[id]))
     doculects = relationship('Doculect', back_populates='family')
 
-    def has_doculects_with_feature_profiles(self) -> bool:
+    def has_doculects_with_feature_profiles(self) -> bool:  # TODO test
         """Checks recursively if this family or any of its children have doculects
         with feature profile filled out.
         """
@@ -36,3 +34,12 @@ class Family(Base):
                 return True
 
         return False
+
+    def iter_doculects_that_have_feature_profiles(self):  # TODO test
+        if not self.has_doculects_with_feature_profiles():
+            return []
+
+        yield from (d for d in self.doculects if d.has_feature_profile)
+
+        for child in self.children:
+            yield from child.iter_doculects_that_have_feature_profiles()

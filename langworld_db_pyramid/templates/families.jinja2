@@ -1,0 +1,52 @@
+{% extends "base.jinja2" %}
+
+{% block content %}
+{% set name_attr = "name_" + request.locale_name %}
+
+<div class="content">
+  {% if parent == None %}
+    <h1 class="w3-text-teal">{% trans %}Генеалогия{% endtrans %}</h1>
+  {% else %}
+    <h1 class="w3-text-teal">{{ parent[name_attr] }} {% trans %}языки{% endtrans %}</h1>
+  {% endif %}
+
+  <div id="map-default"></div>
+
+  {% for family in families recursive %}
+    {% if loop.first %}<ul>{% endif %}
+
+    <li>
+        {% if loop.depth == 1 %}
+            <img src="{{ icon_for_family[family].img_src }}"/>
+        {% endif %}
+        <a href="../family/{{ family.man_id }}">{{ family[name_attr] }}</a>
+    </li>
+
+    {{ loop(family.children) }}
+
+    {% for doculect in family.doculects|sort(attribute=name_attr) %}
+        {% if doculect.has_feature_profile %}
+            {% if loop.first %}<ul>{% endif %}
+            <li><a href="../doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+            {% if loop.last %}</ul>{% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% if loop.last %}</ul>{% endif %}
+  {% endfor %}
+
+  {% if parent != None %}
+  {% for doculect in parent.doculects|selectattr("has_feature_profile") %}
+    {% if loop.first %}<ul>{% endif %}
+    <li><a href="../doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+    {% if loop.last %}</ul>{% endif %}
+  {% endfor %}
+  {% endif %}
+
+</div>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin=""></script>
+
+<script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectMapForFamily.js') }}" type="module"></script>
+{% endblock content %}
