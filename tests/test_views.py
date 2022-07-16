@@ -66,7 +66,7 @@ def test_json_api_get_doculects_for_map(
 ):
 
     dummy_request.matchdict['locale'] = locale
-    doculects = get_doculects_for_map(dummy_request)
+    doculects = sorted(get_doculects_for_map(dummy_request), key = lambda doculect: doculect["name"])
 
     assert len(doculects) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
     assert doculects[0] == expected_first_doculect
