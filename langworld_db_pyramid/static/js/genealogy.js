@@ -1,11 +1,5 @@
 import getLocale from "./getLocale.js"
 
-const retrieve_data = url => fetch(url)
-        .then(res => res.json())
-        .then(renderGenealogyTree)
-        .catch(console.error);
-
-
 const createTree = (items, typeOfItem = "family") => {
     return React.createElement(
             "ul",
@@ -29,12 +23,17 @@ const createTree = (items, typeOfItem = "family") => {
         )
 }
 
-const renderGenealogyTree = retrieved_data => {
+const renderGenealogy = retrieved_data => {
 
     if (typeof retrieved_data[Symbol.iterator] != 'function') return;  // promise is pending, no data to iterate over
     
     ReactDOM.render(createTree(retrieved_data), document.getElementById("genealogy-tree"));
 }
 
+const fetchDataAndRenderGenealogy = url => fetch(url)
+        .then(res => res.json())
+        .then(renderGenealogy)
+        .catch(console.error);
+
 const genealogyUrl = "/" + getLocale() + "/json_api/genealogy";
-retrieve_data(genealogyUrl);
+fetchDataAndRenderGenealogy(genealogyUrl);
