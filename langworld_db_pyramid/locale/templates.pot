@@ -42,7 +42,7 @@ msgid "Карта языков"
 msgstr ""
 
 #: templates/all_features_list.jinja2:8 templates/base.jinja2:60
-#: templates/doculect_profile.jinja2:48
+#: templates/doculect.jinja2:48
 msgid "Признаки"
 msgstr ""
 
@@ -50,39 +50,39 @@ msgstr ""
 msgid "База данных «Языки мира»"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:12
+#: templates/doculect.jinja2:12
 msgid "Альтернативные названия"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:15
+#: templates/doculect.jinja2:15
 msgid "Открыть в энциклопедии"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:18
+#: templates/doculect.jinja2:18
 msgid "Основная страна"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:19
+#: templates/doculect.jinja2:19
 msgid "посмотреть на карте"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:22
+#: templates/doculect.jinja2:22
 msgid "Идентификаторы"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:64
+#: templates/doculect.jinja2:64
 msgid "Незаполненные признаки"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:67
+#: templates/doculect.jinja2:67
 msgid "В энциклопедии отсутствует информация"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:83
+#: templates/doculect.jinja2:83
 msgid "В энциклопедии присутствует явное указание на отсутствие данных"
 msgstr ""
 
-#: templates/doculect_profile.jinja2:99
+#: templates/doculect.jinja2:99
 msgid "Признак неприменим к этому языку"
 msgstr ""
 
