@@ -3,14 +3,14 @@ import pytest
 
 from langworld_db_pyramid.models.doculect import Doculect
 from langworld_db_pyramid.models.family import Family
-from langworld_db_pyramid.views.doculects_list import view_all_doculects
+from langworld_db_pyramid.views.doculects_list import get_doculects_by_substring, view_all_doculects_list
+from langworld_db_pyramid.views.doculects_map import get_doculects_for_map
 from langworld_db_pyramid.views.doculect_profile import view_doculect_profile
 from langworld_db_pyramid.views.families import (
     MATCHDICT_ID_FOR_ALL_FAMILIES,
     view_families_for_list,
     view_families_for_map
 )
-from langworld_db_pyramid.views.json_api import get_doculects_by_substring, get_doculects_for_map
 from langworld_db_pyramid.views.notfound import notfound_view
 
 NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) that have has_feature_profile set to '1'
@@ -27,7 +27,7 @@ NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) 
     ]
 
 )
-def test_json_api_get_doculects_by_substring(
+def test_get_doculects_by_substring(
         dummy_request, setup_models_for_views_testing,
         query, locale, expected_ids,
 ):
@@ -67,7 +67,7 @@ def test_json_api_get_doculects_by_substring(
         ),
     ]
 )
-def test_json_api_get_doculects_for_map(
+def test_get_doculects_for_map(
         dummy_request, setup_models_for_views_testing, locale, expected_first_doculect, expected_last_doculect
 ):
 
@@ -117,9 +117,9 @@ def test_view_families_for_map(
     assert len(data) == expected_number_of_doculects
 
 
-def test_view_all_doculects(dummy_request, setup_models_for_views_testing):
+def test_view_all_doculects_list(dummy_request, setup_models_for_views_testing):
 
-    info = view_all_doculects(dummy_request)
+    info = view_all_doculects_list(dummy_request)
     assert dummy_request.response.status_int == 200
     assert len(info['doculects']) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
 
