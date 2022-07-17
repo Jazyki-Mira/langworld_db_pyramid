@@ -14,24 +14,20 @@
 
   {% for family in families recursive %}
     {% if loop.first %}<ul>{% endif %}
+    {% if family.has_doculects_with_feature_profiles() %} {# This check is needed for recursive calls #}
+        <li>
+            {% if loop.depth == 1 %}<img src="{{ icon_for_family[family].img_src }}"/>{% endif %}
+            <a href="../family/{{ family.man_id }}">{{ family[name_attr] }}</a>
 
-    <li>
-        {% if loop.depth == 1 %}
-            <img src="{{ icon_for_family[family].img_src }}"/>
-        {% endif %}
-        <a href="../family/{{ family.man_id }}">{{ family[name_attr] }}</a>
-    </li>
+            {{ loop(family.children) }}
 
-    {{ loop(family.children) }}
-
-    {% for doculect in family.doculects|sort(attribute=name_attr) %}
-        {% if doculect.has_feature_profile %}
-            {% if loop.first %}<ul>{% endif %}
-            <li><a href="../doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
-            {% if loop.last %}</ul>{% endif %}
-        {% endif %}
-    {% endfor %}
-
+            {% for doculect in family.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
+                {% if loop.first %}<ul>{% endif %}
+                <li><a href="../doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+                {% if loop.last %}</ul>{% endif %}
+            {% endfor %}
+        </li>
+    {% endif %}
     {% if loop.last %}</ul>{% endif %}
   {% endfor %}
 
