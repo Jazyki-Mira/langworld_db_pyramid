@@ -32,7 +32,7 @@
   {% endfor %}
 
   {% if parent != None %}
-  {% for doculect in parent.doculects|selectattr("has_feature_profile") %}
+  {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
     {% if loop.first %}<ul>{% endif %}
     <li><a href="../doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
     {% if loop.last %}</ul>{% endif %}
