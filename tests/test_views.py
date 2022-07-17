@@ -2,9 +2,15 @@ from clldutils import svg
 import pytest
 
 from langworld_db_pyramid.models.doculect import Doculect
+from langworld_db_pyramid.models.family import Family
 from langworld_db_pyramid.views.doculects_list import view_all_doculects
 from langworld_db_pyramid.views.doculect_profile import view_doculect_profile
-from langworld_db_pyramid.views.json_api import get_doculects_by_substring, get_doculects_for_map, get_genealogy
+from langworld_db_pyramid.views.families import (
+    MATCHDICT_ID_FOR_ALL_FAMILIES,
+    view_families_for_list,
+    view_families_for_map
+)
+from langworld_db_pyramid.views.json_api import get_doculects_by_substring, get_doculects_for_map
 from langworld_db_pyramid.views.notfound import notfound_view
 
 NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) that have has_feature_profile set to '1'
@@ -66,45 +72,49 @@ def test_json_api_get_doculects_for_map(
 ):
 
     dummy_request.matchdict['locale'] = locale
-    doculects = sorted(get_doculects_for_map(dummy_request), key = lambda doculect: doculect["name"])
+    doculects = sorted(get_doculects_for_map(dummy_request), key=lambda doculect: doculect["name"])
 
     assert len(doculects) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
     assert doculects[0] == expected_first_doculect
     assert doculects[-1] == expected_last_doculect
 
 
-def test_json_api_get_genealogy(dummy_request, setup_models_for_views_testing):
-
-    def count_doculects(family_as_dict: dict) -> int:
-        return len(family_as_dict['doculects']) + sum(count_doculects(child) for child in family_as_dict['children'])
-
+@pytest.mark.parametrize(
+    'family_man_id, parent_is_none, expected_number_of_families',
+    [   # subtracted numbers indicate families that have no doculects with profiles and must not be in data['families']
+        (MATCHDICT_ID_FOR_ALL_FAMILIES, True, 13-2), ('isolate', False, 0), ('eskimo', False, 2-1), ('slav', False, 3)
+    ]
+)
+def test_view_families_for_list(
+        dummy_request, setup_models_for_views_testing, family_man_id, parent_is_none, expected_number_of_families
+):
     dummy_request.matchdict['locale'] = 'en'
-    data = get_genealogy(dummy_request)
+    dummy_request.matchdict['family_man_id'] = family_man_id
+    data = view_families_for_list(dummy_request)
 
-    # make sure no doculect (with feature profile) is lost
-    doculects_count = sum(count_doculects(top_level_family) for top_level_family in data)
-    assert doculects_count == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
+    if parent_is_none:
+        assert data['parent'] is None
+    else:
+        assert isinstance(data['parent'], Family)
 
-    # number of top families: 13 in total but Yenisey and Yukaghir have no doculects with feature profiles
-    assert len(data) == 13 - 2
+    assert len(data['families']) == expected_number_of_families
+    assert len(data['icon_for_family']) == expected_number_of_families + 1
 
-    # some semi-random checks of particular families
-    assert data[0]['name'] == 'Altaic'
-    assert len(data[0]['children']) == 4
 
-    # Indo-European would have index 5 but Yenisey (#4) has no doculects with feature profiles, must be skipped:
-    assert data[4]['name'] == 'Indo-European'
-    assert data[4]['children'][1]['name'] == 'Indo-Iranian'
-    # Dardic would have index 3 but Nuristani has no doculects with feature profiles:
-    assert data[4]['children'][1]['children'][2]['name'] == 'Dardic'
-    dardic_doculects = data[4]['children'][1]['children'][2]['doculects']
-    # only doculects with feature profiles can be here (they are 18 in total but 16 have profiles):
-    assert len(dardic_doculects) == 16
-    assert 'Sawi' in [d['name'] for d in dardic_doculects]
-    assert 'Dameli' not in [d['name'] for d in dardic_doculects]
-
-    # Yukaghir is the last family in hierarchy, but it has no doculects with feature profiles
-    assert data[-1]['name'] == 'Eskimo-Aleut'
+@pytest.mark.parametrize(
+    'family_man_id, expected_number_of_doculects',
+    [
+        (MATCHDICT_ID_FOR_ALL_FAMILIES, NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES),
+        ('isolate', 4), ('yupik', 1), ('slav', 16)
+    ]
+)
+def test_view_families_for_map(
+        dummy_request, setup_models_for_views_testing, family_man_id, expected_number_of_doculects
+):
+    dummy_request.matchdict['locale'] = 'en'
+    dummy_request.matchdict['family_man_id'] = family_man_id
+    data = view_families_for_map(dummy_request)
+    assert len(data) == expected_number_of_doculects
 
 
 def test_view_all_doculects(dummy_request, setup_models_for_views_testing):

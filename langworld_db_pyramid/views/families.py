@@ -1,7 +1,6 @@
 from pyramid.view import view_config
 from pyramid.response import Response
 from sqlalchemy import select
-from sqlalchemy.exc import SQLAlchemyError
 
 from .. import models
 
@@ -10,11 +9,7 @@ from langworld_db_pyramid.maputils.generate_map_icons import icon_for_object
 MATCHDICT_ID_FOR_ALL_FAMILIES = '_all'
 
 
-@view_config(route_name='families', renderer='langworld_db_pyramid:templates/families.jinja2')
-@view_config(route_name='families_localized', renderer='langworld_db_pyramid:templates/families.jinja2')
-@view_config(route_name='doculects_for_map_family', renderer='json')
-def view_families(request):
-
+def get_parent_families_icons(request):  # TODO test
     family_man_id = request.matchdict['family_man_id']
 
     if family_man_id == MATCHDICT_ID_FOR_ALL_FAMILIES:
@@ -27,19 +22,30 @@ def view_families(request):
 
     # TODO return 404 if family ID invalid?
 
-    families_with_doculects_that_have_feature_profiles = [f for f in families if f.has_doculects_with_feature_profiles()]
+    families_with_doculects_that_have_feature_profiles = [
+        f for f in families if f.has_doculects_with_feature_profiles()
+    ]
 
     # the point is to provide icons only for the top-level children
     icon_for_family = icon_for_object([parent] + families_with_doculects_that_have_feature_profiles)
 
-    if request.matched_route.name in ('families', 'families_localized'):
-        return {
-            'parent': parent,
-            'families': families_with_doculects_that_have_feature_profiles,
-            'icon_for_family': icon_for_family
-        }
+    return parent, families_with_doculects_that_have_feature_profiles, icon_for_family
 
-    # Processing JSON route
+
+@view_config(route_name='families', renderer='langworld_db_pyramid:templates/families.jinja2')
+@view_config(route_name='families_localized', renderer='langworld_db_pyramid:templates/families.jinja2')
+def view_families_for_list(request):
+    parent, families, icon_for_family = get_parent_families_icons(request)
+    return {
+        'parent': parent,
+        'families': families,
+        'icon_for_family': icon_for_family
+    }
+
+
+@view_config(route_name='doculects_for_map_family', renderer='json')
+def view_families_for_map(request):
+    parent, families, icon_for_family = get_parent_families_icons(request)
 
     doculects = []
 
@@ -62,7 +68,7 @@ def view_families(request):
             )
 
     # TODO add doculects that belong to the parent directly!
-    for family in families_with_doculects_that_have_feature_profiles:
+    for family in families:
         for doculect in family.iter_doculects_that_have_feature_profiles():
             # TODO this partly repeats feature.py, can I factor this out?
             doculects.append(
