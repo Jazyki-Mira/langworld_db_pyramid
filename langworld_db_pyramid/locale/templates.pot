@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-09 16:15+0300\n"
+"POT-Creation-Date: 2022-07-17 18:42+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,6 +50,10 @@ msgstr ""
 msgid "База данных «Языки мира»"
 msgstr ""
 
+#: templates/base.jinja2:61 templates/families.jinja2:8
+msgid "Генеалогия"
+msgstr ""
+
 #: templates/doculect.jinja2:12
 msgid "Альтернативные названия"
 msgstr ""
@@ -86,7 +90,11 @@ msgstr ""
 msgid "Признак неприменим к этому языку"
 msgstr ""
 
-#: templates/feature.jinja2:10
+#: templates/families.jinja2:10
+msgid "языки"
+msgstr ""
+
+#: templates/feature.jinja2:12
 msgid "Значения признака (с сортировкой по убыванию числа языков)"
 msgstr ""
 

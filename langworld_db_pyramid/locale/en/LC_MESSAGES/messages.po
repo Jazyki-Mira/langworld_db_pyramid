@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-09 16:15+0300\n"
+"POT-Creation-Date: 2022-07-17 18:42+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -51,6 +51,10 @@ msgstr "Features"
 msgid "База данных «Языки мира»"
 msgstr "The Languages of the World Database"
 
+#: templates/base.jinja2:61 templates/families.jinja2:8
+msgid "Генеалогия"
+msgstr "Genealogy"
+
 #: templates/doculect.jinja2:12
 msgid "Альтернативные названия"
 msgstr "Alternative names"
@@ -87,7 +91,11 @@ msgstr "The encyclopedia explicitly states lack of data"
 msgid "Признак неприменим к этому языку"
 msgstr "Feature is not applicable to this language"
 
-#: templates/feature.jinja2:10
+#: templates/families.jinja2:10
+msgid "языки"
+msgstr "languages"
+
+#: templates/feature.jinja2:12
 msgid "Значения признака (с сортировкой по убыванию числа языков)"
 msgstr "Values of the feature, sorted by number of languages (descending)"
 
