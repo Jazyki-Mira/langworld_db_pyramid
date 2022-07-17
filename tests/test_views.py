@@ -11,6 +11,7 @@ from langworld_db_pyramid.views.families import (
     view_families_for_list,
     view_families_for_map
 )
+from langworld_db_pyramid.views.feature import get_feature_values_icons, view_feature_list, view_feature_map
 from langworld_db_pyramid.views.notfound import notfound_view
 
 NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) that have has_feature_profile set to '1'
@@ -131,6 +132,37 @@ def test_view_doculect_profile(dummy_request, setup_models_for_views_testing):
     doculect = info['doculect']
     assert isinstance(doculect, Doculect)
     assert doculect.name_en == 'Aragonese'
+
+
+def test_feature_get_feature_values_icons(dummy_request, setup_models_for_views_testing):
+    dummy_request.matchdict['feature_man_id'] = 'H-6'
+    feature, values, icon_for_value = get_feature_values_icons(dummy_request)
+
+    assert feature.man_id == 'H-6'
+    assert len(values) == 43 - 9  # there are 43 in total but 9 have no matching doculects
+    assert len(icon_for_value) == len(values)
+    assert len(set([i.svg_tag for i in icon_for_value.values()])) == len(values)  # make sure all icons are unique
+
+
+def test_feature_view_feature_list(dummy_request, setup_models_for_views_testing):
+    dummy_request.matchdict['feature_man_id'] = 'H-6'
+    data = view_feature_list(dummy_request)
+
+    assert data['man_id'] == 'H-6'
+    assert len(data['values']) == 43 - 9  # there are 43 in total but 9 have no matching doculects
+    assert len(data['icon_for_value']) == len(data['values'])
+
+
+def test_feature_view_feature_map(dummy_request, setup_models_for_views_testing):
+    dummy_request.matchdict['feature_man_id'] = 'H-6'
+    data = view_feature_map(dummy_request)
+    assert len(data) == 104  # manually counted doculects that have any listed value of this feature
+
+    # the number of unique icons must be equal to number of values that have at least one doculect
+    assert len(set(item['divIconHTML'] for item in data)) == 43 - 9
+
+    for item in data:
+        assert f"../doculect/{item['id']}" in item['popupText']
 
 
 def test_notfound_view(dummy_request):
