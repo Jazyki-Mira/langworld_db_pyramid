@@ -3,6 +3,7 @@ import pytest
 
 from langworld_db_pyramid.models.doculect import Doculect
 from langworld_db_pyramid.models.family import Family
+from langworld_db_pyramid.models.feature_category import FeatureCategory
 from langworld_db_pyramid.views.doculects_list import get_doculects_by_substring, view_all_doculects_list
 from langworld_db_pyramid.views.doculects_map import get_doculects_for_map
 from langworld_db_pyramid.views.doculect_profile import view_doculect_profile
@@ -11,7 +12,12 @@ from langworld_db_pyramid.views.families import (
     view_families_for_list,
     view_families_for_map
 )
-from langworld_db_pyramid.views.feature import get_feature_values_icons, view_feature_list, view_feature_map
+from langworld_db_pyramid.views.features import (
+    get_feature_values_icons,
+    view_all_features_list_by_category,
+    view_feature_list_of_values,
+    view_feature_map_of_values
+)
 from langworld_db_pyramid.views.notfound import notfound_view
 
 NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) that have has_feature_profile set to '1'
@@ -134,7 +140,14 @@ def test_view_doculect_profile(dummy_request, setup_models_for_views_testing):
     assert doculect.name_en == 'Aragonese'
 
 
-def test_feature_get_feature_values_icons(dummy_request, setup_models_for_views_testing):
+def test_features_view_all_features_list_by_category(dummy_request, setup_models_for_views_testing):
+    data = view_all_features_list_by_category(dummy_request)
+    assert len(data['categories']) == 14
+    for item in data['categories']:
+        assert isinstance(item, FeatureCategory)
+
+
+def test_features_get_feature_values_icons(dummy_request, setup_models_for_views_testing):
     dummy_request.matchdict['feature_man_id'] = 'H-6'
     feature, values, icon_for_value = get_feature_values_icons(dummy_request)
 
@@ -144,18 +157,18 @@ def test_feature_get_feature_values_icons(dummy_request, setup_models_for_views_
     assert len(set([i.svg_tag for i in icon_for_value.values()])) == len(values)  # make sure all icons are unique
 
 
-def test_feature_view_feature_list(dummy_request, setup_models_for_views_testing):
+def test_features_view_feature_list(dummy_request, setup_models_for_views_testing):
     dummy_request.matchdict['feature_man_id'] = 'H-6'
-    data = view_feature_list(dummy_request)
+    data = view_feature_list_of_values(dummy_request)
 
     assert data['man_id'] == 'H-6'
     assert len(data['values']) == 43 - 9  # there are 43 in total but 9 have no matching doculects
     assert len(data['icon_for_value']) == len(data['values'])
 
 
-def test_feature_view_feature_map(dummy_request, setup_models_for_views_testing):
+def test_features_view_feature_map(dummy_request, setup_models_for_views_testing):
     dummy_request.matchdict['feature_man_id'] = 'H-6'
-    data = view_feature_map(dummy_request)
+    data = view_feature_map_of_values(dummy_request)
     assert len(data) == 104  # manually counted doculects that have any listed value of this feature
 
     # the number of unique icons must be equal to number of values that have at least one doculect

@@ -5,6 +5,14 @@ from .. import models
 from langworld_db_pyramid.maputils.generate_map_icons import icon_for_object
 
 
+@view_config(route_name='all_features_list', renderer='langworld_db_pyramid:templates/all_features_list.jinja2')
+@view_config(
+    route_name='all_features_list_localized', renderer='langworld_db_pyramid:templates/all_features_list.jinja2'
+)
+def view_all_features_list_by_category(request):
+    return {'categories': request.dbsession.scalars(select(models.FeatureCategory)).all()}
+
+
 def get_feature_values_icons(request):
     feature = request.dbsession.scalars(
         select(models.Feature).where(models.Feature.man_id == request.matchdict['feature_man_id'])
@@ -20,7 +28,7 @@ def get_feature_values_icons(request):
 
 @view_config(route_name='feature', renderer='langworld_db_pyramid:templates/feature.jinja2')
 @view_config(route_name='feature_localized', renderer='langworld_db_pyramid:templates/feature.jinja2')
-def view_feature_list(request):
+def view_feature_list_of_values(request):
     feature, values, icon_for_value = get_feature_values_icons(request)
     return {
         'feature_name': getattr(feature, f'name_{request.locale_name}'),
@@ -31,7 +39,7 @@ def view_feature_list(request):
 
 
 @view_config(route_name='doculects_for_map_feature', renderer='json')
-def view_feature_map(request):
+def view_feature_map_of_values(request):
     feature, values, icon_for_value = get_feature_values_icons(request)
     data = []
     for value in values:
