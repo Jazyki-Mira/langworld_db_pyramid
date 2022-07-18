@@ -10,6 +10,22 @@
     <h1 class="w3-text-teal">{{ parent[name_attr] }} {% trans %}языки{% endtrans %}</h1>
   {% endif %}
 
+  {% if parent != None %}
+      <p>
+      {# this loop is a workaround of absence of recursive if's. I have to make a one-item list to be able to loop #}
+      {% for grandparent in [parent.parent] recursive %}
+        {% if grandparent != None %}
+            {{ loop([grandparent.parent]) }}  {# I need to start at the top, so recursion comes first #}
+            <a href="../family/{{ grandparent.man_id }}">{{ grandparent[name_attr] }}</a> &rarr;
+        {% else %}
+            <a href="../family/_all">Все языки</a> &rarr;
+        {% endif %}
+      {% endfor %}
+
+      <strong>{{ parent[name_attr] }}</strong>
+      </p>
+  {% endif %}
+
   <div id="map-default"></div>
 
   {% for family in families recursive %}
