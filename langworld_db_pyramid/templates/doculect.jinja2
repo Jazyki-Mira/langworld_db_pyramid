@@ -20,10 +20,10 @@
   {% for parent in [doculect.family.parent] recursive %}
     {% if parent != None %}
         {{ loop([parent.parent]) }}  {# I need to start at the top, so recursion comes first #}
-        <a href="../family/{{ parent.man_id }}">{{ parent[name_attr] }}</a> &rarr;
+        <a href="../family/{{ parent.man_id }}?show_doculect={{ doculect.man_id }}">{{ parent[name_attr] }}</a> &rarr;
     {% endif %}
   {% endfor %}
-  <a href="../family/{{ doculect.family.man_id }}">{{ doculect.family[name_attr] }}</a>
+  <a href="../family/{{ doculect.family.man_id }}?show_doculect={{ doculect.man_id }}">{{ doculect.family[name_attr] }}</a>
   </p>
 
   <h2>{% trans %}География{% endtrans %}</h2>
@@ -59,7 +59,9 @@
   {% for value in doculect.feature_values|sort(attribute="feature.id") %}
     {% if not value.type.entails_empty_value %}
         <li>
-            <a href="../feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }} ({{ value.feature.man_id }})</a>: {{ value[name_attr]}} {%if value.man_id %}({{ value.man_id }}){% endif %}
+            <a href="../feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
+                {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
+            </a>: {{ value[name_attr]}} {%if value.man_id %}({{ value.man_id }}){% endif %}
 
             {# comments are only available in Russian so far #}
             {% if request.locale_name == 'ru' %}
