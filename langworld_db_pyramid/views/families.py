@@ -62,12 +62,11 @@ def view_families_for_map(request):
                     "divIconSize": [40, 40],
                     "popupText": (
                         f'<a href="../doculect/{doculect.man_id}">{getattr(doculect, "name_" + request.locale_name)}'
-                        f'</a><br/>({getattr(parent, "name_" + request.locale_name)})'
+                        f'</a><br/>(<a href="{parent.man_id}">{getattr(parent, "name_" + request.locale_name)}</a>)'
                     ),
                 }
             )
 
-    # TODO add doculects that belong to the parent directly!
     for family in families:
         for doculect in family.iter_doculects_that_have_feature_profiles():
             # TODO this partly repeats feature.py, can I factor this out?
@@ -81,7 +80,7 @@ def view_families_for_map(request):
                     "divIconSize": [40, 40],
                     "popupText": (
                         f'<a href="../doculect/{doculect.man_id}">{getattr(doculect, "name_" + request.locale_name)}'
-                        f'</a><br/>({getattr(family, "name_" + request.locale_name)})'
+                        f'</a><br/>(<a href="{family.man_id}">{getattr(family, "name_" + request.locale_name)}</a>)'
                     ),
                 }
             )
