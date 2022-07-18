@@ -14,35 +14,44 @@
 
   <p class="lead"><a href="{{ request.static_url('langworld_db_pyramid:static/pdf_volumes/11.pdf') }}" target="_blank">{% trans %}Открыть в энциклопедии{% endtrans %}</a></p>
 
-  <p class="lead">
-    {% trans %}Основная страна{% endtrans %}: <span class="font-normal">{{ doculect.main_country[name_attr] }}</span>
-    (<a href="../doculects/map?lat={{ doculect.latitude }}&long={{ doculect.longitude }}&show_doculect={{ doculect.man_id }}">{% trans %}посмотреть на карте{% endtrans %}</a>)
+  <h2>{% trans %}Генеалогия{% endtrans %}</h2>
+  <p>
+  {# this loop is a workaround of absence of recursive if's. I have to make a one-item list to be able to loop #}
+  {% for parent in [doculect.family.parent] recursive %}
+    {% if parent != None %}
+        {{ loop([parent.parent]) }}  {# I need to start at the top, so recursion comes first #}
+        <a href="../family/{{ parent.man_id }}">{{ parent[name_attr] }}</a> &rarr;
+    {% endif %}
+  {% endfor %}
+  <a href="../family/{{ doculect.family.man_id }}">{{ doculect.family[name_attr] }}</a>
   </p>
 
-  <h2>{% trans %}Идентификаторы{% endtrans %}</h2>
+  <h2>{% trans %}География{% endtrans %}</h2>
+    <p>{% trans %}Основная страна{% endtrans %}: <span class="font-normal">{{ doculect.main_country[name_attr] }}</span>
+    (<a href="../doculects/map?lat={{ doculect.latitude }}&long={{ doculect.longitude }}&show_doculect={{ doculect.man_id }}">{% trans %}посмотреть на карте{% endtrans %}</a>)
+    </p>
 
   {% if doculect.glottocodes or doculect.iso_639p3_codes %}
-  <ul>
-  {% endif %}
+      <h2>{% trans %}Идентификаторы{% endtrans %}</h2>
+      <ul>
 
-  {% if doculect.glottocodes %}
-  <li class="lead">Glottolog:
-    {% for glottocode in doculect.glottocodes|sort(attribute="code") %}
-    <span class="font-normal"><a href="https://glottolog.org/resource/languoid/id/{{ glottocode.code }}" target="_blank">{{ glottocode.code }}</a></span>{% if not loop.last %}, {% endif %}
-    {% endfor %}
-  </li>
-  {% endif %}
+      {% if doculect.glottocodes %}
+      <li class="lead">Glottolog:
+        {% for glottocode in doculect.glottocodes|sort(attribute="code") %}
+        <span class="font-normal"><a href="https://glottolog.org/resource/languoid/id/{{ glottocode.code }}" target="_blank">{{ glottocode.code }}</a></span>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </li>
+      {% endif %}
 
-  {% if doculect.iso_639p3_codes %}
-  <li class="lead">ISO-639-3:
-    {% for iso_code in doculect.iso_639p3_codes|sort(attribute="code") %}
-    <span class="font-normal"><a href="https://iso639-3.sil.org/code/{{ iso_code.code }}" target="_blank">{{ iso_code.code }}</a></span>{% if not loop.last %}, {% endif %}
-    {% endfor %}
-  </li>
-  {% endif %}
+      {% if doculect.iso_639p3_codes %}
+      <li class="lead">ISO-639-3:
+        {% for iso_code in doculect.iso_639p3_codes|sort(attribute="code") %}
+        <span class="font-normal"><a href="https://iso639-3.sil.org/code/{{ iso_code.code }}" target="_blank">{{ iso_code.code }}</a></span>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </li>
+      {% endif %}
 
-  {% if doculect.glottocodes or doculect.iso_639p3_codes %}
-  </ul>
+      </ul>
   {% endif %}
 
   <h2>{% trans %}Признаки{% endtrans %}</h2>
