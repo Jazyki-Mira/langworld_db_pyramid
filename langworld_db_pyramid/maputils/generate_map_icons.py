@@ -33,15 +33,23 @@ class CLLDIcon:
         self.svg_tag = svg.icon(self.shape_and_color)
         self.img_src = svg.data_url(self.svg_tag)
 
+    def __eq__(self, other):
+        if self.shape_and_color == other.shape_and_color:
+            return True
+        return False
+
+    def __hash__(self):
+        return hash((self.svg_tag, self.img_src))
+
+    def __repr__(self):
+        return f'CLLDIcon (shape {self.shape_and_color[0]}, color #{self.shape_and_color[1:]})'
+
 
 def generate_map_icons() -> Iterator[CLLDIcon]:
 
     for shape in SHAPES:
         for color in COLORS:
             yield CLLDIcon(f'{shape}{color}')
-            # TODO test if I decide to use this
-
-    raise ValueError(f'Cannot generate more than {len(COLORS) * len(SHAPES)} different markers')
 
 
 def generate_fixed_number_of_map_icons(number) -> Union[CLLDIcon, list[CLLDIcon]]:
@@ -57,4 +65,7 @@ def icon_for_object(objects: list) -> dict[Any, CLLDIcon]:
     """Gets a list of objects and returns a dictionary
     where each object is mapped to an icon.
     """
+    if len(objects) > len(SHAPES) * len(COLORS):
+        raise ValueError(f'Cannot generate more than {len(COLORS) * len(SHAPES)} different markers')
+
     return {obj: icon for obj, icon in zip(objects, generate_map_icons())}
