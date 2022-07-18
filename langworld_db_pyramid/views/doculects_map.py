@@ -25,7 +25,7 @@ def get_doculects_for_map(request):
     data = [
         {
             "id": doculect.man_id,
-            "name": getattr(doculect, name_attr),
+            "name": f'{getattr(doculect, name_attr)} (†)' if doculect.is_extinct else getattr(doculect, name_attr),
             "latitude": doculect.latitude,
             "longitude": doculect.longitude,
             "divIconHTML": generate_fixed_number_of_map_icons(1).svg_tag,
