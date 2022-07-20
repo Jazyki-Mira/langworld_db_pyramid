@@ -57,7 +57,7 @@
   <h2>{% trans %}Признаки{% endtrans %}</h2>
   <ul>
   {% for value in doculect.feature_values|sort(attribute="feature.id") %}
-    {% if not value.type.entails_empty_value %}
+    {% if not value.type.entails_empty_value and not (request.locale_name == 'en' and value.type.name == 'custom') %}
         <li>
             <a href="../feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
                 {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
