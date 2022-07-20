@@ -2,6 +2,8 @@ import DoculectListItem from "./doculectListItem.js"
 import doculectListFormLabels from "./i18n/doculectListFormLabels.js"
 import getLocale from "./getLocale.js"
 
+const elem = React.createElement;
+
 const retrieve_data = url => fetch(url)
         .then(res => res.json())
         .then(renderListOfMatchingDoculects)
@@ -12,11 +14,11 @@ const renderListOfMatchingDoculects = retrieved_data => {
     if (typeof retrieved_data[Symbol.iterator] != 'function') return;  // promise is pending, no data to iterate over
 
     ReactDOM.render(
-        React.createElement(
+        elem(
             'ul',
             {},
             retrieved_data.map(
-                (item, i) => React.createElement(
+                (item, i) => elem(
                     DoculectListItem, { doculect: item, key: i }, null
                     )
                 )
@@ -40,14 +42,14 @@ function DoculectListForm(props) {
       }
     }
 
-    return React.createElement(
+    return elem(
         "form",
         { onSubmit: e => {handleSubmit(e)} },
-        React.createElement("label", {}, doculectListFormLabels["formLabel"][locale]),
-        React.createElement("br"),
-        React.createElement("input", {name: "searchText", type: "text", onChange: e => setQuery(e.target.value)}),
-        React.createElement("input", {type: "submit", value: doculectListFormLabels["buttonLabel"][locale]})
+        elem("label", {}, doculectListFormLabels["formLabel"][locale]),
+        elem("br"),
+        elem("input", {name: "searchText", type: "text", onChange: e => setQuery(e.target.value)}),
+        elem("input", {type: "submit", value: doculectListFormLabels["buttonLabel"][locale]})
     )
 }
 
-ReactDOM.render(React.createElement(DoculectListForm), document.getElementById("doculect-finder-form"));
+ReactDOM.render(elem(DoculectListForm), document.getElementById("doculect-finder-form"));
