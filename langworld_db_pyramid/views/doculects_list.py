@@ -23,7 +23,7 @@ def view_all_doculects_list(request):
 
 @view_config(route_name='doculects_by_substring', renderer='json')
 def get_doculects_by_substring(request):
-    locale, query = request.matchdict['locale'], request.matchdict['query']
+    locale, query = request.locale_name, request.matchdict['query']
     name_attr = f'name_{locale}'
     aliases_attr = f'aliases_{locale}'
 

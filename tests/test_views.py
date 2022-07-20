@@ -39,7 +39,7 @@ def test_get_doculects_by_substring(
         query, locale, expected_ids,
 ):
 
-    dummy_request.matchdict['locale'] = locale
+    dummy_request.locale_name = locale
     dummy_request.matchdict['query'] = query
 
     doculects = get_doculects_by_substring(dummy_request)
@@ -99,7 +99,7 @@ def test_get_doculects_for_map(
 def test_view_families_for_list(
         dummy_request, setup_models_for_views_testing, family_man_id, parent_is_none, expected_number_of_families
 ):
-    dummy_request.matchdict['locale'] = 'en'
+    dummy_request.locale_name = 'en'
     dummy_request.matchdict['family_man_id'] = family_man_id
     data = view_families_for_list(dummy_request)
 
@@ -122,7 +122,7 @@ def test_view_families_for_list(
 def test_view_families_for_map(
         dummy_request, setup_models_for_views_testing, family_man_id, expected_number_of_doculects
 ):
-    dummy_request.matchdict['locale'] = 'en'
+    dummy_request.locale_name = 'en'
     dummy_request.matchdict['family_man_id'] = family_man_id
     data = view_families_for_map(dummy_request)
     assert len(data) == expected_number_of_doculects
