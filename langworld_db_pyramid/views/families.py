@@ -1,10 +1,10 @@
 from pyramid.view import view_config
-from pyramid.response import Response
 from sqlalchemy import select
 
 from .. import models
 
 from langworld_db_pyramid.maputils.generate_map_icons import icon_for_object
+from langworld_db_pyramid.maputils.marker import generate_marker
 
 MATCHDICT_ID_FOR_ALL_FAMILIES = '_all'
 
@@ -46,43 +46,27 @@ def view_families_for_list(request):
 @view_config(route_name='doculects_for_map_family', renderer='json')
 def view_families_for_map(request):
     parent, families, icon_for_family = get_parent_families_icons(request)
-
+    name_attr = "name_" + request.locale_name
     doculects = []
 
-    # TODO this repeats below
     if parent is not None:
-        for doculect in [d for d in parent.doculects if d.has_feature_profile]:
-            doculects.append(
-                {
-                    "id": doculect.man_id,
-                    "name": getattr(doculect, f'name_{request.locale_name}'),
-                    "latitude": doculect.latitude,
-                    "longitude": doculect.longitude,
-                    "divIconHTML": icon_for_family[parent].svg_tag,
-                    "divIconSize": [40, 40],
-                    "popupText": (
-                        f'<a href="../doculect/{doculect.man_id}">{getattr(doculect, "name_" + request.locale_name)}'
-                        f'</a><br/>(<a href="{parent.man_id}">{getattr(parent, "name_" + request.locale_name)}</a>)'
-                    ),
-                }
+        doculects = [
+            generate_marker(
+                request, doculect,
+                div_icon_html=icon_for_family[parent].svg_tag,
+                additional_popup_text=f'(<a href="{parent.man_id}">{getattr(parent, name_attr)}</a>)'
             )
+            for doculect in parent.doculects if doculect.has_feature_profile
+        ]
 
-    for family in families:
-        for doculect in family.iter_doculects_that_have_feature_profiles():
-            # TODO this partly repeats feature.py, can I factor this out?
-            doculects.append(
-                {
-                    "id": doculect.man_id,
-                    "name": getattr(doculect, f'name_{request.locale_name}'),
-                    "latitude": doculect.latitude,
-                    "longitude": doculect.longitude,
-                    "divIconHTML": icon_for_family[family].svg_tag,
-                    "divIconSize": [40, 40],
-                    "popupText": (
-                        f'<a href="../doculect/{doculect.man_id}">{getattr(doculect, "name_" + request.locale_name)}'
-                        f'</a><br/>(<a href="{family.man_id}">{getattr(family, "name_" + request.locale_name)}</a>)'
-                    ),
-                }
-            )
+    doculects += [
+        generate_marker(
+            request, doculect,
+            div_icon_html=icon_for_family[family].svg_tag,
+            additional_popup_text=f'(<a href="{family.man_id}">{getattr(family, name_attr)}</a>)'
+        )
+        for family in families
+        for doculect in family.iter_doculects_that_have_feature_profiles()
+    ]
 
     return doculects

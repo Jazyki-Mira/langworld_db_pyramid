@@ -3,6 +3,7 @@ from sqlalchemy import select
 
 from .. import models
 from langworld_db_pyramid.maputils.generate_map_icons import icon_for_object
+from langworld_db_pyramid.maputils.marker import generate_marker
 
 
 @view_config(route_name='all_features_list', renderer='langworld_db_pyramid:templates/all_features_list.jinja2')
@@ -41,22 +42,14 @@ def view_feature_list_of_values(request):
 @view_config(route_name='doculects_for_map_feature', renderer='json')
 def view_feature_map_of_values(request):
     feature, values, icon_for_value = get_feature_values_icons(request)
-    data = []
-    for value in values:
-        for doculect in value.doculects:
-            data.append(
-                {
-                    "id": doculect.man_id,
-                    "name": getattr(doculect, f'name_{request.locale_name}'),
-                    "latitude": doculect.latitude,
-                    "longitude": doculect.longitude,
-                    "divIconHTML": icon_for_value[value].svg_tag,
-                    "divIconSize": [40, 40],
-                    "popupText": (
-                        f'<a href="../doculect/{doculect.man_id}">{getattr(doculect, "name_" + request.locale_name)}'
-                        f'</a><br/>({getattr(feature, "name_" + request.locale_name)}: '
-                        f'{getattr(value, "name_" + request.locale_name)})'
-                    ),
-                }
-            )
-    return data
+    name_attr = "name_" + request.locale_name
+
+    return [
+        generate_marker(
+            request, doculect,
+            div_icon_html=icon_for_value[value].svg_tag,
+            additional_popup_text=f'({getattr(feature, name_attr)}: {getattr(value, name_attr)})'
+        )
+        for value in values for doculect in value.doculects
+    ]
+

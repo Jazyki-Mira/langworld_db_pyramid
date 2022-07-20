@@ -60,17 +60,21 @@ def test_get_doculects_by_substring(
     [
         (
             'ru',
-            {'id': 'abaza', 'name': 'абазинский', 'latitude': '44.1556', 'longitude': '41.9368',
-             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40]},
-            {'id': 'yaoure', 'name': 'яурэ', 'latitude': '6.85', 'longitude': '-5.3',
-             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40]},
+            {'id': 'abaza', 'name': 'абазинский', 'latitude': 44.1556, 'longitude': 41.9368,
+             'divIconHTML': svg.icon('c1f78b4'), 'divIconSize': [40, 40],
+             'popupText': '<a href="../doculect/abaza">абазинский</a>', 'url': '../doculect/abaza'},
+            {'id': 'yaoure', 'name': 'яурэ', 'latitude': 6.85, 'longitude': -5.3,
+             'divIconHTML': svg.icon('c1f78b4'), 'divIconSize': [40, 40],
+             'popupText': '<a href="../doculect/yaoure">яурэ</a>', 'url': '../doculect/yaoure'},
         ),
         (
             'en',
-            {'id': 'abaza', 'name': 'Abaza', 'latitude': '44.1556', 'longitude': '41.9368',
-             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40]},
-            {'id': 'zefrei', 'name': 'Zefrei', 'latitude': '32.80592', 'longitude': '52.11667',
-             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40]},
+            {'id': 'abaza', 'name': 'Abaza', 'latitude': 44.1556, 'longitude': 41.9368,
+             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40],
+             'popupText': '<a href="../doculect/abaza">Abaza</a>', 'url': '../doculect/abaza'},
+            {'id': 'zefrei', 'name': 'Zefrei', 'latitude': 32.80592, 'longitude': 52.11667,
+             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40],
+             'popupText': '<a href="../doculect/zefrei">Zefrei</a>', 'url': '../doculect/zefrei'},
         ),
     ]
 )
@@ -78,7 +82,7 @@ def test_get_doculects_for_map(
         dummy_request, setup_models_for_views_testing, locale, expected_first_doculect, expected_last_doculect
 ):
 
-    dummy_request.matchdict['locale'] = locale
+    dummy_request.locale_name = locale
     doculects = sorted(get_doculects_for_map(dummy_request), key=lambda doculect: doculect["name"])
 
     assert len(doculects) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
