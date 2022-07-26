@@ -1,8 +1,16 @@
+let allMarkers = [];
+
 const fetchDataAndAddMarkersToMap = (doculectMap, urlParams) => {
+  removeMarkers(doculectMap);
+
   fetch(urlParams.urlToFetch)
     .then((res) => res.json())
     .then((doculects) => addMarkers(doculects, doculectMap, urlParams))
     .catch(console.error);
+};
+
+const removeMarkers = (doculectMap) => {
+  for (let marker of allMarkers) doculectMap.removeLayer(marker);
 };
 
 const addMarkers = (doculects, doculectMap, { idOfDoculectToShow }) => {
@@ -31,6 +39,8 @@ const addMarkers = (doculects, doculectMap, { idOfDoculectToShow }) => {
     marker.on("click", function (e) {
       window.open(doculect["url"], "_self");
     });
+
+    allMarkers.push(marker);
 
     if (doculect["id"] === idOfDoculectToShow) marker.openPopup();
   }
