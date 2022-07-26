@@ -1,0 +1,50 @@
+{% extends "base.jinja2" %}
+
+{% block content %}
+  <h1 class="w3-text-teal">{% trans %}Мастер сложных запросов{% endtrans %}</h1>
+  <div id="map-default"></div>
+{% endblock content %}
+
+{% block one_third %}
+{% set name_attr = "name_" + request.locale_name %}
+
+<div class="content">
+  <form>
+  <h2>{% trans %}Генеалогия{% endtrans %}</h2>
+  <select id="family" multiple size="10">
+  {% for family in families recursive %}
+    <option value="{{ family.man_id }}">{{ " " * loop.depth0 }}{{ family[name_attr] }}</option>
+    {% if family.has_doculects_with_feature_profiles() %}
+        {{ loop(family.children) }}
+    {% endif %}
+  {% endfor %}
+  </select>
+
+  <h2>{% trans %}Признаки{% endtrans %}
+  {% for category in categories %}
+      <h3>{{ category[name_attr] }}</h3>
+        {% for feature in category.features %}
+            <label>{{ feature[name_attr] }}</label><br/>
+            <select id="{{ feature.man_id }}" multiple>
+            {# TODO only if there are doculects with this value #}
+            {% for value in feature.values|selectattr("type.name", "eq", "listed")|list %}
+                <option value="{{ value.man_id }}">{{ value[name_attr] }}</option>
+            {% endfor %}
+            </select><br/>
+        {% endfor %}
+  {% endfor %}
+
+  <input type="submit" value="OK">
+  </form>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin=""></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.css" rel="stylesheet"></link>
+
+<script src="{{ request.static_url('langworld_db_pyramid:static/js/queryWizard.js') }}" type="module"></script>
+{% endblock one_third %}

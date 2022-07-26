@@ -27,3 +27,7 @@ def includeme(config):
     config.add_route('families', '/family/{family_man_id}')
     config.add_route('families_localized', '{locale}/family/{family_man_id}')
     config.add_route('doculects_for_map_family', '/{locale}/json_api/doculects_for_map/family/{family_man_id}')
+
+    config.add_route('query_wizard', '/query_wizard')
+    config.add_route('query_wizard_localized', '{locale}/query_wizard')
+    config.add_route('query_wizard_json', '{locale}/json_api/query_wizard')
