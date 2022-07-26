@@ -44,4 +44,5 @@ export default function renderMap({ mapDivID, urlToFetch }) {
   const params = { mapDivID, urlToFetch, ...paramsFromURL };
   let doculectMap = renderBase(params);
   fetchDataAndAddMarkersToMap(doculectMap, params);
+  return doculectMap;
 }
