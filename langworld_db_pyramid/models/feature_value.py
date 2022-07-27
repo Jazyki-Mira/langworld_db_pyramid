@@ -1,4 +1,5 @@
 from sqlalchemy import (
+    Boolean,
     Column,
     ForeignKey,
     Integer,
@@ -22,6 +23,11 @@ class FeatureValue(Base):
     # Not adding 'comment' attributes here (corresponding to comment field in feature profiles)
     # because comments relate to an occurrence of a particular value
     # in a particular doculect - not to the abstract value itself
+
+    # Values for this column must be calculated after the database is filled with doculects
+    # This may not be optimal, but it speeds up the rendering of query wizard significantly
+    # because the expensive filtering no longer has to be done at rendering time.
+    is_listed_and_has_doculects = Column(Boolean)
 
     doculects = relationship(
         'Doculect', secondary='doculect_to_feature_value', back_populates='feature_values'

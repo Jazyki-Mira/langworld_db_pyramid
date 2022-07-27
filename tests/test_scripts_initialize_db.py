@@ -91,6 +91,18 @@ class TestCustomModelInitializer:
         assert old_russian.family.parent.parent.name_ru == 'Индоевропейские'
         # TODO can add more tests here (for country, features etc.)
 
+        # `is_listed_and_has_doculects` attribute in non-listed feature values must be False
+        for non_listed_value in dbsession.scalars(
+                select(models.FeatureValue).where(models.FeatureValue.man_id == '')
+        ).all():
+            assert not non_listed_value.is_listed_and_has_doculects
+
+        # checking `is_listed_and_has_doculects` attribute in listed feature values
+        a31 = dbsession.scalars(select(models.FeatureValue).where(models.FeatureValue.man_id == 'A-3-1')).one()
+        assert not a31.is_listed_and_has_doculects
+        a32 = dbsession.scalars(select(models.FeatureValue).where(models.FeatureValue.man_id == 'A-3-2')).one()
+        assert a32.is_listed_and_has_doculects
+
     def test__delete_all_data(self, dbsession, test_db_initializer):
         test_db_initializer.setup_models()
 

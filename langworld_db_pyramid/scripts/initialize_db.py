@@ -121,6 +121,7 @@ class CustomModelInitializer:
         self._populate_iso639p3_codes()
 
         self._populate_doculects_custom_feature_values_and_comments()
+        self._set_is_listed_and_has_doculect_to_false_for_listed_values_without_doculects()
 
     def _populate_categories_features_value_types_listed_and_empty_values(self):
         # Putting these in one method to emphasize tight coupling
@@ -154,6 +155,7 @@ class CustomModelInitializer:
             # adding values of 3 entailing-empty-value types for each feature
             for value_type in [t for t in self.value_type_for_name.values() if t.entails_empty_value]:
                 empty_value = models.FeatureValue(
+                        is_listed_and_has_doculects=False,
                         man_id='',
                         name_en='',
                         name_ru='',
@@ -168,6 +170,9 @@ class CustomModelInitializer:
         # populating values of type 'listed': from file with listed values
         for value_row in self.read_file(self.file_with_listed_values):
             value = models.FeatureValue(
+                # This will be set to False later if there are no doculects.
+                # See comment in models/feature_value.py about conscious choice of this suboptimal algorithm
+                is_listed_and_has_doculects=True,
                 man_id=value_row['id'],
                 name_en=value_row['en'],
                 name_ru=value_row['ru'],
@@ -337,6 +342,7 @@ class CustomModelInitializer:
                             ]
                         except KeyError:
                             value = models.FeatureValue(
+                                is_listed_and_has_doculects=False,
                                 man_id='',
                                 name_ru=feature_profile_row['value_ru'],
                                 name_en='',
@@ -364,6 +370,11 @@ class CustomModelInitializer:
 
             self.dbsession.add(doculect)
             # TODO add comment to association table
+
+    def _set_is_listed_and_has_doculect_to_false_for_listed_values_without_doculects(self):
+        for value in self.listed_value_for_id.values():
+            if not value.doculects:
+                value.is_listed_and_has_doculects = False
 
 
 def setup_models(dbsession):
