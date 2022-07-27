@@ -39,7 +39,7 @@ def generate_marker(
         longitude += 360
 
     doculect_name = f'{getattr(doculect, name_attr)} (†)' if doculect.is_extinct else getattr(doculect, name_attr)
-    url = f'../doculect/{doculect.man_id}'
+    url = f'/{request.locale_name}/doculect/{doculect.man_id}'
 
     popup_text = f'<a href="{url}">{doculect_name}</a>'
 

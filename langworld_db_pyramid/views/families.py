@@ -54,7 +54,9 @@ def view_families_for_map(request):
             generate_marker(
                 request, doculect,
                 div_icon_html=icon_for_family[parent].svg_tag,
-                additional_popup_text=f'(<a href="{parent.man_id}">{getattr(parent, name_attr)}</a>)'
+                additional_popup_text=(
+                    f'(<a href="/{request.locale_name}/family/{parent.man_id}">{getattr(parent, name_attr)}</a>)'
+                )
             )
             for doculect in parent.doculects if doculect.has_feature_profile
         ]
@@ -63,7 +65,9 @@ def view_families_for_map(request):
         generate_marker(
             request, doculect,
             div_icon_html=icon_for_family[family].svg_tag,
-            additional_popup_text=f'(<a href="{family.man_id}">{getattr(family, name_attr)}</a>)'
+            additional_popup_text=(
+                f'(<a href="/{request.locale_name}/family/{family.man_id}">{getattr(family, name_attr)}</a>)'
+            )
         )
         for family in families
         for doculect in family.iter_doculects_that_have_feature_profiles()

@@ -20,15 +20,15 @@
   {% for parent in [doculect.family.parent] recursive %}
     {% if parent != None %}
         {{ loop([parent.parent]) }}  {# I need to start at the top, so recursion comes first #}
-        <a href="../family/{{ parent.man_id }}?show_doculect={{ doculect.man_id }}">{{ parent[name_attr] }}</a> &rarr;
+        <a href="/{{ request.locale_name }}/family/{{ parent.man_id }}?show_doculect={{ doculect.man_id }}">{{ parent[name_attr] }}</a> &rarr;
     {% endif %}
   {% endfor %}
-  <a href="../family/{{ doculect.family.man_id }}?show_doculect={{ doculect.man_id }}">{{ doculect.family[name_attr] }}</a>
+  <a href="/{{ request.locale_name }}/family/{{ doculect.family.man_id }}?show_doculect={{ doculect.man_id }}">{{ doculect.family[name_attr] }}</a>
   </p>
 
   <h2>{% trans %}География{% endtrans %}</h2>
     <p>{% trans %}Основная страна{% endtrans %}: <span class="font-normal">{{ doculect.main_country[name_attr] }}</span>
-    (<a href="../doculects/map?lat={{ doculect.latitude }}&long={{ doculect.longitude }}&show_doculect={{ doculect.man_id }}">{% trans %}посмотреть на карте{% endtrans %}</a>)
+    (<a href="/{{ request.locale_name }}/doculects/map?lat={{ doculect.latitude }}&long={{ doculect.longitude }}&show_doculect={{ doculect.man_id }}">{% trans %}посмотреть на карте{% endtrans %}</a>)
     </p>
 
   {% if doculect.glottocodes or doculect.iso_639p3_codes %}
@@ -59,7 +59,7 @@
   {% for value in doculect.feature_values|sort(attribute="feature.id") %}
     {% if not value.type.entails_empty_value and not (request.locale_name == 'en' and value.type.name == 'custom') %}
         <li>
-            <a href="../feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
+            <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
                 {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
             </a>: {{ value[name_attr]}} {%if value.man_id %}({{ value.man_id }}){% endif %}
 

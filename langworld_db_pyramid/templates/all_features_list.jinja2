@@ -11,7 +11,7 @@
       <h2>{{ category[name_attr] }}</h2>
       <ul>
         {% for feature in category.features %}
-        <li><a href="../feature/{{ feature.man_id }}">{{ feature[name_attr] }}</a> ({{ feature.man_id }})</li>
+        <li><a href="/{{ request.locale_name }}/feature/{{ feature.man_id }}">{{ feature[name_attr] }}</a> ({{ feature.man_id }})</li>
         {% endfor %}
       </ul>
   {% endfor %}

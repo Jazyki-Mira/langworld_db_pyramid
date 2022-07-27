@@ -62,19 +62,19 @@ def test_get_doculects_by_substring(
             'ru',
             {'id': 'abaza', 'name': 'абазинский', 'latitude': 44.1556, 'longitude': 41.9368,
              'divIconHTML': svg.icon('c1f78b4'), 'divIconSize': [40, 40],
-             'popupText': '<a href="../doculect/abaza">абазинский</a>', 'url': '../doculect/abaza'},
+             'popupText': '<a href="/ru/doculect/abaza">абазинский</a>', 'url': '/ru/doculect/abaza'},
             {'id': 'yaoure', 'name': 'яурэ', 'latitude': 6.85, 'longitude': -5.3,
              'divIconHTML': svg.icon('c1f78b4'), 'divIconSize': [40, 40],
-             'popupText': '<a href="../doculect/yaoure">яурэ</a>', 'url': '../doculect/yaoure'},
+             'popupText': '<a href="/ru/doculect/yaoure">яурэ</a>', 'url': '/ru/doculect/yaoure'},
         ),
         (
             'en',
             {'id': 'abaza', 'name': 'Abaza', 'latitude': 44.1556, 'longitude': 41.9368,
              'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40],
-             'popupText': '<a href="../doculect/abaza">Abaza</a>', 'url': '../doculect/abaza'},
+             'popupText': '<a href="/en/doculect/abaza">Abaza</a>', 'url': '/en/doculect/abaza'},
             {'id': 'zefrei', 'name': 'Zefrei', 'latitude': 32.80592, 'longitude': 52.11667,
              'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40],
-             'popupText': '<a href="../doculect/zefrei">Zefrei</a>', 'url': '../doculect/zefrei'},
+             'popupText': '<a href="/en/doculect/zefrei">Zefrei</a>', 'url': '/en/doculect/zefrei'},
         ),
     ]
 )
@@ -171,6 +171,7 @@ def test_features_view_feature_list(dummy_request, setup_models_for_views_testin
 
 
 def test_features_view_feature_map(dummy_request, setup_models_for_views_testing):
+    dummy_request.locale_name = 'ru'
     dummy_request.matchdict['feature_man_id'] = 'H-6'
     data = view_feature_map_of_values(dummy_request)
     assert len(data) == 104  # manually counted doculects that have any listed value of this feature
@@ -179,7 +180,7 @@ def test_features_view_feature_map(dummy_request, setup_models_for_views_testing
     assert len(set(item['divIconHTML'] for item in data)) == 43 - 9
 
     for item in data:
-        assert f"../doculect/{item['id']}" in item['popupText']
+        assert f"/ru/doculect/{item['id']}" in item['popupText']
 
 
 def test_notfound_view(dummy_request):

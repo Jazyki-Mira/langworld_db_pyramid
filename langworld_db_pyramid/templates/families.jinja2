@@ -16,9 +16,9 @@
       {% for grandparent in [parent.parent] recursive %}
         {% if grandparent != None %}
             {{ loop([grandparent.parent]) }}  {# I need to start at the top, so recursion comes first #}
-            <a href="../family/{{ grandparent.man_id }}">{{ grandparent[name_attr] }}</a> &rarr;
+            <a href="/{{ request.locale_name }}/family/{{ grandparent.man_id }}">{{ grandparent[name_attr] }}</a> &rarr;
         {% else %}
-            <a href="../family/_all">Все языки</a> &rarr;
+            <a href="/{{ request.locale_name }}/family/_all">Все языки</a> &rarr;
         {% endif %}
       {% endfor %}
 
@@ -33,13 +33,13 @@
     {% if family.has_doculects_with_feature_profiles() %} {# This check is needed for recursive calls #}
         <li>
             {% if loop.depth == 1 %}<img src="{{ icon_for_family[family].img_src }}"/>{% endif %}
-            <a href="../family/{{ family.man_id }}">{{ family[name_attr] }}</a>
+            <a href="/{{ request.locale_name }}/family/{{ family.man_id }}">{{ family[name_attr] }}</a>
 
             {{ loop(family.children) }}
 
             {% for doculect in family.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
                 {% if loop.first %}<ul>{% endif %}
-                <li><a href="../doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+                <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
                 {% if loop.last %}</ul>{% endif %}
             {% endfor %}
         </li>
@@ -50,7 +50,7 @@
   {% if parent != None %}
   {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
     {% if loop.first %}<ul>{% endif %}
-    <li><a href="../doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+    <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
     {% if loop.last %}</ul>{% endif %}
   {% endfor %}
   {% endif %}

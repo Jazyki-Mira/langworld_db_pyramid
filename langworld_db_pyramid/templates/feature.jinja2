@@ -17,7 +17,7 @@
         <img src="{{ icon_for_value[value].img_src }}"/> {{ value[name_attr] }} ({{ value.doculects|length }})
         <ul>
             {% for doculect in value.doculects|sort(attribute=name_attr) %}
-            <li><a href="../doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+            <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
             {% endfor %}
         </ul>
     </li>
