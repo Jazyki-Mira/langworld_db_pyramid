@@ -26,8 +26,7 @@
         {% for feature in category.features %}
             <label>{{ feature[name_attr] }}</label><br/>
             <select id="{{ feature.man_id }}" multiple>
-            {# TODO only if there are doculects with this value #}
-            {% for value in feature.values|selectattr("type.name", "eq", "listed")|list %}
+            {% for value in feature.values|selectattr("type.name", "eq", "listed")|selectattr("doculects")|list %}
                 <option value="{{ value.man_id }}">{{ value[name_attr] }}</option>
             {% endfor %}
             </select><br/>
