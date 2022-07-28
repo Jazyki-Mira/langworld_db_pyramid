@@ -1,5 +1,7 @@
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 from sqlalchemy import select
+from sqlalchemy.exc import SQLAlchemyError
 
 from .. import models
 
@@ -16,11 +18,13 @@ def get_parent_families_icons(request):  # TODO test
         parent = None
         families = request.dbsession.scalars(select(models.Family).where(models.Family.parent == parent)).all()
     else:
-        parent = request.dbsession.scalars(select(models.Family).where(models.Family.man_id == family_man_id)).one()
-        families = parent.children
+        try:
+            parent = request.dbsession.scalars(select(models.Family).where(models.Family.man_id == family_man_id)).one()
+        except SQLAlchemyError:
+            raise HTTPNotFound(f"Family with ID {family_man_id} does not exist")
+        else:
+            families = parent.children
         # TODO top level doculects
-
-    # TODO return 404 if family ID invalid?
 
     families_with_doculects_that_have_feature_profiles = [
         f for f in families if f.has_doculects_with_feature_profiles()

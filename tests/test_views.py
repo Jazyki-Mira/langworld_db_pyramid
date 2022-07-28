@@ -1,3 +1,4 @@
+import pyramid.httpexceptions
 from clldutils import svg
 import pytest
 
@@ -8,6 +9,7 @@ from langworld_db_pyramid.views.doculects_list import get_doculects_by_substring
 from langworld_db_pyramid.views.doculects_map import get_doculects_for_map
 from langworld_db_pyramid.views.doculect_profile import view_doculect_profile
 from langworld_db_pyramid.views.families import (
+    get_parent_families_icons,
     MATCHDICT_ID_FOR_ALL_FAMILIES,
     view_families_for_list,
     view_families_for_map
@@ -144,6 +146,22 @@ def test_view_doculect_profile(dummy_request, setup_models_for_views_testing):
     assert doculect.name_en == 'Aragonese'
 
 
+def test_view_doculect_profile_raises_not_found(dummy_request, setup_models_for_views_testing):
+    dummy_request.matchdict['doculect_man_id'] = 'foo'
+
+    with pytest.raises(pyramid.httpexceptions.HTTPNotFound):
+        # I cannot check for presence of specific error message
+        # because DummyRequest object has no 'exception' attribute.
+        # Maybe app_request fixture can be used here instead.
+        view_doculect_profile(dummy_request)
+
+
+def test_families_get_parent_families_icons_not_found(dummy_request):
+    dummy_request.matchdict['family_man_id'] = 'foo'
+    with pytest.raises(pyramid.httpexceptions.HTTPNotFound):
+        get_parent_families_icons(dummy_request)
+
+
 def test_features_view_all_features_list_by_category(dummy_request, setup_models_for_views_testing):
     data = view_all_features_list_by_category(dummy_request)
     assert len(data['categories']) == 14
@@ -159,6 +177,13 @@ def test_features_get_feature_values_icons(dummy_request, setup_models_for_views
     assert len(values) == 43 - 9  # there are 43 in total but 9 have no matching doculects
     assert len(icon_for_value) == len(values)
     assert len(set([i.svg_tag for i in icon_for_value.values()])) == len(values)  # make sure all icons are unique
+
+
+def test_features_get_feature_values_icons_not_found(dummy_request, setup_models_for_views_testing):
+    dummy_request.matchdict['feature_man_id'] = 'Z-99'
+
+    with pytest.raises(pyramid.httpexceptions.HTTPNotFound):
+        get_feature_values_icons(dummy_request)
 
 
 def test_features_view_feature_list(dummy_request, setup_models_for_views_testing):

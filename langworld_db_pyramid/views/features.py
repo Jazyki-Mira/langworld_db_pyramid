@@ -1,5 +1,7 @@
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 from sqlalchemy import select
+from sqlalchemy.exc import SQLAlchemyError
 
 from .. import models
 from langworld_db_pyramid.maputils.generate_map_icons import icon_for_object
@@ -15,9 +17,13 @@ def view_all_features_list_by_category(request):
 
 
 def get_feature_values_icons(request):
-    feature = request.dbsession.scalars(
-        select(models.Feature).where(models.Feature.man_id == request.matchdict['feature_man_id'])
-    ).one()
+    feature_man_id = request.matchdict['feature_man_id']
+    try:
+        feature = request.dbsession.scalars(
+            select(models.Feature).where(models.Feature.man_id == feature_man_id)
+        ).one()
+    except SQLAlchemyError:
+        raise HTTPNotFound(f"Feature with ID {feature_man_id} does not exist")
 
     values = sorted(
         [value for value in feature.values if value.type.name == 'listed' and value.doculects],
