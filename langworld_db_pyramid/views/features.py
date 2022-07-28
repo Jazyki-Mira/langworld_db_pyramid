@@ -52,4 +52,3 @@ def view_feature_map_of_values(request):
         )
         for value in values for doculect in value.doculects
     ]
-
