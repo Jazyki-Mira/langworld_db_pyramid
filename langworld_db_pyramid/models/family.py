@@ -20,7 +20,7 @@ class Family(Base):
     children = relationship('Family', backref=backref('parent', remote_side=[id]))
     doculects = relationship('Doculect', back_populates='family')
 
-    def has_doculects_with_feature_profiles(self) -> bool:  # TODO test
+    def has_doculects_with_feature_profiles(self) -> bool:
         """Checks recursively if this family or any of its children have doculects
         with feature profile filled out.
         """
@@ -35,7 +35,7 @@ class Family(Base):
 
         return False
 
-    def iter_doculects_that_have_feature_profiles(self):  # TODO test
+    def iter_doculects_that_have_feature_profiles(self):
         if not self.has_doculects_with_feature_profiles():
             return []
 
