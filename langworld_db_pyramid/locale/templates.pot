@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-17 18:42+0300\n"
+"POT-Creation-Date: 2022-07-29 17:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Страница не найдена"
 msgstr ""
 
-#: templates/404.jinja2:6
+#: templates/404.jinja2:7
 msgid "Перейти на главную"
 msgstr ""
 
@@ -42,7 +42,7 @@ msgid "Карта языков"
 msgstr ""
 
 #: templates/all_features_list.jinja2:8 templates/base.jinja2:60
-#: templates/doculect.jinja2:48
+#: templates/doculect.jinja2:57 templates/query_wizard.jinja2:23
 msgid "Признаки"
 msgstr ""
 
@@ -50,8 +50,13 @@ msgstr ""
 msgid "База данных «Языки мира»"
 msgstr ""
 
-#: templates/base.jinja2:61 templates/families.jinja2:8
+#: templates/base.jinja2:61 templates/doculect.jinja2:17
+#: templates/families.jinja2:8 templates/query_wizard.jinja2:13
 msgid "Генеалогия"
+msgstr ""
+
+#: templates/base.jinja2:62 templates/query_wizard.jinja2:4
+msgid "Мастер сложных запросов"
 msgstr ""
 
 #: templates/doculect.jinja2:12
@@ -62,36 +67,48 @@ msgstr ""
 msgid "Открыть в энциклопедии"
 msgstr ""
 
-#: templates/doculect.jinja2:18
+#: templates/doculect.jinja2:29
+msgid "География"
+msgstr ""
+
+#: templates/doculect.jinja2:30
 msgid "Основная страна"
 msgstr ""
 
-#: templates/doculect.jinja2:19
+#: templates/doculect.jinja2:31
 msgid "посмотреть на карте"
 msgstr ""
 
-#: templates/doculect.jinja2:22
+#: templates/doculect.jinja2:35
 msgid "Идентификаторы"
 msgstr ""
 
-#: templates/doculect.jinja2:64
+#: templates/doculect.jinja2:75
 msgid "Незаполненные признаки"
 msgstr ""
 
-#: templates/doculect.jinja2:67
+#: templates/doculect.jinja2:78
 msgid "В энциклопедии отсутствует информация"
 msgstr ""
 
-#: templates/doculect.jinja2:83
+#: templates/doculect.jinja2:94
 msgid "В энциклопедии присутствует явное указание на отсутствие данных"
 msgstr ""
 
-#: templates/doculect.jinja2:99
+#: templates/doculect.jinja2:110
 msgid "Признак неприменим к этому языку"
 msgstr ""
 
 #: templates/families.jinja2:10
 msgid "языки"
+msgstr ""
+
+#: templates/families.jinja2:35
+msgid "без деления на подсемьи"
+msgstr ""
+
+#: templates/families.jinja2:46
+msgid "Языки, принадлежащие к подсемьям выбранной семьи"
 msgstr ""
 
 #: templates/feature.jinja2:12

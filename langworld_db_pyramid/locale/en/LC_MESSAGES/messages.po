@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-17 18:42+0300\n"
+"POT-Creation-Date: 2022-07-29 17:54+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Страница не найдена"
 msgstr "Page not found"
 
-#: templates/404.jinja2:6
+#: templates/404.jinja2:7
 msgid "Перейти на главную"
 msgstr "To the main page"
 
@@ -43,7 +43,7 @@ msgid "Карта языков"
 msgstr "Map of languages and dialects"
 
 #: templates/all_features_list.jinja2:8 templates/base.jinja2:60
-#: templates/doculect.jinja2:48
+#: templates/doculect.jinja2:57 templates/query_wizard.jinja2:23
 msgid "Признаки"
 msgstr "Features"
 
@@ -51,9 +51,14 @@ msgstr "Features"
 msgid "База данных «Языки мира»"
 msgstr "The Languages of the World Database"
 
-#: templates/base.jinja2:61 templates/families.jinja2:8
+#: templates/base.jinja2:61 templates/doculect.jinja2:17
+#: templates/families.jinja2:8 templates/query_wizard.jinja2:13
 msgid "Генеалогия"
 msgstr "Genealogy"
+
+#: templates/base.jinja2:62 templates/query_wizard.jinja2:4
+msgid "Мастер сложных запросов"
+msgstr "Query Wizard"
 
 #: templates/doculect.jinja2:12
 msgid "Альтернативные названия"
@@ -63,37 +68,49 @@ msgstr "Alternative names"
 msgid "Открыть в энциклопедии"
 msgstr "Open the encyclopedia PDF (in Russian)"
 
-#: templates/doculect.jinja2:18
+#: templates/doculect.jinja2:29
+msgid "География"
+msgstr "Geography"
+
+#: templates/doculect.jinja2:30
 msgid "Основная страна"
 msgstr "Main country"
 
-#: templates/doculect.jinja2:19
+#: templates/doculect.jinja2:31
 msgid "посмотреть на карте"
 msgstr "show on the map"
 
-#: templates/doculect.jinja2:22
+#: templates/doculect.jinja2:35
 msgid "Идентификаторы"
 msgstr "Identifiers"
 
-#: templates/doculect.jinja2:64
+#: templates/doculect.jinja2:75
 msgid "Незаполненные признаки"
 msgstr "Unfilled features"
 
-#: templates/doculect.jinja2:67
+#: templates/doculect.jinja2:78
 msgid "В энциклопедии отсутствует информация"
 msgstr "The encyclopedia contains no information"
 
-#: templates/doculect.jinja2:83
+#: templates/doculect.jinja2:94
 msgid "В энциклопедии присутствует явное указание на отсутствие данных"
 msgstr "The encyclopedia explicitly states lack of data"
 
-#: templates/doculect.jinja2:99
+#: templates/doculect.jinja2:110
 msgid "Признак неприменим к этому языку"
 msgstr "Feature is not applicable to this language"
 
 #: templates/families.jinja2:10
 msgid "языки"
 msgstr "languages"
+
+#: templates/families.jinja2:35
+msgid "без деления на подсемьи"
+msgstr "without further subdivision"
+
+#: templates/families.jinja2:46
+msgid "Языки, принадлежащие к подсемьям выбранной семьи"
+msgstr "Languages belonging to subfamilies of the selected family"
 
 #: templates/feature.jinja2:12
 msgid "Значения признака (с сортировкой по убыванию числа языков)"
