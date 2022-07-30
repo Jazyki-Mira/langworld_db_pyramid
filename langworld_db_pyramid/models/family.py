@@ -1,3 +1,4 @@
+from typing import Iterable
 from sqlalchemy import (
     Column,
     ForeignKey,
@@ -35,7 +36,18 @@ class Family(Base):
 
         return False
 
-    def iter_doculects_that_have_feature_profiles(self):
+    def is_descendant_of(self, man_id_of_presumable_parent: str) -> bool:
+        """Checks if this family has a family with given man_id
+        as its ancestor.
+        Goes recursively up the genealogy tree.
+        """
+        if self.parent is None:
+            return False
+        if self.parent.man_id == man_id_of_presumable_parent:
+            return True
+        return self.parent.is_descendant_of(man_id_of_presumable_parent)
+
+    def iter_doculects_that_have_feature_profiles(self) -> Iterable:
         if not self.has_doculects_with_feature_profiles():
             return []
 

@@ -20,17 +20,11 @@ def view_query_wizard(request):
 @view_config(route_name='query_wizard_json', renderer='json')
 def get_matching_doculects(request):
     # TODO test, maybe move these methods to models
-    def family_is_child_of_family(family: models.Family, man_id_of_presumable_parent: str):
-        if family.parent is None:
-            return False
-        if family.parent.man_id == man_id_of_presumable_parent:
-            return True
-        return family_is_child_of_family(family.parent, man_id_of_presumable_parent)
 
     def doculect_is_member_of_family(doculect: models.Doculect, family_man_id: str):
         if doculect.family.man_id == family_man_id:
             return True
-        return family_is_child_of_family(doculect.family, family_man_id)
+        return doculect.family.is_descendant_of(family_man_id)
 
     doculects = set(
         request.dbsession.scalars(

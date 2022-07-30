@@ -19,6 +19,24 @@ def test_family_has_doculects_with_feature_profiles(
 
 
 @pytest.mark.parametrize(
+    'man_id_of_presumable_parent, expected_result',
+    [
+        ('rom', True),  # immediate parent
+        ('ital', True),  # grandparent
+        ('indo_euro', True),  # great-grandparent
+        ('balk_rom', False),  # family is not a descendant of its child
+        ('east_rom', False),  # family is not a descendant of itself
+        ('isolate', False), ('inuit', False)
+    ]
+)
+def test_family_is_descendant_of(
+        dbsession, setup_models_for_views_testing, man_id_of_presumable_parent, expected_result
+):
+    east_romance = dbsession.scalars(select(models.Family).where(models.Family.man_id == 'east_rom')).one()
+    assert east_romance.is_descendant_of(man_id_of_presumable_parent) == expected_result
+
+
+@pytest.mark.parametrize(
     'man_id, expected_doculect_ids',
     [
         ('east_rom', ['aromanian', 'istro_romanian', 'megleno_romanian', 'romanian']),
