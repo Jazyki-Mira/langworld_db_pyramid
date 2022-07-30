@@ -1,4 +1,8 @@
 {% extends "base.jinja2" %}
+{% block custom_css %}
+  <link href="{{request.static_url('langworld_db_pyramid:static/css/query-wizard.css')}}" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.css" rel="stylesheet">
+{% endblock custom_css %}
 
 {% block content %}
   <h1 class="w3-text-teal">{% trans %}Мастер сложных запросов{% endtrans %}</h1>
@@ -22,15 +26,23 @@
 
   <h2>{% trans %}Признаки{% endtrans %}
   {% for category in categories %}
-      <h3>{{ category[name_attr] }}</h3>
-        {% for feature in category.features %}
-            <label>{{ feature[name_attr] }}</label><br/>
-            <select id="{{ feature.man_id }}" multiple>
-            {% for value in feature.values|selectattr("is_listed_and_has_doculects") %}
-                <option value="{{ value.man_id }}">{{ value[name_attr] }}</option>
-            {% endfor %}
-            </select><br/>
-        {% endfor %}
+      <div class="wrap-collabsible">
+          <input id="{{ category.man_id }}" class="toggle" type="checkbox">
+          <label for="{{ category.man_id }}" class="lbl-toggle">{{ category[name_attr] }}</label>
+          <div class="collapsible-content">
+            <div class="content-inner">
+                {% for feature in category.features %}
+                    <label>{{ feature[name_attr] }}</label><br/>
+                    <select id="{{ feature.man_id }}" multiple>
+                    {% for value in feature.values|selectattr("is_listed_and_has_doculects") %}
+                        <option value="{{ value.man_id }}">{{ value[name_attr] }}</option>
+                    {% endfor %}
+                    </select><br/>
+                {% endfor %}
+             </div>
+          </div>
+      </div>
+
   {% endfor %}
 
   </form>
@@ -42,7 +54,6 @@ integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0v
 crossorigin=""></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.css" rel="stylesheet"></link>
 
 <script src="{{ request.static_url('langworld_db_pyramid:static/js/queryWizard.js') }}" type="module"></script>
 {% endblock one_third %}
