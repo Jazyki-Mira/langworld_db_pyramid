@@ -46,3 +46,11 @@ class Doculect(Base):
     feature_values = relationship("FeatureValue", back_populates="doculects", secondary='doculect_to_feature_value')
     glottocodes = relationship('Glottocode', back_populates='doculects', secondary='doculect_to_glottocode')
     iso_639p3_codes = relationship('Iso639P3Code', back_populates='doculects', secondary='doculect_to_iso_639p3_code')
+
+    def belongs_to_family(self, family_man_id: str) -> bool:
+        """Recursively (goes up the genealogy) checks
+        if doculect belongs to a family with a given man_id."""
+        if self.family.man_id == family_man_id:
+            return True
+        # this may look like violating Demeter law but Family is immediately related to Doculect
+        return self.family.is_descendant_of(family_man_id)

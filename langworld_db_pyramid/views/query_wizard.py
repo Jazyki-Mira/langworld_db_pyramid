@@ -19,12 +19,7 @@ def view_query_wizard(request):
 
 @view_config(route_name='query_wizard_json', renderer='json')
 def get_matching_doculects(request):
-    # TODO test, maybe move these methods to models
-
-    def doculect_is_member_of_family(doculect: models.Doculect, family_man_id: str):
-        if doculect.family.man_id == family_man_id:
-            return True
-        return doculect.family.is_descendant_of(family_man_id)
+    # TODO test
 
     doculects = set(
         request.dbsession.scalars(
@@ -50,7 +45,7 @@ def get_matching_doculects(request):
     else:
         matching_doculects = set()
         for family_id in family_man_ids:
-            matching_doculects.update(d for d in doculects if doculect_is_member_of_family(d, family_id))
+            matching_doculects.update(d for d in doculects if d.belongs_to_family(family_id))
         del params['family']
 
     # every feature has to be an intersection, while every value within a feature has to be a union
