@@ -11,6 +11,7 @@ for (let elem of document.querySelectorAll("select")) {
     allowDeselectOption: true,
     closeOnSelect: false,
     selectByGroup: true,
+    showContent: "down",
   });
 }
 
