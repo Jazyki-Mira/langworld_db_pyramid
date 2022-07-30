@@ -13,8 +13,8 @@
   <h2>{% trans %}Генеалогия{% endtrans %}</h2>
   <select id="family" multiple size="10">
   {% for family in families recursive %}
-    <option value="{{ family.man_id }}">{{ " " * loop.depth0 }}{{ family[name_attr] }}</option>
     {% if family.has_doculects_with_feature_profiles() %}
+        <option value="{{ family.man_id }}">{{ " " * loop.depth0 }}{{ family[name_attr] }}</option>
         {{ loop(family.children) }}
     {% endif %}
   {% endfor %}
