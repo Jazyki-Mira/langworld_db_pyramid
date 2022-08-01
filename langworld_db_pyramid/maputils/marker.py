@@ -30,7 +30,6 @@ def generate_marker(
 
     Returns dictionary, ready to be used in Javascript code.
     """
-    # TODO test
     locale = request.locale_name
     name_attr = f'name_{locale}'
 
