@@ -19,7 +19,6 @@ def view_query_wizard(request):
 
 @view_config(route_name='query_wizard_json', renderer='json')
 def get_matching_doculects(request):
-    # TODO test
 
     doculects = set(
         request.dbsession.scalars(
@@ -35,8 +34,6 @@ def get_matching_doculects(request):
             generate_marker(request=request, doculect=doculect, div_icon_html=icon.svg_tag)
             for doculect in doculects
         ]
-
-    print(params)
 
     try:
         family_man_ids = params['family']

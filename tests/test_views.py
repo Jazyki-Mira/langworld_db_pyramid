@@ -21,6 +21,7 @@ from langworld_db_pyramid.views.features import (
     view_feature_map_of_values
 )
 from langworld_db_pyramid.views.notfound import notfound_view
+from langworld_db_pyramid.views.query_wizard import get_matching_doculects
 
 NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) that have has_feature_profile set to '1'
 
@@ -212,3 +213,50 @@ def test_notfound_view(dummy_request):
     info = notfound_view(dummy_request)
     assert dummy_request.response.status_int == 404
     assert info == {}
+
+
+# I'm not testing the building of params dict from URL as this is done by Pyramid.
+# request.params is a NestedMultiDict, but I think passing a simple dictionary in test is OK.
+@pytest.mark.parametrize(
+    'params, expected_number_of_items, selected_doculects_to_check',
+    [
+        ({}, NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES, []),
+        ({'family': 'yupik'}, 1, ['asiatic_eskimo']),
+        ({'family': 'yupik,aram'}, 8, ['asiatic_eskimo', 'classical_syriac', 'turoyo']),
+        ({'family': 'yupik,aram'}, 8, ['asiatic_eskimo', 'classical_syriac', 'turoyo']),
+        ({'family': 'south_chuk_kamch,chuk_kamch'}, 4, ['itelmen', 'kerek']),  # overlapping families
+        # family + feature:
+        ({'family': 'yupik,aram', 'A-11-1': 'A-11-1'}, 6, [
+            'official_aramaic', 'jewish_palestinian_aramaic', 'classical_mandaic', 'neo_aramaic_of_maalula',
+            'neo_mandaic', 'turoyo',
+        ]),
+        ({'family': 'yupik,aram', 'A-11-1': 'A-11-1,A-11-2'}, 6, [
+            'official_aramaic', 'jewish_palestinian_aramaic', 'classical_mandaic', 'neo_aramaic_of_maalula',
+            'neo_mandaic', 'turoyo',  # none of these languages has A-11-2
+        ]),
+        ({'family': 'yupik,aram', 'A-11-1': 'A-11-1,A-11-7'}, 7, [
+            'official_aramaic', 'jewish_palestinian_aramaic', 'classical_mandaic', 'neo_aramaic_of_maalula',
+            'neo_mandaic', 'turoyo', 'classical_syriac',
+        ]),
+        # family + 2 features:
+        ({'family': 'yupik,aram', 'A-11-1': 'A-11-1,A-11-7', 'N-5': 'N-5-1'}, 5, [
+            'official_aramaic', 'jewish_palestinian_aramaic', 'classical_mandaic', 'neo_aramaic_of_maalula',
+            'turoyo',
+        ]),
+        ({'family': 'yupik,aram', 'A-11-1': 'A-11-1,A-11-7', 'N-5': 'N-5-1,N-5-3'}, 7, [
+            'official_aramaic', 'jewish_palestinian_aramaic', 'classical_mandaic', 'neo_aramaic_of_maalula',
+            'turoyo', 'neo_mandaic', 'classical_syriac',
+        ]),
+    ]
+)
+def test_query_wizard_get_matching_doculects(
+        dummy_request, setup_models_for_views_testing,
+        params, expected_number_of_items, selected_doculects_to_check
+):
+    dummy_request.params = params
+
+    markers = get_matching_doculects(dummy_request)
+    assert len(markers) == expected_number_of_items
+
+    for doculect_id in selected_doculects_to_check:
+        assert doculect_id in [m['id'] for m in markers]
