@@ -44,6 +44,13 @@ const addMarkers = (doculects, doculectMap, { idOfDoculectToShow }) => {
 
     if (doculect["id"] === idOfDoculectToShow) marker.openPopup();
   }
+
+  // after all markers were added, fit map to see them all
+  let featureGroup = L.featureGroup(allMarkers);
+  doculectMap.fitBounds(featureGroup.getBounds(), {
+    maxZoom: 13,
+    padding: [10, 25],
+  });
 };
 
 export default fetchDataAndAddMarkersToMap;

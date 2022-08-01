@@ -34,6 +34,7 @@ const renderBase = ({ mapDivID, mapViewLat, mapViewLong, zoom }) => {
     tileSize: 512,
     zoomOffset: -1,
     accessToken: accessToken,
+    minZoom: 2.5, // 2 will show all languages but will be too small
   }).addTo(doculectMap);
 
   return doculectMap;
