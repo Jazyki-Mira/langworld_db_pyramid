@@ -57,11 +57,11 @@ def test__generate_marker_group_item(setup_models_for_views_testing, dbsession):
         locale='en',
         additional_popup_text='foo'
     )
-    assert data['name'] == doculect.name_en
-    assert data['latitude'] == float(doculect.latitude)
-    assert data['longitude'] == float(doculect.longitude) + 360  # testing doculect with longitude -173.128
-    assert data['popupText'] == f'<a href="/en/doculect/{doculect.man_id}">{doculect.name_en}</a><br/>foo'
-    assert data['url'] == f'/en/doculect/{doculect.man_id}'
+    assert data.name == doculect.name_en
+    assert data.latitude == float(doculect.latitude)
+    assert data.longitude == float(doculect.longitude) + 360  # testing doculect with longitude -173.128
+    assert data.popupText == f'<a href="/en/doculect/{doculect.man_id}">{doculect.name_en}</a><br/>foo'
+    assert data.url == f'/en/doculect/{doculect.man_id}'
 
 
 def test_generate_marker_group(setup_models_for_views_testing, dbsession):

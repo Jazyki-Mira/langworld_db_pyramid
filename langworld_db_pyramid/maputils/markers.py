@@ -1,24 +1,11 @@
 from dataclasses import asdict, dataclass
-from typing import Iterable, NamedTuple, Optional
+from typing import Iterable, Optional
 
 from langworld_db_pyramid.models import Doculect
 
 
-@dataclass
-class MarkerGroup:
-    """Group of markers for a Leaflet map.
-    All the markers within it share the same icon size, shape and color.
-    """
-    id: str
-    name: str
-
-    divIconHTML: str
-    divIconSize: list
-
-    markers: list[dict]
-
-
-class MarkerGroupItem(NamedTuple):
+@dataclass()
+class MarkerGroupItem:
     """Provides individual data for specific doculect marker.
     Cannot function outside group of markers
     because data for icon generation is stored in the group.
@@ -29,6 +16,20 @@ class MarkerGroupItem(NamedTuple):
     longitude: float
     popupText: str
     url: str
+
+
+@dataclass()
+class MarkerGroup:
+    """Group of markers for a Leaflet map.
+    All the markers within it share the same icon size, shape and color.
+    """
+    id: str
+    name: str
+
+    divIconHTML: str
+    divIconSize: list
+
+    markers: list[MarkerGroupItem]
 
 
 def generate_marker_group(
@@ -59,7 +60,8 @@ def generate_marker_group(
                 additional_popup_text=additional_popup_text,
             ) for doculect in doculects
         ]
-    ))
+    ))  # this will convert nested dataclasses to dicts as well.
+    # I am not using NamedTuple because this trick with nested conversion does not work with it.
 
 
 def _generate_marker_group_item(
@@ -67,7 +69,7 @@ def _generate_marker_group_item(
         doculect: Doculect,
         locale: str,
         additional_popup_text: Optional[str] = None
-) -> dict:
+) -> MarkerGroupItem:
     """Generates a dictionary with data for an individual marker within a group.
 
     Pop-up text defaults to doculect name with hyperlink to profile,
@@ -94,4 +96,4 @@ def _generate_marker_group_item(
         longitude=longitude,
         popupText=popup_text,
         url=url,
-    )._asdict()
+    )
