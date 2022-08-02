@@ -5,8 +5,8 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from .. import models
 
-from langworld_db_pyramid.maputils.generate_map_icons import icon_for_object
-from langworld_db_pyramid.maputils.marker import generate_marker
+from langworld_db_pyramid.maputils.marker_icons import icon_for_object
+from langworld_db_pyramid.maputils.markers import generate_marker_group
 
 MATCHDICT_ID_FOR_ALL_FAMILIES = '_all'
 
@@ -47,33 +47,34 @@ def view_families_for_list(request):
 
 
 @view_config(route_name='doculects_for_map_family', renderer='json')
-def view_families_for_map(request):
+def view_families_for_map(request) -> list[dict]:
     parent, families, icon_for_family = get_parent_families_icons(request)
-    name_attr = "name_" + request.locale_name
-    doculects = []
+    locale = request.locale_name
+    name_attr = "name_" + locale
+    marker_groups = []
 
     if parent is not None:
-        doculects = [
-            generate_marker(
-                request, doculect,
-                div_icon_html=icon_for_family[parent].svg_tag,
+        marker_groups.append(generate_marker_group(
+            group_id=parent.man_id,
+            group_name=getattr(parent, name_attr),
+            div_icon_html=icon_for_family[parent].svg_tag,
+            doculects=[d for d in parent.doculects if d.has_feature_profile],
+            locale=locale,
+            additional_popup_text=f'(<a href="/{request.locale_name}/family/{parent.man_id}">{getattr(parent, name_attr)}</a>)'
+        ))
+
+    for family in families:
+        marker_groups.append(
+            generate_marker_group(
+                group_id=family.man_id,
+                group_name=getattr(family, name_attr),
+                div_icon_html=icon_for_family[family].svg_tag,
+                doculects=list(family.iter_doculects_that_have_feature_profiles()),
+                locale=locale,
                 additional_popup_text=(
-                    f'(<a href="/{request.locale_name}/family/{parent.man_id}">{getattr(parent, name_attr)}</a>)'
+                    f'(<a href="/{request.locale_name}/family/{family.man_id}">{getattr(family, name_attr)}</a>)'
                 )
             )
-            for doculect in parent.doculects if doculect.has_feature_profile
-        ]
-
-    doculects += [
-        generate_marker(
-            request, doculect,
-            div_icon_html=icon_for_family[family].svg_tag,
-            additional_popup_text=(
-                f'(<a href="/{request.locale_name}/family/{family.man_id}">{getattr(family, name_attr)}</a>)'
-            )
         )
-        for family in families
-        for doculect in family.iter_doculects_that_have_feature_profiles()
-    ]
 
-    return doculects
+    return marker_groups

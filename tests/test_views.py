@@ -1,5 +1,4 @@
 import pyramid.httpexceptions
-from clldutils import svg
 import pytest
 
 from langworld_db_pyramid.models.doculect import Doculect
@@ -64,19 +63,15 @@ def test_get_doculects_by_substring(
         (
             'ru',
             {'id': 'abaza', 'name': 'абазинский', 'latitude': 44.1556, 'longitude': 41.9368,
-             'divIconHTML': svg.icon('c1f78b4'), 'divIconSize': [40, 40],
              'popupText': '<a href="/ru/doculect/abaza">абазинский</a>', 'url': '/ru/doculect/abaza'},
             {'id': 'yaoure', 'name': 'яурэ', 'latitude': 6.85, 'longitude': -5.3,
-             'divIconHTML': svg.icon('c1f78b4'), 'divIconSize': [40, 40],
              'popupText': '<a href="/ru/doculect/yaoure">яурэ</a>', 'url': '/ru/doculect/yaoure'},
         ),
         (
             'en',
             {'id': 'abaza', 'name': 'Abaza', 'latitude': 44.1556, 'longitude': 41.9368,
-             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40],
              'popupText': '<a href="/en/doculect/abaza">Abaza</a>', 'url': '/en/doculect/abaza'},
             {'id': 'zefrei', 'name': 'Zefrei', 'latitude': 32.80592, 'longitude': 52.11667,
-             'divIconHTML': svg.icon('c1f78b4'), "divIconSize": [40, 40],
              'popupText': '<a href="/en/doculect/zefrei">Zefrei</a>', 'url': '/en/doculect/zefrei'},
         ),
     ]
@@ -86,7 +81,9 @@ def test_get_doculects_for_map(
 ):
 
     dummy_request.locale_name = locale
-    doculects = sorted(get_doculects_for_map(dummy_request), key=lambda doculect: doculect["name"])
+    groups = get_doculects_for_map(dummy_request)
+    assert len(groups) == 1
+    doculects = sorted(groups[0]["markers"], key=lambda doculect: doculect["name"])
 
     assert len(doculects) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
     assert doculects[0] == expected_first_doculect
@@ -116,19 +113,24 @@ def test_view_families_for_list(
 
 
 @pytest.mark.parametrize(
-    'family_man_id, expected_number_of_doculects',
+    'family_man_id, expected_number_of_groups, expected_number_of_doculects',
     [
-        (MATCHDICT_ID_FOR_ALL_FAMILIES, NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES),
-        ('isolate', 4), ('yupik', 1), ('slav', 16)
+        # subtracted numbers indicate families that have no doculects
+        (MATCHDICT_ID_FOR_ALL_FAMILIES, 13 - 2, NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES),
+        # addition indicates that a family that has subfamilies gets a group created for its immediate doculects
+        # (even if this group ends up being empty)
+        ('isolate', 1, 4), ('yupik', 1, 1), ('slav', 3 + 1, 16), ('avar_andi', 2 + 1, 14)
     ]
 )
 def test_view_families_for_map(
-        dummy_request, setup_models_for_views_testing, family_man_id, expected_number_of_doculects
+        dummy_request, setup_models_for_views_testing,
+        family_man_id, expected_number_of_groups, expected_number_of_doculects
 ):
     dummy_request.locale_name = 'en'
     dummy_request.matchdict['family_man_id'] = family_man_id
-    data = view_families_for_map(dummy_request)
-    assert len(data) == expected_number_of_doculects
+    immediate_subfamilies = view_families_for_map(dummy_request)
+    assert len(immediate_subfamilies) == expected_number_of_groups
+    assert sum(len(group['markers']) for group in immediate_subfamilies) == expected_number_of_doculects
 
 
 def test_view_all_doculects_list(dummy_request, setup_models_for_views_testing):
@@ -196,17 +198,13 @@ def test_features_view_feature_list(dummy_request, setup_models_for_views_testin
     assert len(data['icon_for_value']) == len(data['values'])
 
 
-def test_features_view_feature_map(dummy_request, setup_models_for_views_testing):
+def test_features_view_feature_map_of_values(dummy_request, setup_models_for_views_testing):
     dummy_request.locale_name = 'ru'
     dummy_request.matchdict['feature_man_id'] = 'H-6'
-    data = view_feature_map_of_values(dummy_request)
-    assert len(data) == 104  # manually counted doculects that have any listed value of this feature
-
-    # the number of unique icons must be equal to number of values that have at least one doculect
-    assert len(set(item['divIconHTML'] for item in data)) == 43 - 9
-
-    for item in data:
-        assert f"/ru/doculect/{item['id']}" in item['popupText']
+    groups = view_feature_map_of_values(dummy_request)
+    # the number of groups must be equal to number of values that have at least one doculect
+    assert len(groups) == 43 - 9
+    assert sum(len(group['markers']) for group in groups) == 104
 
 
 def test_notfound_view(dummy_request):
@@ -255,7 +253,9 @@ def test_query_wizard_get_matching_doculects(
 ):
     dummy_request.params = params
 
-    markers = get_matching_doculects(dummy_request)
+    groups = get_matching_doculects(dummy_request)
+    assert len(groups) == 1
+    markers = groups[0]['markers']
     assert len(markers) == expected_number_of_items
 
     for doculect_id in selected_doculects_to_check:

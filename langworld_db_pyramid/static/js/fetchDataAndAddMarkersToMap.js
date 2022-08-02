@@ -5,7 +5,9 @@ const fetchDataAndAddMarkersToMap = (doculectMap, urlParams) => {
 
   fetch(urlParams.urlToFetch)
     .then((res) => res.json())
-    .then((doculects) => addMarkers(doculects, doculectMap, urlParams))
+    .then((groupsOfDoculects) =>
+      addMarkers(groupsOfDoculects, doculectMap, urlParams)
+    )
     .catch(console.error);
 };
 
@@ -13,25 +15,50 @@ const removeMarkers = (doculectMap) => {
   for (let marker of allMarkers) doculectMap.removeLayer(marker);
 };
 
-const addMarkers = (doculects, doculectMap, { idOfDoculectToShow }) => {
-  for (let doculect of doculects) {
+const addMarkers = (groupsOfDoculects, doculectMap, { idOfDoculectToShow }) => {
+  console.log(groupsOfDoculects);
+  for (let group of groupsOfDoculects) {
     let iconSize = [
-      parseInt(doculect["divIconSize"][0]),
-      parseInt(doculect["divIconSize"][1]),
+      parseInt(group["divIconSize"][0]),
+      parseInt(group["divIconSize"][1]),
     ];
     let iconAnchor = [iconSize[0] / 2, iconSize[1] / 2];
 
     const icon = L.divIcon({
-      html: doculect["divIconHTML"],
+      html: group["divIconHTML"],
       className: "",
       iconSize: iconSize,
       iconAnchor: iconAnchor,
     });
 
+    addMarkersForOneGroup(
+      group["markers"],
+      doculectMap,
+      icon,
+      idOfDoculectToShow
+    );
+  }
+
+  // after all markers were added, fit map to see them all
+  let featureGroup = L.featureGroup(allMarkers);
+  doculectMap.fitBounds(featureGroup.getBounds(), {
+    maxZoom: 13,
+    padding: [10, 25],
+  });
+};
+
+const addMarkersForOneGroup = (
+  doculects,
+  doculectMap,
+  icon,
+  idOfDoculectToShow
+) => {
+  doculects.forEach((doculect) => {
     let marker = L.marker([doculect["latitude"], doculect["longitude"]], {
       icon: icon,
       riseOnHover: true,
     }).addTo(doculectMap);
+
     marker.bindPopup(doculect["popupText"]);
     marker.on("mouseover", function (e) {
       this.openPopup();
@@ -43,13 +70,6 @@ const addMarkers = (doculects, doculectMap, { idOfDoculectToShow }) => {
     allMarkers.push(marker);
 
     if (doculect["id"] === idOfDoculectToShow) marker.openPopup();
-  }
-
-  // after all markers were added, fit map to see them all
-  let featureGroup = L.featureGroup(allMarkers);
-  doculectMap.fitBounds(featureGroup.getBounds(), {
-    maxZoom: 13,
-    padding: [10, 25],
   });
 };
 

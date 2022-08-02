@@ -4,8 +4,8 @@ from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
 from .. import models
-from langworld_db_pyramid.maputils.generate_map_icons import icon_for_object
-from langworld_db_pyramid.maputils.marker import generate_marker
+from langworld_db_pyramid.maputils.marker_icons import icon_for_object
+from langworld_db_pyramid.maputils.markers import generate_marker_group
 
 
 @view_config(route_name='all_features_list', renderer='langworld_db_pyramid:templates/all_features_list.jinja2')
@@ -46,15 +46,19 @@ def view_feature_list_of_values(request):
 
 
 @view_config(route_name='doculects_for_map_feature', renderer='json')
-def view_feature_map_of_values(request):
+def view_feature_map_of_values(request) -> list[dict]:
     feature, values, icon_for_value = get_feature_values_icons(request)
-    name_attr = "name_" + request.locale_name
+    locale = request.locale_name
+    name_attr = "name_" + locale
 
     return [
-        generate_marker(
-            request, doculect,
+        generate_marker_group(
+            group_id=value.id,
+            group_name=getattr(value, name_attr),
             div_icon_html=icon_for_value[value].svg_tag,
-            additional_popup_text=f'({getattr(feature, name_attr)}: {getattr(value, name_attr)})'
+            doculects=value.doculects,
+            locale=locale,
+            additional_popup_text=f'({getattr(feature, name_attr)}: {getattr(value, name_attr)})',
         )
-        for value in values for doculect in value.doculects
+        for value in values
     ]

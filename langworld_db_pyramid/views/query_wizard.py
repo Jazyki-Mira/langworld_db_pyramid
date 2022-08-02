@@ -2,8 +2,8 @@ from pyramid.view import view_config
 from sqlalchemy import select
 
 from .. import models
-from langworld_db_pyramid.maputils.generate_map_icons import generate_fixed_number_of_map_icons
-from langworld_db_pyramid.maputils.marker import generate_marker
+from langworld_db_pyramid.maputils.marker_icons import generate_fixed_number_of_map_icons
+from langworld_db_pyramid.maputils.markers import generate_marker_group
 
 
 @view_config(route_name='query_wizard', renderer='langworld_db_pyramid:templates/query_wizard.jinja2')
@@ -18,7 +18,7 @@ def view_query_wizard(request):
 
 
 @view_config(route_name='query_wizard_json', renderer='json')
-def get_matching_doculects(request):
+def get_matching_doculects(request) -> list[dict]:
 
     doculects = set(
         request.dbsession.scalars(
@@ -30,10 +30,14 @@ def get_matching_doculects(request):
     params = {key: value.split(',') for key, value in request.params.items()}
 
     if not params:
-        return [
-            generate_marker(request=request, doculect=doculect, div_icon_html=icon.svg_tag)
-            for doculect in doculects
-        ]
+        # for uniformity, I return not a dictionary, but a list consisting of one dictionary
+        return [generate_marker_group(
+            group_id='',
+            group_name='',
+            doculects=doculects,
+            div_icon_html=icon.svg_tag,
+            locale=request.locale_name,
+        )]
 
     try:
         family_man_ids = params['family']
@@ -56,7 +60,10 @@ def get_matching_doculects(request):
 
         matching_doculects.intersection_update(doculects_with_any_of_requested_values_of_feature)
 
-    return [
-        generate_marker(request=request, doculect=doculect, div_icon_html=icon.svg_tag)
-        for doculect in matching_doculects
-    ]
+    return [generate_marker_group(
+        group_id='',
+        group_name='',
+        div_icon_html=icon.svg_tag,
+        doculects=matching_doculects,
+        locale=request.locale_name,
+    )]
