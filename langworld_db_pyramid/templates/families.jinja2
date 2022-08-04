@@ -45,7 +45,7 @@
   {% endif %}
 
   {% for family in families recursive %}
-    {% if loop.first and loop.depth == 1%}<h2>{% trans %}Языки, принадлежащие к подсемьям выбранной семьи{% endtrans %}</h2>{% endif %}
+    {% if loop.first and loop.depth == 1 and parent != None%}<h2>{% trans %}Языки, принадлежащие к подсемьям выбранной семьи{% endtrans %}</h2>{% endif %}
     {% if loop.first %}<ul>{% endif %}
     {% if family.has_doculects_with_feature_profiles() %} {# This check is needed for recursive calls #}
         <li>
