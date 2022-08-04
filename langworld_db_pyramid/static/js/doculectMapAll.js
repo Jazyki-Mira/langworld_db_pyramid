@@ -1,7 +1,10 @@
 import getLocale from "./getLocale.js";
-import renderMap from "./renderMap.js";
+import MapAndList from "./baseDoculectMapAndList.js";
 
-renderMap({
-  mapDivID: "map-default",
-  urlToFetch: `/${getLocale()}/json_api/doculects_for_map/all`,
-});
+ReactDOM.render(
+  React.createElement(MapAndList, {
+    mapDivID: "map-default",
+    urlToFetch: `/${getLocale()}/json_api/doculects_for_map/all`,
+  }),
+  document.getElementById("map-and-list")
+);
