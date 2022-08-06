@@ -4,27 +4,6 @@ import getLocale from "./getLocale.js";
 
 const elem = React.createElement;
 
-const fetchAndRenderResults = (url) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then(renderListOfMatchingDoculects)
-    .catch(console.error);
-
-const renderListOfMatchingDoculects = (retrieved_data) => {
-  if (typeof retrieved_data[Symbol.iterator] != "function") return; // promise is pending, no data to iterate over
-
-  ReactDOM.render(
-    elem(
-      "ul",
-      {},
-      retrieved_data.map((item, i) =>
-        elem(DoculectListItem, { doculect: item, key: i }, null)
-      )
-    ),
-    document.getElementById("doculect-finder-list")
-  );
-};
-
 function DoculectListForm(props) {
   const [query, setQuery] = React.useState("");
 
@@ -38,6 +17,27 @@ function DoculectListForm(props) {
       let url = `/${locale}/json_api/doculect_by_name/` + query;
       fetchAndRenderResults(url);
     }
+  };
+
+  const fetchAndRenderResults = (url) =>
+    fetch(url)
+      .then((res) => res.json())
+      .then(renderListOfMatchingDoculects)
+      .catch(console.error);
+
+  const renderListOfMatchingDoculects = (retrieved_data) => {
+    if (typeof retrieved_data[Symbol.iterator] != "function") return; // promise is pending, no data to iterate over
+
+    ReactDOM.render(
+      elem(
+        "ul",
+        {},
+        retrieved_data.map((item, i) =>
+          elem(DoculectListItem, { doculect: item, key: i }, null)
+        )
+      ),
+      document.getElementById("doculect-finder-list")
+    );
   };
 
   return elem(
