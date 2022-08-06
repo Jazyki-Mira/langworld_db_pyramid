@@ -1,31 +1,13 @@
 import accessToken from "./mapboxAccessToken.js";
+import getURLParams from "./getURLParams.js";
 
 export default function MapAndList({ mapDivID, urlToFetch }) {
   const elem = React.createElement;
 
   const markerForDoculectID = new Map();
+
+  const leafletFeatureGroupsRef = React.useRef([]);
   const mapRef = React.useRef(null);
-
-  const getURLParams = () => {
-    let urlParams = new URLSearchParams(location.search);
-
-    /* these 3 can be connected (center on a specific doculect),
-      but I want to keep the functionality flexible and be able to center on something
-      without necessarily showing the doculect */
-    let idOfDoculectToShow = urlParams.has("show_doculect")
-      ? urlParams.get("show_doculect")
-      : null;
-    let mapViewLat = urlParams.has("lat")
-      ? parseInt(urlParams.get("lat"))
-      : 55.0;
-    let mapViewLong = urlParams.has("long")
-      ? parseInt(urlParams.get("long"))
-      : 95.0;
-
-    let zoom = 2.5;
-
-    return { idOfDoculectToShow, mapViewLat, mapViewLong, zoom };
-  };
 
   const { mapViewLat, mapViewLong, zoom, idOfDoculectToShow } = getURLParams();
 
@@ -49,8 +31,6 @@ export default function MapAndList({ mapDivID, urlToFetch }) {
     }).addTo(mapRef.current);
   }, []);
 
-  const featureGroupsRef = React.useRef([]);
-
   React.useEffect(() => {
     fetch(urlToFetch)
       .then((res) => res.json())
@@ -67,8 +47,8 @@ export default function MapAndList({ mapDivID, urlToFetch }) {
   }, [urlToFetch]);
 
   const removeExistingMarkersAndFeatureGroups = () => {
-    featureGroupsRef.current.forEach((group) => group.clearLayers());
-    featureGroupsRef.current = [];
+    leafletFeatureGroupsRef.current.forEach((group) => group.clearLayers());
+    leafletFeatureGroupsRef.current = [];
   };
 
   const createFeatureGroups = (groupsOfDoculects) => {
@@ -86,7 +66,9 @@ export default function MapAndList({ mapDivID, urlToFetch }) {
         iconAnchor: iconAnchor,
       });
 
-      featureGroupsRef.current.push(createFeatureGroup(group["markers"], icon));
+      leafletFeatureGroupsRef.current.push(
+        createFeatureGroup(group["markers"], icon)
+      );
     }
   };
 
@@ -115,7 +97,7 @@ export default function MapAndList({ mapDivID, urlToFetch }) {
   };
 
   const addGroupsOfMarkersToMap = () => {
-    featureGroupsRef.current.forEach((featureGroup) =>
+    leafletFeatureGroupsRef.current.forEach((featureGroup) =>
       featureGroup.addTo(mapRef.current)
     );
   };
@@ -126,7 +108,7 @@ export default function MapAndList({ mapDivID, urlToFetch }) {
 
   const zoomMapToFitAllMarkers = () => {
     let allMarkers = [];
-    featureGroupsRef.current.forEach((group) => {
+    leafletFeatureGroupsRef.current.forEach((group) => {
       group.eachLayer((marker) => allMarkers.push(marker));
     });
 
