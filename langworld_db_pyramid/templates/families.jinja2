@@ -27,9 +27,7 @@
       </p>
   {% endif %}
 
-  <div id="map-and-list">
-    <div id="map-default"></div>
-  </div>
+  <div id="map-and-list"></div>
 
   {% if parent != None %}
       {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
