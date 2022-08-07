@@ -151,7 +151,6 @@ export default function DoculectMap({ mapDivID }) {
       if (copiedGroup["markers"].length > 0) groupsInMapView.push(copiedGroup);
     }
 
-    console.log("Groups in view:", groupsInMapView);
     return groupsInMapView;
   };
 

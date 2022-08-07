@@ -10,7 +10,6 @@ export default function InteractiveDoculectList() {
 
   if (doculectGroupsInMapView === null) return null;
 
-  console.log("Inside DoculectList:", doculectGroupsInMapView);
   return elem(
     "div",
     {},
@@ -22,7 +21,7 @@ function DoculectGroup(doculectGroup) {
   let doculects = doculectGroup["markers"];
   return elem(
     "div",
-    {},
+    { key: doculectGroup["id"] },
     elem("h2", {}, doculectGroup["name"]),
     elem(
       "ul",
@@ -35,7 +34,7 @@ function DoculectGroup(doculectGroup) {
 function DoculectListItem(doculect) {
   return elem(
     "li",
-    {},
+    { key: doculect["id"] },
     elem(
       "a",
       { href: `/${getLocale()}/doculect/${doculect["id"]}` },
