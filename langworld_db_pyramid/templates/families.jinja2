@@ -1,7 +1,13 @@
 {% extends "base.jinja2" %}
 
-{% block content %}
 {% set name_attr = "name_" + request.locale_name %}
+
+{% block map_and_list %}
+    <div id="map-and-list"></div>
+{% endblock map_and_list %}
+
+
+{% block content %}
 
 <div class="content">
   {% if parent == None %}
@@ -26,8 +32,6 @@
       <strong>{{ parent[name_attr] }}</strong>
       </p>
   {% endif %}
-
-  <div id="map-and-list"></div>
 
   {% if parent != None %}
       {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}

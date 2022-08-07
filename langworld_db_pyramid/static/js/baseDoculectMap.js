@@ -1,5 +1,8 @@
 import accessToken from "./mapboxAccessToken.js";
-import { doculectGroupsContext } from "./contexts.js";
+import {
+  allFetchedDoculectGroupsContext,
+  doculectGroupsInMapViewContext,
+} from "./contexts.js";
 import getURLParams from "./getURLParams.js";
 
 const elem = React.createElement;
@@ -11,7 +14,12 @@ export default function DoculectMap({ mapDivID }) {
   const { mapViewLat, mapViewLong, zoom, idOfDoculectToShow } = getURLParams();
   const markerForDoculectID = new Map();
 
-  const { doculectGroups } = React.useContext(doculectGroupsContext);
+  const { allDoculectGroups } = React.useContext(
+    allFetchedDoculectGroupsContext
+  );
+  const { setDoculectGroupsInMapView } = React.useContext(
+    doculectGroupsInMapViewContext
+  );
 
   // map base (rendered once, hence empty dependency array)
   React.useEffect(() => {
@@ -34,14 +42,19 @@ export default function DoculectMap({ mapDivID }) {
   }, []);
 
   React.useEffect(() => {
-    if (doculectGroups === null) return;
+    if (allDoculectGroups === null) return;
     removeExistingMarkersAndFeatureGroups();
     createFeatureGroups();
 
     addGroupsOfMarkersToMap();
     zoomMapToFitAllMarkers(); // note that the map will not move if zoom doesn't need to change
     openPopupForDoculect(idOfDoculectToShow);
-  }, [doculectGroups]);
+
+    mapRef.current.on("zoomend moveend", () => {
+      // only change context, the list rendering is called from parent
+      setDoculectGroupsInMapView(getGroupsInMapView());
+    });
+  }, [allDoculectGroups]);
 
   const removeExistingMarkersAndFeatureGroups = () => {
     leafletFeatureGroupsRef.current.forEach((group) => group.clearLayers());
@@ -49,7 +62,7 @@ export default function DoculectMap({ mapDivID }) {
   };
 
   const createFeatureGroups = () => {
-    for (let group of doculectGroups) {
+    for (let group of allDoculectGroups) {
       let iconSize = [
         parseInt(group["divIconSize"][0]),
         parseInt(group["divIconSize"][1]),
@@ -99,10 +112,6 @@ export default function DoculectMap({ mapDivID }) {
     );
   };
 
-  const openPopupForDoculect = (doculectID) => {
-    if (doculectID != null) markerForDoculectID[doculectID].openPopup();
-  };
-
   const zoomMapToFitAllMarkers = () => {
     let allMarkers = [];
     leafletFeatureGroupsRef.current.forEach((group) => {
@@ -113,8 +122,38 @@ export default function DoculectMap({ mapDivID }) {
 
     mapRef.current.fitBounds(groupOfAllMarkers.getBounds(), {
       maxZoom: 13,
-      padding: [10, 25],
+      // if less than 35, interactive list may not be rendered
+      // because Leaflet may not see that the markers are within the map (e.g. Baltic languages)
+      padding: [10, 35],
     });
+  };
+
+  const openPopupForDoculect = (doculectID) => {
+    if (doculectID != null) markerForDoculectID[doculectID].openPopup();
+  };
+
+  const getGroupsInMapView = () => {
+    let groupsInMapView = [];
+
+    for (let group of allDoculectGroups) {
+      // Make a copy of the group but without doculects.
+      let copiedGroup = { ...group };
+      copiedGroup["markers"] = [];
+
+      // Add (from the original group) doculects that are in current map view.
+      for (let doculect of group["markers"]) {
+        let marker = markerForDoculectID[doculect["id"]];
+        if (mapRef.current.getBounds().contains(marker.getLatLng())) {
+          copiedGroup["markers"].push(doculect);
+        }
+      }
+
+      // If copied group turns out to have doculects, add to list of groups to be returned.
+      if (copiedGroup["markers"].length > 0) groupsInMapView.push(copiedGroup);
+    }
+
+    console.log("Groups in view:", groupsInMapView);
+    return groupsInMapView;
   };
 
   return elem("div", { id: mapDivID });
