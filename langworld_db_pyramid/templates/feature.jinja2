@@ -1,5 +1,9 @@
 {% extends "base.jinja2" %}
 
+{% block content_top %}
+    <h1 class="w3-text-teal">{{ feature_name }} ({{ man_id }})</h1>
+{% endblock content_top %}
+
 {% block map_and_list %}
     <div id="map-and-list"></div>
 {% endblock map_and_list %}
@@ -9,7 +13,6 @@
 {% set name_attr = "name_" + request.locale_name %}
 
 <div class="content">
-  <h1 class="w3-text-teal">{{ feature_name }} ({{ man_id }})</h1>
 
   <h2>{% trans %}Значения признака (с сортировкой по убыванию числа языков){% endtrans %}</h2>
 

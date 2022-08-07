@@ -27,7 +27,7 @@ export default function MapAndList({ mapDivID, urlToFetch }) {
       { value: { doculectGroupsInMapView, setDoculectGroupsInMapView } },
       elem(
         "div",
-        { className: "w3-row w3-padding-64" }, // TODO hardcoded for now
+        { className: "w3-row w3-padding-small" }, // TODO hardcoded for now
         elem(
           "div",
           { className: "w3-twothird w3-container" },

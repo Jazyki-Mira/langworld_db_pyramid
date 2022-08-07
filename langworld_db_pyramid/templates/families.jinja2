@@ -2,14 +2,7 @@
 
 {% set name_attr = "name_" + request.locale_name %}
 
-{% block map_and_list %}
-    <div id="map-and-list"></div>
-{% endblock map_and_list %}
-
-
-{% block content %}
-
-<div class="content">
+{% block content_top %}
   {% if parent == None %}
     <h1 class="w3-text-teal">{% trans %}Генеалогия{% endtrans %}</h1>
   {% else %}
@@ -32,6 +25,15 @@
       <strong>{{ parent[name_attr] }}</strong>
       </p>
   {% endif %}
+{% endblock content_top %}
+
+{% block map_and_list %}
+    <div id="map-and-list"></div>
+{% endblock map_and_list %}
+
+{% block content %}
+
+<div class="content">
 
   {% if parent != None %}
       {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}

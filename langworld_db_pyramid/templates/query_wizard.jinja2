@@ -4,8 +4,11 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.css" rel="stylesheet">
 {% endblock custom_css %}
 
-{% block content %}
+{% block content_top %}
   <h1 class="w3-text-teal">{% trans %}Мастер сложных запросов{% endtrans %}</h1>
+{% endblock content_top %}
+
+{% block content %}
   <div id="map-default"></div>
 {% endblock content %}
 

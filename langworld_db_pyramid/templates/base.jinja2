@@ -77,6 +77,10 @@
     <!-- Sidebar -->
 
     <div class="w3-main">
+      <div class="w3-row w3-padding-top-32 w3-margin-left">
+      {% block content_top %}
+      {% endblock content_top %}
+      </div>
 
         {% block map_and_list %}
         {% endblock map_and_list %}
