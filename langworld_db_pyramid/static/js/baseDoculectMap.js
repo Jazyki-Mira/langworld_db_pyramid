@@ -47,6 +47,7 @@ export default function DoculectMap({ mapDivID }) {
     createFeatureGroups();
 
     addGroupsOfMarkersToMap();
+    setDoculectGroupsInMapView(getGroupsInMapView());
     zoomMapToFitAllMarkers(); // note that the map will not move if zoom doesn't need to change
     openPopupForDoculect(idOfDoculectToShow);
 
@@ -122,9 +123,7 @@ export default function DoculectMap({ mapDivID }) {
 
     mapRef.current.fitBounds(groupOfAllMarkers.getBounds(), {
       maxZoom: 13,
-      // if less than 35, interactive list may not be rendered
-      // because Leaflet may not see that the markers are within the map (e.g. Baltic languages)
-      padding: [10, 35],
+      padding: [10, 25],
     });
   };
 
