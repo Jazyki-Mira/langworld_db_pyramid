@@ -1,4 +1,7 @@
-import { doculectGroupsInMapViewContext } from "./contexts.js";
+import {
+  doculectGroupsInMapViewContext,
+  idOfDoculectToOpenPopupOnMapContext,
+} from "./contexts.js";
 import getLocale from "./getLocale.js";
 
 const elem = React.createElement;
@@ -6,6 +9,9 @@ const elem = React.createElement;
 export default function InteractiveDoculectList() {
   const { doculectGroupsInMapView } = React.useContext(
     doculectGroupsInMapViewContext
+  );
+  const { setIdOfDoculectToOpenPopupOnMap } = React.useContext(
+    idOfDoculectToOpenPopupOnMapContext
   );
 
   if (doculectGroupsInMapView === null) return null;
@@ -15,30 +21,35 @@ export default function InteractiveDoculectList() {
     {},
     doculectGroupsInMapView.map((group) => DoculectGroup(group))
   );
-}
 
-function DoculectGroup(doculectGroup) {
-  let doculects = doculectGroup["markers"];
-  return elem(
-    "div",
-    { key: doculectGroup["id"] },
-    elem("h2", {}, doculectGroup["name"]),
-    elem(
-      "ul",
-      {},
-      doculects.map((doculect) => DoculectListItem(doculect))
-    )
-  );
-}
+  // these functions have to be inside top-level function to be able to use the context
+  function DoculectGroup(doculectGroup) {
+    let doculects = doculectGroup["markers"];
+    return elem(
+      "div",
+      { key: doculectGroup["id"] },
+      elem("h2", {}, doculectGroup["name"]),
+      elem(
+        "ul",
+        {},
+        doculects.map((doculect) => DoculectListItem(doculect))
+      )
+    );
+  }
 
-function DoculectListItem(doculect) {
-  return elem(
-    "li",
-    { key: doculect["id"] },
-    elem(
-      "a",
-      { href: `/${getLocale()}/doculect/${doculect["id"]}` },
-      doculect["name"]
-    )
-  );
+  function DoculectListItem(doculect) {
+    return elem(
+      "li",
+      { key: doculect["id"] },
+      elem(
+        "a",
+        {
+          href: `/${getLocale()}/doculect/${doculect["id"]}`,
+          onMouseEnter: () => setIdOfDoculectToOpenPopupOnMap(doculect["id"]),
+          onMouseOut: () => setIdOfDoculectToOpenPopupOnMap(null),
+        },
+        doculect["name"]
+      )
+    );
+  }
 }

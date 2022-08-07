@@ -2,6 +2,7 @@ import accessToken from "./mapboxAccessToken.js";
 import {
   allFetchedDoculectGroupsContext,
   doculectGroupsInMapViewContext,
+  idOfDoculectToOpenPopupOnMapContext,
 } from "./contexts.js";
 import getURLParams from "./getURLParams.js";
 
@@ -12,13 +13,16 @@ export default function DoculectMap({ mapDivID }) {
   const mapRef = React.useRef(null);
 
   const { mapViewLat, mapViewLong, zoom, idOfDoculectToShow } = getURLParams();
-  const markerForDoculectID = new Map();
+  const markerForDoculectIDRef = React.useRef(new Map());
 
   const { allDoculectGroups } = React.useContext(
     allFetchedDoculectGroupsContext
   );
   const { setDoculectGroupsInMapView } = React.useContext(
     doculectGroupsInMapViewContext
+  );
+  const { idOfDoculectToOpenPopupOnMap } = React.useContext(
+    idOfDoculectToOpenPopupOnMapContext
   );
 
   // map base (rendered once, hence empty dependency array)
@@ -56,6 +60,15 @@ export default function DoculectMap({ mapDivID }) {
       setDoculectGroupsInMapView(getGroupsInMapView());
     });
   }, [allDoculectGroups]);
+
+  // open pop-up if ID of language to pop up changes
+  React.useEffect(() => {
+    if (idOfDoculectToOpenPopupOnMap === null) {
+      mapRef.current.closePopup();
+    } else {
+      openPopupForDoculect(idOfDoculectToOpenPopupOnMap);
+    }
+  }, [idOfDoculectToOpenPopupOnMap]);
 
   const removeExistingMarkersAndFeatureGroups = () => {
     leafletFeatureGroupsRef.current.forEach((group) => group.clearLayers());
@@ -101,7 +114,7 @@ export default function DoculectMap({ mapDivID }) {
       });
 
       markersInThisGroup.push(marker);
-      markerForDoculectID[doculect["id"]] = marker;
+      markerForDoculectIDRef.current[doculect["id"]] = marker;
     });
 
     return L.featureGroup(markersInThisGroup);
@@ -128,7 +141,13 @@ export default function DoculectMap({ mapDivID }) {
   };
 
   const openPopupForDoculect = (doculectID) => {
-    if (doculectID != null) markerForDoculectID[doculectID].openPopup();
+    if (doculectID != null) {
+      let marker = markerForDoculectIDRef.current[doculectID];
+      marker.openPopup();
+      marker.fire("mouseover"); // to make the marker rise to the top
+      // TODO if user returns to the same list item, the marker will not rise again
+      // I guess I have to trigger "mouseout" on PREVIOUS marker when ID changes
+    }
   };
 
   const getGroupsInMapView = () => {
@@ -141,7 +160,7 @@ export default function DoculectMap({ mapDivID }) {
 
       // Add (from the original group) doculects that are in current map view.
       for (let doculect of group["markers"]) {
-        let marker = markerForDoculectID[doculect["id"]];
+        let marker = markerForDoculectIDRef.current[doculect["id"]];
         if (mapRef.current.getBounds().contains(marker.getLatLng())) {
           copiedGroup["markers"].push(doculect);
         }
