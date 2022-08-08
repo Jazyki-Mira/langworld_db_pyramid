@@ -3,6 +3,9 @@
 {% set name_attr = "name_" + request.locale_name %}
 
 {% block content_top %}
+
+<div class="w3-twothird w3-container">
+
   {% if parent == None %}
     <h1 class="w3-text-teal">{% trans %}Генеалогия{% endtrans %}</h1>
   {% else %}
@@ -25,53 +28,67 @@
       <strong>{{ parent[name_attr] }}</strong>
       </p>
   {% endif %}
+
+</div>
+
+<div class="w3-third w3-container w3-padding-top-32">
+    <span>Карта</span>
+    <label class="switch">
+        <input id="map-tree-toggle" type="checkbox">
+        <span class="slider round"></span>
+    </label>
+    <span>Подробное дерево</span>
+</div>
+
 {% endblock content_top %}
 
 {% block map_and_list %}
     <div id="map-and-list"></div>
+
+    <div id="tree" class="content w3-hide">
+      {% if parent != None %}
+          {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
+              {% if loop.first %}
+                  <h2><img src="{{ icon_for_family[parent].img_src }}"/>{{ parent[name_attr] }} ({% trans %}без деления на подсемьи{% endtrans %})</h2>
+                  <ul>
+              {% endif %}
+                  <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+              {% if loop.last %}
+                  </ul>
+              {% endif %}
+          {% endfor %}
+      {% endif %}
+
+      {% for family in families recursive %}
+        {% if loop.first and loop.depth == 1 and parent != None%}<h2>{% trans %}Языки, принадлежащие к подсемьям выбранной семьи{% endtrans %}</h2>{% endif %}
+        {% if loop.first %}<ul>{% endif %}
+        {% if family.has_doculects_with_feature_profiles() %} {# This check is needed for recursive calls #}
+            <li>
+                {% if loop.depth == 1 %}<img src="{{ icon_for_family[family].img_src }}"/>{% endif %}
+                <a href="/{{ request.locale_name }}/family/{{ family.man_id }}">{{ family[name_attr] }}</a>
+
+                {{ loop(family.children) }}
+
+                {% for doculect in family.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
+                    {% if loop.first %}<ul>{% endif %}
+                    <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+                    {% if loop.last %}</ul>{% endif %}
+                {% endfor %}
+            </li>
+        {% endif %}
+        {% if loop.last %}</ul>{% endif %}
+      {% endfor %}
+
+    </div>
 {% endblock map_and_list %}
 
 {% block content %}
+{# I intentionally moved the tree from "block content" into the block with map and interactive list so they show on the same level #}
 
-<div class="content">
-
-  {% if parent != None %}
-      {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
-          {% if loop.first %}
-              <h2><img src="{{ icon_for_family[parent].img_src }}"/>{{ parent[name_attr] }} ({% trans %}без деления на подсемьи{% endtrans %})</h2>
-              <ul>
-          {% endif %}
-              <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
-          {% if loop.last %}
-              </ul>
-          {% endif %}
-      {% endfor %}
-  {% endif %}
-
-  {% for family in families recursive %}
-    {% if loop.first and loop.depth == 1 and parent != None%}<h2>{% trans %}Языки, принадлежащие к подсемьям выбранной семьи{% endtrans %}</h2>{% endif %}
-    {% if loop.first %}<ul>{% endif %}
-    {% if family.has_doculects_with_feature_profiles() %} {# This check is needed for recursive calls #}
-        <li>
-            {% if loop.depth == 1 %}<img src="{{ icon_for_family[family].img_src }}"/>{% endif %}
-            <a href="/{{ request.locale_name }}/family/{{ family.man_id }}">{{ family[name_attr] }}</a>
-
-            {{ loop(family.children) }}
-
-            {% for doculect in family.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
-                {% if loop.first %}<ul>{% endif %}
-                <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
-                {% if loop.last %}</ul>{% endif %}
-            {% endfor %}
-        </li>
-    {% endif %}
-    {% if loop.last %}</ul>{% endif %}
-  {% endfor %}
-
-</div>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>
 
 <script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectMapForFamily.js') }}" type="module"></script>
+<script src="{{ request.static_url('langworld_db_pyramid:static/js/toggleMapAndTree.js') }}" type="module"></script>
 {% endblock content %}
