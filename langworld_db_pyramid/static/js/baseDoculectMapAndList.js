@@ -47,7 +47,7 @@ export default function MapAndList({ mapDivID, urlToFetch }) {
           ),
           elem(
             "div",
-            { className: "w3-third w3-container" },
+            { className: "w3-third w3-container interactive-list" },
             elem(InteractiveDoculectList) // TODO div ID here or remove div ID for map
           )
         )
