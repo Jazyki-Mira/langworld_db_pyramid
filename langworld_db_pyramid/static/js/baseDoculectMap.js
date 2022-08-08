@@ -91,7 +91,7 @@ export default function DoculectMap({ mapDivID }) {
       });
 
       leafletFeatureGroupsRef.current.push(
-        createFeatureGroup(group["markers"], icon)
+        createFeatureGroup(group["doculects"], icon)
       );
     }
   };
@@ -156,18 +156,18 @@ export default function DoculectMap({ mapDivID }) {
     for (let group of allDoculectGroups) {
       // Make a copy of the group but without doculects.
       let copiedGroup = { ...group };
-      copiedGroup["markers"] = [];
+      copiedGroup["doculects"] = [];
 
       // Add (from the original group) doculects that are in current map view.
-      for (let doculect of group["markers"]) {
+      for (let doculect of group["doculects"]) {
         let marker = markerForDoculectIDRef.current[doculect["id"]];
         if (mapRef.current.getBounds().contains(marker.getLatLng())) {
-          copiedGroup["markers"].push(doculect);
+          copiedGroup["doculects"].push(doculect);
         }
       }
 
       // If copied group turns out to have doculects, add to list of groups to be returned.
-      if (copiedGroup["markers"].length > 0) groupsInMapView.push(copiedGroup);
+      if (copiedGroup["doculects"].length > 0) groupsInMapView.push(copiedGroup);
     }
 
     return groupsInMapView;

@@ -78,16 +78,16 @@ def test_generate_marker_group(setup_models_for_views_testing, dbsession):
     )
     assert group['id'] == 'test_id'
     assert group['name'] == 'test_name'
-    assert len(group['markers']) == 2
+    assert len(group['doculects']) == 2
 
-    eskimo_data = group['markers'][0]
+    eskimo_data = group['doculects'][0]
     assert eskimo_data['name'] == eskimo.name_en
     assert eskimo_data['latitude'] == float(eskimo.latitude)
     assert eskimo_data['longitude'] == float(eskimo.longitude) + 360  # testing doculect with longitude -173.128
     assert eskimo_data['popupText'] == f'<a href="/en/doculect/{eskimo.man_id}">{eskimo.name_en}</a><br/>foo'
     assert eskimo_data['url'] == f'/en/doculect/{eskimo.man_id}'
 
-    old_french_data = group['markers'][1]
+    old_french_data = group['doculects'][1]
     assert old_french_data['name'] == old_french.name_en + ' (†)'
     assert old_french_data['latitude'] == float(old_french.latitude)
     assert old_french_data['longitude'] == float(old_french.longitude)

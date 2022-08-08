@@ -5,7 +5,7 @@ from langworld_db_pyramid.models import Doculect
 
 
 @dataclass()
-class MarkerGroupItem:
+class DoculectDoculectMarkerGroupItem:
     """Provides individual data for specific doculect marker.
     Cannot function outside group of markers
     because data for icon generation is stored in the group.
@@ -19,7 +19,7 @@ class MarkerGroupItem:
 
 
 @dataclass()
-class MarkerGroup:
+class DoculectMarkerGroup:
     """Group of markers for a Leaflet map.
     All the markers within it share the same icon size, shape and color.
     """
@@ -29,7 +29,7 @@ class MarkerGroup:
     divIconHTML: str
     divIconSize: list
 
-    markers: list[MarkerGroupItem]
+    doculects: list[DoculectDoculectMarkerGroupItem]
 
 
 def generate_marker_group(
@@ -48,12 +48,12 @@ def generate_marker_group(
     """
     # NOTE that this function returns a plain dictionary
     # and only uses classes for clarity within the module.
-    return asdict(MarkerGroup(
+    return asdict(DoculectMarkerGroup(
         id=group_id,
         name=group_name,
         divIconHTML=div_icon_html,
         divIconSize=[40, 40],
-        markers=[
+        doculects=[
             _generate_marker_group_item(
                 doculect=doculect,
                 locale=locale,
@@ -69,7 +69,7 @@ def _generate_marker_group_item(
         doculect: Doculect,
         locale: str,
         additional_popup_text: Optional[str] = None
-) -> MarkerGroupItem:
+) -> DoculectDoculectMarkerGroupItem:
     """Generates a dictionary with data for an individual marker within a group.
 
     Pop-up text defaults to doculect name with hyperlink to profile,
@@ -89,7 +89,7 @@ def _generate_marker_group_item(
     if additional_popup_text:
         popup_text = f'{popup_text}<br/>{additional_popup_text}'
 
-    return MarkerGroupItem(
+    return DoculectDoculectMarkerGroupItem(
         id=doculect.man_id,
         name=doculect_name,
         latitude=float(doculect.latitude),

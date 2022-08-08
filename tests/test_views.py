@@ -83,7 +83,7 @@ def test_get_doculects_for_map(
     dummy_request.locale_name = locale
     groups = get_doculects_for_map(dummy_request)
     assert len(groups) == 1
-    doculects = sorted(groups[0]["markers"], key=lambda doculect: doculect["name"])
+    doculects = sorted(groups[0]['doculects'], key=lambda doculect: doculect['name'])
 
     assert len(doculects) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
     assert doculects[0] == expected_first_doculect
@@ -130,7 +130,7 @@ def test_view_families_for_map(
     dummy_request.matchdict['family_man_id'] = family_man_id
     immediate_subfamilies = view_families_for_map(dummy_request)
     assert len(immediate_subfamilies) == expected_number_of_groups
-    assert sum(len(group['markers']) for group in immediate_subfamilies) == expected_number_of_doculects
+    assert sum(len(group['doculects']) for group in immediate_subfamilies) == expected_number_of_doculects
 
 
 def test_view_all_doculects_list(dummy_request, setup_models_for_views_testing):
@@ -204,7 +204,7 @@ def test_features_view_feature_map_of_values(dummy_request, setup_models_for_vie
     groups = view_feature_map_of_values(dummy_request)
     # the number of groups must be equal to number of values that have at least one doculect
     assert len(groups) == 43 - 9
-    assert sum(len(group['markers']) for group in groups) == 104
+    assert sum(len(group['doculects']) for group in groups) == 104
 
 
 def test_notfound_view(dummy_request):
@@ -255,7 +255,7 @@ def test_query_wizard_get_matching_doculects(
 
     groups = get_matching_doculects(dummy_request)
     assert len(groups) == 1
-    markers = groups[0]['markers']
+    markers = groups[0]['doculects']
     assert len(markers) == expected_number_of_items
 
     for doculect_id in selected_doculects_to_check:

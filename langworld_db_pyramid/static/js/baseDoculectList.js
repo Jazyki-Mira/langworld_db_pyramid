@@ -24,7 +24,7 @@ export default function InteractiveDoculectList() {
 
   // these functions have to be inside top-level function to be able to use the context
   function DoculectGroup(doculectGroup) {
-    let doculects = doculectGroup["markers"];
+    let doculects = doculectGroup["doculects"];
     return elem(
       "div",
       { key: doculectGroup["id"] },

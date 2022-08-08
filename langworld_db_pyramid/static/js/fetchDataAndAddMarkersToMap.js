@@ -32,7 +32,7 @@ const addMarkers = (groupsOfDoculects, doculectMap, { idOfDoculectToShow }) => {
     });
 
     addMarkersForOneGroup(
-      group["markers"],
+      group["doculects"],
       doculectMap,
       icon,
       idOfDoculectToShow

@@ -19,6 +19,7 @@ def view_query_wizard(request):
 
 @view_config(route_name='query_wizard_json', renderer='json')
 def get_matching_doculects(request) -> list[dict]:
+    name_attr = f'name_{request.locale_name}'
 
     doculects = set(
         request.dbsession.scalars(
@@ -34,7 +35,7 @@ def get_matching_doculects(request) -> list[dict]:
         return [generate_marker_group(
             group_id='',
             group_name='',
-            doculects=doculects,
+            doculects=sorted(doculects, key=lambda d: getattr(d, name_attr)),
             div_icon_html=icon.svg_tag,
             locale=request.locale_name,
         )]
@@ -64,6 +65,6 @@ def get_matching_doculects(request) -> list[dict]:
         group_id='',
         group_name='',
         div_icon_html=icon.svg_tag,
-        doculects=matching_doculects,
+        doculects=sorted(matching_doculects, key=lambda d: getattr(d, name_attr)),
         locale=request.locale_name,
     )]

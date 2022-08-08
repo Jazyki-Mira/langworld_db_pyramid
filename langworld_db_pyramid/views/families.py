@@ -58,9 +58,13 @@ def view_families_for_map(request) -> list[dict]:
             group_id=parent.man_id,
             group_name=getattr(parent, name_attr),
             div_icon_html=icon_for_family[parent].svg_tag,
-            doculects=[d for d in parent.doculects if d.has_feature_profile],
+            doculects=sorted(
+                [d for d in parent.doculects if d.has_feature_profile], key=lambda d: getattr(d, name_attr)
+            ),
             locale=locale,
-            additional_popup_text=f'(<a href="/{request.locale_name}/family/{parent.man_id}">{getattr(parent, name_attr)}</a>)'
+            additional_popup_text=(
+                f'(<a href="/{request.locale_name}/family/{parent.man_id}">{getattr(parent, name_attr)}</a>)'
+            )
         ))
 
     for family in families:
@@ -69,7 +73,10 @@ def view_families_for_map(request) -> list[dict]:
                 group_id=family.man_id,
                 group_name=getattr(family, name_attr),
                 div_icon_html=icon_for_family[family].svg_tag,
-                doculects=list(family.iter_doculects_that_have_feature_profiles()),
+                doculects=sorted(
+                    list(family.iter_doculects_that_have_feature_profiles()),
+                    key=lambda d: getattr(d, name_attr)
+                ),
                 locale=locale,
                 additional_popup_text=(
                     f'(<a href="/{request.locale_name}/family/{family.man_id}">{getattr(family, name_attr)}</a>)'

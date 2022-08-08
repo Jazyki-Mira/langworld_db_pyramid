@@ -56,7 +56,7 @@ def view_feature_map_of_values(request) -> list[dict]:
             group_id=value.id,
             group_name=getattr(value, name_attr),
             div_icon_html=icon_for_value[value].svg_tag,
-            doculects=value.doculects,
+            doculects=sorted(value.doculects, key=lambda d: getattr(d, name_attr)),
             locale=locale,
             additional_popup_text=f'({getattr(feature, name_attr)}: {getattr(value, name_attr)})',
         )
