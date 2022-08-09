@@ -1,22 +1,35 @@
 {% extends "base.jinja2" %}
+{% set name_attr = "name_" + request.locale_name %}
+
 {% block custom_css %}
   <link href="{{request.static_url('langworld_db_pyramid:static/css/query-wizard.css')}}" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.css" rel="stylesheet">
 {% endblock custom_css %}
 
 {% block content_top %}
-  <h1 class="w3-text-teal">{% trans %}Мастер сложных запросов{% endtrans %}</h1>
+  <div class="w3-twothird w3-container">
+    <h1 class="w3-text-teal">{% trans %}Мастер сложных запросов{% endtrans %}</h1>
+  </div>
+
+  <div class="w3-third w3-container w3-padding-top-32">
+    <span>{% trans %}Форма{% endtrans %}</span>
+    <label class="switch">
+        <input id="form-list-toggle" type="checkbox">
+        <span class="slider round"></span>
+    </label>
+    <span>{% trans %}Интерактивный список результатов{% endtrans %}</span>
+</div>
+
 {% endblock content_top %}
 
-{% block content %}
-  <div id="map-default"></div>
-{% endblock content %}
+{% block map_and_list %}
+    <div id="map-and-list"></div>
+{% endblock map_and_list %}
 
 {% block one_third %}
-{% set name_attr = "name_" + request.locale_name %}
 
-<div class="content">
-  <form>
+<div class="w3-third w3-container scrollable" id="query-wizard-form-container">
+  <form id ="query-wizard-form">
   <h2>{% trans %}Генеалогия{% endtrans %}</h2>
   <select id="family" multiple size="10">
   {% for family in families recursive %}
@@ -29,7 +42,7 @@
 
   <h2>{% trans %}Признаки{% endtrans %}
   {% for category in categories %}
-      <div class="wrap-collabsible">
+      <div class="wrap-collapsible">
           <input id="{{ category.man_id }}" class="toggle" type="checkbox">
           <label for="{{ category.man_id }}" class="lbl-toggle">{{ category[name_attr] }}</label>
           <div class="collapsible-content">
@@ -59,4 +72,6 @@ crossorigin=""></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.js"></script>
 
 <script src="{{ request.static_url('langworld_db_pyramid:static/js/queryWizard.js') }}" type="module"></script>
+<script src="{{ request.static_url('langworld_db_pyramid:static/js/toggleListAndForm.js') }}" type="module"></script>
+
 {% endblock one_third %}

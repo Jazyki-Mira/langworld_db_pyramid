@@ -1,45 +1,59 @@
-import fetchDataAndAddMarkersToMap from "./fetchDataAndAddMarkersToMap.js";
+import MapAndList from "./baseDoculectMapAndList.js";
 import getLocale from "./getLocale.js";
-import renderMap from "./renderMap.js";
 
-for (let elem of document.querySelectorAll("select")) {
-  new SlimSelect({
-    select: elem,
-    placeholder: "Выберите любое количество значений",
-    searchPlaceholder: "Поиск значения",
-    searchText: "Нет подходящих значений",
-    allowDeselectOption: true,
-    closeOnSelect: false,
-    selectByGroup: true,
-    showContent: "down",
+const elem = React.createElement;
+
+const wrapInputFieldsWithSlimSelect = () => {
+  for (let elem of document.querySelectorAll("select")) {
+    new SlimSelect({
+      select: elem,
+      placeholder: "Выберите любое количество значений",
+      searchPlaceholder: "Поиск значения",
+      searchText: "Нет подходящих значений",
+      allowDeselectOption: true,
+      closeOnSelect: false,
+      selectByGroup: true,
+      showContent: "down",
+    });
+  }
+};
+
+function QueryWizard() {
+  const form = document.getElementById("query-wizard-form");
+
+  const generateFetchUrl = () => {
+    let valuesFromAllSelects = [];
+
+    for (let elem of form.querySelectorAll("select")) {
+      let selectedValues = elem.slim.selected();
+      if (selectedValues.length > 0)
+        valuesFromAllSelects.push(`${elem.id}=${selectedValues.toString()}`);
+    }
+
+    let paramsForURLToFetch = encodeURI(valuesFromAllSelects.join("&"));
+    return `/${getLocale()}/json_api/query_wizard?${paramsForURLToFetch}`;
+  };
+
+  wrapInputFieldsWithSlimSelect();
+
+  // after the render: move the form into same container as interactive list, hide the list
+  React.useEffect(() => {
+    let formContainer = document.getElementById("query-wizard-form-container");
+    let mapAndListContainer = document.getElementById(
+      "map-and-list-inside-container"
+    );
+    mapAndListContainer.append(formContainer);
+
+    let interactiveListContainer = document.getElementById("interactive-list");
+    interactiveListContainer.classList.toggle("w3-hide");
+  }, []);
+
+  return elem(MapAndList, {
+    mapDivID: "map-default",
+    urlToFetch: `/${getLocale()}/json_api/doculects_for_map/all`,
+    formId: "query-wizard-form",
+    fetchUrlGenerator: generateFetchUrl,
   });
 }
 
-const handleChange = (e, doculectMap) => {
-  console.log("Changed");
-  let valuesFromAllSelects = [];
-
-  for (let elem of document.querySelectorAll("select")) {
-    let selectedValues = elem.slim.selected();
-    if (selectedValues.length > 0)
-      valuesFromAllSelects.push(`${elem.id}=${selectedValues.toString()}`);
-  }
-
-  let paramsForURLToFetch = encodeURI(valuesFromAllSelects.join("&"));
-  let urlToFetch = `/${getLocale()}/json_api/query_wizard?${paramsForURLToFetch}`;
-  console.log(urlToFetch);
-  fetchDataAndAddMarkersToMap(doculectMap, { urlToFetch });
-};
-
-const handleSubmit = (e) => {
-  e.preventDefault();
-};
-
-let doculectsFoundMap = renderMap({
-  mapDivID: "map-default",
-  urlToFetch: `/${getLocale()}/json_api/doculects_for_map/all`,
-});
-
-let form = document.querySelector("form");
-form.onchange = (e) => handleChange(e, doculectsFoundMap);
-form.onsubmit = handleSubmit;
+ReactDOM.render(elem(QueryWizard), document.getElementById("map-and-list"));

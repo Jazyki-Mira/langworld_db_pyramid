@@ -2,53 +2,85 @@ import {
   allFetchedDoculectGroupsContext,
   doculectGroupsInMapViewContext,
   idOfDoculectToOpenPopupOnMapContext,
+  fetchUrlContext,
 } from "./contexts.js";
 import InteractiveDoculectList from "./baseDoculectList.js";
 import DoculectMap from "./baseDoculectMap.js";
 
 const elem = React.createElement;
 
-export default function MapAndList({ mapDivID, urlToFetch }) {
+// TODO rename urlToFetch
+export default function MapAndList({
+  mapDivID,
+  urlToFetch,
+  formId = null,
+  fetchUrlGenerator = null,
+}) {
   const [allDoculectGroups, setAllDoculectGroups] = React.useState(null);
   const [doculectGroupsInMapView, setDoculectGroupsInMapView] =
     React.useState(null);
   const [idOfDoculectToOpenPopupOnMap, setIdOfDoculectToOpenPopupOnMap] =
     React.useState(null);
+  const [fetchUrl, setFetchUrl] = React.useState(urlToFetch);
+
+  // fetchUrl can only change if there is some sort of form on the page
+  // For now I assume that the form is in HTML already, not being created by React
+  const formRef = React.useRef(null);
 
   React.useEffect(() => {
-    fetch(urlToFetch)
+    if (formId != null) {
+      formRef.current = document.getElementById(formId);
+      formRef.current.onchange = () => setFetchUrl(fetchUrlGenerator());
+      formRef.current.onsubmit = (e) => {
+        e.preventDefault();
+      };
+    }
+  }, []); // only look for the form once, hence empty dependency list
+
+  React.useEffect(() => {
+    fetch(fetchUrl)
       .then((res) => res.json())
       .then((groups) => setAllDoculectGroups(groups))
       .catch(console.error);
-  }, []);
+  }, [fetchUrl]); // TODO handle case when there are no doculects
 
   return elem(
-    allFetchedDoculectGroupsContext.Provider,
-    { value: { allDoculectGroups, setAllDoculectGroups } },
+    fetchUrlContext.Provider,
+    { value: { fetchUrl, setFetchUrl } },
     elem(
-      doculectGroupsInMapViewContext.Provider,
-      { value: { doculectGroupsInMapView, setDoculectGroupsInMapView } },
+      allFetchedDoculectGroupsContext.Provider,
+      { value: { allDoculectGroups, setAllDoculectGroups } },
       elem(
-        idOfDoculectToOpenPopupOnMapContext.Provider,
-        {
-          value: {
-            idOfDoculectToOpenPopupOnMap,
-            setIdOfDoculectToOpenPopupOnMap,
-          },
-        },
+        doculectGroupsInMapViewContext.Provider,
+        { value: { doculectGroupsInMapView, setDoculectGroupsInMapView } },
         elem(
-          "div",
-          { className: "w3-row w3-padding-small" }, // TODO hardcoded for now
+          idOfDoculectToOpenPopupOnMapContext.Provider,
+          {
+            value: {
+              idOfDoculectToOpenPopupOnMap,
+              setIdOfDoculectToOpenPopupOnMap,
+            },
+          },
           elem(
             "div",
-            { className: "w3-twothird w3-container" },
-            // TODO div ID for map is needed because of CSS, but should I really keep it here?
-            elem(DoculectMap, { mapDivID })
-          ),
-          elem(
-            "div",
-            { className: "w3-third w3-container interactive-list" },
-            elem(InteractiveDoculectList) // TODO div ID here or remove div ID for map
+            {
+              className: "w3-row w3-padding-small",
+              id: "map-and-list-inside-container",
+            }, // TODO hardcoded for now
+            elem(
+              "div",
+              { className: "w3-twothird w3-container" },
+              // TODO div ID for map is needed because of CSS, but should I really keep it here?
+              elem(DoculectMap, { mapDivID })
+            ),
+            elem(
+              "div",
+              {
+                className: "w3-third w3-container scrollable",
+                id: "interactive-list",
+              },
+              elem(InteractiveDoculectList) // TODO div ID here or remove div ID for map
+            )
           )
         )
       )
