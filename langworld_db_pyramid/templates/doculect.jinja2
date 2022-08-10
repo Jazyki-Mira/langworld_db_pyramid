@@ -55,22 +55,35 @@
   {% endif %}
 
   <h2>{% trans %}Признаки{% endtrans %}</h2>
-  <ul>
-  {% for value in doculect.feature_values|sort(attribute="feature.id") %}
-    {% if not value.type.entails_empty_value and not (request.locale_name == 'en' and value.type.name == 'custom') %}
-        <li>
-            <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
-                {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
-            </a>: {{ value[name_attr]}} {%if value.man_id %}({{ value.man_id }}){% endif %}
 
-            {# comments are only available in Russian so far #}
-            {% if request.locale_name == 'ru' %}
-                {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+  {% for category in categories %}
+      <h2>{{ category[name_attr] }}</h2>
+      {% set values_to_list = doculect.feature_values|selectattr("feature.category.id", "eq", category.id)|selectattr("type.entails_empty_value", "false")|sort(attribute="feature.id") %}
+
+      {% if not values_to_list %}<p>{% trans %}Нет заполненных признаков для этого языка.{% endtrans %}</p>
+      {# I realise that ^ this message ^ will not show in English version if a category only contains
+      'custom' values for this doculect.  An empty list will be rendered instead.
+      But this is a rare situation and custom values should not stay for too long anyway. #}
+
+      {% else %}
+          <ul>
+          {% for value in values_to_list %}
+            {% if not (request.locale_name == 'en' and value.type.name == 'custom') %}
+                <li>
+                    <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
+                        {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
+                    </a>: {{ value[name_attr]}} {%if value.man_id %}({{ value.man_id }}){% endif %}
+
+                    {# comments are only available in Russian so far #}
+                    {% if request.locale_name == 'ru' %}
+                        {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+                    {% endif %}
+                </li>
             {% endif %}
-        </li>
-    {% endif %}
+          {% endfor %}
+          </ul>
+      {% endif %}
   {% endfor %}
-  </ul>
 
   <h2>{% trans %}Незаполненные признаки{% endtrans %}</h2>
 

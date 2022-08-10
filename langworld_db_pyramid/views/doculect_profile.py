@@ -17,4 +17,8 @@ def view_doculect_profile(request):
     except SQLAlchemyError:
         raise HTTPNotFound(f"Doculect with ID {doculect_man_id} does not exist")
 
-    return {'doculect': doculect}
+    categories = request.dbsession.scalars(
+        select(models.FeatureCategory).order_by(models.FeatureCategory.man_id)
+    ).all()
+
+    return {'doculect': doculect, 'categories': categories}

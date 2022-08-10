@@ -148,6 +148,8 @@ def test_view_doculect_profile(dummy_request, setup_models_for_views_testing):
     assert isinstance(doculect, Doculect)
     assert doculect.name_en == 'Aragonese'
 
+    assert len(info['categories']) == 14
+
 
 def test_view_doculect_profile_raises_not_found(dummy_request, setup_models_for_views_testing):
     dummy_request.matchdict['doculect_man_id'] = 'foo'
