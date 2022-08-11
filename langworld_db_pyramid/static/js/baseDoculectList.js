@@ -40,7 +40,7 @@ export default function InteractiveDoculectList() {
       ),
       elem(
         "ul",
-        {},
+        { className: "doculects-in-group" },
         doculects.map((doculect) => DoculectListItem(doculect))
       )
     );

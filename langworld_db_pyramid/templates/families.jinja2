@@ -85,10 +85,21 @@
 {% block content %}
 {# I intentionally moved the tree from "block content" into the block with map and interactive list so they show on the same level #}
 
+{# this <div> will be moved above the list using the script imported below #}
+<div id="doculects-in-list-toggle-container">
+  <span>Списки языков</span>
+  <label class="switch">
+    <input id="doculects-in-list-toggle" type="checkbox">
+    <span class="slider round"></span>
+  </label>
+  <span>Только легенда</span>
+</div>
+
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>
 
 <script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectMapForFamily.js') }}" type="module"></script>
 <script src="{{ request.static_url('langworld_db_pyramid:static/js/toggleMapAndTree.js') }}" type="module"></script>
+<script src="{{ request.static_url('langworld_db_pyramid:static/js/toggleDoculectsInInteractiveList.js') }}" type="module"></script>
 {% endblock content %}
