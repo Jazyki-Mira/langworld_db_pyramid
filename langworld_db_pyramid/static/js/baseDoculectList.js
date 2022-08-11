@@ -24,13 +24,9 @@ export default function InteractiveDoculectList() {
 
   // these functions have to be inside top-level function to be able to use the context
   function DoculectGroup(doculectGroup) {
-    let headingText = doculectGroup["name"];
+    let headingText = `${doculectGroup["name"]} (${doculectGroup["doculects"].length})`;
     if (doculectGroup["href"] != "")
-      headingText = elem(
-        "a",
-        { href: doculectGroup["href"] },
-        doculectGroup["name"]
-      );
+      headingText = elem("a", { href: doculectGroup["href"] }, headingText);
 
     let doculects = doculectGroup["doculects"];
     return elem(
