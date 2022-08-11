@@ -29,5 +29,6 @@ def get_doculects_for_map(request) -> list[dict]:
         group_name='',
         doculects=sorted(doculects, key=lambda d: getattr(d, f'name_{request.locale_name}')),
         div_icon_html=icon.svg_tag,
+        img_src=icon.img_src,
         locale=request.locale_name,
     )]

@@ -28,7 +28,12 @@ export default function InteractiveDoculectList() {
     return elem(
       "div",
       { key: doculectGroup["id"] },
-      elem("h2", {}, doculectGroup["name"]),
+      elem(
+        "h2",
+        {},
+        elem("img", { src: doculectGroup["imgSrc"] }),
+        doculectGroup["name"]
+      ),
       elem(
         "ul",
         {},

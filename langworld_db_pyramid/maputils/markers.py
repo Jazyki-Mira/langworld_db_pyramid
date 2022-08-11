@@ -28,6 +28,7 @@ class DoculectMarkerGroup:
 
     divIconHTML: str
     divIconSize: list
+    imgSrc: str
 
     doculects: list[DoculectDoculectMarkerGroupItem]
 
@@ -37,6 +38,7 @@ def generate_marker_group(
         group_name: str,
         div_icon_html: str,
         doculects: Iterable[Doculect],
+        img_src: str,
         locale: str,
         additional_popup_text: Optional[str] = None,
 ) -> dict:
@@ -53,6 +55,7 @@ def generate_marker_group(
         name=group_name,
         divIconHTML=div_icon_html,
         divIconSize=[40, 40],
+        imgSrc=img_src,
         doculects=[
             _generate_marker_group_item(
                 doculect=doculect,

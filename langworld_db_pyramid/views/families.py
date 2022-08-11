@@ -58,6 +58,7 @@ def view_families_for_map(request) -> list[dict]:
             group_id=parent.man_id,
             group_name=getattr(parent, name_attr),
             div_icon_html=icon_for_family[parent].svg_tag,
+            img_src=icon_for_family[parent].img_src,
             doculects=sorted(
                 [d for d in parent.doculects if d.has_feature_profile], key=lambda d: getattr(d, name_attr)
             ),
@@ -73,6 +74,7 @@ def view_families_for_map(request) -> list[dict]:
                 group_id=family.man_id,
                 group_name=getattr(family, name_attr),
                 div_icon_html=icon_for_family[family].svg_tag,
+                img_src=icon_for_family[family].img_src,
                 doculects=sorted(
                     list(family.iter_doculects_that_have_feature_profiles()),
                     key=lambda d: getattr(d, name_attr)

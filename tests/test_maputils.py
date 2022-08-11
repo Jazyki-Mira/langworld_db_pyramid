@@ -72,6 +72,7 @@ def test_generate_marker_group(setup_models_for_views_testing, dbsession):
         group_id='test_id',
         group_name='test_name',
         div_icon_html='will be received elsewhere',
+        img_src='will be received elsewhere',
         doculects=[eskimo, old_french],
         locale='en',
         additional_popup_text='foo',
