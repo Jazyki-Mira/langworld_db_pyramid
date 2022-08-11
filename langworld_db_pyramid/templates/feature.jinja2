@@ -10,26 +10,6 @@
 
 {% block content %}
 
-{% set name_attr = "name_" + request.locale_name %}
-
-<div class="content">
-
-  <h2>{% trans %}Значения признака (с сортировкой по убыванию числа языков){% endtrans %}</h2>
-
-  <ul>
-  {% for value in values%}
-    <li>
-        {{ icon_for_value[value].img_tag|safe }} {{ value[name_attr] }} ({{ value.doculects|length }})
-        <ul>
-            {% for doculect in value.doculects|sort(attribute=name_attr) %}
-            <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-  {% endfor %}
-  </ul>
-</div>
-
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>

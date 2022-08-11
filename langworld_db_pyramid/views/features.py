@@ -36,12 +36,12 @@ def get_feature_values_icons(request):
 @view_config(route_name='feature', renderer='langworld_db_pyramid:templates/feature.jinja2')
 @view_config(route_name='feature_localized', renderer='langworld_db_pyramid:templates/feature.jinja2')
 def view_feature_list_of_values(request):
-    feature, values, icon_for_value = get_feature_values_icons(request)
+    # The list of values is no longer shown (because it would duplicate the interactive list),
+    # but it still makes sense to use the common function
+    feature, _, _ = get_feature_values_icons(request)
     return {
         'feature_name': getattr(feature, f'name_{request.locale_name}'),
         'man_id': feature.man_id,
-        'values': values,
-        'icon_for_value': icon_for_value
     }
 
 
