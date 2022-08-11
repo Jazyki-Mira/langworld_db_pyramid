@@ -54,26 +54,31 @@ def view_families_for_map(request) -> list[dict]:
     marker_groups = []
 
     if parent is not None:
+        href = f"/{request.locale_name}/family/{parent.man_id}"
+
         marker_groups.append(generate_marker_group(
             group_id=parent.man_id,
             group_name=getattr(parent, name_attr),
             div_icon_html=icon_for_family[parent].svg_tag,
+            href_for_heading_in_list=href,
             img_src=icon_for_family[parent].img_src,
             doculects=sorted(
                 [d for d in parent.doculects if d.has_feature_profile], key=lambda d: getattr(d, name_attr)
             ),
             locale=locale,
             additional_popup_text=(
-                f'(<a href="/{request.locale_name}/family/{parent.man_id}">{getattr(parent, name_attr)}</a>)'
+                f'(<a href="{href}">{getattr(parent, name_attr)}</a>)'
             )
         ))
 
     for family in families:
+        href = f'/{request.locale_name}/family/{family.man_id}'
         marker_groups.append(
             generate_marker_group(
                 group_id=family.man_id,
                 group_name=getattr(family, name_attr),
                 div_icon_html=icon_for_family[family].svg_tag,
+                href_for_heading_in_list=href,
                 img_src=icon_for_family[family].img_src,
                 doculects=sorted(
                     list(family.iter_doculects_that_have_feature_profiles()),
@@ -81,7 +86,7 @@ def view_families_for_map(request) -> list[dict]:
                 ),
                 locale=locale,
                 additional_popup_text=(
-                    f'(<a href="/{request.locale_name}/family/{family.man_id}">{getattr(family, name_attr)}</a>)'
+                    f'(<a href="{href}">{getattr(family, name_attr)}</a>)'
                 )
             )
         )

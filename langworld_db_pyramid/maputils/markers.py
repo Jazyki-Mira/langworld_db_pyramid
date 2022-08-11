@@ -20,17 +20,22 @@ class DoculectDoculectMarkerGroupItem:
 
 @dataclass()
 class DoculectMarkerGroup:
-    """Group of markers for a Leaflet map.
+    """Group of markers for a Leaflet map and interactive list.
     All the markers within it share the same icon size, shape and color.
+
+    For the map: `divIconHTML` and `divIconSize`.
+    For the list: `imgSrc` (icon next to heading), `href`
+    (provide a non-empty string if a heading must be a link).
     """
     id: str
     name: str
 
+    doculects: list[DoculectDoculectMarkerGroupItem]
+
     divIconHTML: str
     divIconSize: list
+    href: str
     imgSrc: str
-
-    doculects: list[DoculectDoculectMarkerGroupItem]
 
 
 def generate_marker_group(
@@ -41,6 +46,7 @@ def generate_marker_group(
         img_src: str,
         locale: str,
         additional_popup_text: Optional[str] = None,
+        href_for_heading_in_list: Optional[str] = None,
 ) -> dict:
     """
     Generates a group of markers sharing the same icon style.
@@ -55,6 +61,7 @@ def generate_marker_group(
         name=group_name,
         divIconHTML=div_icon_html,
         divIconSize=[40, 40],
+        href=href_for_heading_in_list if href_for_heading_in_list else "",
         imgSrc=img_src,
         doculects=[
             _generate_marker_group_item(

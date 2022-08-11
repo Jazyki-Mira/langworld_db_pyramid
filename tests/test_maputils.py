@@ -76,10 +76,12 @@ def test_generate_marker_group(setup_models_for_views_testing, dbsession):
         doculects=[eskimo, old_french],
         locale='en',
         additional_popup_text='foo',
+        href_for_heading_in_list='bar',
     )
     assert group['id'] == 'test_id'
     assert group['name'] == 'test_name'
     assert len(group['doculects']) == 2
+    assert group['href'] == 'bar'
 
     eskimo_data = group['doculects'][0]
     assert eskimo_data['name'] == eskimo.name_en
