@@ -191,13 +191,11 @@ def test_features_get_feature_values_icons_not_found(dummy_request, setup_models
         get_feature_values_icons(dummy_request)
 
 
-def test_features_view_feature_list(dummy_request, setup_models_for_views_testing):
+def test_features_view_feature_list_of_values(dummy_request, setup_models_for_views_testing):
     dummy_request.matchdict['feature_man_id'] = 'H-6'
     data = view_feature_list_of_values(dummy_request)
 
     assert data['man_id'] == 'H-6'
-    assert len(data['values']) == 43 - 9  # there are 43 in total but 9 have no matching doculects
-    assert len(data['icon_for_value']) == len(data['values'])
 
 
 def test_features_view_feature_map_of_values(dummy_request, setup_models_for_views_testing):
