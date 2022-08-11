@@ -49,7 +49,7 @@
       {% if parent != None %}
           {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
               {% if loop.first %}
-                  <h2><img src="{{ icon_for_family[parent].img_src }}"/>{{ parent[name_attr] }} ({% trans %}без деления на подсемьи{% endtrans %})</h2>
+                  <h2><img src="{{ icon_for_family[parent].img_tag }}"/>{{ parent[name_attr] }} ({% trans %}без деления на подсемьи{% endtrans %})</h2>
                   <ul>
               {% endif %}
                   <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
@@ -64,7 +64,7 @@
         {% if loop.first %}<ul>{% endif %}
         {% if family.has_doculects_with_feature_profiles() %} {# This check is needed for recursive calls #}
             <li>
-                {% if loop.depth == 1 %}<img src="{{ icon_for_family[family].img_src }}"/>{% endif %}
+                {% if loop.depth == 1 %}{{ icon_for_family[family].img_tag|safe }}{% endif %}
                 <a href="/{{ request.locale_name }}/family/{{ family.man_id }}">{{ family[name_attr] }}</a>
 
                 {{ loop(family.children) }}

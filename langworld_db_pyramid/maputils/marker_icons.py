@@ -22,16 +22,22 @@ SHAPES = ('c', 's', 't', 'd', 'f')
 
 @dataclass
 class CLLDIcon:
-    """A convenience class that takes string in style of clldutils.svg
+    """A convenience class that takes string in style of `clldutils.svg`
     and produces object with two attributes needed for displaying an icon
-    either inline (use value of `.img_src` instead of ... in <img src="..." />)
-    or on a map (use `.svg_html`, for example, in `.html` attribute of `L.divIcon`)
+    either inline (value of `.img_tag` gives `<img src="<svg_code_of_the_icon>" />`
+    for Python-rendered content; value of `.img_src` gives contents of <img src=".../">
+    for use in Javascript when generating an <img> element)
+    or on a map (use `.svg_tag`, for example, in `.html` attribute of `L.divIcon`).
+
+    Note that use of `.img_tag` in Jinja templates will require `|safe` filter,
+    otherwise some characters will be escaped.
     """
     shape_and_color: str
 
     def __post_init__(self):
         self.svg_tag = svg.icon(self.shape_and_color)
         self.img_src = svg.data_url(self.svg_tag)
+        self.img_tag = f'<img src="{self.img_src}"/>'
 
     def __eq__(self, other):
         if self.shape_and_color == other.shape_and_color:
@@ -39,7 +45,7 @@ class CLLDIcon:
         return False
 
     def __hash__(self):
-        return hash((self.svg_tag, self.img_src))
+        return hash((self.svg_tag, self.img_tag))
 
     def __repr__(self):
         return f'CLLDIcon (shape {self.shape_and_color[0]}, color #{self.shape_and_color[1:]})'

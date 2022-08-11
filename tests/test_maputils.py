@@ -16,7 +16,7 @@ class DummyObject(NamedTuple):
 def test_clld_icon__post_init__():
     icon = CLLDIcon('c000000')
     assert '<svg' in icon.svg_tag and '000000' in icon.svg_tag
-    assert icon.img_src.startswith('data:image/svg+xml')
+    assert icon.img_tag.startswith('<img src="data:image/svg+xml')
 
 
 def test_clld_icon_dunder_methods():
