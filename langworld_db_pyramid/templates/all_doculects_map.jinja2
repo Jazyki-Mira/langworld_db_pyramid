@@ -1,22 +1,11 @@
-{% extends "base.jinja2" %}
+{% extends "page_with_map.jinja2" %}
 
 {% block content_top %}
   <h1 class="w3-text-dark-blue-grey">{% trans %}Карта языков{% endtrans %}</h1>
 {% endblock content_top %}
 
-{% block map_and_list %}
-    <div id="map-and-list"></div>
-{% endblock map_and_list %}
-
-{% block content %}
-
-{% set name_attr = "name_" + request.locale_name %}
-{% set aliases_attr = "aliases_" + request.locale_name %}
-
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-crossorigin=""></script>
-
+{% block scripts %}
+{{ super() }}
 <script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectMapAll.js') }}" type="module"></script>
 
-{% endblock content %}
+{% endblock scripts %}

@@ -5,7 +5,6 @@
 {% block content %}
 <div class="content">
   <h1 class="w3-text-dark-blue-grey">{% trans %}Список языков{% endtrans %}</h1>
-
   <h2 class="w3-text-darkest-blue-grey">{% trans%}Полный список c сортировкой по названию{% endtrans %}</h2>
   <p>{% trans %}В списке представлены языки и диалекты, для которых заполнены рефераты{% endtrans %} (<strong>{{ doculects|length }}</strong>).</p>
   <ul class="w3-ul">
@@ -13,15 +12,16 @@
       <li><a href="/{{ request.locale_name }}/doculect/{{ item.man_id }}"><strong>{{ item[name_attr] }}</strong></a> {% if item[aliases_attr] %}({{ item[aliases_attr] }}){% endif %} </li>
   {% endfor %}
   </ul>
-
 </div>
-
-
-
 {% endblock content %}
 
 {% block one_third %}
   <div id="doculect-finder-form"></div>
   <div id="doculect-finder-list"></div>
-  <script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectListForm.js') }}" type="module"></script>
 {% endblock one_third %}
+
+{% block scripts %}
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectListForm.js') }}" type="module"></script>
+{% endblock scripts %}
