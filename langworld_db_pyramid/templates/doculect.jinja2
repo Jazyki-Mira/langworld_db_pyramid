@@ -12,10 +12,10 @@
 
 <div class="w3-margin-left">
     {% if doculect[aliases_attr] %}
-  <p class="lead">{% trans %}Альтернативные названия{% endtrans %}: <span class="font-normal">{{ doculect[aliases_attr] }}</span></p>
+  <p>{% trans %}Альтернативные названия{% endtrans %}: <span class="font-normal">{{ doculect[aliases_attr] }}</span></p>
     {% endif %}
 
-  <p class="lead"><a href="{{ request.static_url('langworld_db_pyramid:static/pdf_volumes/11.pdf') }}" target="_blank">{% trans %}Открыть в энциклопедии{% endtrans %}</a></p>
+  <p><a href="{{ request.static_url('langworld_db_pyramid:static/pdf_volumes/11.pdf') }}" target="_blank">{% trans %}Открыть в энциклопедии{% endtrans %}</a></p>
 
   <h2 class="w3-text-darkest-blue-grey">{% trans %}Генеалогия{% endtrans %}</h2>
   <p>
@@ -39,7 +39,7 @@
       <ul>
 
       {% if doculect.glottocodes %}
-      <li class="lead">Glottolog:
+      <li>Glottolog:
         {% for glottocode in doculect.glottocodes|sort(attribute="code") %}
         <span class="font-normal"><a href="https://glottolog.org/resource/languoid/id/{{ glottocode.code }}" target="_blank">{{ glottocode.code }}</a></span>{% if not loop.last %}, {% endif %}
         {% endfor %}
@@ -47,7 +47,7 @@
       {% endif %}
 
       {% if doculect.iso_639p3_codes %}
-      <li class="lead">ISO-639-3:
+      <li>ISO-639-3:
         {% for iso_code in doculect.iso_639p3_codes|sort(attribute="code") %}
         <span class="font-normal"><a href="https://iso639-3.sil.org/code/{{ iso_code.code }}" target="_blank">{{ iso_code.code }}</a></span>{% if not loop.last %}, {% endif %}
         {% endfor %}
@@ -139,7 +139,7 @@
   {% endif %}
 
   {% if request.locale_name == 'ru' %}
-    <p class="lead">{{ doculect.comment_ru }}</p>
+    <p>{{ doculect.comment_ru }}</p>
   {% endif %}
 
 </div>
