@@ -1,13 +1,16 @@
 {% extends "base.jinja2" %}
-
-{% block content %}
-
 {% set name_attr = "name_" + request.locale_name %}
 {% set aliases_attr = "aliases_" + request.locale_name %}
 
-<div class="content">
+{% block content_top %}
+<div class="w3-twothird w3-container">
   <h1 class="w3-text-dark-blue-grey">{{ doculect[name_attr] }} {{ doculect.type[name_attr] }} {% if doculect.is_extinct %}†{% endif %}</h1>
+</div>
+{% endblock content_top %}
 
+{% block content %}
+
+<div class="w3-margin-left">
     {% if doculect[aliases_attr] %}
   <p class="lead">{% trans %}Альтернативные названия{% endtrans %}: <span class="font-normal">{{ doculect[aliases_attr] }}</span></p>
     {% endif %}
