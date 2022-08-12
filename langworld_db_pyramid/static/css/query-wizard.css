@@ -13,12 +13,13 @@ input[type='checkbox'] {
 	text-transform: uppercase; 
 	text-align: center; */
     font-size: 1.2rem;
-	padding: 1rem;
+	padding: 0.5rem;
 	color: #3a4b53;
 	background: #a6cee3;
 	cursor: pointer;
 	border-radius: 7px;
 	transition: all 0.25s ease-out;
+	margin-top:-0.5rem;
 }
 
 .lbl-toggle:hover {
@@ -49,7 +50,7 @@ input[type='checkbox'] {
 
 .toggle:checked+.lbl-toggle+.collapsible-content {
 	max-height: 100%;
-	padding-bottom: 16rem; /* added for bottom option within category to be displayed correctly */
+	padding-bottom: 13.5rem; /* added for bottom option within category to be displayed correctly */
 }
 
 .toggle:checked+.lbl-toggle {
