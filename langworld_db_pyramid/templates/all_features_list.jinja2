@@ -5,10 +5,10 @@
 {% set name_attr = "name_" + request.locale_name %}
 
 <div class="content">
-  <h1 class="w3-text-teal">{% trans %}Признаки{% endtrans %}</h1>
+  <h1 class="w3-text-dark-blue-grey">{% trans %}Признаки{% endtrans %}</h1>
 
   {% for category in categories %}
-      <h2>{{ category[name_attr] }}</h2>
+      <h2 class="w3-text-darkest-blue-grey">{{ category[name_attr] }}</h2>
       <ul>
         {% for feature in category.features %}
         <li><a href="/{{ request.locale_name }}/feature/{{ feature.man_id }}">{{ feature[name_attr] }}</a> ({{ feature.man_id }})</li>

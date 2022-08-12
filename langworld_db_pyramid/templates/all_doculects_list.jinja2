@@ -1,17 +1,16 @@
 {% extends "base.jinja2" %}
+{% set name_attr = "name_" + request.locale_name %}
+{% set aliases_attr = "aliases_" + request.locale_name %}
 
 {% block content %}
 <div class="content">
-  <h1 class="w3-text-teal">{% trans %}Список языков{% endtrans %}</h1>
+  <h1 class="w3-text-dark-blue-grey">{% trans %}Список языков{% endtrans %}</h1>
 
-  <h2>{% trans%}Полный список c сортировкой по названию{% endtrans %}</h2>
+  <h2 class="w3-text-darkest-blue-grey">{% trans%}Полный список c сортировкой по названию{% endtrans %}</h2>
   <p>{% trans %}В списке представлены языки и диалекты, для которых заполнены рефераты{% endtrans %} (<strong>{{ doculects|length }}</strong>).</p>
-  <ul>
+  <ul class="w3-ul">
   {% for item in doculects %}
-      {% set name_attr = "name_" + request.locale_name %}
-      {% set aliases_attr = "aliases_" + request.locale_name %}
-
-      <li><a href="/{{ request.locale_name }}/doculect/{{ item.man_id }}">{{ item[name_attr] }}</a> {% if item[aliases_attr] %}({{ item[aliases_attr] }}){% endif %} </li>
+      <li><a href="/{{ request.locale_name }}/doculect/{{ item.man_id }}"><strong>{{ item[name_attr] }}</strong></a> {% if item[aliases_attr] %}({{ item[aliases_attr] }}){% endif %} </li>
   {% endfor %}
   </ul>
 

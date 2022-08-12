@@ -6,7 +6,7 @@
 {% set aliases_attr = "aliases_" + request.locale_name %}
 
 <div class="content">
-  <h1 class="w3-text-teal">{{ doculect[name_attr] }} {{ doculect.type[name_attr] }} {% if doculect.is_extinct %}†{% endif %}</h1>
+  <h1 class="w3-text-dark-blue-grey">{{ doculect[name_attr] }} {{ doculect.type[name_attr] }} {% if doculect.is_extinct %}†{% endif %}</h1>
 
     {% if doculect[aliases_attr] %}
   <p class="lead">{% trans %}Альтернативные названия{% endtrans %}: <span class="font-normal">{{ doculect[aliases_attr] }}</span></p>
@@ -14,7 +14,7 @@
 
   <p class="lead"><a href="{{ request.static_url('langworld_db_pyramid:static/pdf_volumes/11.pdf') }}" target="_blank">{% trans %}Открыть в энциклопедии{% endtrans %}</a></p>
 
-  <h2>{% trans %}Генеалогия{% endtrans %}</h2>
+  <h2 class="w3-text-darkest-blue-grey">{% trans %}Генеалогия{% endtrans %}</h2>
   <p>
   {# this loop is a workaround of absence of recursive if's. I have to make a one-item list to be able to loop #}
   {% for parent in [doculect.family.parent] recursive %}
@@ -26,13 +26,13 @@
   <a href="/{{ request.locale_name }}/family/{{ doculect.family.man_id }}?show_doculect={{ doculect.man_id }}">{{ doculect.family[name_attr] }}</a>
   </p>
 
-  <h2>{% trans %}География{% endtrans %}</h2>
+  <h2 class="w3-text-darkest-blue-grey">{% trans %}География{% endtrans %}</h2>
     <p>{% trans %}Основная страна{% endtrans %}: <span class="font-normal">{{ doculect.main_country[name_attr] }}</span>
     (<a href="/{{ request.locale_name }}/doculects/map?lat={{ doculect.latitude }}&long={{ doculect.longitude }}&show_doculect={{ doculect.man_id }}">{% trans %}посмотреть на карте{% endtrans %}</a>)
     </p>
 
   {% if doculect.glottocodes or doculect.iso_639p3_codes %}
-      <h2>{% trans %}Идентификаторы{% endtrans %}</h2>
+      <h2 class="w3-text-darkest-blue-grey">{% trans %}Идентификаторы{% endtrans %}</h2>
       <ul>
 
       {% if doculect.glottocodes %}
@@ -54,10 +54,10 @@
       </ul>
   {% endif %}
 
-  <h2>{% trans %}Признаки{% endtrans %}</h2>
+  <h2 class="w3-text-darkest-blue-grey">{% trans %}Признаки{% endtrans %}</h2>
 
   {% for category in categories %}
-      <h3>{{ category[name_attr] }}</h3>
+      <h3 class="w3-text-darkest-blue-grey">{{ category[name_attr] }}</h3>
       {% set values_to_list = doculect.feature_values|selectattr("feature.category.id", "eq", category.id)|selectattr("type.entails_empty_value", "false")|sort(attribute="feature.id") %}
 
       {% if not values_to_list %}<p>{% trans %}Нет заполненных признаков для этого языка.{% endtrans %}</p>
@@ -85,10 +85,10 @@
       {% endif %}
   {% endfor %}
 
-  <h2>{% trans %}Незаполненные признаки{% endtrans %}</h2>
+  <h2 class="w3-text-darkest-blue-grey">{% trans %}Незаполненные признаки{% endtrans %}</h2>
 
   {% if doculect.feature_values|selectattr("type.name", "eq", "not_stated")|list %}
-      <h3>{% trans %}В энциклопедии отсутствует информация{% endtrans %}</h3>
+      <h3 class="w3-text-darkest-blue-grey">{% trans %}В энциклопедии отсутствует информация{% endtrans %}</h3>
       <ul>
       {% for value in doculect.feature_values|sort(attribute="feature.id") %}
         {% if value.type.name == 'not_stated' %}
@@ -104,7 +104,7 @@
   {% endif %}
 
   {% if doculect.feature_values|selectattr("type.name", "eq", "explicit_gap")|list %}
-      <h3>{% trans %}В энциклопедии присутствует явное указание на отсутствие данных{% endtrans %}</h3>
+      <h3 class="w3-text-darkest-blue-grey">{% trans %}В энциклопедии присутствует явное указание на отсутствие данных{% endtrans %}</h3>
       <ul>
       {% for value in doculect.feature_values|sort(attribute="feature.id") %}
         {% if value.type.name == 'explicit_gap' %}
@@ -120,7 +120,7 @@
   {% endif %}
 
   {% if doculect.feature_values|selectattr("type.name", "eq", "not_applicable")|list %}
-      <h3>{% trans %}Признак неприменим к этому языку{% endtrans %}</h3>
+      <h3 class="w3-text-darkest-blue-grey">{% trans %}Признак неприменим к этому языку{% endtrans %}</h3>
       <ul>
       {% for value in doculect.feature_values|sort(attribute="feature.id") %}
         {% if value.type.name == 'not_applicable' %}

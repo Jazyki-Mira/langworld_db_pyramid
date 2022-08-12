@@ -33,7 +33,7 @@ export default function InteractiveDoculectList() {
       "div",
       { key: doculectGroup["id"] },
       elem(
-        "h2",
+        "h3",
         {},
         elem("img", { src: doculectGroup["imgSrc"] }),
         headingText
