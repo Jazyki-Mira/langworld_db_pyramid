@@ -32,12 +32,12 @@
 </div>
 
 <div class="w3-third w3-container w3-padding-top-32">
-    <span>Карта</span>
+    <span class="slider-label w3-text-dark-blue-grey">{% trans %}Карта{% endtrans %}</span>
     <label class="switch">
         <input id="map-tree-toggle" type="checkbox">
         <span class="slider round"></span>
     </label>
-    <span>Подробное дерево</span>
+    <span class="slider-label w3-text-dark-blue-grey">{% trans %}Подробное дерево{% endtrans %}</span>
 </div>
 
 {% endblock content_top %}
@@ -87,12 +87,12 @@
 
     {# this <div> will be moved above the list using the script imported below #}
     <div id="doculects-in-list-toggle-container">
-      <span>Списки языков</span>
+      <span class="slider-label w3-text-dark-blue-grey">{% trans %}Списки языков{% endtrans %}</span>
       <label class="switch">
         <input id="doculects-in-list-toggle" type="checkbox">
         <span class="slider round"></span>
       </label>
-      <span>Только легенда</span>
+      <span class="slider-label w3-text-dark-blue-grey">{% trans %}Только легенда{% endtrans %}</span>
     </div>
 {% endblock content %}
 
