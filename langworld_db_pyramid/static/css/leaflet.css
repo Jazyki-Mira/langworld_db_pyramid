@@ -2,6 +2,7 @@
   position: relative;
   height: 86vh;
   width: 100%;
+  border-radius: 8px;
   z-index: 0;
 }
 
