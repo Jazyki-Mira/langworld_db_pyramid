@@ -96,7 +96,7 @@
       {% for value in doculect.feature_values|sort(attribute="feature.id") %}
         {% if value.type.name == 'not_stated' %}
             <li>
-                {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
+                <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }} ({{ value.feature.man_id }})</a>
                 {% if request.locale_name == 'ru' %}
                     {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
                 {% endif %}
@@ -112,7 +112,7 @@
       {% for value in doculect.feature_values|sort(attribute="feature.id") %}
         {% if value.type.name == 'explicit_gap' %}
             <li>
-                {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
+                <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }} ({{ value.feature.man_id }})</a>
                 {% if request.locale_name == 'ru' %}
                     {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
                 {% endif %}
@@ -128,7 +128,7 @@
       {% for value in doculect.feature_values|sort(attribute="feature.id") %}
         {% if value.type.name == 'not_applicable' %}
             <li>
-                {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
+                <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }} ({{ value.feature.man_id }})</a>
                 {% if request.locale_name == 'ru' %}
                     {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
                 {% endif %}
