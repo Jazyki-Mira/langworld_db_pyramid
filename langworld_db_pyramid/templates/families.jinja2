@@ -46,7 +46,7 @@
 {% block map_and_list %}
     <div id="map-and-list"></div>
 
-    <div id="tree" class="content w3-hide">
+    <div id="tree" class="w3-margin-left w3-hide">
       {% if parent != None %}
           {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
               {% if loop.first %}
