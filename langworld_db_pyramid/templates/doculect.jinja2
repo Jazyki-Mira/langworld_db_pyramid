@@ -57,7 +57,7 @@
   <h2>{% trans %}Признаки{% endtrans %}</h2>
 
   {% for category in categories %}
-      <h2>{{ category[name_attr] }}</h2>
+      <h3>{{ category[name_attr] }}</h3>
       {% set values_to_list = doculect.feature_values|selectattr("feature.category.id", "eq", category.id)|selectattr("type.entails_empty_value", "false")|sort(attribute="feature.id") %}
 
       {% if not values_to_list %}<p>{% trans %}Нет заполненных признаков для этого языка.{% endtrans %}</p>
