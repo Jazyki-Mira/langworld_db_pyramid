@@ -30,7 +30,7 @@
 
 <div class="w3-third w3-container scrollable" id="query-wizard-form-container">
   <form id ="query-wizard-form">
-  <h2>{% trans %}Генеалогия{% endtrans %}</h2>
+  <h2 class="w3-text-darkest-blue-grey">{% trans %}Генеалогия{% endtrans %}</h2>
   <select id="family" multiple size="10">
   {% for family in families recursive %}
     {% if family.has_doculects_with_feature_profiles() %}
@@ -40,7 +40,7 @@
   {% endfor %}
   </select>
 
-  <h2>{% trans %}Признаки{% endtrans %}
+  <h2 class="w3-text-darkest-blue-grey">{% trans %}Признаки{% endtrans %}</h2>
   {% for category in categories %}
       <div class="wrap-collapsible">
           <input id="{{ category.man_id }}" class="toggle" type="checkbox">
