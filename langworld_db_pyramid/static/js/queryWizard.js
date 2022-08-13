@@ -57,3 +57,9 @@ function QueryWizard() {
 }
 
 ReactDOM.render(elem(QueryWizard), document.getElementById("map-and-list"));
+
+const clearButton = document.getElementById("clear-selection");
+clearButton.onclick = () => {
+  // will only work if the select elements were already wrapped in SlimSelect
+  for (let elem of document.querySelectorAll("select")) elem.slim.set([]);
+};
