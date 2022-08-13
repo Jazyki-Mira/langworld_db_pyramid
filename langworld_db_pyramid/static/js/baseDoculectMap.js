@@ -46,13 +46,17 @@ export default function DoculectMap({ mapDivID }) {
   }, []);
 
   React.useEffect(() => {
-    if (allDoculectGroups === null) return;
+    if (allDoculectGroups === null) return null;
     removeExistingMarkersAndFeatureGroups();
     createFeatureGroups();
 
     addGroupsOfMarkersToMap();
     setDoculectGroupsInMapView(getGroupsInMapView());
-    zoomMapToFitAllMarkers(); // note that the map will not move if zoom doesn't need to change
+    if (
+      allDoculectGroups.length > 1 ||
+      allDoculectGroups[0]["doculects"].length > 0
+    )
+      zoomMapToFitAllMarkers(); // note that the map will not move if zoom doesn't need to change
     openPopupForDoculect(idOfDoculectToShow);
 
     mapRef.current.on("zoomend moveend", () => {
@@ -167,7 +171,8 @@ export default function DoculectMap({ mapDivID }) {
       }
 
       // If copied group turns out to have doculects, add to list of groups to be returned.
-      if (copiedGroup["doculects"].length > 0) groupsInMapView.push(copiedGroup);
+      if (copiedGroup["doculects"].length > 0)
+        groupsInMapView.push(copiedGroup);
     }
 
     return groupsInMapView;
