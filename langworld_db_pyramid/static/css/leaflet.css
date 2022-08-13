@@ -11,6 +11,10 @@ div .scrollable {
   overflow: auto;
 }
 
+.legend-heading {
+  margin-bottom: -1rem;
+}
+
  /* The switch - the box around the slider */
  .switch {
   position: relative;

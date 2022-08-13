@@ -33,8 +33,8 @@ export default function InteractiveDoculectList() {
       "div",
       { key: doculectGroup["id"] },
       elem(
-        "h3",
-        {},
+        "p",
+        { className: "w3-large legend-heading" },
         elem("img", { src: doculectGroup["imgSrc"] }),
         headingText
       ),
