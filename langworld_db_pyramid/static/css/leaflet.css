@@ -85,3 +85,10 @@ input:checked + .slider:before {
 .genealogy-subheading {
   margin-top: -10px !important;
 }
+
+p.indented-for-icon {
+  line-height: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 40px;
+  text-indent: -40px;
+}
