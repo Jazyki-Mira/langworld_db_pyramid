@@ -12,13 +12,13 @@
     <h1 class="w3-text-dark-blue-grey">{% trans %}Мастер сложных запросов{% endtrans %}</h1>
   </div>
 
-  <div class="w3-third w3-container w3-padding-top-32">
-    <span>{% trans %}Форма{% endtrans %}</span>
+  <div class="w3-third w3-container" id="form-list-toggle-container">
+    <span class="w3-text-dark-blue-grey">{% trans %}Форма{% endtrans %}</span>
     <label class="switch">
         <input id="form-list-toggle" type="checkbox">
         <span class="slider round"></span>
     </label>
-    <span>{% trans %}Интерактивный список результатов{% endtrans %}</span>
+    <span class="w3-text-dark-blue-grey">{% trans %}Интерактивный список результатов{% endtrans %}</span>
 </div>
 
 {% endblock content_top %}

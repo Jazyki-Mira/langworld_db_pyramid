@@ -70,3 +70,11 @@ input[type='checkbox'] {
 .collapsible-content p {
 	margin-bottom: 0;
 }
+
+#form-list-toggle-container {
+	padding-top: 41px!important;
+}
+
+#form-list-toggle-container > label {
+	vertical-align: bottom;
+}
