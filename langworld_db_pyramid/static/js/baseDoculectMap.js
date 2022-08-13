@@ -51,12 +51,13 @@ export default function DoculectMap({ mapDivID }) {
     createFeatureGroups();
 
     addGroupsOfMarkersToMap();
-    setDoculectGroupsInMapView(getGroupsInMapView());
     if (
       allDoculectGroups.length > 1 ||
       allDoculectGroups[0]["doculects"].length > 0
     )
       zoomMapToFitAllMarkers(); // note that the map will not move if zoom doesn't need to change
+
+    setDoculectGroupsInMapView(getGroupsInMapView());
     openPopupForDoculect(idOfDoculectToShow);
 
     mapRef.current.on("zoomend moveend", () => {
