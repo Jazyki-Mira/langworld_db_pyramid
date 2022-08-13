@@ -23,10 +23,15 @@ def get_doculects_for_map(request) -> list[dict]:
 
     icon = generate_fixed_number_of_map_icons(1)
 
+    if request.locale_name == 'ru':
+        group_name = 'Языки на видимой области карты'
+    else:
+        group_name = 'Languages in the visible area of the map'
+
     # for uniformity, I return not a dictionary, but a list consisting of one dictionary
     return [generate_marker_group(
         group_id='',
-        group_name='',
+        group_name=group_name,
         doculects=sorted(doculects, key=lambda d: getattr(d, f'name_{request.locale_name}')),
         div_icon_html=icon.svg_tag,
         img_src=icon.img_src,
