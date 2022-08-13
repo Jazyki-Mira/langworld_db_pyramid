@@ -38,7 +38,7 @@ div .scrollable {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color:#b2df8a;
+  background-color:#9eb1bb;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -56,11 +56,11 @@ div .scrollable {
 }
 
 input:checked + .slider {
-  background-color: #a6cee3;
+  background-color: #becbd2;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #a6cee3;
+  box-shadow: 0 0 1px #becbd2;
 }
 
 input:checked + .slider:before {
