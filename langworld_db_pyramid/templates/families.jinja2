@@ -50,7 +50,7 @@
       {% if parent != None %}
           {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
               {% if loop.first %}
-                  <h2 class="w3-text-darkest-blue-grey"><img src="{{ icon_for_family[parent].img_tag }}"/>{{ parent[name_attr] }} ({% trans %}без деления на подсемьи{% endtrans %})</h2>
+                  <h2 class="w3-text-darkest-blue-grey">{{ icon_for_family[parent].img_tag|safe }}{{ parent[name_attr] }} ({% trans %}без деления на подсемьи{% endtrans %})</h2>
                   <ul>
               {% endif %}
                   <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
