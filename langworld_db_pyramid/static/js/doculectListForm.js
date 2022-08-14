@@ -47,14 +47,24 @@ function DoculectListForm(props) {
         handleSubmit(e);
       },
     },
-    elem("label", {}, doculectListFormLabels["formLabel"][locale]),
+    elem(
+      "label",
+      {
+        id: "doculect-form-label",
+        className: "w3-large w3-text-dark-blue-grey",
+      },
+      doculectListFormLabels["formLabel"][locale]
+    ),
     elem("br"),
     elem("input", {
+      id: "doculect-form-input",
       name: "searchText",
       type: "text",
+      placeholder: doculectListFormLabels["inputPlaceholderText"][locale],
       onChange: (e) => setQuery(e.target.value),
     }),
     elem("input", {
+      id: "doculect-form-button",
       type: "submit",
       value: doculectListFormLabels["buttonLabel"][locale],
     })

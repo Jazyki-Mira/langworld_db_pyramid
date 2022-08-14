@@ -1,0 +1,29 @@
+#doculect-finder-container{
+    border-color: #9eb1bb!important;
+    border-width: 2px!important;
+    padding-left: 8px;
+}
+
+#doculect-form-button {
+    background-color: #dfe5e8;
+    color: #435761;
+    margin: 0.5rem;
+    font-size: 1.3rem;
+}
+
+#doculect-form-label {
+    font-family:"Bitter",Arial,sans-serif;
+    font-size: 1.7rem!important;
+    font-weight: bold!important;
+    margin: 0.5rem;
+}
+
+#doculect-form-input {
+    line-height: 2rem;
+    width: 75%;
+    margin: 0rem 0.5rem;
+    border-style: dashed;
+    border-radius:5px;
+    border-color: #becbd2;
+    padding-left: 5px;
+}
