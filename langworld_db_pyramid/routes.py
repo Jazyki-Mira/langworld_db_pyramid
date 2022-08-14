@@ -2,7 +2,6 @@ def includeme(config):
     config.add_static_view('css', 'static/css', cache_max_age=3600)
     config.add_static_view('img', 'static/images', cache_max_age=3600)
     config.add_static_view('scripts', 'static/js', cache_max_age=3600)
-    config.add_static_view('pdf', 'static/pdf_volumes', cache_max_age=3600)
 
     config.add_route('all_doculects_list', '/doculects/list')
     config.add_route('all_doculects_list_localized', '{locale}/doculects/list')
