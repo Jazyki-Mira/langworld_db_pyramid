@@ -15,6 +15,17 @@
 {% endblock map_and_list %}
 
 {% block content %}
+
+{# this <div> will be moved above the list using the script imported below #}
+<div id="doculects-in-list-toggle-container">
+  <span>{% trans %}Языки{% endtrans %}</span>
+  <label class="switch">
+    <input id="doculects-in-list-toggle" type="checkbox">
+    <span class="slider round"></span>
+  </label>
+  <span>{% trans %}Только легенда{% endtrans %}</span>
+</div>
+
 {% endblock content %}
 
 {% block scripts %}
@@ -23,4 +34,6 @@ integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0v
 crossorigin=""></script>
 <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+<script src="{{ request.static_url('langworld_db_pyramid:static/js/toggleDoculectsInInteractiveList.js') }}" type="module"></script>
 {% endblock scripts %}
