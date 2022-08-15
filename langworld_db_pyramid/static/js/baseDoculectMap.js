@@ -1,4 +1,3 @@
-import accessToken from "./mapboxAccessToken.js";
 import {
   allFetchedDoculectGroupsContext,
   doculectGroupsInMapViewContext,
@@ -25,13 +24,20 @@ export default function DoculectMap({ mapDivID }) {
     idOfDoculectToOpenPopupOnMapContext
   );
 
-  // map base (rendered once, hence empty dependency array)
+  const [mapboxToken, setMapboxToken] = React.useState(null);
+  fetch("/json_api/mapbox_token")
+    .then((res) => res.json())
+    .then(setMapboxToken)
+    .catch(console.error);
+
   React.useEffect(() => {
+    if (mapboxToken === null) return null;
+
     mapRef.current = L.map(mapDivID).setView([mapViewLat, mapViewLong], zoom);
 
     const titleLayerUrl =
       "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=" +
-      accessToken;
+      mapboxToken;
 
     L.tileLayer(titleLayerUrl, {
       attribution:
@@ -40,13 +46,13 @@ export default function DoculectMap({ mapDivID }) {
       id: "mapbox/streets-v11",
       tileSize: 512,
       zoomOffset: -1,
-      accessToken: accessToken,
+      accessToken: mapboxToken,
       minZoom: 2.5, // 2 will show all languages but will be too small
     }).addTo(mapRef.current);
-  }, []);
+  }, [mapboxToken]); // map will be loaded once mapBox token is fetched
 
   React.useEffect(() => {
-    if (allDoculectGroups === null) return null;
+    if (allDoculectGroups === null || mapRef.current === null) return null;
     removeExistingMarkersAndFeatureGroups();
     createFeatureGroups();
 
@@ -68,6 +74,8 @@ export default function DoculectMap({ mapDivID }) {
 
   // open pop-up if ID of language to pop up changes
   React.useEffect(() => {
+    if (mapRef.current === null) return null;
+
     if (idOfDoculectToOpenPopupOnMap === null) {
       mapRef.current.closePopup();
     } else {

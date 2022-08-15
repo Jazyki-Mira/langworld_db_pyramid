@@ -30,3 +30,5 @@ def includeme(config):
     config.add_route('query_wizard', '/query_wizard')
     config.add_route('query_wizard_localized', '{locale}/query_wizard')
     config.add_route('query_wizard_json', '{locale}/json_api/query_wizard')
+
+    config.add_route('mapbox_token', '/json_api/mapbox_token')
