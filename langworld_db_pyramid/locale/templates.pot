@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-29 17:54+0300\n"
+"POT-Creation-Date: 2022-08-16 19:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,93 +25,161 @@ msgstr ""
 msgid "Перейти на главную"
 msgstr ""
 
-#: templates/all_doculects_list.jinja2:5 templates/base.jinja2:58
+#: templates/all_doculects_list.jinja2:11 templates/base.jinja2:59
 msgid "Список языков"
 msgstr ""
 
-#: templates/all_doculects_list.jinja2:10
-msgid "Полный список c сортировкой по названию"
-msgstr ""
-
-#: templates/all_doculects_list.jinja2:11
+#: templates/all_doculects_list.jinja2:17
 msgid "В списке представлены языки и диалекты, для которых заполнены рефераты"
 msgstr ""
 
-#: templates/all_doculects_map.jinja2:9 templates/base.jinja2:59
+#: templates/all_doculects_map.jinja2:5 templates/base.jinja2:60
 msgid "Карта языков"
 msgstr ""
 
-#: templates/all_features_list.jinja2:8 templates/base.jinja2:60
-#: templates/doculect.jinja2:57 templates/query_wizard.jinja2:23
+#: templates/all_features_list.jinja2:5 templates/base.jinja2:61
+#: templates/doculect.jinja2:65 templates/query_wizard.jinja2:45
 msgid "Признаки"
 msgstr ""
 
-#: templates/base.jinja2:11
+#: templates/base.jinja2:11 templates/base.jinja2:137 templates/home.jinja2:5
 msgid "База данных «Языки мира»"
 msgstr ""
 
-#: templates/base.jinja2:61 templates/doculect.jinja2:17
-#: templates/families.jinja2:8 templates/query_wizard.jinja2:13
+#: templates/base.jinja2:58
+msgid "Главная"
+msgstr ""
+
+#: templates/base.jinja2:62 templates/doculect.jinja2:25
+#: templates/families.jinja2:10 templates/query_wizard.jinja2:35
 msgid "Генеалогия"
 msgstr ""
 
-#: templates/base.jinja2:62 templates/query_wizard.jinja2:4
+#: templates/base.jinja2:63 templates/query_wizard.jinja2:12
 msgid "Мастер сложных запросов"
 msgstr ""
 
-#: templates/doculect.jinja2:12
-msgid "Альтернативные названия"
+#: templates/base.jinja2:137
+msgid "Института языкознания РАН"
 msgstr ""
 
 #: templates/doculect.jinja2:15
-msgid "Открыть в энциклопедии"
+msgid "Альтернативные названия"
 msgstr ""
 
-#: templates/doculect.jinja2:29
+#: templates/doculect.jinja2:18
+msgid "В энциклопедии"
+msgstr ""
+
+#: templates/doculect.jinja2:20
+msgid "Открыть том энциклопедии в PDF"
+msgstr ""
+
+#: templates/doculect.jinja2:20
+msgid "файл будет загружен полностью и затем открыт"
+msgstr ""
+
+#: templates/doculect.jinja2:20
+msgid "в новом окне"
+msgstr ""
+
+#: templates/doculect.jinja2:20
+msgid "на нужной странице"
+msgstr ""
+
+#: templates/doculect.jinja2:22
+msgid "Том энциклопедии в формате PDF на данный момент недоступен"
+msgstr ""
+
+#: templates/doculect.jinja2:37
 msgid "География"
 msgstr ""
 
-#: templates/doculect.jinja2:30
+#: templates/doculect.jinja2:38
 msgid "Основная страна"
 msgstr ""
 
-#: templates/doculect.jinja2:31
+#: templates/doculect.jinja2:39
 msgid "посмотреть на карте"
 msgstr ""
 
-#: templates/doculect.jinja2:35
+#: templates/doculect.jinja2:43
 msgid "Идентификаторы"
 msgstr ""
 
-#: templates/doculect.jinja2:75
+#: templates/doculect.jinja2:71
+msgid "Нет заполненных признаков для этого языка."
+msgstr ""
+
+#: templates/doculect.jinja2:96
 msgid "Незаполненные признаки"
 msgstr ""
 
-#: templates/doculect.jinja2:78
+#: templates/doculect.jinja2:99
 msgid "В энциклопедии отсутствует информация"
 msgstr ""
 
-#: templates/doculect.jinja2:94
+#: templates/doculect.jinja2:115
 msgid "В энциклопедии присутствует явное указание на отсутствие данных"
 msgstr ""
 
-#: templates/doculect.jinja2:110
+#: templates/doculect.jinja2:131
 msgid "Признак неприменим к этому языку"
 msgstr ""
 
-#: templates/families.jinja2:10
+#: templates/families.jinja2:12
 msgid "языки"
 msgstr ""
 
-#: templates/families.jinja2:35
+#: templates/families.jinja2:25 templates/families.jinja2:29
+msgid "Все языки"
+msgstr ""
+
+#: templates/families.jinja2:33
+msgid "Карта"
+msgstr ""
+
+#: templates/families.jinja2:38
+msgid "Подробное дерево"
+msgstr ""
+
+#: templates/families.jinja2:53
 msgid "без деления на подсемьи"
 msgstr ""
 
-#: templates/families.jinja2:46
+#: templates/families.jinja2:64
 msgid "Языки, принадлежащие к подсемьям выбранной семьи"
 msgstr ""
 
-#: templates/feature.jinja2:12
-msgid "Значения признака (с сортировкой по убыванию числа языков)"
+#: templates/home.jinja2:6
+msgid "Версия 4 (онлайн). Веб-приложение находится в процессе разработки."
+msgstr ""
+
+#: templates/home.jinja2:7
+msgid "Со любыми вопросами и комментариями просьба обращаться к разработчику"
+msgstr ""
+
+#: templates/home.jinja2:7
+msgid "Дмитрию Коломацкому"
+msgstr ""
+
+#: templates/page_with_map.jinja2:21
+msgid "Языки"
+msgstr ""
+
+#: templates/page_with_map.jinja2:26
+msgid "Только легенда"
+msgstr ""
+
+#: templates/query_wizard.jinja2:16
+msgid "Форма запроса"
+msgstr ""
+
+#: templates/query_wizard.jinja2:21
+msgid "Результаты"
+msgstr ""
+
+#: templates/query_wizard.jinja2:22
+msgid "Сбросить выбор"
 msgstr ""
 
