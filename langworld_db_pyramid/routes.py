@@ -12,11 +12,14 @@ def includeme(config):
         ('all_features_list', 'features/list'),
         ('feature', 'feature/{feature_man_id}'),
         ('families', 'family/{family_man_id}'),
+        ('home', 'home'),
         ('query_wizard', 'query_wizard')
     )
     for name, path in names_and_paths:
         config.add_route(name, f'/{path}')
         config.add_route(f'{name}_localized', '/{locale}/' + path)  # no f-string because of curly braces
+
+    config.add_route('home_empty', '/')  # '/' and '/home' will lead to the same page
 
     # JSON for Javascript fetch requests: always with explicit locale except for Mapbox token
     config.add_route('doculects_by_substring', '/{locale}/json_api/doculect_by_name/{query}')

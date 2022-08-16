@@ -43,6 +43,8 @@
             {% set link_text = "Switch to English" %}
             {% if '/ru/' in request.url %}
                 {% set target = request.url.replace('/ru/', '/en/') %}
+            {% elif request.current_route_path() == "/" %}
+                {% set target = request.host_url + "/en/home" %}
             {% else %}
                 {% set target = request.host_url + "/en" + request.url.replace(request.host_url, "") %}
             {% endif %}
@@ -53,6 +55,7 @@
 
         <a href="{{target}}" class="w3-bar-item w3-button w3-theme-l1 w3-right">{{ link_text }}</a>
 
+        <a href="/{{request.locale_name}}/home" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Главная{% endtrans %}</a>
         <a href="/{{request.locale_name}}/doculects/list" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Список языков{% endtrans %}</a>
         <a href="/{{request.locale_name}}/doculects/map" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Карта языков{% endtrans %}</a>
         <a href="/{{request.locale_name}}/features/list" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Признаки{% endtrans %}</a>

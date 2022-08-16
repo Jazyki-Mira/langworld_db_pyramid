@@ -1,0 +1,9 @@
+{% extends "base.jinja2" %}
+
+{% block content %}
+<div class="content">
+  <h1 class="w3-text-dark-blue-grey">{% trans %}База данных «Языки мира»{% endtrans %}</h1>
+  <p>{% trans %}Версия 4 (онлайн). Веб-приложение находится в процессе разработки.{% endtrans %}</p>
+  <p>{% trans %}Со любыми вопросами и комментариями просьба обращаться к разработчику{% endtrans %} <a href="https://iling-ran.ru/web/{{ request.locale_name}}/scholars/kolomatskiy" target="_blank">{% trans %}Дмитрию Коломацкому{% endtrans %}</a>.</p>
+</div>
+{% endblock content %}
