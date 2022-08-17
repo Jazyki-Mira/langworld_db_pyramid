@@ -3,7 +3,7 @@
 {% set aliases_attr = "aliases_" + request.locale_name %}
 
 {% block content_top %}
-<div class="w3-col w3-container">
+<div class="w3-col w3-container negative-margin-bottom">
   <h1 class="w3-text-dark-blue-grey">{{ doculect[name_attr] }} {{ doculect.type[name_attr] }} {% if doculect.is_extinct %}†{% endif %}</h1>
 </div>
 {% endblock content_top %}
@@ -12,7 +12,7 @@
 
 <div class="w3-margin-left padding-top-small">
     {% if doculect[aliases_attr] %}
-      <h2>{% trans %}Альтернативные названия{% endtrans %}</h2>
+      <h2 class="w3-text-darkest-blue-grey">{% trans %}Альтернативные названия{% endtrans %}</h2>
       <p><span class="font-normal">{{ doculect[aliases_attr] }}</span></p>
     {% endif %}
 
