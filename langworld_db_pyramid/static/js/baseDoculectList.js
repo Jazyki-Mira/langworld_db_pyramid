@@ -3,6 +3,7 @@ import {
   idOfDoculectToOpenPopupOnMapContext,
 } from "./contexts.js";
 import getLocale from "./getLocale.js";
+import i18nStrings from "./i18n/doculectMapAndList.js";
 
 const elem = React.createElement;
 
@@ -14,7 +15,26 @@ export default function InteractiveDoculectList() {
     idOfDoculectToOpenPopupOnMapContext
   );
 
-  if (doculectGroupsInMapView === null) return null;
+  /* TODO I am not sure this is the right module for displaying this message
+  although the implementation is easy enough here thanks to useContext()
+  */
+  if (doculectGroupsInMapView === null)
+    return elem(
+      "div",
+      { className: "w3-display-middle w3-pale-green w3-round-large" },
+      elem(
+        "p",
+        { className: "w3-large w3-center w3-text-dark-blue-grey" },
+        i18nStrings["dataNotLoaded"][getLocale()]
+      )
+    );
+
+  if (doculectGroupsInMapView != null && doculectGroupsInMapView.length === 0)
+    return elem(
+      "p",
+      { className: "w3-large" },
+      i18nStrings["noDoculectsToShow"][getLocale()]
+    );
 
   return elem(
     "div",
