@@ -28,7 +28,7 @@ msgstr "To the main page"
 
 #: templates/all_doculects_list.jinja2:11 templates/base.jinja2:59
 msgid "Список языков"
-msgstr "All languages and dialects"
+msgstr "List of languages"
 
 #: templates/all_doculects_list.jinja2:17
 msgid "В списке представлены языки и диалекты, для которых заполнены рефераты"
@@ -36,7 +36,7 @@ msgstr "This list includes all languages and dialects that have feature profiles
 
 #: templates/all_doculects_map.jinja2:5 templates/base.jinja2:60
 msgid "Карта языков"
-msgstr "Map of languages and dialects"
+msgstr "Map of languages"
 
 #: templates/all_features_list.jinja2:5 templates/base.jinja2:61
 #: templates/doculect.jinja2:65 templates/query_wizard.jinja2:45
