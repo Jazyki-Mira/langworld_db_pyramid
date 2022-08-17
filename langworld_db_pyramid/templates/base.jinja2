@@ -43,7 +43,7 @@
             {% set link_text = "Switch to English" %}
             {% if '/ru/' in request.url %}
                 {% set target = request.url.replace('/ru/', '/en/') %}
-            {% elif request.current_route_path() == "/" %}
+            {% elif request.url == request.host_url + "/" %}
                 {% set target = request.host_url + "/en/home" %}
             {% else %}
                 {% set target = request.host_url + "/en" + request.url.replace(request.host_url, "") %}
