@@ -18,7 +18,15 @@ def view_all_doculects_list(request):
     except SQLAlchemyError:
         return Response('Database error', content_type='text/plain', status=500)
 
-    return {'doculects': all_doculects}
+    try:
+        volumes = request.dbsession.scalars(
+            select(models.EncyclopediaVolume)
+            .order_by(models.EncyclopediaVolume.id)
+        ).all()  # TODO test
+    except SQLAlchemyError:
+        return Response('Database error', content_type='text/plain', status=500)
+
+    return {'doculects': all_doculects, 'volumes': volumes}
 
 
 @view_config(route_name='doculects_by_substring', renderer='json')
