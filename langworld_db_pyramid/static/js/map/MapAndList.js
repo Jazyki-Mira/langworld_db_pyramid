@@ -4,8 +4,8 @@ import {
   idOfDoculectToOpenPopupOnMapContext,
   fetchUrlContext,
 } from "./contexts.js";
-import InteractiveDoculectList from "./baseDoculectList.js";
-import DoculectMap from "./baseDoculectMap.js";
+import InteractiveDoculectList from "./InteractiveDoculectList.js";
+import DoculectMap from "./DoculectMap.js";
 
 const elem = React.createElement;
 

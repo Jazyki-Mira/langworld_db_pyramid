@@ -1,4 +1,4 @@
-import MapAndList from "./baseDoculectMapAndList.js";
+import MapAndList from "./map/MapAndList.js";
 import getLocale from "./getLocale.js";
 
 const elem = React.createElement;

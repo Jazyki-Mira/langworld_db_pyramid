@@ -1,5 +1,5 @@
 import getLocale from "./getLocale.js";
-import MapAndList from "./baseDoculectMapAndList.js";
+import MapAndList from "./map/MapAndList.js";
 
 let splitURL = location.pathname.split("/");
 const indexOfFamilyID = splitURL.indexOf("family") + 1;
