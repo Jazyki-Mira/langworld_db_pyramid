@@ -8,8 +8,8 @@ const doculectListFormLabels = {
     ru: "Найти",
   },
   inputPlaceholderText: {
-    en: "Enter several letters and press ENTER",
-    ru: "Введите несколько букв и нажмите ВВОД",
+    en: "Any part of name/ISO-639-3/glottocode",
+    ru: "Любая часть названия/ISO-639-3/glottocode",
   },
 };
 

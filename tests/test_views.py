@@ -32,7 +32,11 @@ NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) 
         # the request is in Russian but IDs received are English:
         ('немец', 'ru', ('dutch', 'german', 'luxembourgian', 'swiss_german', 'yiddish')),
         # this query produces 7 doculects without 'has_feature_profile' restriction but only 3 with it:
-        ('пар', 'ru', ('parachi', 'parthian', 'middle_persian'))
+        ('пар', 'ru', ('parachi', 'parthian', 'middle_persian')),
+        # glottocode
+        ('nucl1', 'ru', ('turkish', 'japanese', 'neo_mandaic', 'georgian', 'kannada', 'pashto')),
+        # matches both ISO code and name (balochi), only part of name (karachay_balkar)
+        ('bal', 'en', ('balochi', 'karachay_balkar')),
     ]
 
 )
@@ -135,9 +139,10 @@ def test_view_families_for_map(
 
 def test_view_all_doculects_list(dummy_request, setup_models_for_views_testing):
 
-    info = view_all_doculects_list(dummy_request)
+    data = view_all_doculects_list(dummy_request)
     assert dummy_request.response.status_int == 200
-    assert len(info['doculects']) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
+    assert len(data['doculects']) == NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES
+    assert len(data['volumes']) == 19
 
 
 def test_view_doculect_profile(dummy_request, setup_models_for_views_testing):
