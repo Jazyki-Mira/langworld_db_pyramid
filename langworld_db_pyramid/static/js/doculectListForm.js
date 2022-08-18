@@ -4,13 +4,17 @@ import getLocale from "./tools/getLocale.js";
 const elem = React.createElement;
 
 function DoculectListItem({ doculect }) {
-  let textToDisplay = ` ${doculect.iso639p3Codes.join(
-    ", "
-  )} ${doculect.glottocodes.join(", ")}`;
+  let additionalTextToDisplay = "";
 
   if (doculect.aliases != "") {
-    textToDisplay += ` (${doculect.aliases})`;
+    additionalTextToDisplay += ` (${doculect.aliases})`;
   }
+
+  if (doculect.iso639p3Codes.length > 0)
+    additionalTextToDisplay += ` | ${doculect.iso639p3Codes.join(", ")}`;
+
+  if (doculect.glottocodes.length > 0)
+    additionalTextToDisplay += ` | ${doculect.glottocodes.join(", ")}`;
 
   return elem(
     "li",
@@ -20,7 +24,11 @@ function DoculectListItem({ doculect }) {
       { href: `/${getLocale()}/doculect/${doculect.id}` },
       doculect.name
     ),
-    textToDisplay
+    elem(
+      "span",
+      { className: "w3-text-dark-blue-grey" },
+      additionalTextToDisplay
+    )
   );
 }
 
