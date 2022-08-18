@@ -1,8 +1,28 @@
-import DoculectListItem from "./doculectListItem.js";
 import doculectListFormLabels from "./i18n/doculectListFormLabels.js";
 import getLocale from "./tools/getLocale.js";
 
 const elem = React.createElement;
+
+function DoculectListItem({ doculect }) {
+  let textToDisplay = ` ${doculect.iso639p3Codes.join(
+    ", "
+  )} ${doculect.glottocodes.join(", ")}`;
+
+  if (doculect.aliases != "") {
+    textToDisplay += ` (${doculect.aliases})`;
+  }
+
+  return elem(
+    "li",
+    { className: "doculect" },
+    elem(
+      "a",
+      { href: `/${getLocale()}/doculect/${doculect.id}` },
+      doculect.name
+    ),
+    textToDisplay
+  );
+}
 
 function DoculectListForm(props) {
   const [query, setQuery] = React.useState("");
