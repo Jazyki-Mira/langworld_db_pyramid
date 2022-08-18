@@ -1,4 +1,4 @@
-import getLocale from "./getLocale.js";
+import getLocale from "./tools/getLocale.js";
 
 export default function DoculectListItem({ doculect }) {
   let textToDisplay = ` ${doculect.iso639p3Codes.join(

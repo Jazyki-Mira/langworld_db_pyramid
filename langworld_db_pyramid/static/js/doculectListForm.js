@@ -1,6 +1,6 @@
 import DoculectListItem from "./doculectListItem.js";
 import doculectListFormLabels from "./i18n/doculectListFormLabels.js";
-import getLocale from "./getLocale.js";
+import getLocale from "./tools/getLocale.js";
 
 const elem = React.createElement;
 

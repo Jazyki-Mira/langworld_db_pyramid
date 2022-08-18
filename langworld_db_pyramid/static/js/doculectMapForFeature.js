@@ -1,4 +1,4 @@
-import getLocale from "./getLocale.js";
+import getLocale from "./tools/getLocale.js";
 import MapAndList from "./map/MapAndList.js";
 
 let splitURL = location.pathname.split("/");

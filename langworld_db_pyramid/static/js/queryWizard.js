@@ -1,5 +1,5 @@
 import MapAndList from "./map/MapAndList.js";
-import getLocale from "./getLocale.js";
+import getLocale from "./tools/getLocale.js";
 
 const elem = React.createElement;
 
