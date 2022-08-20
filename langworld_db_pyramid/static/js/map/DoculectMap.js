@@ -36,6 +36,7 @@ export default function DoculectMap({ mapDivID }) {
   }
 
   React.useEffect(() => {
+    console.log("In eseEffect for loading map");
     if (mapboxToken === null) return null;
     console.log("Loading map");
 
@@ -62,6 +63,7 @@ export default function DoculectMap({ mapDivID }) {
   console.log(allDoculectGroups);
 
   React.useEffect(() => {
+    console.log("In eseEffect for rendering groups");
     if (allDoculectGroups === null || mapRef.current === null) return null;
     console.log("Rendering groups");
     removeExistingMarkersAndFeatureGroups();
@@ -86,6 +88,7 @@ export default function DoculectMap({ mapDivID }) {
 
   // open pop-up if ID of language to pop up changes
   React.useEffect(() => {
+    console.log("In eseEffect for popup");
     if (mapRef.current === null) return null;
 
     if (idOfDoculectToOpenPopupOnMap === null) {
