@@ -59,6 +59,8 @@ export default function DoculectMap({ mapDivID }) {
     console.log("Map loaded");
   }, [mapboxToken]); // map will be loaded once mapBox token is fetched
 
+  console.log(allDoculectGroups);
+
   React.useEffect(() => {
     if (allDoculectGroups === null || mapRef.current === null) return null;
     console.log("Rendering groups");
