@@ -25,6 +25,7 @@ export default function DoculectMap({ mapDivID }) {
   );
 
   const [mapboxToken, setMapboxToken] = React.useState(null);
+  const [mapLoaded, setMapLoaded] = React.useState(false);
 
   if (mapboxToken === null) {
     console.log("Fetching token");
@@ -36,7 +37,7 @@ export default function DoculectMap({ mapDivID }) {
   }
 
   React.useEffect(() => {
-    console.log("In eseEffect for loading map");
+    console.log("In useEffect for loading map");
     if (mapboxToken === null) return null;
     console.log("Loading map");
 
@@ -58,13 +59,19 @@ export default function DoculectMap({ mapDivID }) {
     }).addTo(mapRef.current);
 
     console.log("Map loaded");
+    setMapLoaded(true);
   }, [mapboxToken]); // map will be loaded once mapBox token is fetched
 
   console.log(allDoculectGroups);
 
   React.useEffect(() => {
-    console.log("In eseEffect for rendering groups");
-    if (allDoculectGroups === null || mapRef.current === null) return null;
+    console.log("In useEffect for rendering groups");
+    if (
+      allDoculectGroups === null ||
+      mapRef.current === null ||
+      mapLoaded === false
+    )
+      return null;
     console.log("Rendering groups");
     removeExistingMarkersAndFeatureGroups();
     createFeatureGroups();
@@ -84,11 +91,11 @@ export default function DoculectMap({ mapDivID }) {
       setDoculectGroupsInMapView(getGroupsInMapView());
     });
     console.log("Rendering complete");
-  }, [allDoculectGroups]);
+  }, [allDoculectGroups, mapLoaded]);
 
   // open pop-up if ID of language to pop up changes
   React.useEffect(() => {
-    console.log("In eseEffect for popup");
+    console.log("In useEffect for popup");
     if (mapRef.current === null) return null;
 
     if (idOfDoculectToOpenPopupOnMap === null) {
