@@ -38,11 +38,9 @@ export default function MapAndList({
   }, []); // only look for the form once, hence empty dependency list
 
   React.useEffect(() => {
-    console.log("Starting to fetch URL", fetchUrl);
     fetch(fetchUrl)
       .then((res) => res.json())
       .then((groups) => setAllDoculectGroups(groups))
-      .then(console.log("Fetched"))
       .catch(console.error);
   }, [fetchUrl]); // TODO handle case when there are no doculects
 

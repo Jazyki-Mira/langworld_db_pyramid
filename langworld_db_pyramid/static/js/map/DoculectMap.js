@@ -28,18 +28,14 @@ export default function DoculectMap({ mapDivID }) {
   const [mapLoaded, setMapLoaded] = React.useState(false);
 
   if (mapboxToken === null) {
-    console.log("Fetching token");
     fetch("/json_api/mapbox_token")
       .then((res) => res.json())
       .then(setMapboxToken)
-      .then(console.log("Token ready"))
       .catch(console.error);
   }
 
   React.useEffect(() => {
-    console.log("In useEffect for loading map");
     if (mapboxToken === null) return null;
-    console.log("Loading map");
 
     mapRef.current = L.map(mapDivID).setView([mapViewLat, mapViewLong], zoom);
 
@@ -58,21 +54,16 @@ export default function DoculectMap({ mapDivID }) {
       minZoom: 2.5, // 2 will show all languages but will be too small
     }).addTo(mapRef.current);
 
-    console.log("Map loaded");
     setMapLoaded(true);
   }, [mapboxToken]); // map will be loaded once mapBox token is fetched
 
-  console.log(allDoculectGroups);
-
   React.useEffect(() => {
-    console.log("In useEffect for rendering groups");
     if (
       allDoculectGroups === null ||
       mapRef.current === null ||
       mapLoaded === false
     )
       return null;
-    console.log("Rendering groups");
     removeExistingMarkersAndFeatureGroups();
     createFeatureGroups();
 
@@ -90,13 +81,11 @@ export default function DoculectMap({ mapDivID }) {
       // only change context, the list rendering is called from parent
       setDoculectGroupsInMapView(getGroupsInMapView());
     });
-    console.log("Rendering complete");
   }, [allDoculectGroups, mapLoaded]);
 
   // open pop-up if ID of language to pop up changes
   React.useEffect(() => {
-    console.log("In useEffect for popup");
-    if (mapRef.current === null) return null;
+    if (mapRef.current === null || mapLoaded === false) return null;
 
     if (idOfDoculectToOpenPopupOnMap === null) {
       mapRef.current.closePopup();
