@@ -1,4 +1,4 @@
-const doculectListFormLabels = {
+const doculectListFormStrings = {
   formLabel: {
     en: "Search for languages",
     ru: "Поиск языка",
@@ -15,6 +15,10 @@ const doculectListFormLabels = {
     en: "The search returned no matches",
     ru: "По вашему запросу ничего не найдено",
   },
+  searchInProgressText: {
+    en: "Search in progress...",
+    ru: "Идёт поиск...",
+  },
 };
 
-export default doculectListFormLabels;
+export default doculectListFormStrings;

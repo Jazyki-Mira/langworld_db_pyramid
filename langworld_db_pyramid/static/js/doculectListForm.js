@@ -1,7 +1,8 @@
-import doculectListFormLabels from "./i18n/doculectListFormLabels.js";
+import doculectListFormStrings from "./i18n/doculectListFormStrings.js";
 import getLocale from "./tools/getLocale.js";
 
 const elem = React.createElement;
+const listContainer = document.getElementById("doculect-finder-list");
 
 function DoculectListItem({ doculect }) {
   let additionalTextToDisplay = "";
@@ -47,13 +48,25 @@ function DoculectListForm(props) {
     }
   };
 
-  const fetchAndRenderResults = (url) =>
+  const fetchAndRenderResults = (url) => {
+    ReactDOM.render(
+      elem(
+        "p",
+        { className: "w3-margin-left w3-text-dark-blue-grey" },
+        doculectListFormStrings["searchInProgressText"][locale]
+      ),
+      listContainer
+    );
+
     fetch(url)
       .then((res) => res.json())
       .then(renderListOfMatchingDoculects)
       .catch(console.error);
+  };
 
   const renderListOfMatchingDoculects = (retrieved_data) => {
+    const locale = getLocale();
+
     if (typeof retrieved_data[Symbol.iterator] != "function") return; // promise is pending, no data to iterate over
 
     if (retrieved_data.length === 0) {
@@ -61,9 +74,9 @@ function DoculectListForm(props) {
         elem(
           "p",
           { className: "w3-margin-left w3-text-dark-blue-grey" },
-          doculectListFormLabels["nothingFoundText"][getLocale()]
+          doculectListFormStrings["nothingFoundText"][locale]
         ),
-        document.getElementById("doculect-finder-list")
+        listContainer
       );
     } else {
       ReactDOM.render(
@@ -74,7 +87,7 @@ function DoculectListForm(props) {
             elem(DoculectListItem, { doculect: item, key: i }, null)
           )
         ),
-        document.getElementById("doculect-finder-list")
+        listContainer
       );
     }
   };
@@ -92,20 +105,20 @@ function DoculectListForm(props) {
         id: "doculect-form-label",
         className: "w3-large w3-text-dark-blue-grey",
       },
-      doculectListFormLabels["formLabel"][locale]
+      doculectListFormStrings["formLabel"][locale]
     ),
     elem("br"),
     elem("input", {
       id: "doculect-form-input",
       name: "searchText",
       type: "text",
-      placeholder: doculectListFormLabels["inputPlaceholderText"][locale],
+      placeholder: doculectListFormStrings["inputPlaceholderText"][locale],
       onChange: (e) => setQuery(e.target.value),
     }),
     elem("input", {
       id: "doculect-form-button",
       type: "submit",
-      value: doculectListFormLabels["buttonLabel"][locale],
+      value: doculectListFormStrings["buttonLabel"][locale],
     })
   );
 }
