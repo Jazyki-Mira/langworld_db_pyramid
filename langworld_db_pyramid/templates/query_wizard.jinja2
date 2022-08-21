@@ -4,7 +4,7 @@
 {% block custom_css %}
   {{ super() }}
   <link href="{{request.static_url('langworld_db_pyramid:static/css/query-wizard.css')}}" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.css" rel="stylesheet">
+  <link href="{{request.static_url('langworld_db_pyramid:static/css/slimselect.min.css')}}" rel="stylesheet">
 {% endblock custom_css %}
 
 {% block content_top %}
@@ -70,7 +70,7 @@
 
 {% block scripts %}
   {{ super() }}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.js"></script>
+  <script src="{{ request.static_url('langworld_db_pyramid:static/js/slimselect/slimselect.min.js') }}" type="module"></script>
   <script src="{{ request.static_url('langworld_db_pyramid:static/js/queryWizard.js') }}" type="module"></script>
   <script src="{{ request.static_url('langworld_db_pyramid:static/js/toggleListAndForm.js') }}" type="module"></script>
 {% endblock scripts %}
