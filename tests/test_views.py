@@ -61,6 +61,16 @@ def test_get_doculects_by_substring(
         assert doculect_id in ids
 
 
+def test_get_doculects_by_substring_returns_empty_list_if_nothing_found(dummy_request, setup_models_for_views_testing):
+    dummy_request.locale_name = 'en'
+    dummy_request.matchdict['query'] = 'foo'
+
+    doculects = get_doculects_by_substring(dummy_request)
+
+    assert isinstance(doculects, list)
+    assert len(doculects) == 0
+
+
 @pytest.mark.parametrize(
     'locale, expected_first_doculect, expected_last_doculect',
     [

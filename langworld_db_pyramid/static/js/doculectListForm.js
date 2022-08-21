@@ -56,16 +56,27 @@ function DoculectListForm(props) {
   const renderListOfMatchingDoculects = (retrieved_data) => {
     if (typeof retrieved_data[Symbol.iterator] != "function") return; // promise is pending, no data to iterate over
 
-    ReactDOM.render(
-      elem(
-        "ul",
-        {},
-        retrieved_data.map((item, i) =>
-          elem(DoculectListItem, { doculect: item, key: i }, null)
-        )
-      ),
-      document.getElementById("doculect-finder-list")
-    );
+    if (retrieved_data.length === 0) {
+      ReactDOM.render(
+        elem(
+          "p",
+          { className: "w3-margin-left w3-text-dark-blue-grey" },
+          doculectListFormLabels["nothingFoundText"][getLocale()]
+        ),
+        document.getElementById("doculect-finder-list")
+      );
+    } else {
+      ReactDOM.render(
+        elem(
+          "ul",
+          {},
+          retrieved_data.map((item, i) =>
+            elem(DoculectListItem, { doculect: item, key: i }, null)
+          )
+        ),
+        document.getElementById("doculect-finder-list")
+      );
+    }
   };
 
   return elem(

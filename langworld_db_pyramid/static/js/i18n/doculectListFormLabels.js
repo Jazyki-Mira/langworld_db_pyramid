@@ -1,6 +1,6 @@
 const doculectListFormLabels = {
   formLabel: {
-    en: "Look for languages",
+    en: "Search for languages",
     ru: "Поиск языка",
   },
   buttonLabel: {
@@ -10,6 +10,10 @@ const doculectListFormLabels = {
   inputPlaceholderText: {
     en: "Any part of name/ISO-639-3/glottocode",
     ru: "Любая часть названия/ISO-639-3/glottocode",
+  },
+  nothingFoundText: {
+    en: "The search returned no matches",
+    ru: "По вашему запросу ничего не найдено",
   },
 };
 
