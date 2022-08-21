@@ -3,7 +3,7 @@ import {
   idOfDoculectToOpenPopupOnMapContext,
 } from "./contexts.js";
 import getLocale from "../tools/getLocale.js";
-import i18nStrings from "../i18n/doculectMapAndList.js";
+import doculectMapAndListStrings from "../i18n/doculectMapAndListStrings.js";
 
 const elem = React.createElement;
 
@@ -25,7 +25,7 @@ export default function InteractiveDoculectList() {
       elem(
         "p",
         { className: "w3-large w3-center w3-text-dark-blue-grey" },
-        i18nStrings["dataNotLoaded"][getLocale()]
+        doculectMapAndListStrings["dataNotLoaded"][getLocale()]
       )
     );
 
@@ -33,7 +33,7 @@ export default function InteractiveDoculectList() {
     return elem(
       "p",
       { className: "w3-large" },
-      i18nStrings["noDoculectsToShow"][getLocale()]
+      doculectMapAndListStrings["noDoculectsToShow"][getLocale()]
     );
 
   return elem(
