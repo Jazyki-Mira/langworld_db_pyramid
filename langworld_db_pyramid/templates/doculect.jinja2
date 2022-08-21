@@ -39,8 +39,14 @@
 
   <h2 class="w3-text-darkest-blue-grey">{% trans %}География{% endtrans %}</h2>
     <p>{% trans %}Основная страна{% endtrans %}: <span class="font-normal">{{ doculect.main_country[name_attr] }}</span>
-    (<a href="/{{ request.locale_name }}/doculects/map?lat={{ doculect.latitude }}&long={{ doculect.longitude }}&show_doculect={{ doculect.man_id }}">{% trans %}посмотреть на карте{% endtrans %}</a>)
+    (<a href="/{{ request.locale_name }}/doculects/map?lat={{ doculect.latitude }}&long={{ doculect.longitude }}&show_doculect={{ doculect.man_id }}"><strong>{% trans %}посмотреть на карте{% endtrans %}</strong></a>)
     </p>
+    {% for encyclopedia_map in doculect.encyclopedia_maps %}
+      {% if loop.first %}<h3 class="w3-text-darkest-blue-grey">{% trans %}Карты ареалов из энциклопедии{% endtrans %}</h3>
+      <ul>{% endif %}
+      <li><a href="https://iling-ran.ru/library/langworld/maps/{{ encyclopedia_map.file_name }}" target="_blank">{{ encyclopedia_map[request.locale_name] }}</a></li>
+      {% if loop.last %}</ul>{% endif %}
+    {% endfor %}
 
   {% if doculect.glottocodes or doculect.iso_639p3_codes %}
       <h2 class="w3-text-darkest-blue-grey">{% trans %}Идентификаторы{% endtrans %}</h2>

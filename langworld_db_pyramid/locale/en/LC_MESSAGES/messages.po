@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-17 18:17+0300\n"
+"POT-Creation-Date: 2022-08-21 18:42+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -52,7 +52,7 @@ msgid "Карта языков"
 msgstr "Map of languages"
 
 #: templates/all_features_list.jinja2:5 templates/base.jinja2:61
-#: templates/doculect.jinja2:68 templates/query_wizard.jinja2:45
+#: templates/doculect.jinja2:74 templates/query_wizard.jinja2:45
 msgid "Признаки"
 msgstr "Features"
 
@@ -113,27 +113,31 @@ msgstr "Main country"
 msgid "посмотреть на карте"
 msgstr "show on the map"
 
-#: templates/doculect.jinja2:46
+#: templates/doculect.jinja2:45
+msgid "Карты ареалов из энциклопедии"
+msgstr "Area maps from the encyclopedia (in Russian)"
+
+#: templates/doculect.jinja2:52
 msgid "Идентификаторы"
 msgstr "Identifiers"
 
-#: templates/doculect.jinja2:74
+#: templates/doculect.jinja2:80
 msgid "Нет заполненных признаков для этого языка."
 msgstr "No filled features for this language."
 
-#: templates/doculect.jinja2:99
+#: templates/doculect.jinja2:105
 msgid "Незаполненные признаки"
 msgstr "Unfilled features"
 
-#: templates/doculect.jinja2:102
+#: templates/doculect.jinja2:108
 msgid "В энциклопедии отсутствует информация"
 msgstr "The encyclopedia contains no information"
 
-#: templates/doculect.jinja2:118
+#: templates/doculect.jinja2:124
 msgid "В энциклопедии присутствует явное указание на отсутствие данных"
 msgstr "The encyclopedia explicitly states lack of data"
 
-#: templates/doculect.jinja2:134
+#: templates/doculect.jinja2:140
 msgid "Признак неприменим к этому языку"
 msgstr "Feature is not applicable to this language"
 

@@ -36,14 +36,17 @@ class Doculect(Base):
     comment_en = Column(Text)
     comment_ru = Column(Text)
 
-    encyclopedia_volume = relationship("EncyclopediaVolume", back_populates="doculects")
-    family = relationship("Family", back_populates="doculects")
+    encyclopedia_volume = relationship('EncyclopediaVolume', back_populates='doculects')
+    family = relationship('Family', back_populates='doculects')
     feature_value_comments = relationship('DoculectFeatureValueComment', back_populates='doculect')
-    main_country = relationship("Country", back_populates="doculects")
-    type = relationship("DoculectType", back_populates="doculects")
+    main_country = relationship('Country', back_populates='doculects')
+    type = relationship('DoculectType', back_populates='doculects')
 
     # many-to-many relationships
-    feature_values = relationship("FeatureValue", back_populates="doculects", secondary='doculect_to_feature_value')
+    encyclopedia_maps = relationship(
+        'EncyclopediaMap', back_populates='doculects', secondary='encyclopedia_map_to_doculect'
+    )
+    feature_values = relationship('FeatureValue', back_populates='doculects', secondary='doculect_to_feature_value')
     glottocodes = relationship('Glottocode', back_populates='doculects', secondary='doculect_to_glottocode')
     iso_639p3_codes = relationship('Iso639P3Code', back_populates='doculects', secondary='doculect_to_iso_639p3_code')
 

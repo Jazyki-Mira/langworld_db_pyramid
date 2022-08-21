@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-17 18:17+0300\n"
+"POT-Creation-Date: 2022-08-21 18:42+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgid "Карта языков"
 msgstr ""
 
 #: templates/all_features_list.jinja2:5 templates/base.jinja2:61
-#: templates/doculect.jinja2:68 templates/query_wizard.jinja2:45
+#: templates/doculect.jinja2:74 templates/query_wizard.jinja2:45
 msgid "Признаки"
 msgstr ""
 
@@ -112,27 +112,31 @@ msgstr ""
 msgid "посмотреть на карте"
 msgstr ""
 
-#: templates/doculect.jinja2:46
+#: templates/doculect.jinja2:45
+msgid "Карты ареалов из энциклопедии"
+msgstr ""
+
+#: templates/doculect.jinja2:52
 msgid "Идентификаторы"
 msgstr ""
 
-#: templates/doculect.jinja2:74
+#: templates/doculect.jinja2:80
 msgid "Нет заполненных признаков для этого языка."
 msgstr ""
 
-#: templates/doculect.jinja2:99
+#: templates/doculect.jinja2:105
 msgid "Незаполненные признаки"
 msgstr ""
 
-#: templates/doculect.jinja2:102
+#: templates/doculect.jinja2:108
 msgid "В энциклопедии отсутствует информация"
 msgstr ""
 
-#: templates/doculect.jinja2:118
+#: templates/doculect.jinja2:124
 msgid "В энциклопедии присутствует явное указание на отсутствие данных"
 msgstr ""
 
-#: templates/doculect.jinja2:134
+#: templates/doculect.jinja2:140
 msgid "Признак неприменим к этому языку"
 msgstr ""
 

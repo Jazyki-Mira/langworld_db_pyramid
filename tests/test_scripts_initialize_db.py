@@ -29,6 +29,7 @@ class TestCustomModelInitializer:
             models.Country: 283,
             models.Doculect: 429,
             models.DoculectType: 3,
+            models.EncyclopediaMap: 62,
             models.EncyclopediaVolume: 19,
             models.Family: 145,
             models.Feature: 126,
@@ -89,6 +90,9 @@ class TestCustomModelInitializer:
         assert old_russian.family.name_en == 'East Slavic'
         assert old_russian.family.parent.name_en == 'Slavic'
         assert old_russian.family.parent.parent.name_ru == 'Индоевропейские'
+        assert len(old_russian.encyclopedia_maps) == 2
+        assert '13-2' in [map_.man_id for map_ in old_russian.encyclopedia_maps]
+        assert '13-11' in [map_.man_id for map_ in old_russian.encyclopedia_maps]
         # TODO can add more tests here (for country, features etc.)
 
         # `is_listed_and_has_doculects` attribute in non-listed feature values must be False

@@ -31,3 +31,13 @@ class DoculectToIso639P3Code(Base):
     __tablename__ = 'doculect_to_iso_639p3_code'
     doculect_id = Column(ForeignKey('doculects.id'), primary_key=True)
     iso_639p3_code_id = Column(ForeignKey('iso_639p3_codes.id'), primary_key=True)
+
+
+class EncyclopediaMapToDoculect(Base):
+    """Class for **automatic** creation of objects by SQLAlchemy
+    when establishing "many to many" relationship
+    between `EncyclopediaMap` and `Doculect`.
+    """
+    __tablename__ = 'encyclopedia_map_to_doculect'
+    encyclopedia_map_id = Column(ForeignKey('encyclopedia_maps.id'), primary_key=True)
+    doculect_id = Column(ForeignKey('doculects.id'), primary_key=True)

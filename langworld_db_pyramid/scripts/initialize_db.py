@@ -20,6 +20,8 @@ from langworld_db_data.langworld_db_data.constants.paths import (
     FILE_WITH_GENEALOGY_HIERARCHY,
     FILE_WITH_GENEALOGY_NAMES,
     FILE_WITH_LISTED_VALUES,
+    FILE_WITH_MAPS,
+    FILE_WITH_MAP_TO_DOCULECT,
     FILE_WITH_NAMES_OF_FEATURES,
     FILE_WITH_VALUE_TYPES,
 )
@@ -46,6 +48,8 @@ class CustomModelInitializer:
         file_with_categories: Path = FILE_WITH_CATEGORIES,
         file_with_countries: Path = FILE_WITH_COUNTRIES,
         file_with_doculects: Path = FILE_WITH_DOCULECTS,
+        file_with_encyclopedia_maps: Path = FILE_WITH_MAPS,
+        file_with_encyclopedia_map_to_doculect: Path = FILE_WITH_MAP_TO_DOCULECT,
         file_with_encyclopedia_volumes: Path = FILE_WITH_ENCYCLOPEDIA_VOLUMES,
         file_with_genealogy_hierarchy: Path = FILE_WITH_GENEALOGY_HIERARCHY,
         file_with_genealogy_names: Path = FILE_WITH_GENEALOGY_NAMES,
@@ -55,9 +59,9 @@ class CustomModelInitializer:
     ):
         self.ALL_MODELS = (
                 models.association_tables.DoculectToFeatureValue, models.association_tables.DoculectToGlottocode,
-                models.association_tables.DoculectToIso639P3Code,
+                models.association_tables.DoculectToIso639P3Code, models.association_tables.EncyclopediaMapToDoculect,
                 models.Doculect, models.DoculectFeatureValueComment, models.DoculectType, models.Country,
-                models.EncyclopediaVolume, models.Family,
+                models.EncyclopediaMap, models.EncyclopediaVolume, models.Family,
                 models.FeatureValue, models.FeatureValueType, models.Feature, models.FeatureCategory,
                 models.Glottocode, models.Iso639P3Code,
         )
@@ -70,6 +74,8 @@ class CustomModelInitializer:
         self.file_with_categories = file_with_categories
         self.file_with_countries = file_with_countries
         self.file_with_doculects = file_with_doculects
+        self.file_with_encyclopedia_maps = file_with_encyclopedia_maps
+        self.file_with_encyclopedia_map_to_doculect = file_with_encyclopedia_map_to_doculect
         self.file_with_encyclopedia_volumes = file_with_encyclopedia_volumes
         self.file_with_genealogy_hierarchy = file_with_genealogy_hierarchy
         self.file_with_listed_values = file_with_listed_values
@@ -84,6 +90,7 @@ class CustomModelInitializer:
         # Dictionaries map identifiers to instances of mapped classes:
 
         self.country_for_id = {}
+        self.encyclopedia_map_for_id = {}
         self.encyclopedia_volume_for_id = {}
         self.family_for_id = {}
 
@@ -115,6 +122,7 @@ class CustomModelInitializer:
 
         self._populate_categories_features_value_types_listed_and_empty_values()
         self._populate_countries()
+        self._populate_encyclopedia_maps()
         self._populate_encyclopedia_volumes()
         self._populate_families()
         self._populate_glottocodes()
@@ -185,7 +193,7 @@ class CustomModelInitializer:
     def _populate_countries(self):
 
         for country_row in self.read_file(self.file_with_countries):
-            country = models.country.Country(
+            country = models.Country(
                 man_id=country_row['id'],
                 iso=country_row['ISO 3166-1 alpha-3'],
                 is_historical=int(country_row['is_historical']),
@@ -195,10 +203,18 @@ class CustomModelInitializer:
             self.dbsession.add(country)
             self.country_for_id[country_row['id']] = country
             
-    def _populate_encyclopedia_volumes(self):
+    def _populate_encyclopedia_maps(self):
+        for map_row in self.read_file(self.file_with_encyclopedia_maps):
+            row_for_model = copy(map_row)
+            row_for_model['man_id'] = row_for_model['id']
+            del row_for_model['id']
+            encyclopedia_map = models.EncyclopediaMap(**row_for_model)
+            self.dbsession.add(encyclopedia_map)
+            self.encyclopedia_map_for_id[encyclopedia_map.man_id] = encyclopedia_map
 
+    def _populate_encyclopedia_volumes(self):
         for encyclopedia_row in self.read_file(self.file_with_encyclopedia_volumes):
-            volume = models.encyclopedia_volume.EncyclopediaVolume(**encyclopedia_row)
+            volume = models.EncyclopediaVolume(**encyclopedia_row)
             self.dbsession.add(volume)
             self.encyclopedia_volume_for_id[volume.id] = volume
 
@@ -216,7 +232,7 @@ class CustomModelInitializer:
 
             manual_id = list(node.keys())[0] if isinstance(node, dict) else node
 
-            family = models.family.Family(
+            family = models.Family(
                 man_id=manual_id,
                 name_en=self.genealogy_names_for_id[manual_id]['en'],
                 name_ru=self.genealogy_names_for_id[manual_id]['ru'],
@@ -261,6 +277,7 @@ class CustomModelInitializer:
 
     def _populate_doculects_custom_feature_values_and_comments(self):
         doculect_rows = self.read_file(self.file_with_doculects)
+        rows_with_encyclopedia_map_to_doculect = self.read_file(self.file_with_encyclopedia_map_to_doculect)
 
         for doculect_type in self.doculect_type_for_id.values():
             self.dbsession.add(doculect_type)
@@ -304,10 +321,16 @@ class CustomModelInitializer:
                 iso_639p3_codes_for_this_doculect.append(self.iso639p3code_for_id[iso_code])
             del doculect_row_to_write['iso_639_3']
 
-            doculect = models.doculect.Doculect(**doculect_row_to_write)
+            doculect = models.Doculect(**doculect_row_to_write)
 
             doculect.comment_en = ''
             doculect.comment_ru = ''
+
+            for encyclopedia_map_id in [
+                row['encyclopedia_map_id'] for row in rows_with_encyclopedia_map_to_doculect
+                if row['doculect_id'] == doculect.man_id
+            ]:
+                doculect.encyclopedia_maps.append(self.encyclopedia_map_for_id[encyclopedia_map_id])
 
             if encyclopedia_volume:
                 doculect.encyclopedia_volume = encyclopedia_volume
