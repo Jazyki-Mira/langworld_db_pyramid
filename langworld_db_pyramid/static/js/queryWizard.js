@@ -1,15 +1,18 @@
 import MapAndList from "./map/MapAndList.js";
 import getLocale from "./tools/getLocale.js";
+import queryWizardStrings from "./i18n/queryWizardStrings.js";
 
 const elem = React.createElement;
 
 const wrapInputFieldsWithSlimSelect = () => {
+  const locale = getLocale();
+
   for (let elem of document.querySelectorAll("select")) {
     new SlimSelect({
       select: elem,
-      placeholder: "Выберите любое количество значений",
-      searchPlaceholder: "Поиск значения",
-      searchText: "Нет подходящих значений",
+      placeholder: queryWizardStrings["placeholder"][locale],
+      searchPlaceholder: queryWizardStrings["searchPlaceholder"][locale],
+      searchText: queryWizardStrings["searchText"][locale],
       allowDeselectOption: true,
       closeOnSelect: false,
       selectByGroup: true,
@@ -20,6 +23,7 @@ const wrapInputFieldsWithSlimSelect = () => {
 
 function QueryWizard() {
   const form = document.getElementById("query-wizard-form");
+  const locale = getLocale();
 
   const generateFetchUrl = () => {
     let valuesFromAllSelects = [];
@@ -31,7 +35,7 @@ function QueryWizard() {
     }
 
     let paramsForURLToFetch = encodeURI(valuesFromAllSelects.join("&"));
-    return `/${getLocale()}/json_api/query_wizard?${paramsForURLToFetch}`;
+    return `/${locale}/json_api/query_wizard?${paramsForURLToFetch}`;
   };
 
   wrapInputFieldsWithSlimSelect();
@@ -50,7 +54,7 @@ function QueryWizard() {
 
   return elem(MapAndList, {
     mapDivID: "map-default",
-    urlToFetch: `/${getLocale()}/json_api/doculects_for_map/all`,
+    urlToFetch: `/${locale}/json_api/doculects_for_map/all`,
     formId: "query-wizard-form",
     fetchUrlGenerator: generateFetchUrl,
   });
