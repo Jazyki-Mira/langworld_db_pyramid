@@ -14,25 +14,25 @@ from .meta import Base
 class Doculect(Base):
     __tablename__ = 'doculects'
     id = Column(Integer, primary_key=True)
-    man_id = Column(String(100))
+    man_id = Column(String(100), index=True)
     type_id = Column(ForeignKey('doculect_types.id'))
     is_extinct = Column(Boolean)
     is_multiple = Column(Boolean)
-    name_en = Column(String(255))
-    name_ru = Column(String(255))
+    name_en = Column(String(255), index=True)
+    name_ru = Column(String(255), index=True)
     custom_title_en = Column(String(255))
     custom_title_ru = Column(String(255))
     # Aliases could be in a separate table, but they are not organized as pairs of English and Russian equivalents,
     # which would mean separate tables (one per locale) or more complex queries. So far I don't think it's worth it.
-    aliases_en = Column(String)
-    aliases_ru = Column(String)
+    aliases_en = Column(String, index=True)
+    aliases_ru = Column(String, index=True)
     family_id = Column(Integer, ForeignKey('families.id'))
     latitude = Column(String)
     longitude = Column(String)
     main_country_id = Column(Integer, ForeignKey('countries.id'))
     encyclopedia_volume_id = Column(Integer, ForeignKey('encyclopedia_volumes.id'))
     page = Column(Integer)
-    has_feature_profile = Column(Boolean)
+    has_feature_profile = Column(Boolean, index=True)
     comment_en = Column(Text)
     comment_ru = Column(Text)
 

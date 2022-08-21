@@ -17,7 +17,7 @@ class FeatureValue(Base):
     feature_id = Column(Integer, ForeignKey('features.id'))
     type_id = Column(Integer, ForeignKey('feature_value_types.id'))
 
-    man_id = Column(String(20))
+    man_id = Column(String(20), index=True)
     name_en = Column(String(255))
     name_ru = Column(String(255))
     # Not adding 'comment' attributes here (corresponding to comment field in feature profiles)
