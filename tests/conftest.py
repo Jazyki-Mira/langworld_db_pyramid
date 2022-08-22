@@ -53,7 +53,7 @@ def dbengine(app_settings, ini_file):
 def app(app_settings, dbengine):
     return main({}, dbengine=dbengine, **app_settings)
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def tm():
     tm = transaction.TransactionManager(explicit=True)
     tm.begin()
@@ -63,7 +63,7 @@ def tm():
 
     tm.abort()
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def dbsession(app, tm):
     session_factory = app.registry['dbsession_factory']
     return models.get_tm_session(session_factory, tm)
@@ -136,27 +136,36 @@ def dummy_config(dummy_request):
 
 
 # Fixtures added by me
+PATHS_FOR_DB_INITIALIZER = {
+    'dir_with_feature_profiles': DIR_WITH_FEATURE_PROFILES_FOR_INITIALIZE_DB,
+    'file_with_categories': FILE_WITH_CATEGORIES_FOR_INITIALIZE_DB,
+    'file_with_countries': FILE_WITH_COUNTRIES_FOR_INITIALIZE_DB,
+    'file_with_doculects': FILE_WITH_DOCULECTS_FOR_INITIALIZE_DB,
+    'file_with_encyclopedia_maps': FILE_WITH_MAPS_FOR_INITIALIZE_DB,
+    'file_with_encyclopedia_map_to_doculect': FILE_WITH_MAP_TO_DOCULECT_FOR_INITIALIZE_DB,
+    'file_with_encyclopedia_volumes': FILE_WITH_ENCYCLOPEDIA_VOLUMES_FOR_INITIALIZE_DB,
+    'file_with_genealogy_hierarchy': FILE_WITH_GENEALOGY_HIERARCHY_FOR_INITIALIZE_DB,
+    'file_with_genealogy_names': FILE_WITH_GENEALOGY_NAMES_FOR_INITIALIZE_DB,
+    'file_with_listed_values': FILE_WITH_LISTED_VALUES_FOR_INITIALIZE_DB,
+    'file_with_names_of_features': FILE_WITH_FEATURES_FOR_INITIALIZE_DB,
+    'file_with_value_types': FILE_WITH_VALUE_TYPES_FOR_INITIALIZE_DB,
+}
+
+
 @pytest.fixture
 def test_db_initializer(dbsession):
 
     from langworld_db_pyramid.scripts.initialize_db import CustomModelInitializer
-    return CustomModelInitializer(
-        dbsession=dbsession,
-        dir_with_feature_profiles=DIR_WITH_FEATURE_PROFILES_FOR_INITIALIZE_DB,
-        file_with_categories=FILE_WITH_CATEGORIES_FOR_INITIALIZE_DB,
-        file_with_countries=FILE_WITH_COUNTRIES_FOR_INITIALIZE_DB,
-        file_with_doculects=FILE_WITH_DOCULECTS_FOR_INITIALIZE_DB,
-        file_with_encyclopedia_maps=FILE_WITH_MAPS_FOR_INITIALIZE_DB,
-        file_with_encyclopedia_map_to_doculect=FILE_WITH_MAP_TO_DOCULECT_FOR_INITIALIZE_DB,
-        file_with_encyclopedia_volumes=FILE_WITH_ENCYCLOPEDIA_VOLUMES_FOR_INITIALIZE_DB,
-        file_with_genealogy_hierarchy=FILE_WITH_GENEALOGY_HIERARCHY_FOR_INITIALIZE_DB,
-        file_with_genealogy_names=FILE_WITH_GENEALOGY_NAMES_FOR_INITIALIZE_DB,
-        file_with_listed_values=FILE_WITH_LISTED_VALUES_FOR_INITIALIZE_DB,
-        file_with_names_of_features=FILE_WITH_FEATURES_FOR_INITIALIZE_DB,
-        file_with_value_types=FILE_WITH_VALUE_TYPES_FOR_INITIALIZE_DB,
-    )
+    return CustomModelInitializer(dbsession=dbsession, **PATHS_FOR_DB_INITIALIZER)
 
 
-@pytest.fixture
-def setup_models_for_views_testing(test_db_initializer):
-    test_db_initializer.setup_models()
+@pytest.fixture(scope='module')
+def test_db_initializer_with_module_scope(dbsession):
+
+    from langworld_db_pyramid.scripts.initialize_db import CustomModelInitializer
+    return CustomModelInitializer(dbsession=dbsession, **PATHS_FOR_DB_INITIALIZER)
+
+
+@pytest.fixture(scope='module')
+def setup_models_once_for_test_module(test_db_initializer_with_module_scope):
+    test_db_initializer_with_module_scope.setup_models()

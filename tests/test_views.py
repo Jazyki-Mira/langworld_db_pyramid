@@ -41,7 +41,7 @@ NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) 
 
 )
 def test_get_doculects_by_substring(
-        dummy_request, setup_models_for_views_testing,
+        dummy_request, setup_models_once_for_test_module,
         query, locale, expected_ids,
 ):
 
@@ -61,7 +61,8 @@ def test_get_doculects_by_substring(
         assert doculect_id in ids
 
 
-def test_get_doculects_by_substring_returns_empty_list_if_nothing_found(dummy_request, setup_models_for_views_testing):
+def test_get_doculects_by_substring_returns_empty_list_if_nothing_found(dummy_request,
+                                                                        setup_models_once_for_test_module):
     dummy_request.locale_name = 'en'
     dummy_request.matchdict['query'] = 'foo'
 
@@ -91,7 +92,7 @@ def test_get_doculects_by_substring_returns_empty_list_if_nothing_found(dummy_re
     ]
 )
 def test_get_doculects_for_map(
-        dummy_request, setup_models_for_views_testing, locale, expected_first_doculect, expected_last_doculect
+        dummy_request, setup_models_once_for_test_module, locale, expected_first_doculect, expected_last_doculect
 ):
 
     dummy_request.locale_name = locale
@@ -111,7 +112,7 @@ def test_get_doculects_for_map(
     ]
 )
 def test_view_families_for_list(
-        dummy_request, setup_models_for_views_testing, family_man_id, parent_is_none, expected_number_of_families
+        dummy_request, setup_models_once_for_test_module, family_man_id, parent_is_none, expected_number_of_families
 ):
     dummy_request.locale_name = 'en'
     dummy_request.matchdict['family_man_id'] = family_man_id
@@ -137,7 +138,7 @@ def test_view_families_for_list(
     ]
 )
 def test_view_families_for_map(
-        dummy_request, setup_models_for_views_testing,
+        dummy_request, setup_models_once_for_test_module,
         family_man_id, expected_number_of_groups, expected_number_of_doculects
 ):
     dummy_request.locale_name = 'en'
@@ -147,7 +148,7 @@ def test_view_families_for_map(
     assert sum(len(group['doculects']) for group in immediate_subfamilies) == expected_number_of_doculects
 
 
-def test_view_all_doculects_list(dummy_request, setup_models_for_views_testing):
+def test_view_all_doculects_list(dummy_request, setup_models_once_for_test_module):
 
     data = view_all_doculects_list(dummy_request)
     assert dummy_request.response.status_int == 200
@@ -155,7 +156,7 @@ def test_view_all_doculects_list(dummy_request, setup_models_for_views_testing):
     assert len(data['volumes']) == 19
 
 
-def test_view_doculect_profile(dummy_request, setup_models_for_views_testing):
+def test_view_doculect_profile(dummy_request, setup_models_once_for_test_module):
     dummy_request.matchdict['doculect_man_id'] = 'aragonese'
 
     info = view_doculect_profile(dummy_request)
@@ -166,7 +167,7 @@ def test_view_doculect_profile(dummy_request, setup_models_for_views_testing):
     assert len(info['categories']) == 14
 
 
-def test_view_doculect_profile_raises_not_found(dummy_request, setup_models_for_views_testing):
+def test_view_doculect_profile_raises_not_found(dummy_request, setup_models_once_for_test_module):
     dummy_request.matchdict['doculect_man_id'] = 'foo'
 
     with pytest.raises(pyramid.httpexceptions.HTTPNotFound):
@@ -182,14 +183,14 @@ def test_families_get_parent_families_icons_not_found(dummy_request):
         get_parent_families_icons(dummy_request)
 
 
-def test_features_view_all_features_list_by_category(dummy_request, setup_models_for_views_testing):
+def test_features_view_all_features_list_by_category(dummy_request, setup_models_once_for_test_module):
     data = view_all_features_list_by_category(dummy_request)
     assert len(data['categories']) == 14
     for item in data['categories']:
         assert isinstance(item, FeatureCategory)
 
 
-def test_features_get_feature_values_icons(dummy_request, setup_models_for_views_testing):
+def test_features_get_feature_values_icons(dummy_request, setup_models_once_for_test_module):
     dummy_request.matchdict['feature_man_id'] = 'H-6'
     feature, values, icon_for_value = get_feature_values_icons(dummy_request)
 
@@ -199,21 +200,21 @@ def test_features_get_feature_values_icons(dummy_request, setup_models_for_views
     assert len(set([i.svg_tag for i in icon_for_value.values()])) == len(values)  # make sure all icons are unique
 
 
-def test_features_get_feature_values_icons_not_found(dummy_request, setup_models_for_views_testing):
+def test_features_get_feature_values_icons_not_found(dummy_request, setup_models_once_for_test_module):
     dummy_request.matchdict['feature_man_id'] = 'Z-99'
 
     with pytest.raises(pyramid.httpexceptions.HTTPNotFound):
         get_feature_values_icons(dummy_request)
 
 
-def test_features_view_feature_list_of_values(dummy_request, setup_models_for_views_testing):
+def test_features_view_feature_list_of_values(dummy_request, setup_models_once_for_test_module):
     dummy_request.matchdict['feature_man_id'] = 'H-6'
     data = view_feature_list_of_values(dummy_request)
 
     assert data['man_id'] == 'H-6'
 
 
-def test_features_view_feature_map_of_values(dummy_request, setup_models_for_views_testing):
+def test_features_view_feature_map_of_values(dummy_request, setup_models_once_for_test_module):
     dummy_request.locale_name = 'ru'
     dummy_request.matchdict['feature_man_id'] = 'H-6'
     groups = view_feature_map_of_values(dummy_request)
@@ -263,7 +264,7 @@ def test_notfound_view(dummy_request):
     ]
 )
 def test_query_wizard_get_matching_doculects(
-        dummy_request, setup_models_for_views_testing,
+        dummy_request, setup_models_once_for_test_module,
         params, expected_number_of_items, selected_doculects_to_check
 ):
     dummy_request.params = params

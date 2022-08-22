@@ -50,7 +50,7 @@ def test_generate_fixed_number_of_map_icons_fails_for_more_than_max_number():
     assert 'Cannot generate more than' in str(e)
 
 
-def test__generate_marker_group_item(setup_models_for_views_testing, dbsession):
+def test__generate_marker_group_item(setup_models_once_for_test_module, dbsession):
     doculect = dbsession.scalars(select(Doculect).where(Doculect.man_id == 'asiatic_eskimo')).one()
     data = _generate_marker_group_item(
         doculect=doculect,
@@ -64,7 +64,7 @@ def test__generate_marker_group_item(setup_models_for_views_testing, dbsession):
     assert data.url == f'/en/doculect/{doculect.man_id}'
 
 
-def test_generate_marker_group(setup_models_for_views_testing, dbsession):
+def test_generate_marker_group(setup_models_once_for_test_module, dbsession):
     eskimo = dbsession.scalars(select(Doculect).where(Doculect.man_id == 'asiatic_eskimo')).one()
     old_french = dbsession.scalars(select(Doculect).where(Doculect.man_id == 'old_french')).one()
 

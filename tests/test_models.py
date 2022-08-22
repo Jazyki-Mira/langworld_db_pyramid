@@ -15,7 +15,7 @@ class TestDoculect:
         ]
     )
     def test_doculect_belongs_to_family(
-            self, dbsession, setup_models_for_views_testing, man_id, expected_result
+            self, dbsession, setup_models_once_for_test_module, man_id, expected_result
     ):
         romanian = dbsession.scalars(select(models.Doculect).where(models.Doculect.man_id == 'romanian')).one()
         assert romanian.belongs_to_family(man_id) == expected_result
@@ -31,7 +31,7 @@ class TestFamily:
         ]
     )
     def test_family_has_doculects_with_feature_profiles(
-            self, dbsession, setup_models_for_views_testing, man_id, expected_result
+            self, dbsession, setup_models_once_for_test_module, man_id, expected_result
     ):
         family = dbsession.scalars(select(models.Family).where(models.Family.man_id == man_id)).one()
         assert family.has_doculects_with_feature_profiles() == expected_result
@@ -48,7 +48,7 @@ class TestFamily:
         ]
     )
     def test_family_is_descendant_of(
-            self, dbsession, setup_models_for_views_testing, man_id_of_presumable_parent, expected_result
+            self, dbsession, setup_models_once_for_test_module, man_id_of_presumable_parent, expected_result
     ):
         east_romance = dbsession.scalars(select(models.Family).where(models.Family.man_id == 'east_rom')).one()
         assert east_romance.is_descendant_of(man_id_of_presumable_parent) == expected_result
@@ -66,7 +66,7 @@ class TestFamily:
         ]
     )
     def test_family_iter_doculects_that_have_feature_profiles(
-            self, dbsession, setup_models_for_views_testing, man_id, expected_doculect_ids
+            self, dbsession, setup_models_once_for_test_module, man_id, expected_doculect_ids
     ):
         family = dbsession.scalars(select(models.Family).where(models.Family.man_id == man_id)).one()
         ids = [d.man_id for d in family.iter_doculects_that_have_feature_profiles()]
