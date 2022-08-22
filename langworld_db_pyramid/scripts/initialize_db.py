@@ -9,22 +9,9 @@ from pyramid.paster import bootstrap, setup_logging
 from sqlalchemy import delete
 from sqlalchemy.exc import OperationalError
 
+from langworld_db_data.langworld_db_data.constants import paths
 from langworld_db_data.langworld_db_data.filetools.csv_xls import read_csv
 from langworld_db_data.langworld_db_data.filetools.json_toml_yaml import read_json_toml_yaml
-from langworld_db_data.langworld_db_data.constants.paths import (
-    FEATURE_PROFILES_DIR,
-    FILE_WITH_CATEGORIES,
-    FILE_WITH_COUNTRIES,
-    FILE_WITH_DOCULECTS,
-    FILE_WITH_ENCYCLOPEDIA_VOLUMES,
-    FILE_WITH_GENEALOGY_HIERARCHY,
-    FILE_WITH_GENEALOGY_NAMES,
-    FILE_WITH_LISTED_VALUES,
-    FILE_WITH_MAPS,
-    FILE_WITH_MAP_TO_DOCULECT,
-    FILE_WITH_NAMES_OF_FEATURES,
-    FILE_WITH_VALUE_TYPES,
-)
 
 from .. import models
 
@@ -44,18 +31,18 @@ class CustomModelInitializer:
     def __init__(
         self,
         dbsession,
-        dir_with_feature_profiles: Path = FEATURE_PROFILES_DIR,
-        file_with_categories: Path = FILE_WITH_CATEGORIES,
-        file_with_countries: Path = FILE_WITH_COUNTRIES,
-        file_with_doculects: Path = FILE_WITH_DOCULECTS,
-        file_with_encyclopedia_maps: Path = FILE_WITH_MAPS,
-        file_with_encyclopedia_map_to_doculect: Path = FILE_WITH_MAP_TO_DOCULECT,
-        file_with_encyclopedia_volumes: Path = FILE_WITH_ENCYCLOPEDIA_VOLUMES,
-        file_with_genealogy_hierarchy: Path = FILE_WITH_GENEALOGY_HIERARCHY,
-        file_with_genealogy_names: Path = FILE_WITH_GENEALOGY_NAMES,
-        file_with_listed_values: Path = FILE_WITH_LISTED_VALUES,
-        file_with_names_of_features: Path = FILE_WITH_NAMES_OF_FEATURES,
-        file_with_value_types: Path = FILE_WITH_VALUE_TYPES,
+        dir_with_feature_profiles: Path = paths.FEATURE_PROFILES_DIR,
+        file_with_categories: Path = paths.FILE_WITH_CATEGORIES,
+        file_with_countries: Path = paths.FILE_WITH_COUNTRIES,
+        file_with_doculects: Path = paths.FILE_WITH_DOCULECTS,
+        file_with_encyclopedia_maps: Path = paths.FILE_WITH_MAPS,
+        file_with_encyclopedia_map_to_doculect: Path = paths.FILE_WITH_MAP_TO_DOCULECT,
+        file_with_encyclopedia_volumes: Path = paths.FILE_WITH_ENCYCLOPEDIA_VOLUMES,
+        file_with_genealogy_hierarchy: Path = paths.FILE_WITH_GENEALOGY_HIERARCHY,
+        file_with_genealogy_names: Path = paths.FILE_WITH_GENEALOGY_NAMES,
+        file_with_listed_values: Path = paths.FILE_WITH_LISTED_VALUES,
+        file_with_names_of_features: Path = paths.FILE_WITH_NAMES_OF_FEATURES,
+        file_with_value_types: Path = paths.FILE_WITH_VALUE_TYPES,
     ):
         self.ALL_MODELS = (
                 models.association_tables.DoculectToFeatureValue, models.association_tables.DoculectToGlottocode,
