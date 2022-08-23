@@ -87,13 +87,13 @@
           {% for value in values_to_list %}
             {% if not (request.locale_name == 'en' and value.type.name == 'custom') %}
                 <li>
-                    <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
-                        {{ value.feature[name_attr] }} ({{ value.feature.man_id }})
-                    </a>: {{ value[name_attr]}} {%if value.man_id %}({{ value.man_id }}){% endif %}
+                    <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
+                        <strong>{{ value.feature[name_attr] }}</strong></a>:
+                    {{ value[name_attr]}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-medium">[{{ value.man_id }}]</span>{% endif %}
 
                     {# comments are only available in Russian so far #}
                     {% if request.locale_name == 'ru' %}
-                        {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+                        {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="w3-text-darkest-blue-grey"><i>Комментарий: {{ comment.text_ru }}</i></span>{% endfor %}
                     {% endif %}
                 </li>
             {% endif %}
