@@ -99,7 +99,7 @@
                     <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
                         <strong>{{ value.feature[name_attr] }}</strong></a>
                     </td>
-                    <td>{{ value[name_attr]}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-medium">[{{ value.man_id }}]</span>{% endif %}</td>
+                    <td>{{ value[name_attr]}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-small">[{{ value.man_id }}]</span>{% endif %}</td>
 
                     <td>
                     {# comments are only available in Russian so far #}
