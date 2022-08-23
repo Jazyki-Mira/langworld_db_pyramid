@@ -7,9 +7,14 @@
   <link href="{{request.static_url('langworld_db_pyramid:static/css/slimselect.min.css')}}" rel="stylesheet">
 {% endblock custom_css %}
 
+{% block title %}{% trans %}Мастер сложных запросов{% endtrans %}{% endblock title %}
+
+{# in query wizard, the <h1> is a part of a more complex container, so the standard container is explicitly empty #}
+{% block h1_container %}{% endblock h1_container %}
+
 {% block content_top %}
   <div class="w3-twothird w3-container">
-    <h1 class="w3-text-dark-blue-grey">{% trans %}Мастер сложных запросов{% endtrans %}</h1>
+    <h1 class="w3-text-dark-blue-grey">{{ self.title() }}</h1>
   </div>
 
   <div class="w3-third w3-container" id="form-list-toggle-container">

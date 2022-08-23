@@ -2,11 +2,8 @@
 {% set name_attr = "name_" + request.locale_name %}
 {% set aliases_attr = "aliases_" + request.locale_name %}
 
-{% block content_top %}
-<div class="w3-col w3-container negative-margin-bottom">
-  <h1 class="w3-text-dark-blue-grey">{{ doculect[name_attr] }} {{ doculect.type[name_attr] }} {% if doculect.is_extinct %}†{% endif %}</h1>
-</div>
-{% endblock content_top %}
+{% block title %}{{ doculect[name_attr] }} {{ doculect.type[name_attr] }} {% if doculect.is_extinct %}†{% endif %}{% endblock title %}
+{% block h1 %}{{ self.title() }}{% endblock h1 %}
 
 {% block full_width %}
 

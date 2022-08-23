@@ -1,10 +1,7 @@
 {% extends "base_depth1_single_full_width.jinja2" %}
 
-{% block content_top %}
-<div class="w3-col w3-container negative-margin-bottom">
-  <h1 class="w3-text-dark-blue-grey">{% trans %}База данных «Языки мира»{% endtrans %}</h1>
-</div>
-{% endblock content_top %}
+{% block title %}{% trans %}Главная{% endtrans %}{% endblock title %}
+{% block h1 %}{% trans %}База данных «Языки мира»{% endtrans %}{% endblock h1 %}
 
 {% block full_width %}
   <div class="w3-margin-left">

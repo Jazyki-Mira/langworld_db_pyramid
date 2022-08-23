@@ -8,7 +8,7 @@
         <meta name="author" content="Institute of Linguistics, Russian Academy of Sciences">
         <link rel="shortcut icon" href="{{request.static_url('langworld_db_pyramid:static/images/favicon.png')}}">
 
-        <title>{% trans %}База данных «Языки мира»{% endtrans %}</title>
+        <title>{% block title %}{% endblock title %} | {% trans %}База данных «Языки мира»{% endtrans %}</title>
 
         <link href="{{request.static_url('langworld_db_pyramid:static/css/w3.css')}}" rel="stylesheet">
         <link href="{{request.static_url('langworld_db_pyramid:static/css/w3-theme-blue-grey.css')}}" rel="stylesheet">
@@ -75,8 +75,17 @@
 
     <div class="w3-main">
       <div class="w3-row w3-padding-top-32 w3-margin-left">
-      {% block content_top %}
-      {% endblock content_top %}
+        {% block h1_container %}  {# add the ability to override the whole container if needed #}
+          <div class="w3-col w3-container negative-margin-bottom">
+            <h1 class="w3-text-dark-blue-grey">
+              {% block h1 %}
+              {% endblock h1 %}
+            </h1>
+          </div>
+        {% endblock h1_container %}
+
+        {% block content_top %}
+        {% endblock content_top %}
       </div>
 
       {% block map_and_list %}
