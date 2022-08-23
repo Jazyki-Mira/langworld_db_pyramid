@@ -91,12 +91,12 @@
           {% for value in values_to_list %}
             {% if not (request.locale_name == 'en' and value.type.name == 'custom') %}
                 <tr>
-                    <td class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</td>
+                    <td class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id.replace('-', '‑') }}]</td>  {# replace simple hyphen with non-breaking hyphen #}
                     <td>
                     <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
                         <strong>{{ value.feature[name_attr] }}</strong></a>
                     </td>
-                    <td>{{ value[name_attr]}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-small">[{{ value.man_id }}]</span>{% endif %}</td>
+                    <td>{{ value[name_attr]}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-small">[{{ value.man_id.replace('-', '‑') }}]</span>{% endif %}</td>
 
                     <td>
                     {# comments are only available in Russian so far #}
