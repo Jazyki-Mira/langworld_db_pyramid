@@ -74,7 +74,7 @@
   <h2 class="w3-text-darkest-blue-grey">{% trans %}Признаки{% endtrans %}</h2>
 
   {% for category in categories %}
-      <h3 class="w3-text-darkest-blue-grey">{{ category[name_attr] }}</h3>
+      <h3 class="w3-text-darkest-blue-grey {% if not loop.first %}w3-padding-top-24{% endif %}">{{ category[name_attr] }}</h3>
       {% set values_to_list = doculect.feature_values|selectattr("feature.category.id", "eq", category.id)|selectattr("type.entails_empty_value", "false")|sort(attribute="feature.id") %}
 
       {% if not values_to_list %}<p>{% trans %}Нет заполненных признаков для этого языка.{% endtrans %}</p>
@@ -83,26 +83,39 @@
       But this is a rare situation and custom values should not stay for too long anyway. #}
 
       {% else %}
-          <ul>
+        <table class="w3-table w3-bordered w3-margin-bottom">
+          <colgroup>
+            <col style="width:3%">
+            <col style="width:30%">
+            <col style="width:42%">
+            <col style="width:25%">
+          </colgroup>
+          <tbody>
           {% for value in values_to_list %}
             {% if not (request.locale_name == 'en' and value.type.name == 'custom') %}
-                <li>
-                    <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
-                        <strong>{{ value.feature[name_attr] }}</strong></a>:
-                    {{ value[name_attr]}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-medium">[{{ value.man_id }}]</span>{% endif %}
+                <tr>
+                    <td class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</td>
+                    <td>
+                    <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
+                        <strong>{{ value.feature[name_attr] }}</strong></a>
+                    </td>
+                    <td>{{ value[name_attr]}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-medium">[{{ value.man_id }}]</span>{% endif %}</td>
 
+                    <td>
                     {# comments are only available in Russian so far #}
                     {% if request.locale_name == 'ru' %}
-                        {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="w3-text-darkest-blue-grey"><i>Комментарий: {{ comment.text_ru }}</i></span>{% endfor %}
+                        {% for comment in value.doculect_comments if comment.doculect == doculect %}<span class="w3-text-darkest-blue-grey">{{ comment.text_ru }}</span>{% endfor %}
                     {% endif %}
-                </li>
+                    </td>
+                </tr>
             {% endif %}
           {% endfor %}
-          </ul>
+          </tbody>
+        </table>
       {% endif %}
   {% endfor %}
 
-  <h2 class="w3-text-darkest-blue-grey">{% trans %}Незаполненные признаки{% endtrans %}</h2>
+  <h2 class="w3-text-darkest-blue-grey w3-padding-top-32">{% trans %}Незаполненные признаки{% endtrans %}</h2>
 
   {% if doculect.feature_values|selectattr("type.name", "eq", "not_stated")|list %}
       <h3 class="w3-text-darkest-blue-grey">{% trans %}В энциклопедии отсутствует информация{% endtrans %}</h3>
@@ -112,7 +125,7 @@
             <li>
                 <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
                 {% if request.locale_name == 'ru' %}
-                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="w3-text-dark-blue-grey">{{ comment.text_ru }}</span>{% endfor %}
                 {% endif %}
             </li>
         {% endif %}
@@ -128,7 +141,7 @@
             <li>
                 <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
                 {% if request.locale_name == 'ru' %}
-                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="w3-text-dark-blue-grey">{{ comment.text_ru }}</span>{% endfor %}
                 {% endif %}
             </li>
         {% endif %}
@@ -144,7 +157,7 @@
             <li>
                 <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
                 {% if request.locale_name == 'ru' %}
-                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
+                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="w3-text-dark-blue-grey">{{ comment.text_ru }}</span>{% endfor %}
                 {% endif %}
             </li>
         {% endif %}
@@ -153,7 +166,7 @@
   {% endif %}
 
   {% if request.locale_name == 'ru' %}
-    <p>{{ doculect.comment_ru }}</p>
+    <p class="w3-large w3-text-dark-blue-grey">{{ doculect.comment_ru }}</p>
   {% endif %}
 
 </div>
