@@ -1,9 +1,10 @@
-{% extends "base.jinja2" %}
+{% extends "base_depth1_single_full_width.jinja2" %}
 
-{% block content %}
-<div>
-  <h1 class="w3-text-dark-blue-grey">{% trans %}Страница не найдена{% endtrans %}</h1>
+{% block content_top %}
+<h1 class="w3-text-dark-blue-grey">{% trans %}Страница не найдена{% endtrans %}</h1>
+{% endblock content_top %}
+
+{% block full_width %}
   <p>{{ request.exception.detail }}</p>
   <p><a href="/{{ request.locale_name }}/home"><strong>{% trans %}Перейти на главную{% endtrans %}</strong></a></p>
-</div>
-{% endblock content %}
+{% endblock full_width %}

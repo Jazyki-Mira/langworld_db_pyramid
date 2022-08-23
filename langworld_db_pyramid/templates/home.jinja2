@@ -1,4 +1,4 @@
-{% extends "base.jinja2" %}
+{% extends "base_depth1_single_full_width.jinja2" %}
 
 {% block content_top %}
 <div class="w3-col w3-container negative-margin-bottom">
@@ -6,9 +6,9 @@
 </div>
 {% endblock content_top %}
 
-{% block content %}
-<div class="w3-margin-left padding-top-small">
-  <p>{% trans %}Версия 4 (онлайн). Веб-приложение находится в процессе разработки.{% endtrans %}</p>
-  <p>{% trans %}Со любыми вопросами и комментариями просьба обращаться к разработчику{% endtrans %} <a href="https://iling-ran.ru/web/{{ request.locale_name}}/scholars/kolomatskiy" target="_blank">{% trans %}Дмитрию Коломацкому{% endtrans %}</a>.</p>
-</div>
-{% endblock content %}
+{% block full_width %}
+  <div class="w3-margin-left">
+    <p>{% trans %}Версия 4 (онлайн). Веб-приложение находится в процессе разработки.{% endtrans %}</p>
+    <p>{% trans %}Со любыми вопросами и комментариями просьба обращаться к разработчику{% endtrans %} <a href="https://iling-ran.ru/web/{{ request.locale_name}}/scholars/kolomatskiy" target="_blank">{% trans %}Дмитрию Коломацкому{% endtrans %}</a>.</p>
+  </div>
+{% endblock full_width %}

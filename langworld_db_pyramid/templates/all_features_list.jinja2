@@ -1,4 +1,4 @@
-{% extends "base.jinja2" %}
+{% extends "base_depth1_twothird_and_onethird.jinja2" %}
 
 {% block content_top %}
 <div class="w3-twothird w3-container negative-margin-bottom">
@@ -6,19 +6,17 @@
 </div>
 {% endblock content_top %}
 
-{% block content %}
-
+{% block two_thirds %}
 {% set name_attr = "name_" + request.locale_name %}
 
 <div class="w3-margin-left">
   {% for category in categories %}
       <h2 class="w3-text-darkest-blue-grey">{{ category[name_attr] }}</h2>
-      <ul>
+      <ul class="w3-ul">
         {% for feature in category.features %}
-        <li><a href="/{{ request.locale_name }}/feature/{{ feature.man_id }}">{{ feature[name_attr] }}</a> ({{ feature.man_id }})</li>
+        <li><span class="w3-text-dark-blue-grey w3-medium">[{{ feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ feature.man_id }}">{{ feature[name_attr] }}</a></li>
         {% endfor %}
       </ul>
   {% endfor %}
-
 </div>
-{% endblock content %}
+{% endblock two_thirds %}

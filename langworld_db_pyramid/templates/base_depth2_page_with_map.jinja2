@@ -1,4 +1,4 @@
-{% extends "base.jinja2" %}
+{% extends "base_depth1_twothird_and_onethird.jinja2" %}
 
 {% block custom_css %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
@@ -14,8 +14,7 @@
     <div id="map-and-list"></div>
 {% endblock map_and_list %}
 
-{% block content %}
-
+{% block two_thirds %}
 {# this <div> will be moved above the list using the script imported below #}
 <div id="doculects-in-list-toggle-container">
   <span class="w3-text-dark-blue-grey">{% trans %}Языки{% endtrans %}</span>
@@ -25,13 +24,13 @@
   </label>
   <span class="w3-text-dark-blue-grey">{% trans %}Только легенда{% endtrans %}</span>
 </div>
-
-{% endblock content %}
+{% endblock two_thirds %}
 
 {% block scripts %}
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>
+
   {% if request.registry.settings['react_script_type'] == 'development' %}
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>

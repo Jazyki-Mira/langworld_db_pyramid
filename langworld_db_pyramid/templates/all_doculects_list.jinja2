@@ -1,4 +1,4 @@
-{% extends "base.jinja2" %}
+{% extends "base_depth1_twothird_and_onethird.jinja2" %}
 {% set name_attr = "name_" + request.locale_name %}
 {% set aliases_attr = "aliases_" + request.locale_name %}
 
@@ -13,7 +13,7 @@
 </div>
 {% endblock content_top %}
 
-{% block content %}
+{% block two_thirds %}
 <div class="w3-margin-left">
   <p>{% trans %}В списке представлены языки и диалекты, для которых заполнены рефераты{% endtrans %} (<strong>{{ doculects|length }}</strong>).</p>
 
@@ -46,7 +46,7 @@
   </div>
 
 </div>
-{% endblock content %}
+{% endblock two_thirds %}
 
 {% block one_third %}
   <div id="doculect-finder-container" class="w3-border w3-padding-16 w3-round-medium">

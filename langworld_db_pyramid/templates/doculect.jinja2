@@ -1,4 +1,4 @@
-{% extends "base.jinja2" %}
+{% extends "base_depth1_single_full_width.jinja2" %}
 {% set name_attr = "name_" + request.locale_name %}
 {% set aliases_attr = "aliases_" + request.locale_name %}
 
@@ -8,7 +8,7 @@
 </div>
 {% endblock content_top %}
 
-{% block content %}
+{% block full_width %}
 
 <div class="w3-margin-left padding-top-small">
     {% if doculect[aliases_attr] %}
@@ -106,11 +106,11 @@
 
   {% if doculect.feature_values|selectattr("type.name", "eq", "not_stated")|list %}
       <h3 class="w3-text-darkest-blue-grey">{% trans %}В энциклопедии отсутствует информация{% endtrans %}</h3>
-      <ul>
+      <ul class="w3-ul">
       {% for value in doculect.feature_values|sort(attribute="feature.id") %}
         {% if value.type.name == 'not_stated' %}
             <li>
-                <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }} ({{ value.feature.man_id }})</a>
+                <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
                 {% if request.locale_name == 'ru' %}
                     {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
                 {% endif %}
@@ -122,11 +122,11 @@
 
   {% if doculect.feature_values|selectattr("type.name", "eq", "explicit_gap")|list %}
       <h3 class="w3-text-darkest-blue-grey">{% trans %}В энциклопедии присутствует явное указание на отсутствие данных{% endtrans %}</h3>
-      <ul>
+      <ul class="w3-ul">
       {% for value in doculect.feature_values|sort(attribute="feature.id") %}
         {% if value.type.name == 'explicit_gap' %}
             <li>
-                <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }} ({{ value.feature.man_id }})</a>
+                <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
                 {% if request.locale_name == 'ru' %}
                     {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
                 {% endif %}
@@ -138,11 +138,11 @@
 
   {% if doculect.feature_values|selectattr("type.name", "eq", "not_applicable")|list %}
       <h3 class="w3-text-darkest-blue-grey">{% trans %}Признак неприменим к этому языку{% endtrans %}</h3>
-      <ul>
+      <ul class="w3-ul">
       {% for value in doculect.feature_values|sort(attribute="feature.id") %}
         {% if value.type.name == 'not_applicable' %}
             <li>
-                <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }} ({{ value.feature.man_id }})</a>
+                <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
                 {% if request.locale_name == 'ru' %}
                     {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="comment">{{ comment.text_ru }}</span>{% endfor %}
                 {% endif %}
@@ -157,4 +157,4 @@
   {% endif %}
 
 </div>
-{% endblock content %}
+{% endblock full_width %}

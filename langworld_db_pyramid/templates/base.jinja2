@@ -79,23 +79,11 @@
       {% endblock content_top %}
       </div>
 
-        {% block map_and_list %}
-        {% endblock map_and_list %}
+      {% block map_and_list %}
+      {% endblock map_and_list %}
 
-      <div class="w3-row w3-padding-top-16">
-        <div class="w3-twothird w3-container">
-
-            {% block content %}
-            {% endblock content %}
-
-        </div>
-
-        <div class="w3-third w3-container w3-padding-top-32">
-            {% block one_third %}
-            {% endblock one_third %}
-        </div>
-
-      </div>
+      {% block content_main %}
+      {% endblock content_main %}
 
 <!-- NOT NEEDED
       <div class="w3-row">
@@ -134,7 +122,7 @@
 
       <footer id="myFooter">
         <div class="w3-container w3-theme-l2 w3-padding-32">
-          <p class="w3-large w3-text-darkest-blue-grey">{% trans %}База данных «Языки мира»{% endtrans %} <a href="https://iling-ran.ru/web/{{ request.locale_name }}" target="_blank">{% trans %}Института языкознания РАН{% endtrans %}</p>
+          <p class="w3-large w3-text-darkest-blue-grey">{% trans %}База данных «Языки мира»{% endtrans %} <a href="https://iling-ran.ru/web/{{ request.locale_name }}" target="_blank">{% trans %}Института языкознания РАН{% endtrans %}</a></p>
         </div>
 
         <div class="w3-container w3-theme-l1">
