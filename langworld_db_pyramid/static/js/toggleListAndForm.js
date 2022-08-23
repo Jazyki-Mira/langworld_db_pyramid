@@ -1,8 +1,6 @@
-const formDiv = document.getElementById("query-wizard-form");
-const listDiv = document.getElementById("interactive-list");
-const toggleSwitch = document.getElementById("form-list-toggle");
+import enableToggleSwitch from "./enableToggleSwitch.js";
 
-toggleSwitch.onclick = () => {
-  formDiv.classList.toggle("w3-hide");
-  listDiv.classList.toggle("w3-hide");
-};
+enableToggleSwitch("form-list-toggle", [
+  "query-wizard-form",
+  "interactive-list",
+]);

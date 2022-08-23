@@ -1,8 +1,6 @@
-const alphabeticDiv = document.getElementById("alphabetic");
-const byVolumeDiv = document.getElementById("by-volume");
-const toggleSwitch = document.getElementById("alphabetic-or-by-volume-toggle");
+import enableToggleSwitch from "./enableToggleSwitch.js";
 
-toggleSwitch.onclick = () => {
-  alphabeticDiv.classList.toggle("w3-hide");
-  byVolumeDiv.classList.toggle("w3-hide");
-};
+enableToggleSwitch("alphabetic-or-by-volume-toggle", [
+  "alphabetic",
+  "by-volume",
+]);
