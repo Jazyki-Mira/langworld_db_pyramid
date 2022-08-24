@@ -28,11 +28,18 @@ export default function enableToggleSwitch(
   (Matching the content to the position of switch is tricky in interactive list by the map.)
   */
 
-  window.addEventListener("load", () => {
+  const clickOnLoad = () => {
     if (toggleSwitch.checked === true) {
       toggleSwitch.click();
       initiallyHiddenDiv.classList.add(nameOfHiddenClass);
       initiallyVisibleDiv.classList.remove(nameOfHiddenClass);
     }
-  });
+  };
+
+  window.addEventListener("load", () => setTimeout(clickOnLoad, 10));
+  /* Without the timeout Chrome will think that the switch is OFF
+  and then turn it ON after a fraction of a second.
+  Turns out that even with a ZERO timeout Chrome will recognize the switch is ON at pageload,
+  but I put 10 milliseconds just in case.
+  */
 }

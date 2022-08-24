@@ -31,5 +31,14 @@ window.addEventListener("load", () => {
   No other actions are needed because the data is being fetched and there are no containers
   with data to hide/show.
   */
-  if (toggleSwitch.checked === true) toggleSwitch.click();
+  const toggleBackOnLoad = () => {
+    if (toggleSwitch.checked === true) toggleSwitch.click();
+  };
+
+  setTimeout(toggleBackOnLoad, 10);
+  /* Without the timeout Chrome will think that the switch is OFF
+  and then turn it ON after a fraction of a second.
+  Turns out that even with a ZERO timeout Chrome will recognize the switch is ON at pageload,
+  but I put 10 milliseconds just in case.
+  */
 });
