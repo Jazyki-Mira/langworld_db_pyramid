@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-24 15:25+0300\n"
+"POT-Creation-Date: 2022-08-24 15:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,7 +181,7 @@ msgid "Версия 4 (онлайн). Веб-приложение находит
 msgstr ""
 
 #: templates/home.jinja2:9
-msgid "Со любыми вопросами и комментариями просьба обращаться к разработчику"
+msgid "С любыми вопросами и комментариями просьба обращаться к разработчику"
 msgstr ""
 
 #: templates/home.jinja2:9

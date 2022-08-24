@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-24 15:25+0300\n"
+"POT-Creation-Date: 2022-08-24 15:28+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -182,7 +182,7 @@ msgid "Версия 4 (онлайн). Веб-приложение находит
 msgstr "Version 4 (online). The web app is under development."
 
 #: templates/home.jinja2:9
-msgid "Со любыми вопросами и комментариями просьба обращаться к разработчику"
+msgid "С любыми вопросами и комментариями просьба обращаться к разработчику"
 msgstr "If you have questions or suggestions, please contact the developer"
 
 #: templates/home.jinja2:9
