@@ -23,12 +23,16 @@ export default function enableToggleSwitch(
 
   In Firefox, same thing happens if the switch is turned ON and then the page is reloaded.
 
-  To prevent this, I have to check the position of switch at page load and switch
-  the visibility of div's if the switch is ON.
+  To be consistent throughout the app, if this is the case, out the switch back to OFF
+  and restore <div>'s to their initial visible/hidden state.
+  (Matching the content to the position of switch is tricky in interactive list by the map.)
   */
 
   window.addEventListener("load", () => {
-    if (toggleSwitch.checked === true)
-      toggleVisibility([initiallyHiddenDiv, initiallyVisibleDiv]);
+    if (toggleSwitch.checked === true) {
+      toggleSwitch.click();
+      initiallyHiddenDiv.classList.add(nameOfHiddenClass);
+      initiallyVisibleDiv.classList.remove(nameOfHiddenClass);
+    }
   });
 }
