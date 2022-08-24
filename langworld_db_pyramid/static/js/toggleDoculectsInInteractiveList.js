@@ -1,9 +1,12 @@
 /* This script is imported in a parent Jinja template,
-so including it without .onload will cause it to run
+so including it without eventListener for "load" will cause it to run
 while the child template is still not fully rendered.
+
+I use .addEventListener instead of .onload to allow potential multiple
+actions after window is loaded.
 */
 
-window.onload = () => {
+window.addEventListener("load", () => {
   const toggleSwitch = document.getElementById("doculects-in-list-toggle");
 
   toggleSwitch.onclick = () => {
@@ -22,4 +25,4 @@ window.onload = () => {
   );
   const listContainer = document.getElementById("interactive-list");
   listContainer.prepend(toggleSwitchContainer);
-};
+});
