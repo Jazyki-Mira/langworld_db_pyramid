@@ -1,5 +1,6 @@
 import MapAndList from "./map/MapAndList.js";
 import getLocale from "./tools/getLocale.js";
+import hideListAndLegendToggleSwitch from "./hideListAndLegendToggleSwitch.js";
 import queryWizardStrings from "./i18n/queryWizardStrings.js";
 
 const elem = React.createElement;
@@ -67,3 +68,5 @@ clearButton.onclick = () => {
   // will only work if the select elements were already wrapped in SlimSelect
   for (let elem of document.querySelectorAll("select")) elem.slim.set([]);
 };
+
+hideListAndLegendToggleSwitch();

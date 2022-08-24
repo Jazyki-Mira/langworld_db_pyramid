@@ -1,4 +1,5 @@
 import getLocale from "./tools/getLocale.js";
+import hideListAndLegendToggleSwitch from "./hideListAndLegendToggleSwitch.js";
 import MapAndList from "./map/MapAndList.js";
 
 ReactDOM.render(
@@ -8,3 +9,5 @@ ReactDOM.render(
   }),
   document.getElementById("map-and-list")
 );
+
+hideListAndLegendToggleSwitch();
