@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-24 15:11+0300\n"
+"POT-Creation-Date: 2022-08-24 15:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,7 +69,7 @@ msgid "Генеалогия"
 msgstr ""
 
 #: templates/base.jinja2:63 templates/query_wizard.jinja2:10
-msgid "Мастер сложных запросов"
+msgid "Мастер запросов"
 msgstr ""
 
 #: templates/base.jinja2:134 templates/home.jinja2:4
