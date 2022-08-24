@@ -170,5 +170,12 @@
     {% block scripts %}
     {% endblock scripts %}
 
+      {# The following script forces Firefox to run scripts on a page
+      even if user returns to that page using Back button.
+      I use simple `.onunload` because it is highly unlikely
+      that this event will be used for a different purpose.
+      It gives uniformity in behavior between Chrome and Firefox. #}
+    <script type="text/javascript">window.onunload = function () {};</script>
+
     </body>
 </html>
