@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-24 13:06+0300\n"
+"POT-Creation-Date: 2022-08-24 15:11+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -42,8 +42,8 @@ msgstr "Single list"
 msgid "С группировкой по томам"
 msgstr "Grouped by encyclopedia volume"
 
-#: templates/all_doculects_list.jinja2:37 templates/doculect.jinja2:18
-#: templates/doculect.jinja2:21
+#: templates/all_doculects_list.jinja2:37 templates/doculect.jinja2:17
+#: templates/doculect.jinja2:20
 msgid "Том"
 msgstr "Volume"
 
@@ -56,15 +56,15 @@ msgstr "Map of languages"
 msgid "Признаки"
 msgstr "Features"
 
-#: templates/base.jinja2:11 templates/base.jinja2:134 templates/home.jinja2:4
-msgid "База данных «Языки мира»"
-msgstr "The Languages of the World Database"
+#: templates/base.jinja2:11
+msgid "БД «Языки мира»"
+msgstr "Languages of the World"
 
 #: templates/base.jinja2:58 templates/home.jinja2:3
 msgid "Главная"
 msgstr "Home"
 
-#: templates/base.jinja2:62 templates/doculect.jinja2:25
+#: templates/base.jinja2:62 templates/doculect.jinja2:24
 #: templates/families.jinja2:7 templates/query_wizard.jinja2:40
 msgid "Генеалогия"
 msgstr "Genealogy"
@@ -72,6 +72,10 @@ msgstr "Genealogy"
 #: templates/base.jinja2:63 templates/query_wizard.jinja2:10
 msgid "Мастер сложных запросов"
 msgstr "Query Wizard"
+
+#: templates/base.jinja2:134 templates/home.jinja2:4
+msgid "База данных «Языки мира»"
+msgstr "The Languages of the World Database"
 
 #: templates/base.jinja2:134
 msgid "Института языкознания РАН"
@@ -89,43 +93,43 @@ msgstr "Legend only"
 msgid "Варианты названия (в т.ч. исторические и самоназвания)"
 msgstr "Alternative names (including historical names and autoglottonyms)"
 
-#: templates/doculect.jinja2:16
+#: templates/doculect.jinja2:15
 msgid "В энциклопедии"
 msgstr "Open the encyclopedia PDF (in Russian)"
 
-#: templates/doculect.jinja2:19
+#: templates/doculect.jinja2:18
 msgid "Файл PDF будет загружен полностью и затем открыт"
 msgstr "The file will be loaded and then opened"
 
-#: templates/doculect.jinja2:19
+#: templates/doculect.jinja2:18
 msgid "в новом окне"
 msgstr "in a new window or tab"
 
-#: templates/doculect.jinja2:19
+#: templates/doculect.jinja2:18
 msgid "на нужной странице"
 msgstr "on the relevant page"
 
-#: templates/doculect.jinja2:22
+#: templates/doculect.jinja2:21
 msgid "Том энциклопедии в формате PDF на данный момент недоступен"
 msgstr "The PDF volume of the encyclopedia is not available yet"
 
-#: templates/doculect.jinja2:37
+#: templates/doculect.jinja2:36
 msgid "География"
 msgstr "Geography"
 
-#: templates/doculect.jinja2:38
+#: templates/doculect.jinja2:37
 msgid "Основная страна"
 msgstr "Main country"
 
-#: templates/doculect.jinja2:39
+#: templates/doculect.jinja2:38
 msgid "посмотреть на карте"
 msgstr "show on the map"
 
-#: templates/doculect.jinja2:42
+#: templates/doculect.jinja2:41
 msgid "Карты ареалов из энциклопедии"
 msgstr "Area maps from the encyclopedia (in Russian)"
 
-#: templates/doculect.jinja2:49
+#: templates/doculect.jinja2:48
 msgid "Идентификаторы"
 msgstr "Identifiers"
 
