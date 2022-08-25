@@ -40,7 +40,8 @@ NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) 
         # chagatai has turki as alias; turki has neither ISO code nor glottocode, which can affect search
         ('тюрки', 'ru', ('chagatai', 'turki')),
         # biyabuneki has glottocode but no ISO code
-        ('бия', 'ru', ('biyabuneki',))
+        ('бия', 'ru', ('biyabuneki',)),  # searching by name
+        ('biya', 'ru', ('biyabuneki',)),  # searching by glottocode
     ]
 
 )
