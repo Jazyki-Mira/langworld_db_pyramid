@@ -15,12 +15,12 @@
 {% block two_thirds %}
 {# this <div> will be moved above the list using the script imported below #}
 <div id="doculects-in-list-toggle-container">
-  <span class="slider-label w3-text-dark-blue-grey">{% trans %}Языки{% endtrans %}</span>
+  <span class="slider-label w3-text-dark-blue-grey">{% trans %}Развернуть все{% endtrans %}</span>
   <label class="switch">
     <input id="doculects-in-list-toggle" type="checkbox">
-    <span class="slider round"></span>
+    <span class="slider round"  title="{% trans %}Используйте этот переключатель, чтобы свернуть/развернуть все группы. Нажатие на цветной маркер конкретной группы языков сворачивает/разворачивает выбранную группу.{% endtrans %}"></span>
   </label>
-  <span class="slider-label w3-text-dark-blue-grey">{% trans %}Только легенда{% endtrans %}</span>
+  <span class="slider-label w3-text-dark-blue-grey">{% trans %}Свернуть все{% endtrans %}</span>
 </div>
 {% endblock two_thirds %}
 

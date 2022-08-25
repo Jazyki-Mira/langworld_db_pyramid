@@ -10,8 +10,15 @@ window.addEventListener("load", () => {
   const toggleSwitch = document.getElementById("doculects-in-list-toggle");
 
   toggleSwitch.onclick = () => {
-    for (let ul of document.querySelectorAll("ul.doculects-in-group")) {
-      ul.classList.toggle("w3-hide");
+    // cannot just toggle because the user may have expanded/collapsed individual groups
+    if (toggleSwitch.checked) {
+      for (let ul of document.querySelectorAll("ul.doculects-in-group")) {
+        ul.classList.add("w3-hide");
+      }
+    } else {
+      for (let ul of document.querySelectorAll("ul.doculects-in-group")) {
+        ul.classList.remove("w3-hide");
+      }
     }
   };
 

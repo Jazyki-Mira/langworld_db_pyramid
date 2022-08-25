@@ -55,12 +55,20 @@ export default function InteractiveDoculectList() {
       elem(
         "p",
         { className: "legend-heading indented-for-icon" },
-        elem("img", { src: doculectGroup["imgSrc"] }),
+        elem("img", {
+          className: "icon-in-map-legend",
+          src: doculectGroup["imgSrc"],
+          title: doculectMapAndListStrings["toggleSwitchHint"][getLocale()],
+          onClick: () => {
+            let ul = document.querySelector(`ul#${doculectGroup["id"]}`);
+            ul.classList.toggle("w3-hide");
+          },
+        }),
         headingText
       ),
       elem(
         "ul",
-        { className: "doculects-in-group w3-ul" },
+        { className: "doculects-in-group w3-ul", id: doculectGroup["id"] },
         doculects.map((doculect) => DoculectListItem(doculect))
       )
     );

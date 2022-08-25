@@ -7,6 +7,10 @@ const doculectMapAndListStrings = {
     en: "No languages to show",
     ru: "Нет языков для отображения",
   },
+  toggleSwitchHint: {
+    en: "Click to expand/collapse this group",
+    ru: "Нажмите, чтобы свернуть/развернуть эту группу",
+  },
 };
 
 export default doculectMapAndListStrings;

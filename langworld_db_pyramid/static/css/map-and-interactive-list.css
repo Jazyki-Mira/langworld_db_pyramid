@@ -32,3 +32,9 @@ ul.doculects-in-group {
   margin-left: 1.6rem;
   margin-top: 0.5rem;
 }
+
+img.icon-in-map-legend:hover {
+  cursor: pointer;
+  filter: alpha(opacity=90);
+  opacity: .9;
+}

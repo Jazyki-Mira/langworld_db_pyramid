@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-24 15:28+0300\n"
+"POT-Creation-Date: 2022-08-25 15:11+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -82,12 +82,21 @@ msgid "Института языкознания РАН"
 msgstr "(Institute of Linguistics, RAS)"
 
 #: templates/base_depth2_page_with_map.jinja2:18
-msgid "Языки"
-msgstr "Languages"
+msgid "Развернуть все"
+msgstr "Expand all"
+
+#: templates/base_depth2_page_with_map.jinja2:21
+msgid ""
+"Используйте этот переключатель, чтобы свернуть/развернуть все группы. "
+"Нажатие на цветной маркер конкретной группы языков "
+"сворачивает/разворачивает выбранную группу."
+msgstr ""
+"Use this switch to expand/collapse all groups. "
+"Click the color icon of a selected group to expand/collapse only that group."
 
 #: templates/base_depth2_page_with_map.jinja2:23
-msgid "Только легенда"
-msgstr "Legend only"
+msgid "Свернуть все"
+msgstr "Collapse all"
 
 #: templates/doculect.jinja2:12
 msgid "Варианты названия (в т.ч. исторические и самоназвания)"
