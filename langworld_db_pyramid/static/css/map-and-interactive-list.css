@@ -25,3 +25,8 @@ p.indented-for-icon {
   padding-left: 40px;
   text-indent: -40px;
 }
+
+ul.doculects-in-group {
+  margin-left: 1.6rem;
+  margin-top: 0.5rem;
+}
