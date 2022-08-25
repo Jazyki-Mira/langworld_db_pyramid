@@ -12,6 +12,8 @@ div .scrollable {
 }
 
 .legend-heading {
+  font-family:"Bitter",Arial,sans-serif;
+  font-size: 1.2rem!important;
   margin-bottom: -1rem;
 }
 
@@ -20,7 +22,7 @@ div .scrollable {
 }
 
 p.indented-for-icon {
-  line-height: 2.5rem;
+  line-height: 2.4rem;
   padding-bottom: 0.5rem;
   padding-left: 40px;
   text-indent: -40px;

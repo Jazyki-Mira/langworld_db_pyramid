@@ -54,7 +54,7 @@ export default function InteractiveDoculectList() {
       { key: doculectGroup["id"] },
       elem(
         "p",
-        { className: "w3-large legend-heading indented-for-icon" },
+        { className: "w3-medium legend-heading indented-for-icon" },
         elem("img", { src: doculectGroup["imgSrc"] }),
         headingText
       ),
