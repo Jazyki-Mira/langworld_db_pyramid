@@ -35,8 +35,12 @@ NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) 
         ('пар', 'ru', ('parachi', 'parthian', 'middle_persian')),
         # glottocode
         ('nucl1', 'ru', ('turkish', 'japanese', 'neo_mandaic', 'georgian', 'kannada', 'pashto')),
-        # matches both ISO code and name (balochi), only part of name (karachay_balkar)
+        # matches both ISO code and name (balochi), only part of name (karachay_balkar); balochi has 3 glottocodes
         ('bal', 'en', ('balochi', 'karachay_balkar')),
+        # chagatai has turki as alias; turki has neither ISO code nor glottocode, which can affect search
+        ('тюрки', 'ru', ('chagatai', 'turki')),
+        # biyabuneki has glottocode but no ISO code
+        ('бия', 'ru', ('biyabuneki',))
     ]
 
 )

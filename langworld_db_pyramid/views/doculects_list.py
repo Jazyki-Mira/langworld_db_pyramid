@@ -38,25 +38,40 @@ def get_doculects_by_substring(request):
     name_attr = f'name_{locale}'
     aliases_attr = f'aliases_{locale}'
 
+    matching_doculects = request.dbsession.scalars(
+        select(models.Doculect)
+        .where(
+            and_(
+                or_(
+                    getattr(models.Doculect, name_attr).contains(query),
+                    getattr(models.Doculect, aliases_attr).contains(query),
+                ),
+                models.Doculect.has_feature_profile
+            )
+        )
+    ).all()
+
+    # I make a separate query for ISO codes and glottocodes
+    # because doculects that have no ISO code and/or no glottocode will not be matched
+    # by a combined query (name OR ISO/glottocode).
+    # Instead of making one very complex query (with checking of existence of glottocode/ISO,
+    # further complicated by many-to-many relationship), I just split the operation into two queries.
     iso_code = aliased(models.Iso639P3Code)
     glottocode = aliased(models.Glottocode)
 
-    matching_doculects = request.dbsession.scalars(
+    matching_doculects += request.dbsession.scalars(
         select(models.Doculect)
         .join(iso_code, models.Doculect.iso_639p3_codes)
         .join(glottocode, models.Doculect.glottocodes)
         .where(
             and_(
-                models.Doculect.has_feature_profile,
                 or_(
-                    getattr(models.Doculect, name_attr).contains(query),
-                    getattr(models.Doculect, aliases_attr).contains(query),
                     glottocode.code.contains(query),
                     iso_code.code.contains(query),
-                )
+                ),
+                models.Doculect.has_feature_profile
             )
         )
-        .distinct()  # without this the JOIN can produce multiple entries of same doculect
     ).all()
 
     data = [
@@ -67,7 +82,7 @@ def get_doculects_by_substring(request):
             "iso639p3Codes": [code.code for code in doculect.iso_639p3_codes],
             "glottocodes": [code.code for code in doculect.glottocodes],
         }
-        for doculect in matching_doculects
+        for doculect in set(matching_doculects)
     ]
 
     return sorted(data, key=lambda item: item['name'])
