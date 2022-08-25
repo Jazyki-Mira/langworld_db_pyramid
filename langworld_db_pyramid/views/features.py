@@ -53,7 +53,7 @@ def view_feature_map_of_values(request) -> list[dict]:
 
     return [
         generate_marker_group(
-            group_id=value.id,
+            group_id=value.man_id,
             group_name=getattr(value, name_attr),
             div_icon_html=icon_for_value[value].svg_tag,
             img_src=icon_for_value[value].img_src,
