@@ -60,20 +60,15 @@ def get_doculects_by_substring(request):
     matching_doculects += request.dbsession.scalars(
         select(models.Doculect)
         .join(glottocode, models.Doculect.glottocodes)
-        .where(
-            and_(glottocode.code.contains(query), models.Doculect.has_feature_profile)
-        )
+        .where(and_(glottocode.code.contains(query), models.Doculect.has_feature_profile))
     ).all()
 
     iso_code = aliased(models.Iso639P3Code)
     matching_doculects += request.dbsession.scalars(
         select(models.Doculect)
         .join(iso_code, models.Doculect.iso_639p3_codes)
-        .where(
-            and_(iso_code.code.contains(query), models.Doculect.has_feature_profile)
-        )
+        .where(and_(iso_code.code.contains(query), models.Doculect.has_feature_profile))
     ).all()
-
 
     data = [
         {
