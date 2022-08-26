@@ -37,7 +37,7 @@
     <!-- Navbar -->
     <div class="w3-top">
       <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
-        <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+        <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="openMenu()"><i class="fa fa-bars"></i></a>
 
         {% if request.locale_name == 'ru' %}
             {% set link_text = "Switch to English" %}
@@ -53,7 +53,7 @@
             {% set target = request.url.replace('/en/', '/ru/') %}
         {% endif %}
 
-        <a href="{{target}}" class="w3-bar-item w3-button w3-theme-l1 w3-right">{{ link_text }}</a>
+        <a href="{{target}}" class="w3-bar-item w3-button w3-theme-l1 w3-hide-small w3-right">{{ link_text }}</a>
 
         <a href="/{{request.locale_name}}/home" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Главная{% endtrans %}</a>
         <a href="/{{request.locale_name}}/doculects/list" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Список языков{% endtrans %}</a>
@@ -61,17 +61,23 @@
         <a href="/{{request.locale_name}}/features/list" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Признаки{% endtrans %}</a>
         <a href="/{{request.locale_name}}/family/_all" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Генеалогия{% endtrans %}</a>
         <a href="/{{request.locale_name}}/query_wizard" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Мастер запросов{% endtrans %}</a>
+      </div>
 
-<!--
-        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">News</a>
-        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
-        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Clients</a>
-        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Partners</a>
--->
+      <!-- Navbar on small screens -->
+      <div id="mobile-navigation-bar" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-large w3-padding-top-48">
+
+        <a href="/{{request.locale_name}}/home" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Главная{% endtrans %}</a>
+        <a href="/{{request.locale_name}}/doculects/list" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Список языков{% endtrans %}</a>
+        <a href="/{{request.locale_name}}/doculects/map" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Карта языков{% endtrans %}</a>
+        <a href="/{{request.locale_name}}/features/list" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Признаки{% endtrans %}</a>
+        <a href="/{{request.locale_name}}/family/_all" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Генеалогия{% endtrans %}</a>
+        <a href="/{{request.locale_name}}/query_wizard" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Мастер запросов{% endtrans %}</a>
+
+        {# language switching using variables defined above #}
+        <a href="{{target}}" class="w3-bar-item w3-button w3-padding-large w3-sand">({{ link_text }})</a>
+
       </div>
     </div>
-
-    <!-- Sidebar -->
 
     <div class="w3-main">
       <div class="w3-row w3-padding-top-32 w3-margin-left">
@@ -94,41 +100,6 @@
       {% block content_main %}
       {% endblock content_main %}
 
-<!-- NOT NEEDED
-      <div class="w3-row">
-        <div class="w3-twothird w3-container">
-        </div>
-        <div class="w3-third w3-container">
-          <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
-          <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
-        </div>
-      </div>
--->
-
-<!-- NOT NEEDED
-      <div class="w3-row w3-padding-64">
-        <div class="w3-third w3-container">
-          <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
-          <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
-        </div>
-      </div>
--->
-
-      <!-- Pagination -->
-
-<!-- NOT NEEDED
-      <div class="w3-center w3-padding-32">
-        <div class="w3-bar">
-          <a class="w3-button w3-black" href="#">1</a>
-          <a class="w3-button w3-hover-black" href="#">2</a>
-          <a class="w3-button w3-hover-black" href="#">3</a>
-          <a class="w3-button w3-hover-black" href="#">4</a>
-          <a class="w3-button w3-hover-black" href="#">5</a>
-          <a class="w3-button w3-hover-black" href="#">&raquo;</a>
-        </div>
-      </div>
--->
-
       <footer id="myFooter">
         <div class="w3-container w3-theme-l2 w3-padding-32">
           <p class="w3-large w3-text-darkest-blue-grey">{% trans %}База данных «Языки мира»{% endtrans %} <a href="https://iling-ran.ru/web/{{ request.locale_name }}" target="_blank">{% trans %}Института языкознания РАН{% endtrans %}</a></p>
@@ -139,34 +110,19 @@
         </div>
       </footer>
 
-    <!-- END MAIN -->
     </div>
 
     <script>
-    // Get the Sidebar
-    var mySidebar = document.getElementById("mySidebar");
-
-    // Get the DIV with overlay effect
-    var overlayBg = document.getElementById("myOverlay");
-
-    // Toggle between showing and hiding the sidebar, and add overlay effect
-    function w3_open() {
-      if (mySidebar.style.display === 'block') {
-        mySidebar.style.display = 'none';
-        overlayBg.style.display = "none";
+    // Used to toggle the menu on small screens when clicking on the menu button
+    function openMenu() {
+      let x = document.getElementById("mobile-navigation-bar");
+      if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
       } else {
-        mySidebar.style.display = 'block';
-        overlayBg.style.display = "block";
+        x.className = x.className.replace(" w3-show", "");
       }
     }
-
-    // Close the sidebar with the close button
-    function w3_close() {
-      mySidebar.style.display = "none";
-      overlayBg.style.display = "none";
-    }
     </script>
-
     {% block scripts %}
     {% endblock scripts %}
 
