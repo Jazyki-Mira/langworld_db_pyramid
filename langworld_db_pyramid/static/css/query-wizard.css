@@ -78,6 +78,10 @@ input[type='checkbox'] {
 	vertical-align: bottom;
 }
 
+.label-of-category-with-some-values-selected {
+	background-color: #b2df8a;
+}
+
 /* tweaking slim select classes */
 .ss-open-below {
 	margin-bottom: 15.7rem;

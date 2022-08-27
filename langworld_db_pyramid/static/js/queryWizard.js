@@ -39,7 +39,32 @@ function QueryWizard() {
     return `/${locale}/json_api/query_wizard?${paramsForURLToFetch}`;
   };
 
+  const markLabelsOfCategories = () => {
+    for (let categoryContainer of document.querySelectorAll(
+      "div.wrap-collapsible"
+    )) {
+      for (let elem of categoryContainer.querySelectorAll("select")) {
+        let currentCategoryId = elem.getAttribute("for-category");
+        let categoryLabel = document.getElementById(
+          `category-label-${currentCategoryId}`
+        );
+        if (categoryLabel === null) continue;
+
+        if (elem.slim.selected().length > 0) {
+          categoryLabel.classList.add(
+            "label-of-category-with-some-values-selected"
+          );
+          break;
+        }
+        categoryLabel.classList.remove(
+          "label-of-category-with-some-values-selected"
+        );
+      }
+    }
+  };
+
   wrapInputFieldsWithSlimSelect();
+  form.addEventListener("change", markLabelsOfCategories);
 
   // after the render: move the form into same container as interactive list, hide the list
   React.useEffect(() => {

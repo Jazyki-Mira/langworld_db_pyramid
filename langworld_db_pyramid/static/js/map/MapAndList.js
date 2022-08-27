@@ -30,7 +30,9 @@ export default function MapAndList({
   React.useEffect(() => {
     if (formId != null) {
       formRef.current = document.getElementById(formId);
-      formRef.current.onchange = () => setFetchUrl(fetchUrlGenerator());
+      formRef.current.addEventListener("change", () =>
+        setFetchUrl(fetchUrlGenerator())
+      );
       formRef.current.onsubmit = (e) => {
         e.preventDefault();
       };
