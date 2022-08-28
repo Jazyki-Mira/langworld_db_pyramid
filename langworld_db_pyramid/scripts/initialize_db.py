@@ -144,7 +144,7 @@ class CustomModelInitializer:
                 man_id=feature_row['id'],
                 name_en=feature_row['en'],
                 name_ru=feature_row['ru'],
-                category=self.category_for_id[feature_row['id'].split('-')[0]]  # TODO add column feature_id to CSV?
+                category=self.category_for_id[feature_row['id'].split('-')[0]]
             )
 
             # adding values of 3 entailing-empty-value types for each feature
@@ -288,19 +288,17 @@ class CustomModelInitializer:
 
             type_of_this_doculect = self.doculect_type_for_id[doculect_row_to_write.pop('type')]
 
-            # TODO refactor to eliminate repetition
-            glottocodes_for_this_doculect = []
-            for glottocode in doculect_row_to_write.pop('glottocode').split(', '):
-                if not glottocode:
-                    continue
-                glottocodes_for_this_doculect.append(self.glottocode_for_id[glottocode])
+            glottocodes_for_this_doculect = [
+                self.glottocode_for_id[glottocode]
+                for glottocode in doculect_row_to_write.pop('glottocode').split(', ') if glottocode
+            ]
 
-            iso_639p3_codes_for_this_doculect = []
-            for iso_code in doculect_row_to_write.pop('iso_639_3').split(', '):
-                if not iso_code:
-                    continue
-                iso_639p3_codes_for_this_doculect.append(self.iso639p3code_for_id[iso_code])
+            iso_639p3_codes_for_this_doculect = [
+                self.iso639p3code_for_id[iso_code]
+                for iso_code in doculect_row_to_write.pop('iso_639_3').split(', ') if iso_code
+            ]
 
+            # POINT OF CREATION OF DOCULECT OBJECT
             doculect = models.Doculect(**doculect_row_to_write)
 
             doculect.comment_en = ''
@@ -369,10 +367,9 @@ class CustomModelInitializer:
                             feature_value=value,
                             text_en=feature_profile_row['comment_en'],
                             text_ru=feature_profile_row['comment_ru'],
-                        )  # should be added to dbsession automatically when doculect gets added
+                        )  # will be added to dbsession automatically when doculect gets added
 
             self.dbsession.add(doculect)
-            # TODO add comment to association table
 
     def _set_is_listed_and_has_doculect_to_false_for_listed_values_without_doculects(self):
         for value in self.listed_value_for_id.values():
