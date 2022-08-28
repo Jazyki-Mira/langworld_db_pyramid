@@ -2,6 +2,33 @@
 {% set name_attr = "name_" + request.locale_name %}
 {% set aliases_attr = "aliases_" + request.locale_name %}
 
+{% macro comment(value, add_parentheses_and_note=False) -%}
+    {# comments are only available in Russian so far #}
+    {% if request.locale_name == 'ru' %}
+        {% for comment in value.doculect_comments if comment.doculect == doculect %}
+          <span class="w3-text-dark-blue-grey">
+            {%- if loop.first and add_parentheses_and_note %}(Комментарий: {% endif -%}
+            {{ comment.text_ru }}
+            {%- if loop.last and add_parentheses_and_note %}){% endif -%}
+          </span>
+        {% endfor %}
+    {% endif %}
+{%- endmacro %}
+
+{% macro list_features_with_empty_values(doculect, value_type) -%}
+    <ul class="w3-ul">
+      {% for value in doculect.feature_values|sort(attribute="feature.id") %}
+        {% if value.type.name == value_type %}
+            <li>
+                <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
+                {{ comment(value, add_parentheses_and_note=True) }}
+            </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+{%- endmacro %}
+
+
 {% block title %}{{ doculect[name_attr] }} {{ doculect.type[name_attr] }} {% if doculect.is_extinct %}†{% endif %}{% endblock title %}
 {% block h1 %}{{ self.title() }}{% endblock h1 %}
 
@@ -70,19 +97,6 @@
   <hr/>
   <h2 class="w3-text-darkest-blue-grey">{% trans %}Признаки{% endtrans %}</h2>
 
-  {% macro comment(value, add_parentheses_and_note=False) -%}
-    {# comments are only available in Russian so far #}
-    {% if request.locale_name == 'ru' %}
-        {% for comment in value.doculect_comments if comment.doculect == doculect %}
-          <span class="w3-text-dark-blue-grey">
-            {%- if loop.first and add_parentheses_and_note %}(Комментарий: {% endif -%}
-            {{ comment.text_ru }}
-            {%- if loop.last and add_parentheses_and_note %}){% endif -%}
-          </span>
-        {% endfor %}
-    {% endif %}
-  {%- endmacro %}
-
   {% for category in categories %}
       <h3 class="w3-text-darkest-blue-grey {% if not loop.first %}w3-padding-top-24{% endif %}">{{ category[name_attr] }}</h3>
       {% set values_to_list = doculect.feature_values|selectattr("feature.category.id", "eq", category.id)|selectattr("type.entails_empty_value", "false")|sort(attribute="feature.id") %}
@@ -122,47 +136,21 @@
   {% endfor %}
 
   <h2 class="w3-text-darkest-blue-grey w3-padding-top-32">{% trans %}Незаполненные признаки{% endtrans %}</h2>
+  {# I don't want to eliminate repetition completely to maintain readability and understanding of structure: #}
 
   {% if doculect.feature_values|selectattr("type.name", "eq", "not_stated")|list %}
       <h3 class="w3-text-darkest-blue-grey">{% trans %}В энциклопедии отсутствует информация{% endtrans %}</h3>
-      <ul class="w3-ul">
-      {% for value in doculect.feature_values|sort(attribute="feature.id") %}
-        {% if value.type.name == 'not_stated' %}
-            <li>
-                <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
-                {{ comment(value, add_parentheses_and_note=True) }}
-            </li>
-        {% endif %}
-      {% endfor %}
-      </ul>
+      {{ list_features_with_empty_values(doculect, "not_stated") }}
   {% endif %}
 
   {% if doculect.feature_values|selectattr("type.name", "eq", "explicit_gap")|list %}
       <h3 class="w3-text-darkest-blue-grey">{% trans %}В энциклопедии присутствует явное указание на отсутствие данных{% endtrans %}</h3>
-      <ul class="w3-ul">
-      {% for value in doculect.feature_values|sort(attribute="feature.id") %}
-        {% if value.type.name == 'explicit_gap' %}
-            <li>
-                <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
-                {{ comment(value, add_parentheses_and_note=True) }}
-            </li>
-        {% endif %}
-      {% endfor %}
-      </ul>
+      {{ list_features_with_empty_values(doculect, "explicit_gap") }}
   {% endif %}
 
   {% if doculect.feature_values|selectattr("type.name", "eq", "not_applicable")|list %}
       <h3 class="w3-text-darkest-blue-grey">{% trans %}Признак неприменим к этому языку{% endtrans %}</h3>
-      <ul class="w3-ul">
-      {% for value in doculect.feature_values|sort(attribute="feature.id") %}
-        {% if value.type.name == 'not_applicable' %}
-            <li>
-                <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
-                {{ comment(value, add_parentheses_and_note=True) }}
-            </li>
-        {% endif %}
-      {% endfor %}
-      </ul>
+      {{ list_features_with_empty_values(doculect, "not_applicable") }}
   {% endif %}
 
   {% if request.locale_name == 'ru' %}
