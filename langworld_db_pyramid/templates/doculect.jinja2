@@ -17,7 +17,7 @@
     <p><a href="https://iling-ran.ru/staff_only/langworld_proto/static/pdf_volumes/{{ doculect.encyclopedia_volume.file_name }}#page={{ doculect.page|int + doculect.encyclopedia_volume.pagenum_offset|int }}" target="_blank"><span class="w3-large"><strong>{% trans %}Том{% endtrans %} {{ doculect.encyclopedia_volume.id }}. {{ doculect.encyclopedia_volume[request.locale_name] }}</strong></span></a><br/>
     {% trans %}Файл PDF будет загружен полностью и затем открыт{% endtrans %} <strong>{% trans %}в новом окне{% endtrans %}</strong> {% trans %}на нужной странице{% endtrans %}.</p>
   {% else %}
-    <span class="w3-large">{% trans %}Том{% endtrans %} {{ doculect.encyclopedia_volume.id }}. {{ doculect.encyclopedia_volume[request.locale_name] }}</span></br>
+    <p><span class="w3-large">{% trans %}Том{% endtrans %} {{ doculect.encyclopedia_volume.id }}. {{ doculect.encyclopedia_volume[request.locale_name] }}</span><br/>
     <span class="w3-text-deep-orange">{% trans %}Том энциклопедии в формате PDF на данный момент недоступен{% endtrans %}</span>.</p>
   {% endif %}
 
@@ -70,6 +70,19 @@
   <hr/>
   <h2 class="w3-text-darkest-blue-grey">{% trans %}Признаки{% endtrans %}</h2>
 
+  {% macro comment(value, add_parentheses_and_note=False) -%}
+    {# comments are only available in Russian so far #}
+    {% if request.locale_name == 'ru' %}
+        {% for comment in value.doculect_comments if comment.doculect == doculect %}
+          <span class="w3-text-dark-blue-grey">
+            {%- if loop.first and add_parentheses_and_note %}(Комментарий: {% endif -%}
+            {{ comment.text_ru }}
+            {%- if loop.last and add_parentheses_and_note %}){% endif -%}
+          </span>
+        {% endfor %}
+    {% endif %}
+  {%- endmacro %}
+
   {% for category in categories %}
       <h3 class="w3-text-darkest-blue-grey {% if not loop.first %}w3-padding-top-24{% endif %}">{{ category[name_attr] }}</h3>
       {% set values_to_list = doculect.feature_values|selectattr("feature.category.id", "eq", category.id)|selectattr("type.entails_empty_value", "false")|sort(attribute="feature.id") %}
@@ -98,13 +111,7 @@
                         <strong>{{ value.feature[name_attr] }}</strong></a>
                     </td>
                     <td>{{ value[name_attr]}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-small">[{{ value.man_id.replace('-', '‑') }}]</span>{% endif %}</td>
-
-                    <td>
-                    {# comments are only available in Russian so far #}
-                    {% if request.locale_name == 'ru' %}
-                        {% for comment in value.doculect_comments if comment.doculect == doculect %}<span class="w3-text-darkest-blue-grey">{{ comment.text_ru }}</span>{% endfor %}
-                    {% endif %}
-                    </td>
+                    <td>{{ comment(value) }}</td>  {# calls macro defined above #}
                 </tr>
             {% endif %}
           {% endfor %}
@@ -123,9 +130,7 @@
         {% if value.type.name == 'not_stated' %}
             <li>
                 <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
-                {% if request.locale_name == 'ru' %}
-                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="w3-text-dark-blue-grey">{{ comment.text_ru }}</span>{% endfor %}
-                {% endif %}
+                {{ comment(value, add_parentheses_and_note=True) }}
             </li>
         {% endif %}
       {% endfor %}
@@ -139,9 +144,7 @@
         {% if value.type.name == 'explicit_gap' %}
             <li>
                 <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
-                {% if request.locale_name == 'ru' %}
-                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="w3-text-dark-blue-grey">{{ comment.text_ru }}</span>{% endfor %}
-                {% endif %}
+                {{ comment(value, add_parentheses_and_note=True) }}
             </li>
         {% endif %}
       {% endfor %}
@@ -155,9 +158,7 @@
         {% if value.type.name == 'not_applicable' %}
             <li>
                 <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
-                {% if request.locale_name == 'ru' %}
-                    {% for comment in value.doculect_comments if comment.doculect == doculect %}<br/><span class="w3-text-dark-blue-grey">{{ comment.text_ru }}</span>{% endfor %}
-                {% endif %}
+                {{ comment(value, add_parentheses_and_note=True) }}
             </li>
         {% endif %}
       {% endfor %}
