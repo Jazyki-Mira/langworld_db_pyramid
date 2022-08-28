@@ -68,7 +68,9 @@
       {% if loop.first %}<h3 class="w3-text-darkest-blue-grey">{% trans %}Карты ареалов из энциклопедии{% endtrans %}</h3>
       <ul>{% endif %}
       <li><a href="https://iling-ran.ru/library/langworld/maps/{{ encyclopedia_map.file_name }}" target="_blank">{{ encyclopedia_map[request.locale_name] }}</a></li>
-      {% if loop.last %}</ul>{% endif %}
+      {% if loop.last -%}</ul>
+      <p><span class="w3-text-dark-blue-grey">{% trans %}Автор карт{% endtrans %}: <a href="https://iling-ran.ru/web/{{ request.locale_name }}/scholars/koryakov" target="_blank">{% trans %}Ю. Б. Коряков{% endtrans %}</a></span></p>
+      {%- endif -%}
     {% endfor %}
 
   {% if doculect.glottocodes or doculect.iso_639p3_codes %}

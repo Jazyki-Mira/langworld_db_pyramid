@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-25 15:11+0300\n"
+"POT-Creation-Date: 2022-08-28 15:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Перейти на главную"
 msgstr ""
 
-#: templates/all_doculects_list.jinja2:5 templates/base.jinja2:59
+#: templates/all_doculects_list.jinja2:5 templates/base.jinja2:40
 msgid "Список языков"
 msgstr ""
 
@@ -41,17 +41,17 @@ msgstr ""
 msgid "С группировкой по томам"
 msgstr ""
 
-#: templates/all_doculects_list.jinja2:37 templates/doculect.jinja2:17
-#: templates/doculect.jinja2:20
+#: templates/all_doculects_list.jinja2:37 templates/doculect.jinja2:44
+#: templates/doculect.jinja2:47
 msgid "Том"
 msgstr ""
 
-#: templates/all_doculects_map.jinja2:3 templates/base.jinja2:60
+#: templates/all_doculects_map.jinja2:3 templates/base.jinja2:41
 msgid "Карта языков"
 msgstr ""
 
-#: templates/all_features_list.jinja2:3 templates/base.jinja2:61
-#: templates/doculect.jinja2:71 templates/query_wizard.jinja2:50
+#: templates/all_features_list.jinja2:3 templates/base.jinja2:42
+#: templates/doculect.jinja2:100 templates/query_wizard.jinja2:50
 msgid "Признаки"
 msgstr ""
 
@@ -59,24 +59,24 @@ msgstr ""
 msgid "БД «Языки мира»"
 msgstr ""
 
-#: templates/base.jinja2:58 templates/home.jinja2:3
+#: templates/base.jinja2:39 templates/home.jinja2:3
 msgid "Главная"
 msgstr ""
 
-#: templates/base.jinja2:62 templates/doculect.jinja2:24
+#: templates/base.jinja2:43 templates/doculect.jinja2:51
 #: templates/families.jinja2:7 templates/query_wizard.jinja2:40
 msgid "Генеалогия"
 msgstr ""
 
-#: templates/base.jinja2:63 templates/query_wizard.jinja2:10
+#: templates/base.jinja2:44 templates/query_wizard.jinja2:10
 msgid "Мастер запросов"
 msgstr ""
 
-#: templates/base.jinja2:134 templates/home.jinja2:4
+#: templates/base.jinja2:99 templates/home.jinja2:4
 msgid "База данных «Языки мира»"
 msgstr ""
 
-#: templates/base.jinja2:134
+#: templates/base.jinja2:99
 msgid "Института языкознания РАН"
 msgstr ""
 
@@ -95,67 +95,75 @@ msgstr ""
 msgid "Свернуть все"
 msgstr ""
 
-#: templates/doculect.jinja2:12
+#: templates/doculect.jinja2:39
 msgid "Варианты названия (в т.ч. исторические и самоназвания)"
 msgstr ""
 
-#: templates/doculect.jinja2:15
+#: templates/doculect.jinja2:42
 msgid "В энциклопедии"
 msgstr ""
 
-#: templates/doculect.jinja2:18
+#: templates/doculect.jinja2:45
 msgid "Файл PDF будет загружен полностью и затем открыт"
 msgstr ""
 
-#: templates/doculect.jinja2:18
+#: templates/doculect.jinja2:45
 msgid "в новом окне"
 msgstr ""
 
-#: templates/doculect.jinja2:18
+#: templates/doculect.jinja2:45
 msgid "на нужной странице"
 msgstr ""
 
-#: templates/doculect.jinja2:21
+#: templates/doculect.jinja2:48
 msgid "Том энциклопедии в формате PDF на данный момент недоступен"
 msgstr ""
 
-#: templates/doculect.jinja2:36
+#: templates/doculect.jinja2:63
 msgid "География"
 msgstr ""
 
-#: templates/doculect.jinja2:37
+#: templates/doculect.jinja2:64
 msgid "Основная страна"
 msgstr ""
 
-#: templates/doculect.jinja2:38
+#: templates/doculect.jinja2:65
 msgid "посмотреть на карте"
 msgstr ""
 
-#: templates/doculect.jinja2:41
+#: templates/doculect.jinja2:68
 msgid "Карты ареалов из энциклопедии"
 msgstr ""
 
-#: templates/doculect.jinja2:48
-msgid "Идентификаторы"
+#: templates/doculect.jinja2:72
+msgid "Автор карт"
+msgstr ""
+
+#: templates/doculect.jinja2:72
+msgid "Ю. Б. Коряков"
 msgstr ""
 
 #: templates/doculect.jinja2:77
+msgid "Идентификаторы"
+msgstr ""
+
+#: templates/doculect.jinja2:106
 msgid "Нет заполненных признаков для этого языка."
 msgstr ""
 
-#: templates/doculect.jinja2:115
+#: templates/doculect.jinja2:140
 msgid "Незаполненные признаки"
 msgstr ""
 
-#: templates/doculect.jinja2:118
+#: templates/doculect.jinja2:144
 msgid "В энциклопедии отсутствует информация"
 msgstr ""
 
-#: templates/doculect.jinja2:134
+#: templates/doculect.jinja2:149
 msgid "В энциклопедии присутствует явное указание на отсутствие данных"
 msgstr ""
 
-#: templates/doculect.jinja2:150
+#: templates/doculect.jinja2:154
 msgid "Признак неприменим к этому языку"
 msgstr ""
 
