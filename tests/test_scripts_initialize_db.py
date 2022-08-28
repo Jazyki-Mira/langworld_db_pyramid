@@ -86,14 +86,26 @@ class TestCustomModelInitializer:
         for doculect in east_rom.doculects:
             assert doculect.name_en in ('Aromanian', 'Istro-Rumanian', 'Megleno-Romanian', 'Romanian')
 
-        old_russian = dbsession.scalars(select(models.Doculect).where(models.Doculect.name_en == 'Old Russian')).one()
+        # random check of different attributes of a doculect
+        old_russian: models.Doculect = dbsession.scalars(
+            select(models.Doculect).where(models.Doculect.name_en == 'Old Russian')
+        ).one()
         assert old_russian.family.name_en == 'East Slavic'
         assert old_russian.family.parent.name_en == 'Slavic'
         assert old_russian.family.parent.parent.name_ru == 'Индоевропейские'
         assert len(old_russian.encyclopedia_maps) == 2
         assert '13-2' in [map_.man_id for map_ in old_russian.encyclopedia_maps]
         assert '13-11' in [map_.man_id for map_ in old_russian.encyclopedia_maps]
-        # TODO can add more tests here (for country, features etc.)
+        assert 'Ruthenian' in old_russian.aliases_en
+        assert len(old_russian.iso_639p3_codes) == len(old_russian.glottocodes) == 1
+        assert 'orv' in [code.code for code in old_russian.iso_639p3_codes]
+        assert 'oldr1238' in [code.code for code in old_russian.glottocodes]
+        assert old_russian.main_country.name_en == 'Ukraine'
+        assert old_russian.encyclopedia_volume.id == '13'
+        assert old_russian.page == '449'
+        assert old_russian.has_feature_profile
+        assert 'A-9-1' in [value.man_id for value in old_russian.feature_values]
+        assert 'A-10-1' not in [value.man_id for value in old_russian.feature_values]
 
         # `is_listed_and_has_doculects` attribute in non-listed feature values must be False
         for non_listed_value in dbsession.scalars(
