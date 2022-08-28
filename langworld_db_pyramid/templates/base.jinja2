@@ -35,6 +35,15 @@
     <body>
 
     <!-- Navbar -->
+    {% macro nav_links_except_for_language_switch(css_class) -%}
+        <a href="/{{request.locale_name}}/home" class="{{ css_class }}">{% trans %}Главная{% endtrans %}</a>
+        <a href="/{{request.locale_name}}/doculects/list" class="{{ css_class }}">{% trans %}Список языков{% endtrans %}</a>
+        <a href="/{{request.locale_name}}/doculects/map" class="{{ css_class }}">{% trans %}Карта языков{% endtrans %}</a>
+        <a href="/{{request.locale_name}}/features/list" class="{{ css_class }}">{% trans %}Признаки{% endtrans %}</a>
+        <a href="/{{request.locale_name}}/family/_all" class="{{ css_class }}">{% trans %}Генеалогия{% endtrans %}</a>
+        <a href="/{{request.locale_name}}/query_wizard" class="{{ css_class }}">{% trans %}Мастер запросов{% endtrans %}</a>        
+    {% endmacro %}
+    
     <div class="w3-top">
       <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
         <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="openMenu()"><i class="fa fa-bars"></i></a>
@@ -54,28 +63,13 @@
         {% endif %}
 
         <a href="{{target}}" class="w3-bar-item w3-button w3-theme-l1 w3-hide-small w3-right">{{ link_text }}</a>
-
-        <a href="/{{request.locale_name}}/home" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Главная{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/doculects/list" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Список языков{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/doculects/map" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Карта языков{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/features/list" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Признаки{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/family/_all" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Генеалогия{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/query_wizard" class="w3-bar-item w3-button w3-hide-small w3-hover-white">{% trans %}Мастер запросов{% endtrans %}</a>
+        {{ nav_links_except_for_language_switch("w3-bar-item w3-button w3-hide-small w3-hover-white") }}
       </div>
 
       <!-- Navbar on small screens -->
       <div id="mobile-navigation-bar" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-large w3-padding-top-48">
-
-        <a href="/{{request.locale_name}}/home" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Главная{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/doculects/list" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Список языков{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/doculects/map" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Карта языков{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/features/list" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Признаки{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/family/_all" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Генеалогия{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/query_wizard" class="w3-bar-item w3-button w3-padding-large w3-sand">{% trans %}Мастер запросов{% endtrans %}</a>
-
-        {# language switching using variables defined above #}
+        {{ nav_links_except_for_language_switch("w3-bar-item w3-button w3-padding-large w3-sand") }}
         <a href="{{target}}" class="w3-bar-item w3-button w3-padding-large w3-sand">({{ link_text }})</a>
-
       </div>
     </div>
 
