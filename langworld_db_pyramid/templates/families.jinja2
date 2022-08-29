@@ -3,10 +3,10 @@
 {% set name_attr = "name_" + request.locale_name %}
 
 {% block title %}
-  {% if parent == None %}
+  {% if family == None %}
     {% trans %}Генеалогия{% endtrans %}
   {% else %}
-    {{ parent[name_attr] }} {% trans %}языки{% endtrans %}
+    {{ family[name_attr] }} {% trans %}языки{% endtrans %}
   {% endif %}
 {% endblock title %}
 {% block h1 %}{{ self.title() }}{% endblock h1 %}
@@ -18,17 +18,17 @@
   <div class="w3-section genealogy-subheading">
     <span class="w3-text-darkest-blue-grey w3-large">
       {# "Navigation" just below the heading displaying families of higher levels than current one #}
-      {% if parent != None %}
+      {% if family != None %}
           {# this loop is a workaround of absence of recursive if's. I have to make a one-item list to be able to loop #}
-          {% for grandparent in [parent.parent] recursive %}
-            {% if grandparent != None %}
-                {{ loop([grandparent.parent]) }}  {# I need to start at the top, so recursion comes first #}
-                <a href="/{{ request.locale_name }}/family/{{ grandparent.man_id }}">{{ grandparent[name_attr] }}</a> &rarr;
+          {% for parent in [family.parent] recursive %}
+            {% if parent != None %}
+                {{ loop([parent.parent]) }}  {# I need to start at the top, so recursion comes first #}
+                <a href="/{{ request.locale_name }}/family/{{ parent.man_id }}">{{ parent[name_attr] }}</a> &rarr;
             {% else %}
                 <a href="/{{ request.locale_name }}/family/_all">{% trans %}Все языки{% endtrans %}</a> &rarr;
             {% endif %}
           {% endfor %}
-          <strong>{{ parent[name_attr] }}</strong>
+          <strong>{{ family[name_attr] }}</strong>
       {% else %}<strong>{% trans %}Все языки{% endtrans %}</strong>
       {% endif %}
     </span>
@@ -50,10 +50,10 @@
     <div id="map-and-list"></div>
 
     <div id="tree" class="w3-margin-left w3-hide">
-      {% if parent != None %}
-          {% for doculect in parent.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
+      {% if family != None %}
+          {% for doculect in family.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
               {% if loop.first %}
-                  <h2 class="w3-text-darkest-blue-grey">{{ icon_for_family[parent].img_tag|safe }}{{ parent[name_attr] }} ({% trans %}без деления на подсемьи{% endtrans %})</h2>
+                  <h2 class="w3-text-darkest-blue-grey">{{ icon_for_family[family].img_tag|safe }}{{ family[name_attr] }} ({% trans %}без деления на подсемьи{% endtrans %})</h2>
                   <ul>
               {% endif %}
                   <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
@@ -63,17 +63,17 @@
           {% endfor %}
       {% endif %}
 
-      {% for family in families recursive %}
-        {% if loop.first and loop.depth == 1 and parent != None%}<h2 class="w3-text-darkest-blue-grey">{% trans %}Языки, принадлежащие к подсемьям выбранной семьи{% endtrans %}</h2>{% endif %}
+      {% for subfamily in subfamilies recursive %}
+        {% if loop.first and loop.depth == 1 and family != None%}<h2 class="w3-text-darkest-blue-grey">{% trans %}Языки, принадлежащие к подсемьям выбранной семьи{% endtrans %}</h2>{% endif %}
         {% if loop.first %}<ul>{% endif %}
-        {% if family.has_doculects_with_feature_profiles() %} {# This check is needed for recursive calls #}
+        {% if subfamily.has_doculects_with_feature_profiles() %} {# This check is needed for recursive calls #}
             <li>
-                {% if loop.depth == 1 %}{{ icon_for_family[family].img_tag|safe }}{% endif %}
-                <a href="/{{ request.locale_name }}/family/{{ family.man_id }}">{{ family[name_attr] }}</a>
+                {% if loop.depth == 1 %}{{ icon_for_family[subfamily].img_tag|safe }}{% endif %}
+                <a href="/{{ request.locale_name }}/family/{{ subfamily.man_id }}">{{ subfamily[name_attr] }}</a>
 
-                {{ loop(family.children) }}
+                {{ loop(subfamily.children) }}
 
-                {% for doculect in family.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
+                {% for doculect in subfamily.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
                     {% if loop.first %}<ul>{% endif %}
                     <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
                     {% if loop.last %}</ul>{% endif %}

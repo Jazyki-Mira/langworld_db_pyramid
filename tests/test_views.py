@@ -8,7 +8,7 @@ from langworld_db_pyramid.views.doculects_list import get_doculects_by_substring
 from langworld_db_pyramid.views.doculects_map import get_doculects_for_map
 from langworld_db_pyramid.views.doculect_profile import view_doculect_profile
 from langworld_db_pyramid.views.families import (
-    get_parent_families_icons,
+    _get_family_immediate_subfamilies_and_icons,
     MATCHDICT_ID_FOR_ALL_FAMILIES,
     view_families_for_list,
     view_families_for_map
@@ -23,6 +23,7 @@ from langworld_db_pyramid.views.notfound import notfound_view
 from langworld_db_pyramid.views.query_wizard import get_matching_doculects
 
 NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) that have has_feature_profile set to '1'
+NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES = 11  # only 11 out of 13 have doculects with feature profiles
 
 
 @pytest.mark.parametrize(
@@ -111,6 +112,33 @@ def test_get_doculects_for_map(
 
 
 @pytest.mark.parametrize(
+    'family_man_id, expected_number_of_subfamilies, expected_number_of_icon_groups',
+    [
+        ('_all', NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES,
+         NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES),
+        ('turk', 8, 9), ('isolate', 0, 1), ('yupik', 0, 1), ('slav', 3, 4), ('avar_andi', 2, 3),
+    ]
+)
+def test_families__get_family_immediate_subfamilies_and_icons(
+        dummy_request, setup_models_once_for_test_module, family_man_id,
+        expected_number_of_subfamilies, expected_number_of_icon_groups
+):
+    dummy_request.matchdict['family_man_id'] = family_man_id
+    parent, families, dict_with_icons = _get_family_immediate_subfamilies_and_icons(dummy_request)
+    if family_man_id == MATCHDICT_ID_FOR_ALL_FAMILIES:
+        assert parent is None
+    else:
+        assert parent.man_id == family_man_id
+    assert len(families) == expected_number_of_subfamilies
+
+
+def test_families__get_family_immediate_subfamilies_and_icons_not_found(dummy_request):
+    dummy_request.matchdict['family_man_id'] = 'foo'
+    with pytest.raises(pyramid.httpexceptions.HTTPNotFound):
+        _get_family_immediate_subfamilies_and_icons(dummy_request)
+
+
+@pytest.mark.parametrize(
     'family_man_id, parent_is_none, expected_number_of_families',
     [   # subtracted numbers indicate families that have no doculects with profiles and must not be in data['families']
         (MATCHDICT_ID_FOR_ALL_FAMILIES, True, 13-2), ('isolate', False, 0), ('eskimo', False, 2-1), ('slav', False, 3)
@@ -124,19 +152,19 @@ def test_view_families_for_list(
     data = view_families_for_list(dummy_request)
 
     if parent_is_none:
-        assert data['parent'] is None
+        assert data['family'] is None
     else:
-        assert isinstance(data['parent'], Family)
+        assert isinstance(data['family'], Family)
 
-    assert len(data['families']) == expected_number_of_families
+    assert len(data['subfamilies']) == expected_number_of_families
     assert len(data['icon_for_family']) == expected_number_of_families + 1
 
 
 @pytest.mark.parametrize(
     'family_man_id, expected_number_of_groups, expected_number_of_doculects',
     [
-        # subtracted numbers indicate families that have no doculects
-        (MATCHDICT_ID_FOR_ALL_FAMILIES, 13 - 2, NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES),
+        (MATCHDICT_ID_FOR_ALL_FAMILIES, NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES,
+         NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES),
         # addition indicates that a family that has subfamilies gets a group created for its immediate doculects
         # (even if this group ends up being empty)
         ('isolate', 1, 4), ('yupik', 1, 1), ('slav', 3 + 1, 16), ('avar_andi', 2 + 1, 14)
@@ -180,12 +208,6 @@ def test_view_doculect_profile_raises_not_found(dummy_request, setup_models_once
         # because DummyRequest object has no 'exception' attribute.
         # Maybe app_request fixture can be used here instead.
         view_doculect_profile(dummy_request)
-
-
-def test_families_get_parent_families_icons_not_found(dummy_request):
-    dummy_request.matchdict['family_man_id'] = 'foo'
-    with pytest.raises(pyramid.httpexceptions.HTTPNotFound):
-        get_parent_families_icons(dummy_request)
 
 
 def test_features_view_all_features_list_by_category(dummy_request, setup_models_once_for_test_module):
