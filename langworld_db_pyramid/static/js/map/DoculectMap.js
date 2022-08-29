@@ -7,7 +7,7 @@ import getURLParams from "./getURLParams.js";
 
 const elem = React.createElement;
 
-export default function DoculectMap({ mapDivID }) {
+export default function DoculectMap({ mapDivID = "map-default" }) {
   const leafletFeatureGroupsRef = React.useRef([]);
   const mapRef = React.useRef(null);
 

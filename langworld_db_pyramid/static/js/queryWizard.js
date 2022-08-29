@@ -79,7 +79,6 @@ function QueryWizard() {
   }, []);
 
   return elem(MapAndList, {
-    mapDivID: "map-default",
     urlToFetch: `/${locale}/json_api/doculects_for_map/all`,
     formId: "query-wizard-form",
     fetchUrlGenerator: generateFetchUrl,

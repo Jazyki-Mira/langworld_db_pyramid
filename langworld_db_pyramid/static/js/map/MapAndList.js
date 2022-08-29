@@ -9,9 +9,7 @@ import DoculectMap from "./DoculectMap.js";
 
 const elem = React.createElement;
 
-// TODO rename urlToFetch
 export default function MapAndList({
-  mapDivID,
   urlToFetch,
   formId = null,
   fetchUrlGenerator = null,
@@ -68,12 +66,11 @@ export default function MapAndList({
             {
               className: "w3-row w3-padding-small",
               id: "map-and-list-inside-container",
-            }, // TODO hardcoded for now
+            },
             elem(
               "div",
               { className: "w3-twothird w3-container" },
-              // TODO div ID for map is needed because of CSS, but should I really keep it here?
-              elem(DoculectMap, { mapDivID })
+              elem(DoculectMap)
             ),
             elem(
               "div",
@@ -81,7 +78,7 @@ export default function MapAndList({
                 className: "w3-third w3-container scrollable",
                 id: "interactive-list",
               },
-              elem(InteractiveDoculectList) // TODO div ID here or remove div ID for map
+              elem(InteractiveDoculectList)
             )
           )
         )

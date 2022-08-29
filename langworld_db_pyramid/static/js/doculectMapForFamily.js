@@ -7,7 +7,6 @@ const familyID = splitURL[indexOfFamilyID];
 
 ReactDOM.render(
   React.createElement(MapAndList, {
-    mapDivID: "map-default",
     urlToFetch: `/${getLocale()}/json_api/doculects_for_map/family/${familyID}`,
   }),
   document.getElementById("map-and-list")
