@@ -15,8 +15,11 @@ export default function InteractiveDoculectList() {
     idOfDoculectToOpenPopupOnMapContext
   );
 
-  /* TODO I am not sure this is the right module for displaying this message
-  although the implementation is easy enough here thanks to useContext()
+  /* This might seem to be the wrong module for displaying the "data not loaded yet" message, 
+  but it is actually good to show it here because it does not affect rendering of the map.
+  It looks better if the map is already there and the message is shown instead of showing
+  the interactive list.
+  The implementation is easy enough here thanks to useContext()
   */
   if (doculectGroupsInMapView === null)
     return elem(
