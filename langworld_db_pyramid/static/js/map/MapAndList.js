@@ -4,8 +4,10 @@ import {
   idOfDoculectToOpenPopupOnMapContext,
   fetchUrlContext,
 } from "./contexts.js";
-import InteractiveDoculectList from "./InteractiveDoculectList.js";
 import DoculectMap from "./DoculectMap.js";
+import doculectMapAndListStrings from "../i18n/doculectMapAndListStrings.js";
+import getLocale from "../tools/getLocale.js";
+import InteractiveDoculectList from "./InteractiveDoculectList.js";
 
 const elem = React.createElement;
 
@@ -42,7 +44,33 @@ export default function MapAndList({
       .then((res) => res.json())
       .then((groups) => setAllDoculectGroups(groups))
       .catch(console.error);
-  }, [fetchUrl]); // TODO handle case when there are no doculects
+  }, [fetchUrl]);
+
+  /* If the page contains a DIV for alerts and there are no doculects to show, 
+  display the alert for 2.5 seconds.
+  */
+  React.useEffect(() => {
+    let alertDiv = document.getElementById("user-alert");
+    if (alertDiv === null) return null;
+
+    alertDiv.innerText =
+      doculectMapAndListStrings["noMatchingDoculects"][getLocale()];
+
+    if (
+      allDoculectGroups != null &&
+      allDoculectGroups.length === 1 &&
+      allDoculectGroups[0]["doculects"].length === 0
+      /* By design of the web app, the only situation where the may be no doculects to show
+      (not just in the selected area of the map, but none at all)
+      is when the database is queried with multiple parameters (Query Wizard).
+      This might change if I create a more complex Query Wizard
+      where the user can create their own (multiple) groups!
+      */
+    ) {
+      alertDiv.classList.remove("w3-hide");
+      setTimeout(() => alertDiv.classList.add("w3-hide"), 2500);
+    }
+  }, [allDoculectGroups]);
 
   return elem(
     fetchUrlContext.Provider,

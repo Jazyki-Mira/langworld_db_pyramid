@@ -238,6 +238,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 
 /* added by me */
 .negative-margin-bottom{margin-bottom: -1rem!important;}
+.padding-side-32{padding-left:32px!important;padding-right:32px!important}
 
 @media screen and (max-width:600px){
     .feature-category-table-container {

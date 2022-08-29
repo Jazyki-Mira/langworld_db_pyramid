@@ -36,7 +36,8 @@
 {% block one_third %}
 
 <div class="w3-third w3-container scrollable" id="query-wizard-form-container">
-  <form id ="query-wizard-form">
+  <div id="user-alert" class="w3-display-middle w3-padding-32 padding-side-32 w3-blue-grey w3-round-large w3-hide"></div>
+  <form id="query-wizard-form">
   <h2 class="w3-text-darkest-blue-grey">{% trans %}Генеалогия{% endtrans %}</h2>
   <select id="family" multiple size="10">
   {% for family in families recursive %}
