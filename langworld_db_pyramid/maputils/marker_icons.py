@@ -35,7 +35,7 @@ class CLLDIcon:
     shape_and_color: str
 
     def __post_init__(self):
-        self.svg_tag = svg.icon(self.shape_and_color)
+        self.svg_tag = self._generate_svg(self.shape_and_color)
         self.img_src = svg.data_url(self.svg_tag)
         self.img_tag = f'<img src="{self.img_src}"/>'
 
@@ -49,6 +49,34 @@ class CLLDIcon:
 
     def __repr__(self):
         return f'CLLDIcon (shape {self.shape_and_color[0]}, color #{self.shape_and_color[1:]})'
+
+    @staticmethod
+    def _generate_svg(spec: str, opacity=None) -> str:
+        """
+        **This method is a copy** of function `icon()` in `clldutils.svg`
+        with `paths` changed to produce smaller icons
+        (since `icon()` does not allow to override the `paths`).
+
+        Creates a SVG graphic according to a spec as used for map icons in `clld` apps.
+        :param spec: Icon spec of the form "(s|d|c|f|t)rrggbb" where the first character defines a \
+        shape (s=square, d=diamond, c=circle, f=upside-down triangle, t=triangle) and "rrggbb" \
+        specifies a color as hex triple.
+        :param opacity: Opacity
+        :return: SVG XML
+        """
+        # different from clldutils.svg.icon() - smaller shapes:
+        paths = {
+            's': 'path d="M10 10 H30 V30 H10 V10"',
+            'd': 'path d="M20 8 L32 20 L20 32 L8 20 L20 8"',
+            'c': 'circle cx="20" cy="20" r="11"',
+            'f': 'path d="M8 10 L32 10 L20 32 L8 10"',
+            't': 'path d="M8 32 L32 32 L20 10 L8 32"',
+        }
+        # Changed calls to functions in clldutils.svg to dotted notation:
+        elem = '<{0} style="{1}"/>'.format(
+            # changed 'black' to dark grey hex (matter of taste)
+            paths[spec[0]], svg.style(stroke='#585858', fill=svg.rgb_as_hex(spec[1:]), opacity=opacity))
+        return svg.svg(elem, height=40, width=40)
 
 
 def generate_map_icons() -> Iterator[CLLDIcon]:
