@@ -7,7 +7,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import backref, relationship
 
-from .meta import Base
+from langworld_db_pyramid.models.meta import Base
 
 
 class Family(Base):

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey
 
-from .meta import Base
+from langworld_db_pyramid.models.meta import Base
 
 
 class DoculectToFeatureValue(Base):

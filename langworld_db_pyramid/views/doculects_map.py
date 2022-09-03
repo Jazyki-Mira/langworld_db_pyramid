@@ -1,7 +1,7 @@
 from pyramid.view import view_config
 from sqlalchemy import select
 
-from .. import models
+from langworld_db_pyramid import models
 from langworld_db_pyramid.maputils.marker_icons import generate_fixed_number_of_map_icons
 from langworld_db_pyramid.maputils.markers import generate_marker_group
 

@@ -3,7 +3,7 @@ from pyramid.view import view_config
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
-from .. import models
+from langworld_db_pyramid import models
 from langworld_db_pyramid.maputils.marker_icons import icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
 

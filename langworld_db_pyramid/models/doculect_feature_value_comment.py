@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, Text
 from sqlalchemy.orm import relationship
 
-from .meta import Base
+from langworld_db_pyramid.models.meta import Base
 
 
 # This class may seem to repeat the functionality of

@@ -1,4 +1,4 @@
-from . import models
+from langworld_db_pyramid import models
 
 
 def setup(env):

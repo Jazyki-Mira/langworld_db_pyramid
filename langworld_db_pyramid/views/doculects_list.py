@@ -4,7 +4,7 @@ from sqlalchemy import and_, or_, select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import aliased
 
-from .. import models
+from langworld_db_pyramid import models
 
 
 @view_config(route_name='all_doculects_list', renderer='langworld_db_pyramid:templates/all_doculects_list.jinja2')

@@ -3,7 +3,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
-from .. import models
+from langworld_db_pyramid import models
 
 
 @view_config(route_name='doculect_profile', renderer='langworld_db_pyramid:templates/doculect.jinja2')

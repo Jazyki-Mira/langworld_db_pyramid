@@ -6,7 +6,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 
-from .meta import Base
+from langworld_db_pyramid.models.meta import Base
 
 
 class EncyclopediaMap(Base):
