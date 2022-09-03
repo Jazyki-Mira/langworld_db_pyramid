@@ -13,7 +13,9 @@ from langworld_db_pyramid.maputils.markers import generate_marker_group
 def view_query_wizard(request):
     return {
         'categories': request.dbsession.scalars(select(models.FeatureCategory)).all(),
-        'families': request.dbsession.scalars(select(models.Family).where(models.Family.parent == None)).all()
+        'families': request.dbsession.scalars(
+            select(models.Family).where(models.Family.parent == None)  # noqa: E711
+        ).all()
     }
 
 

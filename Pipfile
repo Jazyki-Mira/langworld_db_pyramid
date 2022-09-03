@@ -11,6 +11,7 @@ babel = "*"
 pyyaml = "*"
 toml = "*"
 clldutils = "*"
+flake8 = "*"
 
 [dev-packages]
 

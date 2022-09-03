@@ -9,3 +9,4 @@ openpyxl~=3.0.10
 toml~=0.10.2
 PyYAML~=6.0
 pytest~=7.1.2
+flake8~=5.0.4

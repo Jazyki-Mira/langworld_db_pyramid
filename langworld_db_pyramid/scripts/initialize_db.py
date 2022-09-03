@@ -19,12 +19,12 @@ from langworld_db_pyramid import models
 class CustomModelInitializer:
     """Class that I created (not Cookiecutter) for (re-)populating
     the database.
-    
+
     Deletes all data from SQL database, then populates it again
-    with data from data files imported from main data repository. 
-    
-    I put the functionality in the separate class 
-    to make the distinction between generated and custom code clear, 
+    with data from data files imported from main data repository.
+
+    I put the functionality in the separate class
+    to make the distinction between generated and custom code clear,
     to create separate methods for separate tasks, and to enable testing.
     """
 
@@ -92,15 +92,15 @@ class CustomModelInitializer:
         self.empty_value_for_feature_id_and_type_name = {}
 
         self.doculect_type_for_id = {
-            'language': models.DoculectType(name_en='language', name_ru='язык'), 
-            'dialect': models.DoculectType(name_en='dialect', name_ru='диалект'), 
+            'language': models.DoculectType(name_en='language', name_ru='язык'),
+            'dialect': models.DoculectType(name_en='dialect', name_ru='диалект'),
             'language/dialect': models.DoculectType(name_en='language_dialect', name_ru='язык/диалект')
         }
 
     def setup_models(self):
         self._delete_all_data()
         self._populate_all()
-    
+
     def _delete_all_data(self):
         for model in self.ALL_MODELS:
             self.dbsession.execute(delete(model))
@@ -189,7 +189,7 @@ class CustomModelInitializer:
             )
             self.dbsession.add(country)
             self.country_for_id[country_row['id']] = country
-            
+
     def _populate_encyclopedia_maps(self):
         for map_row in self.read_file(self.file_with_encyclopedia_maps):
             row_for_model = copy(map_row)
