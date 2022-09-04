@@ -1,7 +1,8 @@
 import pytest
 
-from langworld_db_data.filetools.txt import *
-from tests.paths import *
+from langworld_db_data.filetools.txt import (check_encoding_of_file, read_non_empty_lines_from_txt_file,
+                                             read_plain_text_from_file, remove_extra_space, write_plain_text_to_file)
+from tests.paths import DIR_WITH_FILETOOLS_TEST_FILES, PATH_TO_TEST_OUTPUT_TXT_FILE
 
 
 def test_check_encoding_of_file():
@@ -34,13 +35,10 @@ def test_remove_extra_space():
         assert remove_extra_space(str_) == 'foo bar'
 
 
-@pytest.mark.parametrize(
-    'content, expected_output',
-    [
-        ('foo bar', 'foo bar'),
-        (['foo', 'bar'], 'foo\nbar\n'),
-    ]
-)
+@pytest.mark.parametrize('content, expected_output', [
+    ('foo bar', 'foo bar'),
+    (['foo', 'bar'], 'foo\nbar\n'),
+])
 def test_write_plain_text_to_file_writes_content_to_file(content, expected_output):
 
     if PATH_TO_TEST_OUTPUT_TXT_FILE.exists():
