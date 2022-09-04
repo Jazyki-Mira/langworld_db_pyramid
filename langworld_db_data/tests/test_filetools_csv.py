@@ -1,10 +1,13 @@
+from pathlib import Path
 from typing import NamedTuple
 
 import pytest
 
-from langworld_db_data.filetools.csv_xls import *
+from langworld_db_data.filetools.csv_xls import (CSVDelimiter, check_csv_for_malformed_rows,
+                                                 check_csv_for_repetitions_in_column, convert_xls_to_csv, read_csv,
+                                                 read_dict_from_2_csv_columns, write_csv)
 from langworld_db_data.filetools.txt import read_plain_text_from_file
-from tests.paths import *
+from tests.paths import DIR_WITH_FILETOOLS_TEST_FILES, PATH_TO_TEST_OUTPUT_TXT_FILE, PATH_TO_TEST_OUTPUT_CSV_FILE
 
 
 def test_convert_xls_to_csv():
@@ -37,8 +40,16 @@ def test_read_csv():
     lines_to_write = ['col1,col2,col3\n', 'foo,bar,baz\n', 'фу,бар,баз']
     expected_rows = [['col1', 'col2', 'col3'], ['foo', 'bar', 'baz'], ['фу', 'бар', 'баз']]
     expected_list_of_dicts = [
-        {'col1': 'foo', 'col2': 'bar', 'col3': 'baz'},
-        {'col1': 'фу', 'col2': 'бар', 'col3': 'баз'},
+        {
+            'col1': 'foo',
+            'col2': 'bar',
+            'col3': 'baz'
+        },
+        {
+            'col1': 'фу',
+            'col2': 'бар',
+            'col3': 'баз'
+        },
     ]
 
     path_to_auto_test_file = Path('test_csv.csv')
@@ -170,23 +181,21 @@ class SomeNamedTuple(NamedTuple):
     foo2: str
 
 
-@pytest.mark.parametrize(
-    'rows, expected_file_content',
-    [
-        (
-            [['foo', 'bar'], ['bar', 'baz']],
-            'foo,bar\nbar,baz\n'
-        ),
-        (
-            [{'foo1': 'bar1.1', 'foo2': 'bar2.1'}, {'foo1': 'b1.2', 'foo2': 'b2.2'}, {'foo1': 'b1.3', 'foo2': 'b2.3'}],
-            'foo1,foo2\nbar1.1,bar2.1\nb1.2,b2.2\nb1.3,b2.3\n'
-        ),
-        (
-            [SomeNamedTuple(foo1='bar1', foo2='bar2'), SomeNamedTuple(foo2='bar2.2', foo1='bar1.2')],
-            'foo1,foo2\nbar1,bar2\nbar1.2,bar2.2\n'
-        ),
-    ]
-)
+@pytest.mark.parametrize('rows, expected_file_content', [
+    ([['foo', 'bar'], ['bar', 'baz']], 'foo,bar\nbar,baz\n'),
+    ([{
+        'foo1': 'bar1.1',
+        'foo2': 'bar2.1'
+    }, {
+        'foo1': 'b1.2',
+        'foo2': 'b2.2'
+    }, {
+        'foo1': 'b1.3',
+        'foo2': 'b2.3'
+    }], 'foo1,foo2\nbar1.1,bar2.1\nb1.2,b2.2\nb1.3,b2.3\n'),
+    ([SomeNamedTuple(foo1='bar1', foo2='bar2'),
+      SomeNamedTuple(foo2='bar2.2', foo1='bar1.2')], 'foo1,foo2\nbar1,bar2\nbar1.2,bar2.2\n'),
+])
 def test_write_csv(rows, expected_file_content):
     if PATH_TO_TEST_OUTPUT_CSV_FILE.exists():
         PATH_TO_TEST_OUTPUT_CSV_FILE.unlink()
