@@ -72,7 +72,7 @@ def view_families_for_map(request) -> list[dict]:
                                   doculects=sorted([d for d in family.doculects if d.has_feature_profile],
                                                    key=lambda d: getattr(d, name_attr)),
                                   locale=locale,
-                                  additional_popup_text=(f'(<a href="{href}">{getattr(family, name_attr)}</a>)')))
+                                  additional_popup_text=f'(<a href="{href}">{getattr(family, name_attr)}</a>)'))
 
     for subfamily in immediate_subfamilies:
         href = f'/{request.locale_name}/family/{subfamily.man_id}'
@@ -85,6 +85,6 @@ def view_families_for_map(request) -> list[dict]:
                                   doculects=sorted(list(subfamily.iter_doculects_that_have_feature_profiles()),
                                                    key=lambda d: getattr(d, name_attr)),
                                   locale=locale,
-                                  additional_popup_text=(f'(<a href="{href}">{getattr(subfamily, name_attr)}</a>)')))
+                                  additional_popup_text=f'(<a href="{href}">{getattr(subfamily, name_attr)}</a>)'))
 
     return marker_groups
