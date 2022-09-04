@@ -12,6 +12,7 @@ pyyaml = "*"
 toml = "*"
 clldutils = "*"
 flake8 = "*"
+yapf = "*"
 
 [dev-packages]
 

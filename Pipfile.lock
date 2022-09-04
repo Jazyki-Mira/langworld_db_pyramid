@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "41783308b33aae7e07ad3121c8acc1540ce9c57f4aeb95a835700aa041d87156"
+            "sha256": "e28f247d833cdea6530bcde038a87ec77f80f0f9701dfb6d3b141be01a30d891"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,11 +18,11 @@
     "default": {
         "arrow": {
             "hashes": [
-                "sha256:05caf1fd3d9a11a1135b2b6f09887421153b94558e5ef4d090b567b47173ac2b",
-                "sha256:d622c46ca681b5b3e3574fcb60a04e5cc81b9625112d5fb2b44220c36c892177"
+                "sha256:3934b30ca1b9f292376d9db15b19446088d12ec58629bc3f0da28fd55fb633a1",
+                "sha256:5a49ab92e3b7b71d96cd6bfcc4df14efefc9dfa96ea19045815914a6ab6b1fe2"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==1.2.2"
+            "version": "==1.2.3"
         },
         "attrs": {
             "hashes": [
@@ -495,6 +495,14 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.8.7"
+        },
+        "yapf": {
+            "hashes": [
+                "sha256:8fea849025584e486fd06d6ba2bed717f396080fd3cc236ba10cb97c4c51cf32",
+                "sha256:a3f5085d37ef7e3e004c4ba9f9b3e40c54ff1901cd111f05145ae313a7c67d1b"
+            ],
+            "index": "pypi",
+            "version": "==0.32.0"
         },
         "zope.deprecation": {
             "hashes": [
