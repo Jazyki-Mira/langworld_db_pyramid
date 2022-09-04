@@ -9,9 +9,8 @@ from langworld_db_pyramid.maputils.markers import generate_marker_group
 
 
 @view_config(route_name='all_features_list', renderer='langworld_db_pyramid:templates/all_features_list.jinja2')
-@view_config(
-    route_name='all_features_list_localized', renderer='langworld_db_pyramid:templates/all_features_list.jinja2'
-)
+@view_config(route_name='all_features_list_localized',
+             renderer='langworld_db_pyramid:templates/all_features_list.jinja2')
 def view_all_features_list_by_category(request):
     return {'categories': request.dbsession.scalars(select(models.FeatureCategory)).all()}
 
@@ -19,16 +18,13 @@ def view_all_features_list_by_category(request):
 def get_feature_values_icons(request):
     feature_man_id = request.matchdict['feature_man_id']
     try:
-        feature = request.dbsession.scalars(
-            select(models.Feature).where(models.Feature.man_id == feature_man_id)
-        ).one()
+        feature = request.dbsession.scalars(select(models.Feature).where(models.Feature.man_id == feature_man_id)).one()
     except SQLAlchemyError:
         raise HTTPNotFound(f"Feature with ID {feature_man_id} does not exist")
 
-    values = sorted(
-        [value for value in feature.values if value.type.name == 'listed' and value.doculects],
-        key=lambda value: (len(value.doculects), value.id), reverse=True
-    )
+    values = sorted([value for value in feature.values if value.type.name == 'listed' and value.doculects],
+                    key=lambda value: (len(value.doculects), value.id),
+                    reverse=True)
 
     return feature, values, icon_for_object(values)
 
@@ -60,6 +56,5 @@ def view_feature_map_of_values(request) -> list[dict]:
             doculects=sorted(value.doculects, key=lambda d: getattr(d, name_attr)),
             locale=locale,
             additional_popup_text=f'({getattr(feature, name_attr)}: {getattr(value, name_attr)})',
-        )
-        for value in values
+        ) for value in values
     ]

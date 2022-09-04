@@ -6,10 +6,7 @@ import zope.sqlalchemy
 # Import or define all models here to ensure they are attached to the
 # ``Base.metadata`` prior to any initialization routines.
 from langworld_db_pyramid.models.association_tables import (  # noqa: F401
-    DoculectToFeatureValue,
-    DoculectToGlottocode,
-    DoculectToIso639P3Code
-)
+    DoculectToFeatureValue, DoculectToGlottocode, DoculectToIso639P3Code)
 from langworld_db_pyramid.models.country import Country  # noqa: F401
 from langworld_db_pyramid.models.doculect import Doculect  # noqa: F401
 from langworld_db_pyramid.models.doculect_feature_value_comment import DoculectFeatureValueComment  # noqa: F401
@@ -95,9 +92,7 @@ def get_tm_session(session_factory, transaction_manager, request=None):
           request = dbsession.info["request"]
     """
     dbsession = session_factory(info={"request": request})
-    zope.sqlalchemy.register(
-        dbsession, transaction_manager=transaction_manager
-    )
+    zope.sqlalchemy.register(dbsession, transaction_manager=transaction_manager)
     return dbsession
 
 
@@ -136,9 +131,7 @@ def includeme(config):
         dbsession = request.environ.get('app.dbsession')
         if dbsession is None:
             # request.tm is the transaction manager used by pyramid_tm
-            dbsession = get_tm_session(
-                session_factory, request.tm, request=request
-            )
+            dbsession = get_tm_session(session_factory, request.tm, request=request)
         return dbsession
 
     config.add_request_method(dbsession, reify=True)

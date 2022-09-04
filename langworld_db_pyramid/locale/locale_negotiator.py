@@ -1,6 +1,5 @@
 from pyramid.settings import aslist
 
-
 DEFAULT_LOCALE = 'ru'
 
 

@@ -43,9 +43,9 @@ class Doculect(Base):
     type = relationship('DoculectType', back_populates='doculects')
 
     # many-to-many relationships
-    encyclopedia_maps = relationship(
-        'EncyclopediaMap', back_populates='doculects', secondary='encyclopedia_map_to_doculect'
-    )
+    encyclopedia_maps = relationship('EncyclopediaMap',
+                                     back_populates='doculects',
+                                     secondary='encyclopedia_map_to_doculect')
     feature_values = relationship('FeatureValue', back_populates='doculects', secondary='doculect_to_feature_value')
     glottocodes = relationship('Glottocode', back_populates='doculects', secondary='doculect_to_glottocode')
     iso_639p3_codes = relationship('Iso639P3Code', back_populates='doculects', secondary='doculect_to_iso_639p3_code')

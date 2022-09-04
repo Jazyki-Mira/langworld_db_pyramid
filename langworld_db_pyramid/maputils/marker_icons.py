@@ -3,17 +3,7 @@ from dataclasses import dataclass
 from typing import Any, Iterator, Union
 
 COLORS = [
-    '1f78b4',
-    'a6cee3',
-    'b2df8a',
-    '33a02c',
-    'fb9a99',
-    'e31a1c',
-    'fdbf6f',
-    'ff7f00',
-    'cab2d6',
-    '6a3d9a',
-    'ffff99',
+    '1f78b4', 'a6cee3', 'b2df8a', '33a02c', 'fb9a99', 'e31a1c', 'fdbf6f', 'ff7f00', 'cab2d6', '6a3d9a', 'ffff99',
     'b15928'
 ]
 
@@ -75,7 +65,8 @@ class CLLDIcon:
         # Changed calls to functions in clldutils.svg to dotted notation:
         elem = '<{0} style="{1}"/>'.format(
             # changed 'black' to dark grey hex (matter of taste)
-            paths[spec[0]], svg.style(stroke='#585858', fill=svg.rgb_as_hex(spec[1:]), opacity=opacity))
+            paths[spec[0]],
+            svg.style(stroke='#585858', fill=svg.rgb_as_hex(spec[1:]), opacity=opacity))
         return svg.svg(elem, height=40, width=40)
 
 

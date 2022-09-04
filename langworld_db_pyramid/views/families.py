@@ -13,9 +13,8 @@ from langworld_db_pyramid.maputils.markers import generate_marker_group
 MATCHDICT_ID_FOR_ALL_FAMILIES = '_all'
 
 
-def _get_family_immediate_subfamilies_and_icons(request) -> tuple[
-    Optional[models.Family], list[models.Family], dict[models.Family, CLLDIcon]
-]:
+def _get_family_immediate_subfamilies_and_icons(
+        request) -> tuple[Optional[models.Family], list[models.Family], dict[models.Family, CLLDIcon]]:
     """Auxiliary function: returns the tuple consisting of
     the `Family` object from the database for the given family ID;
     objects for its immediate children; map/list icons for them.
@@ -28,9 +27,8 @@ def _get_family_immediate_subfamilies_and_icons(request) -> tuple[
 
     if family_man_id == MATCHDICT_ID_FOR_ALL_FAMILIES:
         family = None
-        immediate_subfamilies = (
-            request.dbsession.scalars(select(models.Family).where(models.Family.parent == family)).all()
-        )
+        immediate_subfamilies = (request.dbsession.scalars(select(
+            models.Family).where(models.Family.parent == family)).all())
     else:
         try:
             family = request.dbsession.scalars(select(models.Family).where(models.Family.man_id == family_man_id)).one()
@@ -52,11 +50,7 @@ def _get_family_immediate_subfamilies_and_icons(request) -> tuple[
 @view_config(route_name='families_localized', renderer='langworld_db_pyramid:templates/families.jinja2')
 def view_families_for_list(request):
     family, subfamilies, icon_for_family = _get_family_immediate_subfamilies_and_icons(request)
-    return {
-        'family': family,
-        'subfamilies': subfamilies,
-        'icon_for_family': icon_for_family
-    }
+    return {'family': family, 'subfamilies': subfamilies, 'icon_for_family': icon_for_family}
 
 
 @view_config(route_name='doculects_for_map_family', renderer='json')
@@ -69,39 +63,28 @@ def view_families_for_map(request) -> list[dict]:
     if family is not None:
         href = f"/{request.locale_name}/family/{family.man_id}"
 
-        marker_groups.append(generate_marker_group(
-            group_id=family.man_id,
-            group_name=getattr(family, name_attr),
-            div_icon_html=icon_for_family[family].svg_tag,
-            href_for_heading_in_list=href,
-            img_src=icon_for_family[family].img_src,
-            doculects=sorted(
-                [d for d in family.doculects if d.has_feature_profile], key=lambda d: getattr(d, name_attr)
-            ),
-            locale=locale,
-            additional_popup_text=(
-                f'(<a href="{href}">{getattr(family, name_attr)}</a>)'
-            )
-        ))
+        marker_groups.append(
+            generate_marker_group(group_id=family.man_id,
+                                  group_name=getattr(family, name_attr),
+                                  div_icon_html=icon_for_family[family].svg_tag,
+                                  href_for_heading_in_list=href,
+                                  img_src=icon_for_family[family].img_src,
+                                  doculects=sorted([d for d in family.doculects if d.has_feature_profile],
+                                                   key=lambda d: getattr(d, name_attr)),
+                                  locale=locale,
+                                  additional_popup_text=(f'(<a href="{href}">{getattr(family, name_attr)}</a>)')))
 
     for subfamily in immediate_subfamilies:
         href = f'/{request.locale_name}/family/{subfamily.man_id}'
         marker_groups.append(
-            generate_marker_group(
-                group_id=subfamily.man_id,
-                group_name=getattr(subfamily, name_attr),
-                div_icon_html=icon_for_family[subfamily].svg_tag,
-                href_for_heading_in_list=href,
-                img_src=icon_for_family[subfamily].img_src,
-                doculects=sorted(
-                    list(subfamily.iter_doculects_that_have_feature_profiles()),
-                    key=lambda d: getattr(d, name_attr)
-                ),
-                locale=locale,
-                additional_popup_text=(
-                    f'(<a href="{href}">{getattr(subfamily, name_attr)}</a>)'
-                )
-            )
-        )
+            generate_marker_group(group_id=subfamily.man_id,
+                                  group_name=getattr(subfamily, name_attr),
+                                  div_icon_html=icon_for_family[subfamily].svg_tag,
+                                  href_for_heading_in_list=href,
+                                  img_src=icon_for_family[subfamily].img_src,
+                                  doculects=sorted(list(subfamily.iter_doculects_that_have_feature_profiles()),
+                                                   key=lambda d: getattr(d, name_attr)),
+                                  locale=locale,
+                                  additional_popup_text=(f'(<a href="{href}">{getattr(subfamily, name_attr)}</a>)')))
 
     return marker_groups

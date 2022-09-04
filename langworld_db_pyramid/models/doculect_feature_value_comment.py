@@ -3,11 +3,11 @@ from sqlalchemy.orm import relationship
 
 from langworld_db_pyramid.models.meta import Base
 
-
 # This class may seem to repeat the functionality of
 # association_tables.DoculectToFeatureValue, but DoculectToFeatureValue
 # is an auxiliary class used to automatically establish a relationship between two tables,
 # while this one is used to add a comment to a specific feature value in a specific doculect.
+
 
 class DoculectFeatureValueComment(Base):
     """Class for adding comments

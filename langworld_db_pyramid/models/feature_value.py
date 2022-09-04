@@ -29,11 +29,9 @@ class FeatureValue(Base):
     # because the expensive filtering no longer has to be done at rendering time.
     is_listed_and_has_doculects = Column(Boolean)
 
-    doculects = relationship(
-        'Doculect', secondary='doculect_to_feature_value', back_populates='feature_values'
-    )
+    doculects = relationship('Doculect', secondary='doculect_to_feature_value', back_populates='feature_values')
     doculect_comments = relationship('DoculectFeatureValueComment', back_populates='feature_value')
     feature = relationship('Feature', back_populates='values')
     type = relationship('FeatureValueType', back_populates='values')
 
-    __table_args__ = (UniqueConstraint('feature_id', 'type_id', 'name_en', 'name_ru'),)
+    __table_args__ = (UniqueConstraint('feature_id', 'type_id', 'name_en', 'name_ru'), )

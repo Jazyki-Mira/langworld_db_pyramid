@@ -7,18 +7,11 @@ from langworld_db_pyramid.models.feature_category import FeatureCategory
 from langworld_db_pyramid.views.doculects_list import get_doculects_by_substring, view_all_doculects_list
 from langworld_db_pyramid.views.doculects_map import get_doculects_for_map
 from langworld_db_pyramid.views.doculect_profile import view_doculect_profile
-from langworld_db_pyramid.views.families import (
-    _get_family_immediate_subfamilies_and_icons,
-    MATCHDICT_ID_FOR_ALL_FAMILIES,
-    view_families_for_list,
-    view_families_for_map
-)
-from langworld_db_pyramid.views.features import (
-    get_feature_values_icons,
-    view_all_features_list_by_category,
-    view_feature_list_of_values,
-    view_feature_map_of_values
-)
+from langworld_db_pyramid.views.families import (_get_family_immediate_subfamilies_and_icons,
+                                                 MATCHDICT_ID_FOR_ALL_FAMILIES, view_families_for_list,
+                                                 view_families_for_map)
+from langworld_db_pyramid.views.features import (get_feature_values_icons, view_all_features_list_by_category,
+                                                 view_feature_list_of_values, view_feature_map_of_values)
 from langworld_db_pyramid.views.notfound import notfound_view
 from langworld_db_pyramid.views.query_wizard import get_matching_doculects
 
@@ -41,14 +34,15 @@ NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES = 11  # only 11 out of 1
         # chagatai has turki as alias; turki has neither ISO code nor glottocode, which can affect search
         ('тюрки', 'ru', ('chagatai', 'turki')),
         # biyabuneki has glottocode but no ISO code
-        ('бия', 'ru', ('biyabuneki',)),  # searching by name
-        ('biya', 'ru', ('biyabuneki',)),  # searching by glottocode
-    ]
-
-)
+        ('бия', 'ru', ('biyabuneki', )),  # searching by name
+        ('biya', 'ru', ('biyabuneki', )),  # searching by glottocode
+    ])
 def test_get_doculects_by_substring(
-        dummy_request, setup_models_once_for_test_module,
-        query, locale, expected_ids,
+    dummy_request,
+    setup_models_once_for_test_module,
+    query,
+    locale,
+    expected_ids,
 ):
 
     dummy_request.locale_name = locale
@@ -78,28 +72,48 @@ def test_get_doculects_by_substring_returns_empty_list_if_nothing_found(dummy_re
     assert len(doculects) == 0
 
 
-@pytest.mark.parametrize(
-    'locale, expected_first_doculect, expected_last_doculect',
-    [
-        (
-            'ru',
-            {'id': 'abaza', 'name': 'абазинский', 'latitude': 44.1556, 'longitude': 41.9368,
-             'popupText': '<a href="/ru/doculect/abaza">абазинский</a>', 'url': '/ru/doculect/abaza'},
-            {'id': 'yaoure', 'name': 'яурэ', 'latitude': 6.85, 'longitude': -5.3,
-             'popupText': '<a href="/ru/doculect/yaoure">яурэ</a>', 'url': '/ru/doculect/yaoure'},
-        ),
-        (
-            'en',
-            {'id': 'abaza', 'name': 'Abaza', 'latitude': 44.1556, 'longitude': 41.9368,
-             'popupText': '<a href="/en/doculect/abaza">Abaza</a>', 'url': '/en/doculect/abaza'},
-            {'id': 'zefrei', 'name': 'Zefrei', 'latitude': 32.80592, 'longitude': 52.11667,
-             'popupText': '<a href="/en/doculect/zefrei">Zefrei</a>', 'url': '/en/doculect/zefrei'},
-        ),
-    ]
-)
-def test_get_doculects_for_map(
-        dummy_request, setup_models_once_for_test_module, locale, expected_first_doculect, expected_last_doculect
-):
+@pytest.mark.parametrize('locale, expected_first_doculect, expected_last_doculect', [
+    (
+        'ru',
+        {
+            'id': 'abaza',
+            'name': 'абазинский',
+            'latitude': 44.1556,
+            'longitude': 41.9368,
+            'popupText': '<a href="/ru/doculect/abaza">абазинский</a>',
+            'url': '/ru/doculect/abaza'
+        },
+        {
+            'id': 'yaoure',
+            'name': 'яурэ',
+            'latitude': 6.85,
+            'longitude': -5.3,
+            'popupText': '<a href="/ru/doculect/yaoure">яурэ</a>',
+            'url': '/ru/doculect/yaoure'
+        },
+    ),
+    (
+        'en',
+        {
+            'id': 'abaza',
+            'name': 'Abaza',
+            'latitude': 44.1556,
+            'longitude': 41.9368,
+            'popupText': '<a href="/en/doculect/abaza">Abaza</a>',
+            'url': '/en/doculect/abaza'
+        },
+        {
+            'id': 'zefrei',
+            'name': 'Zefrei',
+            'latitude': 32.80592,
+            'longitude': 52.11667,
+            'popupText': '<a href="/en/doculect/zefrei">Zefrei</a>',
+            'url': '/en/doculect/zefrei'
+        },
+    ),
+])
+def test_get_doculects_for_map(dummy_request, setup_models_once_for_test_module, locale, expected_first_doculect,
+                               expected_last_doculect):
 
     dummy_request.locale_name = locale
     groups = get_doculects_for_map(dummy_request)
@@ -111,18 +125,18 @@ def test_get_doculects_for_map(
     assert doculects[-1] == expected_last_doculect
 
 
-@pytest.mark.parametrize(
-    'family_man_id, expected_number_of_subfamilies, expected_number_of_icon_groups',
-    [
-        ('_all', NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES,
-         NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES),
-        ('turk', 8, 9), ('isolate', 0, 1), ('yupik', 0, 1), ('slav', 3, 4), ('avar_andi', 2, 3),
-    ]
-)
-def test_families__get_family_immediate_subfamilies_and_icons(
-        dummy_request, setup_models_once_for_test_module, family_man_id,
-        expected_number_of_subfamilies, expected_number_of_icon_groups
-):
+@pytest.mark.parametrize('family_man_id, expected_number_of_subfamilies, expected_number_of_icon_groups', [
+    ('_all', NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES,
+     NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES),
+    ('turk', 8, 9),
+    ('isolate', 0, 1),
+    ('yupik', 0, 1),
+    ('slav', 3, 4),
+    ('avar_andi', 2, 3),
+])
+def test_families__get_family_immediate_subfamilies_and_icons(dummy_request, setup_models_once_for_test_module,
+                                                              family_man_id, expected_number_of_subfamilies,
+                                                              expected_number_of_icon_groups):
     dummy_request.matchdict['family_man_id'] = family_man_id
     parent, families, dict_with_icons = _get_family_immediate_subfamilies_and_icons(dummy_request)
     if family_man_id == MATCHDICT_ID_FOR_ALL_FAMILIES:
@@ -140,13 +154,12 @@ def test_families__get_family_immediate_subfamilies_and_icons_not_found(dummy_re
 
 @pytest.mark.parametrize(
     'family_man_id, parent_is_none, expected_number_of_families',
-    [   # subtracted numbers indicate families that have no doculects with profiles and must not be in data['families']
-        (MATCHDICT_ID_FOR_ALL_FAMILIES, True, 13-2), ('isolate', False, 0), ('eskimo', False, 2-1), ('slav', False, 3)
-    ]
-)
-def test_view_families_for_list(
-        dummy_request, setup_models_once_for_test_module, family_man_id, parent_is_none, expected_number_of_families
-):
+    [  # subtracted numbers indicate families that have no doculects with profiles and must not be in data['families']
+        (MATCHDICT_ID_FOR_ALL_FAMILIES, True, 13 - 2), ('isolate', False, 0), ('eskimo', False, 2 - 1),
+        ('slav', False, 3)
+    ])
+def test_view_families_for_list(dummy_request, setup_models_once_for_test_module, family_man_id, parent_is_none,
+                                expected_number_of_families):
     dummy_request.locale_name = 'en'
     dummy_request.matchdict['family_man_id'] = family_man_id
     data = view_families_for_list(dummy_request)
@@ -167,13 +180,13 @@ def test_view_families_for_list(
          NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES),
         # addition indicates that a family that has subfamilies gets a group created for its immediate doculects
         # (even if this group ends up being empty)
-        ('isolate', 1, 4), ('yupik', 1, 1), ('slav', 3 + 1, 16), ('avar_andi', 2 + 1, 14)
-    ]
-)
-def test_view_families_for_map(
-        dummy_request, setup_models_once_for_test_module,
-        family_man_id, expected_number_of_groups, expected_number_of_doculects
-):
+        ('isolate', 1, 4),
+        ('yupik', 1, 1),
+        ('slav', 3 + 1, 16),
+        ('avar_andi', 2 + 1, 14)
+    ])
+def test_view_families_for_map(dummy_request, setup_models_once_for_test_module, family_man_id,
+                               expected_number_of_groups, expected_number_of_doculects):
     dummy_request.locale_name = 'en'
     dummy_request.matchdict['family_man_id'] = family_man_id
     immediate_subfamilies = view_families_for_map(dummy_request)
@@ -262,38 +275,84 @@ def test_notfound_view(dummy_request):
     'params, expected_number_of_items, selected_doculects_to_check',
     [
         ({}, NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES, []),
-        ({'family': 'yupik'}, 1, ['asiatic_eskimo']),
-        ({'family': 'yupik,aram'}, 8, ['asiatic_eskimo', 'classical_syriac', 'turoyo']),
-        ({'family': 'yupik,aram'}, 8, ['asiatic_eskimo', 'classical_syriac', 'turoyo']),
-        ({'family': 'south_chuk_kamch,chuk_kamch'}, 4, ['itelmen', 'kerek']),  # overlapping families
+        ({
+            'family': 'yupik'
+        }, 1, ['asiatic_eskimo']),
+        ({
+            'family': 'yupik,aram'
+        }, 8, ['asiatic_eskimo', 'classical_syriac', 'turoyo']),
+        ({
+            'family': 'yupik,aram'
+        }, 8, ['asiatic_eskimo', 'classical_syriac', 'turoyo']),
+        ({
+            'family': 'south_chuk_kamch,chuk_kamch'
+        }, 4, ['itelmen', 'kerek']),  # overlapping families
         # family + feature:
-        ({'family': 'yupik,aram', 'A-11-1': 'A-11-1'}, 6, [
-            'official_aramaic', 'jewish_palestinian_aramaic', 'classical_mandaic', 'neo_aramaic_of_maalula',
-            'neo_mandaic', 'turoyo',
-        ]),
-        ({'family': 'yupik,aram', 'A-11-1': 'A-11-1,A-11-2'}, 6, [
-            'official_aramaic', 'jewish_palestinian_aramaic', 'classical_mandaic', 'neo_aramaic_of_maalula',
-            'neo_mandaic', 'turoyo',  # none of these languages has A-11-2
-        ]),
-        ({'family': 'yupik,aram', 'A-11-1': 'A-11-1,A-11-7'}, 7, [
-            'official_aramaic', 'jewish_palestinian_aramaic', 'classical_mandaic', 'neo_aramaic_of_maalula',
-            'neo_mandaic', 'turoyo', 'classical_syriac',
-        ]),
-        # family + 2 features:
-        ({'family': 'yupik,aram', 'A-11-1': 'A-11-1,A-11-7', 'N-5': 'N-5-1'}, 5, [
-            'official_aramaic', 'jewish_palestinian_aramaic', 'classical_mandaic', 'neo_aramaic_of_maalula',
+        ({
+            'family': 'yupik,aram',
+            'A-11-1': 'A-11-1'
+        }, 6, [
+            'official_aramaic',
+            'jewish_palestinian_aramaic',
+            'classical_mandaic',
+            'neo_aramaic_of_maalula',
+            'neo_mandaic',
             'turoyo',
         ]),
-        ({'family': 'yupik,aram', 'A-11-1': 'A-11-1,A-11-7', 'N-5': 'N-5-1,N-5-3'}, 7, [
-            'official_aramaic', 'jewish_palestinian_aramaic', 'classical_mandaic', 'neo_aramaic_of_maalula',
-            'turoyo', 'neo_mandaic', 'classical_syriac',
+        (
+            {
+                'family': 'yupik,aram',
+                'A-11-1': 'A-11-1,A-11-2'
+            },
+            6,
+            [
+                'official_aramaic',
+                'jewish_palestinian_aramaic',
+                'classical_mandaic',
+                'neo_aramaic_of_maalula',
+                'neo_mandaic',
+                'turoyo',  # none of these languages has A-11-2
+            ]),
+        ({
+            'family': 'yupik,aram',
+            'A-11-1': 'A-11-1,A-11-7'
+        }, 7, [
+            'official_aramaic',
+            'jewish_palestinian_aramaic',
+            'classical_mandaic',
+            'neo_aramaic_of_maalula',
+            'neo_mandaic',
+            'turoyo',
+            'classical_syriac',
         ]),
-    ]
-)
-def test_query_wizard_get_matching_doculects(
-        dummy_request, setup_models_once_for_test_module,
-        params, expected_number_of_items, selected_doculects_to_check
-):
+        # family + 2 features:
+        ({
+            'family': 'yupik,aram',
+            'A-11-1': 'A-11-1,A-11-7',
+            'N-5': 'N-5-1'
+        }, 5, [
+            'official_aramaic',
+            'jewish_palestinian_aramaic',
+            'classical_mandaic',
+            'neo_aramaic_of_maalula',
+            'turoyo',
+        ]),
+        ({
+            'family': 'yupik,aram',
+            'A-11-1': 'A-11-1,A-11-7',
+            'N-5': 'N-5-1,N-5-3'
+        }, 7, [
+            'official_aramaic',
+            'jewish_palestinian_aramaic',
+            'classical_mandaic',
+            'neo_aramaic_of_maalula',
+            'turoyo',
+            'neo_mandaic',
+            'classical_syriac',
+        ]),
+    ])
+def test_query_wizard_get_matching_doculects(dummy_request, setup_models_once_for_test_module, params,
+                                             expected_number_of_items, selected_doculects_to_check):
     dummy_request.params = params
 
     groups = get_matching_doculects(dummy_request)

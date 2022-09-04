@@ -45,12 +45,23 @@ class CustomModelInitializer:
         file_with_value_types: Path = paths.FILE_WITH_VALUE_TYPES,
     ):
         self.ALL_MODELS = (
-                models.association_tables.DoculectToFeatureValue, models.association_tables.DoculectToGlottocode,
-                models.association_tables.DoculectToIso639P3Code, models.association_tables.EncyclopediaMapToDoculect,
-                models.Doculect, models.DoculectFeatureValueComment, models.DoculectType, models.Country,
-                models.EncyclopediaMap, models.EncyclopediaVolume, models.Family,
-                models.FeatureValue, models.FeatureValueType, models.Feature, models.FeatureCategory,
-                models.Glottocode, models.Iso639P3Code,
+            models.association_tables.DoculectToFeatureValue,
+            models.association_tables.DoculectToGlottocode,
+            models.association_tables.DoculectToIso639P3Code,
+            models.association_tables.EncyclopediaMapToDoculect,
+            models.Doculect,
+            models.DoculectFeatureValueComment,
+            models.DoculectType,
+            models.Country,
+            models.EncyclopediaMap,
+            models.EncyclopediaVolume,
+            models.Family,
+            models.FeatureValue,
+            models.FeatureValueType,
+            models.Feature,
+            models.FeatureCategory,
+            models.Glottocode,
+            models.Iso639P3Code,
         )
 
         self.dbsession = dbsession
@@ -70,7 +81,10 @@ class CustomModelInitializer:
         self.file_with_value_types = file_with_value_types
 
         self.genealogy_names_for_id = {
-            row['id']: {'en': row['en'], 'ru': row['ru']}
+            row['id']: {
+                'en': row['en'],
+                'ru': row['ru']
+            }
             for row in self.read_file(file_with_genealogy_names)
         }
 
@@ -140,21 +154,19 @@ class CustomModelInitializer:
             self.dbsession.add(value_type)
 
         for feature_row in self.read_file(self.file_with_names_of_features):
-            feature = models.Feature(
-                man_id=feature_row['id'],
-                name_en=feature_row['en'],
-                name_ru=feature_row['ru'],
-                category=self.category_for_id[feature_row['id'].split('-')[0]]
-            )
+            feature = models.Feature(man_id=feature_row['id'],
+                                     name_en=feature_row['en'],
+                                     name_ru=feature_row['ru'],
+                                     category=self.category_for_id[feature_row['id'].split('-')[0]])
 
             # adding values of 3 entailing-empty-value types for each feature
             for value_type in [t for t in self.value_type_for_name.values() if t.entails_empty_value]:
                 empty_value = models.FeatureValue(
-                        is_listed_and_has_doculects=False,
-                        man_id='',
-                        name_en='',
-                        name_ru='',
-                        type=value_type,
+                    is_listed_and_has_doculects=False,
+                    man_id='',
+                    name_en='',
+                    name_ru='',
+                    type=value_type,
                 )
                 feature.values.append(empty_value)
                 self.empty_value_for_feature_id_and_type_name[(feature_row['id'], value_type.name)] = empty_value
@@ -172,8 +184,7 @@ class CustomModelInitializer:
                 name_en=value_row['en'],
                 name_ru=value_row['ru'],
                 feature=self.feature_for_id[value_row['feature_id']],
-                type=self.value_type_for_name['listed']
-            )
+                type=self.value_type_for_name['listed'])
             self.dbsession.add(value)
             self.listed_value_for_id[value_row['id']] = value
 
@@ -289,13 +300,13 @@ class CustomModelInitializer:
             type_of_this_doculect = self.doculect_type_for_id[doculect_row_to_write.pop('type')]
 
             glottocodes_for_this_doculect = [
-                self.glottocode_for_id[glottocode]
-                for glottocode in doculect_row_to_write.pop('glottocode').split(', ') if glottocode
+                self.glottocode_for_id[glottocode] for glottocode in doculect_row_to_write.pop('glottocode').split(', ')
+                if glottocode
             ]
 
             iso_639p3_codes_for_this_doculect = [
-                self.iso639p3code_for_id[iso_code]
-                for iso_code in doculect_row_to_write.pop('iso_639_3').split(', ') if iso_code
+                self.iso639p3code_for_id[iso_code] for iso_code in doculect_row_to_write.pop('iso_639_3').split(', ')
+                if iso_code
             ]
 
             # POINT OF CREATION OF DOCULECT OBJECT
@@ -305,8 +316,8 @@ class CustomModelInitializer:
             doculect.comment_ru = ''
 
             for encyclopedia_map_id in [
-                row['encyclopedia_map_id'] for row in rows_with_encyclopedia_map_to_doculect
-                if row['doculect_id'] == doculect.man_id
+                    row['encyclopedia_map_id'] for row in rows_with_encyclopedia_map_to_doculect
+                    if row['doculect_id'] == doculect.man_id
             ]:
                 doculect.encyclopedia_maps.append(self.encyclopedia_map_for_id[encyclopedia_map_id])
 
@@ -338,25 +349,20 @@ class CustomModelInitializer:
                     elif value_type == 'custom':
                         # if value is already in dictionary, use it, else create
                         try:
-                            value = self.custom_value_for_feature_id_and_value_ru[
-                                (feature_profile_row['feature_id'], feature_profile_row['value_ru'])
-                            ]
+                            value = self.custom_value_for_feature_id_and_value_ru[(feature_profile_row['feature_id'],
+                                                                                   feature_profile_row['value_ru'])]
                         except KeyError:
-                            value = models.FeatureValue(
-                                is_listed_and_has_doculects=False,
-                                man_id='',
-                                name_ru=feature_profile_row['value_ru'],
-                                name_en='',
-                                type=self.value_type_for_name['custom'],
-                                feature=self.feature_for_id[feature_profile_row['feature_id']]
-                            )
-                            self.custom_value_for_feature_id_and_value_ru[
-                                (feature_profile_row['feature_id'], feature_profile_row['value_ru'])
-                            ] = value
+                            value = models.FeatureValue(is_listed_and_has_doculects=False,
+                                                        man_id='',
+                                                        name_ru=feature_profile_row['value_ru'],
+                                                        name_en='',
+                                                        type=self.value_type_for_name['custom'],
+                                                        feature=self.feature_for_id[feature_profile_row['feature_id']])
+                            self.custom_value_for_feature_id_and_value_ru[(feature_profile_row['feature_id'],
+                                                                           feature_profile_row['value_ru'])] = value
                     else:
-                        value = self.empty_value_for_feature_id_and_type_name[
-                            (feature_profile_row['feature_id'], value_type)
-                        ]
+                        value = self.empty_value_for_feature_id_and_type_name[(feature_profile_row['feature_id'],
+                                                                               value_type)]
 
                     doculect.feature_values.append(value)
 

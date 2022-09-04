@@ -11,14 +11,11 @@ from langworld_db_pyramid import models
 def view_doculect_profile(request):
     doculect_man_id = request.matchdict['doculect_man_id']
     try:
-        doculect = request.dbsession.scalars(
-            select(models.Doculect).where(models.Doculect.man_id == doculect_man_id)
-        ).one()
+        doculect = request.dbsession.scalars(select(
+            models.Doculect).where(models.Doculect.man_id == doculect_man_id)).one()
     except SQLAlchemyError:
         raise HTTPNotFound(f"Doculect with ID {doculect_man_id} does not exist")
 
-    categories = request.dbsession.scalars(
-        select(models.FeatureCategory).order_by(models.FeatureCategory.man_id)
-    ).all()
+    categories = request.dbsession.scalars(select(models.FeatureCategory).order_by(models.FeatureCategory.man_id)).all()
 
     return {'doculect': doculect, 'categories': categories}

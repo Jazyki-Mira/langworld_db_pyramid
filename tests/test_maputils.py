@@ -52,11 +52,7 @@ def test_generate_fixed_number_of_map_icons_fails_for_more_than_max_number():
 
 def test__generate_marker_group_item(setup_models_once_for_test_module, dbsession):
     doculect = dbsession.scalars(select(Doculect).where(Doculect.man_id == 'asiatic_eskimo')).one()
-    data = _generate_marker_group_item(
-        doculect=doculect,
-        locale='en',
-        additional_popup_text='foo'
-    )
+    data = _generate_marker_group_item(doculect=doculect, locale='en', additional_popup_text='foo')
     assert data.name == doculect.name_en
     assert data.latitude == float(doculect.latitude)
     assert data.longitude == float(doculect.longitude) + 360  # testing doculect with longitude -173.128
@@ -95,8 +91,7 @@ def test_generate_marker_group(setup_models_once_for_test_module, dbsession):
     assert old_french_data['latitude'] == float(old_french.latitude)
     assert old_french_data['longitude'] == float(old_french.longitude)
     assert old_french_data['popupText'] == (
-        f'<a href="/en/doculect/{old_french.man_id}">{old_french.name_en} (†)</a><br/>foo'
-    )
+        f'<a href="/en/doculect/{old_french.man_id}">{old_french.name_en} (†)</a><br/>foo')
     assert old_french_data['url'] == f'/en/doculect/{old_french.man_id}'
 
 

@@ -39,14 +39,14 @@ class DoculectMarkerGroup:
 
 
 def generate_marker_group(
-        group_id: str,
-        group_name: str,
-        div_icon_html: str,
-        doculects: Iterable[Doculect],
-        img_src: str,
-        locale: str,
-        additional_popup_text: Optional[str] = None,
-        href_for_heading_in_list: Optional[str] = None,
+    group_id: str,
+    group_name: str,
+    div_icon_html: str,
+    doculects: Iterable[Doculect],
+    img_src: str,
+    locale: str,
+    additional_popup_text: Optional[str] = None,
+    href_for_heading_in_list: Optional[str] = None,
 ) -> dict:
     """
     Generates a group of markers sharing the same icon style.
@@ -56,30 +56,27 @@ def generate_marker_group(
     """
     # NOTE that this function returns a plain dictionary
     # and only uses classes for clarity within the module.
-    return asdict(DoculectMarkerGroup(
-        id=group_id,
-        name=group_name,
-        divIconHTML=div_icon_html,
-        divIconSize=[40, 40],
-        href=href_for_heading_in_list if href_for_heading_in_list else "",
-        imgSrc=img_src,
-        doculects=[
-            _generate_marker_group_item(
-                doculect=doculect,
-                locale=locale,
-                additional_popup_text=additional_popup_text,
-            ) for doculect in doculects
-        ]
-    ))  # this will convert nested dataclasses to dicts as well.
+    return asdict(
+        DoculectMarkerGroup(id=group_id,
+                            name=group_name,
+                            divIconHTML=div_icon_html,
+                            divIconSize=[40, 40],
+                            href=href_for_heading_in_list if href_for_heading_in_list else "",
+                            imgSrc=img_src,
+                            doculects=[
+                                _generate_marker_group_item(
+                                    doculect=doculect,
+                                    locale=locale,
+                                    additional_popup_text=additional_popup_text,
+                                ) for doculect in doculects
+                            ]))  # this will convert nested dataclasses to dicts as well.
     # I am not using NamedTuple because this trick with nested conversion does not work with it.
 
 
-def _generate_marker_group_item(
-        *,
-        doculect: Doculect,
-        locale: str,
-        additional_popup_text: Optional[str] = None
-) -> DoculectDoculectMarkerGroupItem:
+def _generate_marker_group_item(*,
+                                doculect: Doculect,
+                                locale: str,
+                                additional_popup_text: Optional[str] = None) -> DoculectDoculectMarkerGroupItem:
     """Generates a dictionary with data for an individual marker within a group.
 
     Pop-up text defaults to doculect name with hyperlink to profile,

@@ -5,6 +5,7 @@ import langworld_db_pyramid.models as models
 
 
 class TestCustomModelInitializer:
+
     def test_setup_models(self, dbsession, test_db_initializer):
         # dbsession and test_initializer.dbsession is the same object
         # since the dummy dbsession is passed to constructor or CustomModelInitializer
@@ -62,7 +63,8 @@ class TestCustomModelInitializer:
         afg = dbsession.scalars(select(models.Country).where(models.Country.name_en == 'Afghanistan')).one()
         assert len(afg.doculects) == 21
 
-        rom_volume = dbsession.scalars(select(models.EncyclopediaVolume).where(models.EncyclopediaVolume.id == '11')).one()
+        rom_volume = dbsession.scalars(select(
+            models.EncyclopediaVolume).where(models.EncyclopediaVolume.id == '11')).one()
         assert len(rom_volume.doculects) == 24
 
         # family top to bottom
@@ -88,8 +90,7 @@ class TestCustomModelInitializer:
 
         # random check of different attributes of a doculect
         old_russian: models.Doculect = dbsession.scalars(
-            select(models.Doculect).where(models.Doculect.name_en == 'Old Russian')
-        ).one()
+            select(models.Doculect).where(models.Doculect.name_en == 'Old Russian')).one()
         assert old_russian.family.name_en == 'East Slavic'
         assert old_russian.family.parent.name_en == 'Slavic'
         assert old_russian.family.parent.parent.name_ru == 'Индоевропейские'
@@ -108,9 +109,8 @@ class TestCustomModelInitializer:
         assert 'A-10-1' not in [value.man_id for value in old_russian.feature_values]
 
         # `is_listed_and_has_doculects` attribute in non-listed feature values must be False
-        for non_listed_value in dbsession.scalars(
-                select(models.FeatureValue).where(models.FeatureValue.man_id == '')
-        ).all():
+        for non_listed_value in dbsession.scalars(select(
+                models.FeatureValue).where(models.FeatureValue.man_id == '')).all():
             assert not non_listed_value.is_listed_and_has_doculects
 
         # checking `is_listed_and_has_doculects` attribute in listed feature values

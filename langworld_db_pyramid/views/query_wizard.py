@@ -7,15 +7,12 @@ from langworld_db_pyramid.maputils.markers import generate_marker_group
 
 
 @view_config(route_name='query_wizard', renderer='langworld_db_pyramid:templates/query_wizard.jinja2')
-@view_config(
-    route_name='query_wizard_localized', renderer='langworld_db_pyramid:templates/query_wizard.jinja2'
-)
+@view_config(route_name='query_wizard_localized', renderer='langworld_db_pyramid:templates/query_wizard.jinja2')
 def view_query_wizard(request):
     return {
         'categories': request.dbsession.scalars(select(models.FeatureCategory)).all(),
-        'families': request.dbsession.scalars(
-            select(models.Family).where(models.Family.parent == None)  # noqa: E711
-        ).all()
+        'families': request.dbsession.scalars(select(models.Family).where(models.Family.parent == None)  # noqa: E711
+                                              ).all()
     }
 
 
@@ -23,11 +20,7 @@ def view_query_wizard(request):
 def get_matching_doculects(request) -> list[dict]:
     name_attr = f'name_{request.locale_name}'
 
-    doculects = set(
-        request.dbsession.scalars(
-            select(models.Doculect).where(models.Doculect.has_feature_profile)
-        ).all()
-    )
+    doculects = set(request.dbsession.scalars(select(models.Doculect).where(models.Doculect.has_feature_profile)).all())
     icon = generate_fixed_number_of_map_icons(1)
 
     params = {key: value.split(',') for key, value in request.params.items()}
@@ -39,14 +32,16 @@ def get_matching_doculects(request) -> list[dict]:
 
     if not params:
         # for uniformity, I return not a dictionary, but a list consisting of one dictionary
-        return [generate_marker_group(
-            group_id='',
-            group_name=group_name,
-            doculects=sorted(doculects, key=lambda d: getattr(d, name_attr)),
-            div_icon_html=icon.svg_tag,
-            img_src=icon.img_src,
-            locale=request.locale_name,
-        )]
+        return [
+            generate_marker_group(
+                group_id='',
+                group_name=group_name,
+                doculects=sorted(doculects, key=lambda d: getattr(d, name_attr)),
+                div_icon_html=icon.svg_tag,
+                img_src=icon.img_src,
+                locale=request.locale_name,
+            )
+        ]
 
     try:
         family_man_ids = params['family']
@@ -63,17 +58,18 @@ def get_matching_doculects(request) -> list[dict]:
         doculects_with_any_of_requested_values_of_feature = set()
         for value_id in params[feature_id]:
             value = request.dbsession.scalars(
-                select(models.FeatureValue).where(models.FeatureValue.man_id == value_id)
-            ).one()
+                select(models.FeatureValue).where(models.FeatureValue.man_id == value_id)).one()
             doculects_with_any_of_requested_values_of_feature.update(d for d in doculects if d in value.doculects)
 
         matching_doculects.intersection_update(doculects_with_any_of_requested_values_of_feature)
 
-    return [generate_marker_group(
-        group_id='',
-        group_name=group_name,
-        div_icon_html=icon.svg_tag,
-        img_src=icon.img_src,
-        doculects=sorted(matching_doculects, key=lambda d: getattr(d, name_attr)),
-        locale=request.locale_name,
-    )]
+    return [
+        generate_marker_group(
+            group_id='',
+            group_name=group_name,
+            div_icon_html=icon.svg_tag,
+            img_src=icon.img_src,
+            doculects=sorted(matching_doculects, key=lambda d: getattr(d, name_attr)),
+            locale=request.locale_name,
+        )
+    ]

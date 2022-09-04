@@ -13,8 +13,7 @@ def includeme(config):
         ('feature', 'feature/{feature_man_id}'),
         ('families', 'family/{family_man_id}'),
         ('home', 'home'),
-        ('query_wizard', 'query_wizard')
-    )
+        ('query_wizard', 'query_wizard'))
     for name, path in names_and_paths:
         config.add_route(name, f'/{path}')
         config.add_route(f'{name}_localized', '/{locale}/' + path)  # no f-string because of curly braces
