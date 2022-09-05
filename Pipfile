@@ -13,6 +13,7 @@ toml = "*"
 clldutils = "*"
 flake8 = "*"
 yapf = "*"
+mypy = "*"
 
 [dev-packages]
 
