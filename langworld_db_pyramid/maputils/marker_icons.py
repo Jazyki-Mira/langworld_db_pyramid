@@ -1,6 +1,6 @@
 from clldutils import svg
 from dataclasses import dataclass
-from typing import Any, Iterator, Union
+from typing import Any, Iterator
 
 COLORS = [
     '1f78b4', 'a6cee3', 'b2df8a', '33a02c', 'fb9a99', 'e31a1c', 'fdbf6f', 'ff7f00', 'cab2d6', '6a3d9a', 'ffff99',
@@ -77,13 +77,16 @@ def generate_map_icons() -> Iterator[CLLDIcon]:
             yield CLLDIcon(f'{shape}{color}')
 
 
-def generate_fixed_number_of_map_icons(number) -> Union[CLLDIcon, list[CLLDIcon]]:
+def generate_fixed_number_of_map_icons(number) -> list[CLLDIcon]:
     """Returns list of icon HTMLs or one string with icon HTML if `number` is 1."""
     if number > len(SHAPES) * len(COLORS):
         raise ValueError(f'Cannot generate more than {len(COLORS) * len(SHAPES)} different markers')
 
-    icons = [icon for _, icon in zip(range(number), generate_map_icons())]
-    return icons[0] if number == 1 else icons
+    return [icon for _, icon in zip(range(number), generate_map_icons())]
+
+
+def generate_one_icon() -> CLLDIcon:
+    return generate_fixed_number_of_map_icons(1)[0]
 
 
 def icon_for_object(objects: list) -> dict[Any, CLLDIcon]:

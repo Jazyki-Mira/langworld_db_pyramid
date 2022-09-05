@@ -39,9 +39,16 @@ def test_generate_map_icons():
 
 
 def test_generate_fixed_number_of_map_icons():
-    output_icons = icons.generate_fixed_number_of_map_icons(60)
-    assert len(output_icons) == 60
-    assert len(set(output_icons)) == len(output_icons)
+    for number in (1, 60):
+        output_icons = icons.generate_fixed_number_of_map_icons(number)
+        assert len(output_icons) == number
+        assert len(set(output_icons)) == len(output_icons)
+        assert isinstance(output_icons[0], icons.CLLDIcon)
+
+
+def test_generate_one_icon():
+    icon = icons.generate_one_icon()
+    assert isinstance(icon, icons.CLLDIcon)
 
 
 def test_generate_fixed_number_of_map_icons_fails_for_more_than_max_number():
