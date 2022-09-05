@@ -55,7 +55,7 @@ def get_matching_doculects(request) -> list[dict]:
 
     # every feature has to be an intersection, while every value within a feature has to be a union
     for feature_id in params:
-        doculects_with_any_of_requested_values_of_feature = set()
+        doculects_with_any_of_requested_values_of_feature: set[models.Doculect] = set()
         for value_id in params[feature_id]:
             value = request.dbsession.scalars(
                 select(models.FeatureValue).where(models.FeatureValue.man_id == value_id)).one()

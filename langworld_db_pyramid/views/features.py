@@ -1,10 +1,12 @@
+from typing import Any
+
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
 from langworld_db_pyramid import models
-from langworld_db_pyramid.maputils.marker_icons import icon_for_object
+from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
 
 
@@ -15,7 +17,7 @@ def view_all_features_list_by_category(request):
     return {'categories': request.dbsession.scalars(select(models.FeatureCategory)).all()}
 
 
-def get_feature_values_icons(request):
+def get_feature_values_icons(request) -> tuple[models.Feature, list[models.FeatureValue], dict[Any, CLLDIcon]]:
     feature_man_id = request.matchdict['feature_man_id']
     try:
         feature = request.dbsession.scalars(select(models.Feature).where(models.Feature.man_id == feature_man_id)).one()

@@ -1,6 +1,6 @@
 from clldutils import svg
 from dataclasses import dataclass
-from typing import Any, Iterator
+from typing import Any, Iterator, Optional
 
 COLORS = [
     '1f78b4', 'a6cee3', 'b2df8a', '33a02c', 'fb9a99', 'e31a1c', 'fdbf6f', 'ff7f00', 'cab2d6', '6a3d9a', 'ffff99',
@@ -24,24 +24,24 @@ class CLLDIcon:
     """
     shape_and_color: str
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.svg_tag = self._generate_svg(self.shape_and_color)
         self.img_src = svg.data_url(self.svg_tag)
         self.img_tag = f'<img src="{self.img_src}"/>'
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if self.shape_and_color == other.shape_and_color:
             return True
         return False
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.svg_tag, self.img_tag))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'CLLDIcon (shape {self.shape_and_color[0]}, color #{self.shape_and_color[1:]})'
 
     @staticmethod
-    def _generate_svg(spec: str, opacity=None) -> str:
+    def _generate_svg(spec: str, opacity: Optional[str] = None) -> str:
         """
         **This method is a copy** of function `icon()` in `clldutils.svg`
         with `paths` changed to produce smaller icons
@@ -77,7 +77,7 @@ def generate_map_icons() -> Iterator[CLLDIcon]:
             yield CLLDIcon(f'{shape}{color}')
 
 
-def generate_fixed_number_of_map_icons(number) -> list[CLLDIcon]:
+def generate_fixed_number_of_map_icons(number: int) -> list[CLLDIcon]:
     """Returns list of icon HTMLs or one string with icon HTML if `number` is 1."""
     if number > len(SHAPES) * len(COLORS):
         raise ValueError(f'Cannot generate more than {len(COLORS) * len(SHAPES)} different markers')

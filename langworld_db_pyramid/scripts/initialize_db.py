@@ -90,20 +90,20 @@ class CustomModelInitializer:
 
         # Dictionaries map identifiers to instances of mapped classes:
 
-        self.country_for_id = {}
-        self.encyclopedia_map_for_id = {}
-        self.encyclopedia_volume_for_id = {}
-        self.family_for_id = {}
+        self.country_for_id: dict[str, models.Country] = {}
+        self.encyclopedia_map_for_id: dict[str, models.EncyclopediaMap] = {}
+        self.encyclopedia_volume_for_id: dict[str, models.EncyclopediaVolume] = {}
+        self.family_for_id: dict[str, models.Family] = {}
 
-        self.category_for_id = {}
-        self.feature_for_id = {}
-        self.glottocode_for_id = {}
-        self.iso639p3code_for_id = {}
+        self.category_for_id: dict[str, models.FeatureCategory] = {}
+        self.feature_for_id: dict[str, models.Feature] = {}
+        self.glottocode_for_id: dict[str, models.Glottocode] = {}
+        self.iso639p3code_for_id: dict[str, models.Iso639P3Code] = {}
 
-        self.listed_value_for_id = {}
-        self.value_type_for_name = {}
-        self.custom_value_for_feature_id_and_value_ru = {}
-        self.empty_value_for_feature_id_and_type_name = {}
+        self.listed_value_for_id: dict[str, models.FeatureValue] = {}
+        self.value_type_for_name: dict[str, models.FeatureValueType] = {}
+        self.custom_value_for_feature_id_and_value_ru: dict[tuple[str, str], models.FeatureValue] = {}
+        self.empty_value_for_feature_id_and_type_name: dict[tuple[str, str], models.FeatureValue] = {}
 
         self.doculect_type_for_id = {
             'language': models.DoculectType(name_en='language', name_ru='язык'),
@@ -111,15 +111,15 @@ class CustomModelInitializer:
             'language/dialect': models.DoculectType(name_en='language_dialect', name_ru='язык/диалект')
         }
 
-    def setup_models(self):
+    def setup_models(self) -> None:
         self._delete_all_data()
         self._populate_all()
 
-    def _delete_all_data(self):
+    def _delete_all_data(self) -> None:
         for model in self.ALL_MODELS:
             self.dbsession.execute(delete(model))
 
-    def _populate_all(self):
+    def _populate_all(self) -> None:
 
         self._populate_categories_features_value_types_listed_and_empty_values()
         self._populate_countries()
@@ -132,7 +132,7 @@ class CustomModelInitializer:
         self._populate_doculects_custom_feature_values_and_comments()
         self._set_is_listed_and_has_doculect_to_false_for_listed_values_without_doculects()
 
-    def _populate_categories_features_value_types_listed_and_empty_values(self):
+    def _populate_categories_features_value_types_listed_and_empty_values(self) -> None:
         # Putting these in one method to emphasize tight coupling
         # between the three operations
 
@@ -188,7 +188,7 @@ class CustomModelInitializer:
             self.dbsession.add(value)
             self.listed_value_for_id[value_row['id']] = value
 
-    def _populate_countries(self):
+    def _populate_countries(self) -> None:
 
         for country_row in self.read_file(self.file_with_countries):
             country = models.Country(
@@ -201,7 +201,7 @@ class CustomModelInitializer:
             self.dbsession.add(country)
             self.country_for_id[country_row['id']] = country
 
-    def _populate_encyclopedia_maps(self):
+    def _populate_encyclopedia_maps(self) -> None:
         for map_row in self.read_file(self.file_with_encyclopedia_maps):
             row_for_model = copy(map_row)
             row_for_model['man_id'] = row_for_model.pop('id')
@@ -209,17 +209,17 @@ class CustomModelInitializer:
             self.dbsession.add(encyclopedia_map)
             self.encyclopedia_map_for_id[encyclopedia_map.man_id] = encyclopedia_map
 
-    def _populate_encyclopedia_volumes(self):
+    def _populate_encyclopedia_volumes(self) -> None:
         for encyclopedia_row in self.read_file(self.file_with_encyclopedia_volumes):
             volume = models.EncyclopediaVolume(**encyclopedia_row)
             self.dbsession.add(volume)
             self.encyclopedia_volume_for_id[volume.id] = volume
 
-    def _populate_families(self):
+    def _populate_families(self) -> None:
         # make initial call to another function that will recursively call itself until all families are processed
         self._process_genealogy_hierarchy(read_json_toml_yaml(self.file_with_genealogy_hierarchy))
 
-    def _process_genealogy_hierarchy(self, items: list, parent: Optional[models.family.Family] = None):
+    def _process_genealogy_hierarchy(self, items: list, parent: Optional[models.family.Family] = None) -> None:
         if not isinstance(items, list):
             raise TypeError(f'This function cannot be called with {type(items)} ({items})')
 
@@ -245,7 +245,7 @@ class CustomModelInitializer:
                 # so the node's children are in the first item of .values()
                 self._process_genealogy_hierarchy(items=list(node.values())[0], parent=family)
 
-    def _populate_glottocodes(self):
+    def _populate_glottocodes(self) -> None:
         # for now, I see it reasonable to only add codes that are present in file with doculects (same for ISO-639-3)
         for row in self.read_file(self.file_with_doculects):
             glottocodes = row['glottocode'].split(', ')
@@ -259,7 +259,7 @@ class CustomModelInitializer:
                     self.glottocode_for_id[item] = glottocode
                     self.dbsession.add(glottocode)
 
-    def _populate_iso639p3_codes(self):
+    def _populate_iso639p3_codes(self) -> None:
         for row in self.read_file(self.file_with_doculects):
             iso_codes = row['iso_639_3'].split(', ')
             for item in iso_codes:
@@ -272,7 +272,7 @@ class CustomModelInitializer:
                     self.iso639p3code_for_id[item] = iso_code
                     self.dbsession.add(iso_code)
 
-    def _populate_doculects_custom_feature_values_and_comments(self):
+    def _populate_doculects_custom_feature_values_and_comments(self) -> None:
         doculect_rows = self.read_file(self.file_with_doculects)
         rows_with_encyclopedia_map_to_doculect = self.read_file(self.file_with_encyclopedia_map_to_doculect)
 
@@ -377,13 +377,13 @@ class CustomModelInitializer:
 
             self.dbsession.add(doculect)
 
-    def _set_is_listed_and_has_doculect_to_false_for_listed_values_without_doculects(self):
+    def _set_is_listed_and_has_doculect_to_false_for_listed_values_without_doculects(self) -> None:
         for value in self.listed_value_for_id.values():
             if not value.doculects:
                 value.is_listed_and_has_doculects = False
 
 
-def setup_models(dbsession):
+def setup_models(dbsession) -> None:
     """
     Add or update models / fixtures in the database.
 

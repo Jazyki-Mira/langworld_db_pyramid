@@ -3,7 +3,7 @@ from pyramid.view import view_config
 
 
 @view_config(route_name='mapbox_token', renderer='json')
-def get_mapbox_token(request):
+def get_mapbox_token(request) -> str:
     type_of_token = request.registry.settings['mapbox_access_token_file']
 
     if type_of_token == 'private':
