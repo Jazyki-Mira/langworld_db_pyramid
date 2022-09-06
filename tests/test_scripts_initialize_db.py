@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from langworld_db_data.langworld_db_data.filetools.csv_xls import read_csv
+from langworld_db_data.langworld_db_data.filetools.csv_xls import read_dicts_from_csv
 import langworld_db_pyramid.models as models
 
 
@@ -20,7 +20,7 @@ class TestCustomModelInitializer:
             rows_with_custom_values = {
                 # comment not included because FeatureValue table contains values without comments
                 (row['feature_id'], row['value_ru'])
-                for row in read_csv(file, read_as='dicts') if row['value_type'] == 'custom'
+                for row in read_dicts_from_csv(file) if row['value_type'] == 'custom'
             }
             unique_custom_values.update(rows_with_custom_values)
 

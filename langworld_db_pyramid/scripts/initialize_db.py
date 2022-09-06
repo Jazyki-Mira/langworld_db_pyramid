@@ -1,16 +1,15 @@
 import argparse
 from copy import copy
-from functools import partial
 from pathlib import Path
 import sys
-from typing import Optional
+from typing import cast, Optional, Union
 
 from pyramid.paster import bootstrap, setup_logging
 from sqlalchemy import delete
 from sqlalchemy.exc import OperationalError
 
 from langworld_db_data.langworld_db_data.constants import paths
-from langworld_db_data.langworld_db_data.filetools.csv_xls import read_csv
+from langworld_db_data.langworld_db_data.filetools.csv_xls import read_dicts_from_csv
 from langworld_db_data.langworld_db_data.filetools.json_toml_yaml import read_json_toml_yaml
 
 from langworld_db_pyramid import models
@@ -66,8 +65,6 @@ class CustomModelInitializer:
 
         self.dbsession = dbsession
 
-        self.read_file = partial(read_csv, read_as='dicts')
-
         self.dir_with_feature_profiles = dir_with_feature_profiles
         self.file_with_categories = file_with_categories
         self.file_with_countries = file_with_countries
@@ -85,7 +82,7 @@ class CustomModelInitializer:
                 'en': row['en'],
                 'ru': row['ru']
             }
-            for row in self.read_file(file_with_genealogy_names)
+            for row in read_dicts_from_csv(file_with_genealogy_names)
         }
 
         # Dictionaries map identifiers to instances of mapped classes:
@@ -136,7 +133,7 @@ class CustomModelInitializer:
         # Putting these in one method to emphasize tight coupling
         # between the three operations
 
-        for category_row in self.read_file(self.file_with_categories):
+        for category_row in read_dicts_from_csv(self.file_with_categories):
             category = models.FeatureCategory(
                 man_id=category_row['id'],
                 name_en=category_row['en'],
@@ -145,7 +142,7 @@ class CustomModelInitializer:
             self.dbsession.add(category)
             self.category_for_id[category_row['id']] = category
 
-        for value_type_row in self.read_file(self.file_with_value_types):
+        for value_type_row in read_dicts_from_csv(self.file_with_value_types):
             value_type = models.FeatureValueType(
                 name=value_type_row['id'],
                 entails_empty_value=int(value_type_row['entails_empty_value']),
@@ -153,7 +150,7 @@ class CustomModelInitializer:
             self.value_type_for_name[value_type_row['id']] = value_type
             self.dbsession.add(value_type)
 
-        for feature_row in self.read_file(self.file_with_names_of_features):
+        for feature_row in read_dicts_from_csv(self.file_with_names_of_features):
             feature = models.Feature(man_id=feature_row['id'],
                                      name_en=feature_row['en'],
                                      name_ru=feature_row['ru'],
@@ -175,7 +172,7 @@ class CustomModelInitializer:
             self.feature_for_id[feature_row['id']] = feature
 
         # populating values of type 'listed': from file with listed values
-        for value_row in self.read_file(self.file_with_listed_values):
+        for value_row in read_dicts_from_csv(self.file_with_listed_values):
             value = models.FeatureValue(
                 # This will be set to False later if there are no doculects.
                 # See comment in models/feature_value.py about conscious choice of this suboptimal algorithm
@@ -190,7 +187,7 @@ class CustomModelInitializer:
 
     def _populate_countries(self) -> None:
 
-        for country_row in self.read_file(self.file_with_countries):
+        for country_row in read_dicts_from_csv(self.file_with_countries):
             country = models.Country(
                 man_id=country_row['id'],
                 iso=country_row['ISO 3166-1 alpha-3'],
@@ -202,7 +199,7 @@ class CustomModelInitializer:
             self.country_for_id[country_row['id']] = country
 
     def _populate_encyclopedia_maps(self) -> None:
-        for map_row in self.read_file(self.file_with_encyclopedia_maps):
+        for map_row in read_dicts_from_csv(self.file_with_encyclopedia_maps):
             row_for_model = copy(map_row)
             row_for_model['man_id'] = row_for_model.pop('id')
             encyclopedia_map = models.EncyclopediaMap(**row_for_model)
@@ -210,7 +207,7 @@ class CustomModelInitializer:
             self.encyclopedia_map_for_id[encyclopedia_map.man_id] = encyclopedia_map
 
     def _populate_encyclopedia_volumes(self) -> None:
-        for encyclopedia_row in self.read_file(self.file_with_encyclopedia_volumes):
+        for encyclopedia_row in read_dicts_from_csv(self.file_with_encyclopedia_volumes):
             volume = models.EncyclopediaVolume(**encyclopedia_row)
             self.dbsession.add(volume)
             self.encyclopedia_volume_for_id[volume.id] = volume
@@ -247,7 +244,7 @@ class CustomModelInitializer:
 
     def _populate_glottocodes(self) -> None:
         # for now, I see it reasonable to only add codes that are present in file with doculects (same for ISO-639-3)
-        for row in self.read_file(self.file_with_doculects):
+        for row in read_dicts_from_csv(self.file_with_doculects):
             glottocodes = row['glottocode'].split(', ')
             for item in glottocodes:
                 if not item:
@@ -260,7 +257,7 @@ class CustomModelInitializer:
                     self.dbsession.add(glottocode)
 
     def _populate_iso639p3_codes(self) -> None:
-        for row in self.read_file(self.file_with_doculects):
+        for row in read_dicts_from_csv(self.file_with_doculects):
             iso_codes = row['iso_639_3'].split(', ')
             for item in iso_codes:
                 if not item:
@@ -273,14 +270,17 @@ class CustomModelInitializer:
                     self.dbsession.add(iso_code)
 
     def _populate_doculects_custom_feature_values_and_comments(self) -> None:
-        doculect_rows = self.read_file(self.file_with_doculects)
-        rows_with_encyclopedia_map_to_doculect = self.read_file(self.file_with_encyclopedia_map_to_doculect)
+        doculect_rows = read_dicts_from_csv(self.file_with_doculects)
+        rows_with_encyclopedia_map_to_doculect = read_dicts_from_csv(self.file_with_encyclopedia_map_to_doculect)
 
         for doculect_type in self.doculect_type_for_id.values():
             self.dbsession.add(doculect_type)
 
         for doculect_row in doculect_rows:
             doculect_row_to_write = copy(doculect_row)
+
+            # for typechecking only: Doculect has some boolean fields, while original dictionary values are all `str`
+            doculect_row_to_write = cast(dict[str, Union[str, bool]], doculect_row_to_write)
 
             # popping attributes for future IDs as they will all be autogenerated (auto-incremented ID or ForeignKey)
 
@@ -295,7 +295,7 @@ class CustomModelInitializer:
             family = self.family_for_id[doculect_row_to_write.pop('family_id')]
 
             for bool_key in ('is_extinct', 'is_multiple', 'has_feature_profile'):
-                doculect_row_to_write[bool_key] = int(doculect_row_to_write[bool_key])
+                doculect_row_to_write[bool_key] = bool(int(doculect_row_to_write[bool_key]))
 
             type_of_this_doculect = self.doculect_type_for_id[doculect_row_to_write.pop('type')]
 
@@ -330,7 +330,7 @@ class CustomModelInitializer:
             doculect.type = type_of_this_doculect
 
             if doculect_row_to_write['has_feature_profile'] == 1:
-                feature_profile_rows = self.read_file(self.dir_with_feature_profiles / f"{doculect_row['id']}.csv")
+                feature_profile_rows = read_dicts_from_csv(self.dir_with_feature_profiles / f"{doculect_row['id']}.csv")
 
                 for feature_profile_row in feature_profile_rows:
 
