@@ -6,7 +6,7 @@ from langworld_db_data.constants.paths import (
     FILE_WITH_DOCULECTS,
     FILE_WITH_NAMES_OF_FEATURES,
 )
-from langworld_db_data.filetools.csv_xls import read_csv, read_dict_from_2_csv_columns
+from langworld_db_data.filetools.csv_xls import read_dicts_from_csv, read_dict_from_2_csv_columns
 
 
 class AbstractValueLister(ABC):
@@ -39,16 +39,17 @@ class AbstractValueLister(ABC):
 
         for file in list_of_files:
             key = f'{self.encyclopedia_volume_for_doculect_id[file.stem]}:{file.stem}'
+            rows = read_dicts_from_csv(file)
             self.filtered_rows_for_volume_doculect_id[key] = [
-                row for row in read_csv(file, read_as='dicts') if row['value_type'] == self.value_type
+                row for row in rows if row['value_type'] == self.value_type
             ]
 
     @abstractmethod
-    def write_grouped_by_feature(self, output_file: Path):
+    def write_grouped_by_feature(self, output_file: Path) -> None:
         pass
 
     @abstractmethod
-    def write_grouped_by_volume_and_doculect(self, output_file: Path):
+    def write_grouped_by_volume_and_doculect(self, output_file: Path) -> None:
         pass
 
 

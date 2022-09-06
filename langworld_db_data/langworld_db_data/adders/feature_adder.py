@@ -3,7 +3,7 @@ from typing import Optional
 
 from langworld_db_data.adders.adder import Adder, AdderError, AUX_ROW_MARKER, SEPARATOR
 from langworld_db_data.constants.paths import FILE_WITH_CATEGORIES, FILE_WITH_NAMES_OF_FEATURES
-from langworld_db_data.filetools.csv_xls import read_csv, write_csv
+from langworld_db_data.filetools.csv_xls import read_dicts_from_csv, write_csv
 from langworld_db_data.filetools.txt import remove_extra_space
 
 INDEX_THRESHOLD_FOR_REGULAR_FEATURE_IDS = 100
@@ -38,7 +38,7 @@ class FeatureAdder(Adder):
         listed_values_to_add: list[dict],
         index_of_new_feature: Optional[int] = None,
         insert_after_index: Optional[int] = None,
-    ):
+    ) -> None:
 
         _ = remove_extra_space
         cat_id, feat_en, feat_ru = _(category_id), _(feature_en), _(feature_ru)
@@ -51,10 +51,11 @@ class FeatureAdder(Adder):
             if not ('en' in item and 'ru' in item):
                 raise FeatureAdderError(f"Listed value must have keys 'en' and 'ru'. Your value: {item}")
 
-        if cat_id not in [row['id'] for row in read_csv(self.file_with_categories, read_as='dicts')]:
+        if cat_id not in [row['id'] for row in read_dicts_from_csv(self.file_with_categories)]:
             raise FeatureAdderError(f'Category ID <{cat_id}> not found in file {self.file_with_categories.name}')
 
-        rows_with_features = read_csv(self.input_file_with_features, read_as='dicts')
+        rows_with_features = read_dicts_from_csv(self.input_file_with_features)
+
         if (feat_en in [row['en'] for row in rows_with_features]
                 or feat_ru.strip() in [row['ru'] for row in rows_with_features]):
             # note that this check should not be restricted to one feature category
@@ -94,8 +95,6 @@ class FeatureAdder(Adder):
 
         print(f'\nAdding new values in {id_of_new_feature} to file with listed values')
 
-        value_rows = read_csv(self.input_file_with_listed_values, read_as='dicts')
-
         rows_to_add_to_file_with_listed_values = []
 
         for i, new_listed_value in enumerate(listed_values_to_add, start=1):
@@ -109,7 +108,7 @@ class FeatureAdder(Adder):
             })
 
         value_rows_with_new_values_inserted = self.insert_rows(
-            rows_before_insertion=value_rows,
+            rows_before_insertion=read_dicts_from_csv(self.input_file_with_listed_values),
             rows_to_add=rows_to_add_to_file_with_listed_values,
             category_id=cat_id,
             feature_id_to_add_after=feature_id_to_add_after,
@@ -125,7 +124,7 @@ class FeatureAdder(Adder):
         for file in self.input_feature_profiles:
 
             feature_profile_rows_with_new_features_inserted = self.insert_rows(
-                rows_before_insertion=read_csv(file, read_as='dicts'),
+                rows_before_insertion=read_dicts_from_csv(file),
                 rows_to_add=[{
                     'feature_id': id_of_new_feature,
                     'feature_name_ru': feat_ru,
@@ -148,7 +147,7 @@ class FeatureAdder(Adder):
         self,
         category_id: str,
         custom_index_of_new_feature: Optional[int],
-    ):
+    ) -> str:
         """
         Generates feature ID. If custom feature index is given, tries to use it.
         Otherwise, takes the largest feature ID that is **less than 100**
@@ -161,9 +160,9 @@ class FeatureAdder(Adder):
                 f'For clarity, manual feature indices must be greater than {INDEX_THRESHOLD_FOR_REGULAR_FEATURE_IDS} '
                 f'(you gave {custom_index_of_new_feature}).')
 
+        rows_with_features = read_dicts_from_csv(self.input_file_with_features)
         feature_ids_in_category = [
-            row['id'] for row in read_csv(self.input_file_with_features, read_as='dicts')
-            if row['id'].startswith(f'{category_id}{SEPARATOR}')
+            row['id'] for row in rows_with_features if row['id'].startswith(f'{category_id}{SEPARATOR}')
         ]
 
         if custom_index_of_new_feature is None:
@@ -181,11 +180,11 @@ class FeatureAdder(Adder):
 
     @staticmethod
     def insert_rows(
-        rows_before_insertion: list[dict],
-        rows_to_add: list[dict],
+        rows_before_insertion: list[dict[str, str]],
+        rows_to_add: list[dict[str, str]],
         category_id: str,
         feature_id_to_add_after: Optional[str],
-    ):
+    ) -> list[dict[str, str]]:
         rows = rows_before_insertion[:]
 
         if feature_id_to_add_after is None:
