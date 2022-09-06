@@ -9,7 +9,7 @@ from langworld_db_data.constants.paths import (
 )
 from langworld_db_data.featureprofiletools.feature_profile_reader import FeatureProfileReader
 from langworld_db_data.filetools.csv_xls import (check_csv_for_malformed_rows, check_csv_for_repetitions_in_column,
-                                                 read_csv, read_dict_from_2_csv_columns)
+                                                 read_dicts_from_csv, read_dict_from_2_csv_columns)
 from langworld_db_data.filetools.json_toml_yaml import read_json_toml_yaml
 from langworld_db_data.validators.exceptions import ValidatorError
 
@@ -32,8 +32,10 @@ class FeatureProfileValidator:
         self.feature_profiles = sorted(list(dir_with_feature_profiles.glob('*.csv')))
         self.reader = FeatureProfileReader()
 
-        self.rules_for_not_applicable_value_type = read_json_toml_yaml(file_with_rules_for_not_applicable_value_type)
-        self.valid_value_types = [row['id'] for row in read_csv(file_with_value_types, read_as='dicts')]
+        self.rules_for_not_applicable_value_type: dict = read_json_toml_yaml(
+            file_with_rules_for_not_applicable_value_type)
+
+        self.valid_value_types = [row['id'] for row in read_dicts_from_csv(file_with_value_types)]
 
         for file in self.feature_profiles:
             check_csv_for_malformed_rows(file)
@@ -49,12 +51,12 @@ class FeatureProfileValidator:
         self.must_raise_exception_at_value_name_mismatch = must_raise_exception_at_value_name_mismatch
         self.must_raise_exception_at_not_applicable_rule_breach = must_raise_exception_at_not_applicable_rule_breach
 
-    def validate(self):
+    def validate(self) -> None:
         print(f'\nChecking feature profiles ({len(self.feature_profiles)} files)')
         for feature_profile in self.feature_profiles:
             self._validate_one_file(feature_profile)
 
-    def _validate_one_file(self, file: Path):
+    def _validate_one_file(self, file: Path) -> None:
         try:
             data_from_profile = self.reader.read_feature_profile_as_dict_from_file(file)
         except ValueError as e:

@@ -3,8 +3,10 @@ from typing import NamedTuple
 
 import pytest
 
+# noinspection PyProtectedMember
 from langworld_db_data.filetools.csv_xls import (CSVDelimiter, check_csv_for_malformed_rows,
-                                                 check_csv_for_repetitions_in_column, convert_xls_to_csv, read_csv,
+                                                 check_csv_for_repetitions_in_column, convert_xls_to_csv,
+                                                 read_dicts_from_csv, read_plain_rows_from_csv,
                                                  read_dict_from_2_csv_columns, write_csv)
 from langworld_db_data.filetools.txt import read_plain_text_from_file
 from tests.paths import DIR_WITH_FILETOOLS_TEST_FILES, PATH_TO_TEST_OUTPUT_TXT_FILE, PATH_TO_TEST_OUTPUT_CSV_FILE
@@ -36,7 +38,7 @@ def test_convert_xls_to_csv():
     path_to_output_csv_file.unlink()
 
 
-def test_read_csv():
+def test_read_dicts_from_csv_read_plain_rows_from_csv():
     lines_to_write = ['col1,col2,col3\n', 'foo,bar,baz\n', 'фу,бар,баз']
     expected_rows = [['col1', 'col2', 'col3'], ['foo', 'bar', 'baz'], ['фу', 'бар', 'баз']]
     expected_list_of_dicts = [
@@ -65,13 +67,13 @@ def test_read_csv():
         if 'excel' in path_.name:
             delimiter = ';'
 
-        rows = read_csv(path_, read_as='plain_rows', delimiter=delimiter)
+        rows = read_plain_rows_from_csv(path_, delimiter=delimiter)
         assert rows == expected_rows
 
-        rows_without_header = read_csv(path_, read_as='plain_rows_no_header', delimiter=delimiter)
+        rows_without_header = read_plain_rows_from_csv(path_, delimiter=delimiter, remove_1st_row=True)
         assert rows_without_header == expected_rows[1:]
 
-        list_of_dicts = read_csv(path_, read_as='dicts', delimiter=delimiter)
+        list_of_dicts = read_dicts_from_csv(path_, delimiter=delimiter)
         assert list_of_dicts == expected_list_of_dicts
 
     path_to_auto_test_file.unlink()
@@ -111,12 +113,6 @@ def test_check_csv_for_repetitions_in_column_throws_exception_with_repetition_in
 def test_check_csv_for_repetitions_in_column_passes_for_file_with_repetition_in_column_if_different_column_is_checked():
     file = DIR_WITH_FILETOOLS_TEST_FILES / 'csv_doculects_with_duplicate_values.csv'
     check_csv_for_repetitions_in_column(path_to_file=file, column_name='name_ru')
-
-
-def test_read_csv_raises_exception_with_wrong_read_as():
-    with pytest.raises(ValueError):
-        # noinspection PyTypeChecker
-        read_csv(Path(DIR_WITH_FILETOOLS_TEST_FILES / 'csv_manually_created_in_excel.csv'), read_as='foo')
 
 
 def test_read_dict_from_2_csv_columns():

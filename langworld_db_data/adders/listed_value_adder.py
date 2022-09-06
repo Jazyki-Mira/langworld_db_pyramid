@@ -1,7 +1,7 @@
 from typing import Optional
 
 from langworld_db_data.adders.adder import Adder, AdderError, SEPARATOR
-from langworld_db_data.filetools.csv_xls import read_csv, write_csv
+from langworld_db_data.filetools.csv_xls import read_dicts_from_csv, write_csv
 
 
 class ListedValueAdderError(AdderError):
@@ -14,7 +14,7 @@ class ListedValueAdder(Adder):
                          feature_id: str,
                          new_value_en: str,
                          new_value_ru: str,
-                         custom_values_to_rename: Optional[list[str]] = None):
+                         custom_values_to_rename: Optional[list[str]] = None) -> None:
         """Adds listed value to the inventory and marks matching custom value
         in feature profiles as listed.  If one or more custom values
         in feature profiles were formulated differently but now
@@ -37,8 +37,8 @@ class ListedValueAdder(Adder):
         feature_id: str,
         new_value_en: str,
         new_value_ru: str,
-    ):
-        rows = read_csv(self.input_file_with_listed_values, read_as='dicts')
+    ) -> str:
+        rows = read_dicts_from_csv(self.input_file_with_listed_values)
 
         if not [r for r in rows if r['feature_id'] == feature_id]:
             raise ListedValueAdderError(f'Feature ID {feature_id} not found')
@@ -78,18 +78,19 @@ class ListedValueAdder(Adder):
                                                   feature_id: str,
                                                   new_value_id: str,
                                                   new_value_ru: str,
-                                                  custom_values_to_rename: Optional[list[str]] = None):
+                                                  custom_values_to_rename: Optional[list[str]] = None) -> None:
 
         for file in self.input_feature_profiles:
             is_changed = False
-            rows = read_csv(file, read_as='dicts')
+            rows = read_dicts_from_csv(file)
 
             for i, row in enumerate(rows):
-                if (row['feature_id'] == feature_id and row['value_type'] == 'custom'):
+                if row['feature_id'] == feature_id and row['value_type'] == 'custom':
                     value_ru = row['value_ru'].strip()
                     value_ru = value_ru[:-1] if value_ru.endswith('.') else value_ru
 
-                    if value_ru.lower() not in [v.lower() for v in [new_value_ru] + custom_values_to_rename]:
+                    new_value_with_variants: list[str] = [v.lower() for v in [new_value_ru] + custom_values_to_rename]
+                    if value_ru.lower() not in new_value_with_variants:
                         break
 
                     print(f'{file.name}: changing row {i + 2} (feature {feature_id}). '
