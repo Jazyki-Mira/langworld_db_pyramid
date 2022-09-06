@@ -400,6 +400,7 @@ def parse_args(argv):
     return parser.parse_args(argv[1:])
 
 
+# noinspection PyDefaultArgument
 def main(argv=sys.argv):
     args = parse_args(argv)
     setup_logging(args.config_uri)
