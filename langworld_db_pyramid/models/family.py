@@ -43,9 +43,8 @@ class Family(Base):
         """
         if self.parent is None:
             return False
-        if self.parent.man_id == man_id_of_presumable_parent:
-            return True
-        return self.parent.is_descendant_of(man_id_of_presumable_parent)
+        return self.parent.man_id == man_id_of_presumable_parent or self.parent.is_descendant_of(
+            man_id_of_presumable_parent)
 
     def iter_doculects_that_have_feature_profiles(self) -> Iterable:
         if not self.has_doculects_with_feature_profiles():
