@@ -4,8 +4,8 @@ from typing import Iterable, Optional
 from langworld_db_pyramid.models import Doculect
 
 
-@dataclass()
-class DoculectDoculectMarkerGroupItem:
+@dataclass
+class DoculectMarkerGroupItem:
     """Provides individual data for specific doculect marker.
     Cannot function outside group of markers
     because data for icon generation is stored in the group.
@@ -30,7 +30,7 @@ class DoculectMarkerGroup:
     id: str
     name: str
 
-    doculects: list[DoculectDoculectMarkerGroupItem]
+    doculects: list[DoculectMarkerGroupItem]
 
     divIconHTML: str
     divIconSize: list
@@ -76,7 +76,7 @@ def generate_marker_group(
 def _generate_marker_group_item(*,
                                 doculect: Doculect,
                                 locale: str,
-                                additional_popup_text: Optional[str] = None) -> DoculectDoculectMarkerGroupItem:
+                                additional_popup_text: Optional[str] = None) -> DoculectMarkerGroupItem:
     """Generates a dictionary with data for an individual marker within a group.
 
     Pop-up text defaults to doculect name with hyperlink to profile,
@@ -96,7 +96,7 @@ def _generate_marker_group_item(*,
     if additional_popup_text:
         popup_text = f'{popup_text}<br/>{additional_popup_text}'
 
-    return DoculectDoculectMarkerGroupItem(
+    return DoculectMarkerGroupItem(
         id=doculect.man_id,
         name=doculect_name,
         latitude=float(doculect.latitude),
