@@ -36,6 +36,7 @@ NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES = 11  # only 11 out of 1
         # biyabuneki has glottocode but no ISO code
         ('бия', 'ru', ('biyabuneki', )),  # searching by name
         ('biya', 'ru', ('biyabuneki', )),  # searching by glottocode
+        ('xcr', 'ru', ('carian', ))  # searching by ISO code
     ])
 def test_get_doculects_by_substring(
     dummy_request,

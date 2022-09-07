@@ -2,7 +2,6 @@ from pyramid.view import view_config
 from pyramid.response import Response
 from sqlalchemy import and_, or_, select
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import aliased
 
 from langworld_db_pyramid import models
 
@@ -34,27 +33,20 @@ def get_doculects_by_substring(request):
     aliases_attr = f'aliases_{locale}'
 
     matching_doculects = request.dbsession.scalars(
-        select(models.Doculect).where(
-            and_(
-                or_(
-                    getattr(models.Doculect, name_attr).contains(query),
-                    getattr(models.Doculect, aliases_attr).contains(query),
-                ), models.Doculect.has_feature_profile))).all()
-
-    # I make a separate query for ISO codes and glottocodes
-    # because doculects that have no ISO code and/or no glottocode will not be matched
-    # by a combined query (name OR ISO/glottocode).
-    # Instead of making one very complex query (with checking of existence of glottocode/ISO,
-    # further complicated by many-to-many relationship), I just split the operation into two queries.
-    glottocode = aliased(models.Glottocode)
-    matching_doculects += request.dbsession.scalars(
-        select(models.Doculect).join(glottocode, models.Doculect.glottocodes).where(
-            and_(glottocode.code.contains(query), models.Doculect.has_feature_profile))).all()
-
-    iso_code = aliased(models.Iso639P3Code)
-    matching_doculects += request.dbsession.scalars(
-        select(models.Doculect).join(iso_code, models.Doculect.iso_639p3_codes).where(
-            and_(iso_code.code.contains(query), models.Doculect.has_feature_profile))).all()
+        select(models.Doculect)
+        # Outer join is needed because there are doculects that have no glottocode / ISO-639-3 code.
+        # I explicitly state onclause because of many-to-many relationships.
+        .join(models.Glottocode, onclause=models.Doculect.glottocodes, isouter=True)
+        .join_from(models.Doculect, models.Iso639P3Code, onclause=models.Doculect.iso_639p3_codes, isouter=True)
+        .where(and_(
+            models.Doculect.has_feature_profile),
+            or_(
+                getattr(models.Doculect, name_attr).contains(query),
+                getattr(models.Doculect, aliases_attr).contains(query),
+                models.Glottocode.code.contains(query),
+                models.Iso639P3Code.code.contains(query),
+            ))
+    ).all()
 
     data = [{
         "id": doculect.man_id,
