@@ -1,7 +1,8 @@
+import os
+
 import alembic
 import alembic.config
 import alembic.command
-import os
 from pyramid.paster import get_appsettings
 from pyramid.scripting import prepare
 from pyramid.testing import DummyRequest, testConfig
@@ -37,6 +38,7 @@ def dbengine(app_settings, ini_file):
 
     alembic_cfg = alembic.config.Config(ini_file)
     Base.metadata.drop_all(bind=engine)
+    # noinspection PyTypeChecker
     alembic.command.stamp(alembic_cfg, None, purge=True)
 
     # run migrations to initialize the database
@@ -49,6 +51,7 @@ def dbengine(app_settings, ini_file):
     yield engine
 
     Base.metadata.drop_all(bind=engine)
+    # noinspection PyTypeChecker
     alembic.command.stamp(alembic_cfg, None, purge=True)
 
 
