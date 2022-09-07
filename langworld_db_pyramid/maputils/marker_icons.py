@@ -30,9 +30,7 @@ class CLLDIcon:
         self.img_tag = f'<img src="{self.img_src}"/>'
 
     def __eq__(self, other) -> bool:
-        if self.shape_and_color == other.shape_and_color:
-            return True
-        return False
+        return self.svg_tag == other.svg_tag and self.img_tag == other.img_tag
 
     def __hash__(self) -> int:
         return hash((self.svg_tag, self.img_tag))

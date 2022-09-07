@@ -19,7 +19,7 @@ def test_clld_icon__post_init__():
     assert icon.img_tag.startswith('<img src="data:image/svg+xml')
 
 
-def test_clld_icon_dunder_methods():
+def test_clld_icon___eq__hash__repr__():
     icon1 = icons.CLLDIcon('c000000')
     icon2 = icons.CLLDIcon('cffffff')
     assert len({icon1, icon2}) == 2
