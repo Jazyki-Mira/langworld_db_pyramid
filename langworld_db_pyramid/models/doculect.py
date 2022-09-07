@@ -53,7 +53,5 @@ class Doculect(Base):
     def belongs_to_family(self, family_man_id: str) -> bool:
         """Recursively (goes up the genealogy) checks
         if doculect belongs to a family with a given man_id."""
-        if self.family.man_id == family_man_id:
-            return True
-        # this may look like violating Demeter law but Family is immediately related to Doculect
-        return self.family.is_descendant_of(family_man_id)
+        # calling method of Family may look like violating Demeter law, but Family is immediately related to Doculect
+        return self.family.man_id == family_man_id or self.family.is_descendant_of(family_man_id)
