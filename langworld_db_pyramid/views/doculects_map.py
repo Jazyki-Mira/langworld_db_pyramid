@@ -1,3 +1,6 @@
+from gettext import gettext as _
+
+from pyramid.i18n import TranslationString
 from pyramid.view import view_config
 from sqlalchemy import select
 
@@ -17,19 +20,14 @@ def view_all_doculects_map(request):
 def get_doculects_for_map(request) -> list[dict]:
 
     doculects = request.dbsession.scalars(select(models.Doculect).where(models.Doculect.has_feature_profile)).all()
-
+    group_name = TranslationString(_('Языки на видимой области карты'))
     icon = generate_one_icon()
-
-    if request.locale_name == 'ru':
-        group_name = 'Языки на видимой области карты'
-    else:
-        group_name = 'Languages in the visible area of the map'
 
     # for uniformity, I return not a dictionary, but a list consisting of one dictionary
     return [
         generate_marker_group(
             group_id='',
-            group_name=group_name,
+            group_name=request.localizer.translate(group_name),
             doculects=sorted(doculects, key=lambda d: getattr(d, f'name_{request.locale_name}')),
             div_icon_html=icon.svg_tag,
             img_src=icon.img_src,

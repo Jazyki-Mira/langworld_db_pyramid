@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-08-28 15:21+0300\n"
+"POT-Creation-Date: 2022-09-08 16:05+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -52,7 +52,7 @@ msgid "Карта языков"
 msgstr "Map of languages"
 
 #: templates/all_features_list.jinja2:3 templates/base.jinja2:42
-#: templates/doculect.jinja2:100 templates/query_wizard.jinja2:50
+#: templates/doculect.jinja2:100 templates/query_wizard.jinja2:51
 msgid "Признаки"
 msgstr "Features"
 
@@ -65,7 +65,7 @@ msgid "Главная"
 msgstr "Home"
 
 #: templates/base.jinja2:43 templates/doculect.jinja2:51
-#: templates/families.jinja2:7 templates/query_wizard.jinja2:40
+#: templates/families.jinja2:7 templates/query_wizard.jinja2:41
 msgid "Генеалогия"
 msgstr "Genealogy"
 
@@ -217,3 +217,12 @@ msgstr "Results"
 #: templates/query_wizard.jinja2:27
 msgid "Сбросить выбор"
 msgstr "Discard selection"
+
+#: views/doculects_map.py:23
+msgid "Языки на видимой области карты"
+msgstr "Languages in the visible area of the map"
+
+#: views/query_wizard.py:27
+msgid "Подходящие языки на видимой области карты"
+msgstr "Matching languages in the visible area of the map"
+

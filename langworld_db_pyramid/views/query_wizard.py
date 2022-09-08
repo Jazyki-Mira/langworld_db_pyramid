@@ -1,3 +1,6 @@
+from gettext import gettext as _
+
+from pyramid.i18n import TranslationString
 from pyramid.view import view_config
 from sqlalchemy import select
 
@@ -21,21 +24,17 @@ def get_matching_doculects(request) -> list[dict]:
     name_attr = f'name_{request.locale_name}'
 
     doculects = set(request.dbsession.scalars(select(models.Doculect).where(models.Doculect.has_feature_profile)).all())
+    group_name = TranslationString(_('Подходящие языки на видимой области карты'))
     icon = generate_one_icon()
 
     params = {key: value.split(',') for key, value in request.params.items()}
-
-    if request.locale_name == 'ru':
-        group_name = 'Подходящие языки на видимой области'
-    else:
-        group_name = 'Matching languages in the visible area'
 
     if not params:
         # for uniformity, I return not a dictionary, but a list consisting of one dictionary
         return [
             generate_marker_group(
                 group_id='',
-                group_name=group_name,
+                group_name=request.localizer.translate(group_name),
                 doculects=sorted(doculects, key=lambda d: getattr(d, name_attr)),
                 div_icon_html=icon.svg_tag,
                 img_src=icon.img_src,
@@ -66,7 +65,7 @@ def get_matching_doculects(request) -> list[dict]:
     return [
         generate_marker_group(
             group_id='',
-            group_name=group_name,
+            group_name=request.localizer.translate(group_name),
             div_icon_html=icon.svg_tag,
             img_src=icon.img_src,
             doculects=sorted(matching_doculects, key=lambda d: getattr(d, name_attr)),
