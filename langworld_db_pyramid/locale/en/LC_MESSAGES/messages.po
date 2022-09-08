@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-09-08 16:05+0300\n"
+"POT-Creation-Date: 2022-09-08 18:06+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -17,6 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
+
+#: locale/in_code_translation_strings.py:5
+msgid "Языки на видимой области карты"
+msgstr "Languages in the visible area of the map"
+
+#: locale/in_code_translation_strings.py:6
+msgid "Подходящие языки на видимой области карты"
+msgstr "Matching languages in the visible area of the map"
 
 #: templates/404.jinja2:3
 msgid "Страница не найдена"
@@ -217,12 +225,3 @@ msgstr "Results"
 #: templates/query_wizard.jinja2:27
 msgid "Сбросить выбор"
 msgstr "Discard selection"
-
-#: views/doculects_map.py:23
-msgid "Языки на видимой области карты"
-msgstr "Languages in the visible area of the map"
-
-#: views/query_wizard.py:27
-msgid "Подходящие языки на видимой области карты"
-msgstr "Matching languages in the visible area of the map"
-
