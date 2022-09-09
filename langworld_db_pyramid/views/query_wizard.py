@@ -30,12 +30,12 @@ def get_matching_doculects(request) -> list[dict]:
         # for uniformity, I return not a dictionary, but a list consisting of one dictionary
         return [
             generate_marker_group(
+                request,
                 group_id='',
                 group_name=request.localizer.translate(VISIBLE_MATCHING_DOCULECTS_HEADING),
                 doculects=sorted(doculects, key=lambda d: getattr(d, name_attr)),
                 div_icon_html=icon.svg_tag,
                 img_src=icon.img_src,
-                locale=request.locale_name,
             )
         ]
 
@@ -60,11 +60,11 @@ def get_matching_doculects(request) -> list[dict]:
 
     return [
         generate_marker_group(
+            request,
             group_id='',
             group_name=request.localizer.translate(VISIBLE_MATCHING_DOCULECTS_HEADING),
             div_icon_html=icon.svg_tag,
             img_src=icon.img_src,
             doculects=sorted(matching_doculects, key=lambda d: getattr(d, name_attr)),
-            locale=request.locale_name,
         )
     ]

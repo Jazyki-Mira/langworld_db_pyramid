@@ -1,6 +1,8 @@
 from dataclasses import asdict, dataclass
 from typing import Iterable, Optional
 
+from pyramid.request import Request
+
 from langworld_db_pyramid.models import Doculect
 
 
@@ -39,12 +41,12 @@ class DoculectMarkerGroup:
 
 
 def generate_marker_group(
+    request: Request,
     group_id: str,
     group_name: str,
     div_icon_html: str,
     doculects: Iterable[Doculect],
     img_src: str,
-    locale: str,
     additional_popup_text: Optional[str] = None,
     href_for_heading_in_list: Optional[str] = None,
 ) -> dict:
@@ -65,23 +67,23 @@ def generate_marker_group(
                             imgSrc=img_src,
                             doculects=[
                                 _generate_marker_group_item(
+                                    request,
                                     doculect=doculect,
-                                    locale=locale,
                                     additional_popup_text=additional_popup_text,
                                 ) for doculect in doculects
                             ]))  # this will convert nested dataclasses to dicts as well.
     # I am not using NamedTuple because this trick with nested conversion does not work with it.
 
 
-def _generate_marker_group_item(*,
+def _generate_marker_group_item(request: Request, *,
                                 doculect: Doculect,
-                                locale: str,
                                 additional_popup_text: Optional[str] = None) -> DoculectMarkerGroupItem:
     """Generates a dictionary with data for an individual marker within a group.
 
     Pop-up text defaults to doculect name with hyperlink to profile,
     additional pop-up text can be added via `additional_popup_text`.
     """
+    locale = request.locale_name
     name_attr = f'name_{locale}'
 
     longitude = float(doculect.longitude)
@@ -89,7 +91,7 @@ def _generate_marker_group_item(*,
         longitude += 360
 
     doculect_name = f'{getattr(doculect, name_attr)} (†)' if doculect.is_extinct else getattr(doculect, name_attr)
-    url = f'/{locale}/doculect/{doculect.man_id}'
+    url = request.route_path('doculect_profile_localized', locale=locale, doculect_man_id=doculect.man_id)
 
     popup_text = f'<a href="{url}">{doculect_name}</a>'
 

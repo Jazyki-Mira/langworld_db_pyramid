@@ -57,9 +57,11 @@ def test_generate_fixed_number_of_map_icons_fails_for_more_than_max_number():
     assert 'Cannot generate more than' in str(e)
 
 
-def test__generate_marker_group_item(setup_models_once_for_test_module, dbsession):
+# note that in some tests I have to use app_request because access to app's routes is needed
+def test__generate_marker_group_item(app_request, dbsession, setup_models_once_for_test_module):
+    app_request.locale_name = 'en'
     doculect = dbsession.scalars(select(Doculect).where(Doculect.man_id == 'asiatic_eskimo')).one()
-    data = _generate_marker_group_item(doculect=doculect, locale='en', additional_popup_text='foo')
+    data = _generate_marker_group_item(app_request, doculect=doculect, additional_popup_text='foo')
     assert data.name == doculect.name_en
     assert data.latitude == float(doculect.latitude)
     assert data.longitude == float(doculect.longitude) + 360  # testing doculect with longitude -173.128
@@ -67,17 +69,18 @@ def test__generate_marker_group_item(setup_models_once_for_test_module, dbsessio
     assert data.url == f'/en/doculect/{doculect.man_id}'
 
 
-def test_generate_marker_group(setup_models_once_for_test_module, dbsession):
+def test_generate_marker_group(dbsession, app_request, setup_models_once_for_test_module):
+    app_request.locale_name = 'en'
     eskimo = dbsession.scalars(select(Doculect).where(Doculect.man_id == 'asiatic_eskimo')).one()
     old_french = dbsession.scalars(select(Doculect).where(Doculect.man_id == 'old_french')).one()
 
     group = generate_marker_group(
+        app_request,
         group_id='test_id',
         group_name='test_name',
         div_icon_html='will be received elsewhere',
         img_src='will be received elsewhere',
         doculects=[eskimo, old_french],
-        locale='en',
         additional_popup_text='foo',
         href_for_heading_in_list='bar',
     )

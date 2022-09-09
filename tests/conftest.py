@@ -14,6 +14,7 @@ import webtest
 from langworld_db_pyramid import main
 from langworld_db_pyramid import models
 from langworld_db_pyramid.models.meta import Base
+from langworld_db_pyramid.routes import add_routes_for_page_views_with_i18n
 # added by me
 import tests.paths as paths
 
@@ -146,6 +147,7 @@ def dummy_config(dummy_request):
 
     """
     with testConfig(request=dummy_request) as config:
+        add_routes_for_page_views_with_i18n(config)
         yield config
 
 

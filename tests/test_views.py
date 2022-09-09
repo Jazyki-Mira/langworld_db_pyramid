@@ -113,8 +113,8 @@ def test_get_doculects_by_substring_returns_empty_list_if_nothing_found(dummy_re
         },
     ),
 ])
-def test_get_doculects_for_map(dummy_request, setup_models_once_for_test_module, locale, expected_first_doculect,
-                               expected_last_doculect):
+def test_get_doculects_for_map(dummy_request, dummy_config, setup_models_once_for_test_module,
+                               locale, expected_first_doculect, expected_last_doculect):
 
     dummy_request.locale_name = locale
     groups = get_doculects_for_map(dummy_request)
@@ -186,7 +186,7 @@ def test_view_families_for_list(dummy_request, setup_models_once_for_test_module
         ('slav', 3 + 1, 16),
         ('avar_andi', 2 + 1, 14)
     ])
-def test_view_families_for_map(dummy_request, setup_models_once_for_test_module, family_man_id,
+def test_view_families_for_map(dummy_request, dummy_config, setup_models_once_for_test_module, family_man_id,
                                expected_number_of_groups, expected_number_of_doculects):
     dummy_request.locale_name = 'en'
     dummy_request.matchdict['family_man_id'] = family_man_id
@@ -255,7 +255,7 @@ def test_features_view_feature_list_of_values(dummy_request, setup_models_once_f
     assert data['man_id'] == 'H-6'
 
 
-def test_features_view_feature_map_of_values(dummy_request, setup_models_once_for_test_module):
+def test_features_view_feature_map_of_values(dummy_request, dummy_config, setup_models_once_for_test_module):
     dummy_request.locale_name = 'ru'
     dummy_request.matchdict['feature_man_id'] = 'H-6'
     groups = view_feature_map_of_values(dummy_request)
@@ -352,10 +352,10 @@ def test_notfound_view(dummy_request):
             'classical_syriac',
         ]),
     ])
-def test_query_wizard_get_matching_doculects(dummy_request, setup_models_once_for_test_module, params,
+def test_query_wizard_get_matching_doculects(dummy_request, dummy_config, setup_models_once_for_test_module, params,
                                              expected_number_of_items, selected_doculects_to_check):
     dummy_request.params = params
-
+    print(dummy_request.route_path('doculect_profile_localized', locale='en', doculect_man_id='french'))
     groups = get_matching_doculects(dummy_request)
     assert len(groups) == 1
     markers = groups[0]['doculects']

@@ -63,27 +63,27 @@ def view_families_for_map(request) -> list[dict]:
         href = f"/{request.locale_name}/family/{family.man_id}"
 
         marker_groups.append(
-            generate_marker_group(group_id=family.man_id,
+            generate_marker_group(request,
+                                  group_id=family.man_id,
                                   group_name=getattr(family, name_attr),
                                   div_icon_html=icon_for_family[family].svg_tag,
                                   href_for_heading_in_list=href,
                                   img_src=icon_for_family[family].img_src,
                                   doculects=sorted([d for d in family.doculects if d.has_feature_profile],
                                                    key=lambda d: getattr(d, name_attr)),
-                                  locale=locale,
                                   additional_popup_text=f'(<a href="{href}">{getattr(family, name_attr)}</a>)'))
 
     for subfamily in immediate_subfamilies:
         href = f'/{request.locale_name}/family/{subfamily.man_id}'
         marker_groups.append(
-            generate_marker_group(group_id=subfamily.man_id,
+            generate_marker_group(request,
+                                  group_id=subfamily.man_id,
                                   group_name=getattr(subfamily, name_attr),
                                   div_icon_html=icon_for_family[subfamily].svg_tag,
                                   href_for_heading_in_list=href,
                                   img_src=icon_for_family[subfamily].img_src,
                                   doculects=sorted(list(subfamily.iter_doculects_that_have_feature_profiles()),
                                                    key=lambda d: getattr(d, name_attr)),
-                                  locale=locale,
                                   additional_popup_text=f'(<a href="{href}">{getattr(subfamily, name_attr)}</a>)'))
 
     return marker_groups

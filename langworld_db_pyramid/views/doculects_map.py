@@ -24,11 +24,11 @@ def get_doculects_for_map(request) -> list[dict]:
     # for uniformity, I return not a dictionary, but a list consisting of one dictionary
     return [
         generate_marker_group(
+            request,
             group_id='',
             group_name=request.localizer.translate(ALL_VISIBLE_DOCULECTS_HEADING),
             doculects=sorted(doculects, key=lambda d: getattr(d, f'name_{request.locale_name}')),
             div_icon_html=icon.svg_tag,
             img_src=icon.img_src,
-            locale=request.locale_name,
         )
     ]
