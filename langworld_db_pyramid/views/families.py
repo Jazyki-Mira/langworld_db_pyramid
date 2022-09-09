@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
 from langworld_db_pyramid import models
-
+from langworld_db_pyramid.dbutils.query_helpers import get_all, get_by_man_id
 from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
 
@@ -27,11 +27,10 @@ def _get_family_immediate_subfamilies_and_icons(
 
     if family_man_id == MATCHDICT_ID_FOR_ALL_FAMILIES:
         family = None
-        immediate_subfamilies = (request.dbsession.scalars(select(
-            models.Family).where(models.Family.parent == family)).all())
+        immediate_subfamilies = get_all(request, select(models.Family).where(models.Family.parent == family))
     else:
         try:
-            family = request.dbsession.scalars(select(models.Family).where(models.Family.man_id == family_man_id)).one()
+            family = get_by_man_id(request=request, model=models.Family, man_id=family_man_id)
         except SQLAlchemyError:
             raise HTTPNotFound(f"Family with ID {family_man_id} does not exist")
         else:

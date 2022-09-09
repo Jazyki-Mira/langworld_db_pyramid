@@ -2,6 +2,7 @@ from pyramid.view import view_config
 from sqlalchemy import select
 
 from langworld_db_pyramid import models
+from langworld_db_pyramid.dbutils.query_helpers import get_all, get_by_man_id
 from langworld_db_pyramid.locale.in_code_translation_strings import VISIBLE_MATCHING_DOCULECTS_HEADING
 from langworld_db_pyramid.maputils.marker_icons import generate_one_icon
 from langworld_db_pyramid.maputils.markers import generate_marker_group
@@ -11,9 +12,8 @@ from langworld_db_pyramid.maputils.markers import generate_marker_group
 @view_config(route_name='query_wizard_localized', renderer='langworld_db_pyramid:templates/query_wizard.jinja2')
 def view_query_wizard(request):
     return {
-        'categories': request.dbsession.scalars(select(models.FeatureCategory)).all(),
-        'families': request.dbsession.scalars(select(models.Family).where(models.Family.parent == None)  # noqa: E711
-                                              ).all()
+        'categories': get_all(request, select(models.FeatureCategory)),
+        'families': get_all(request, select(models.Family).where(models.Family.parent == None))  # noqa: E711
     }
 
 
@@ -21,7 +21,7 @@ def view_query_wizard(request):
 def get_matching_doculects(request) -> list[dict]:
     name_attr = f'name_{request.locale_name}'
 
-    doculects = set(request.dbsession.scalars(select(models.Doculect).where(models.Doculect.has_feature_profile)).all())
+    doculects = get_all(request, select(models.Doculect).where(models.Doculect.has_feature_profile))
     icon = generate_one_icon()
 
     params = {key: value.split(',') for key, value in request.params.items()}
@@ -42,7 +42,7 @@ def get_matching_doculects(request) -> list[dict]:
     try:
         family_man_ids = params['family']
     except KeyError:
-        matching_doculects = doculects.copy()
+        matching_doculects = set(doculects)
     else:
         matching_doculects = set()
         for family_id in family_man_ids:
@@ -53,8 +53,7 @@ def get_matching_doculects(request) -> list[dict]:
     for feature_id in params:
         doculects_with_any_of_requested_values_of_feature: set[models.Doculect] = set()
         for value_id in params[feature_id]:
-            value = request.dbsession.scalars(
-                select(models.FeatureValue).where(models.FeatureValue.man_id == value_id)).one()
+            value = get_by_man_id(request=request, model=models.FeatureValue, man_id=value_id)
             doculects_with_any_of_requested_values_of_feature.update(d for d in doculects if d in value.doculects)
 
         matching_doculects.intersection_update(doculects_with_any_of_requested_values_of_feature)

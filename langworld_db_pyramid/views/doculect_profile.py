@@ -4,6 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
 from langworld_db_pyramid import models
+from langworld_db_pyramid.dbutils.query_helpers import get_all, get_by_man_id
 
 
 @view_config(route_name='doculect_profile', renderer='langworld_db_pyramid:templates/doculect.jinja2')
@@ -11,11 +12,10 @@ from langworld_db_pyramid import models
 def view_doculect_profile(request):
     doculect_man_id = request.matchdict['doculect_man_id']
     try:
-        doculect = request.dbsession.scalars(select(
-            models.Doculect).where(models.Doculect.man_id == doculect_man_id)).one()
+        doculect = get_by_man_id(request=request, model=models.Doculect, man_id=request.matchdict['doculect_man_id'])
     except SQLAlchemyError:
         raise HTTPNotFound(f"Doculect with ID {doculect_man_id} does not exist")
 
-    categories = request.dbsession.scalars(select(models.FeatureCategory).order_by(models.FeatureCategory.man_id)).all()
+    categories = get_all(request, select(models.FeatureCategory).order_by(models.FeatureCategory.man_id))
 
     return {'doculect': doculect, 'categories': categories}
