@@ -20,7 +20,7 @@
       {% for value in doculect.feature_values|sort(attribute="feature.id") %}
         {% if value.type.name == value_type %}
             <li>
-                <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}">{{ value.feature[name_attr] }}</a>
+                <span class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id }}]</span> <a href="{{ request.route_path('feature_localized', locale=request.locale_name, feature_man_id=value.feature.man_id) }}">{{ value.feature[name_attr] }}</a>
                 {{ comment(value, add_parentheses_and_note=True) }}
             </li>
         {% endif %}
@@ -54,15 +54,15 @@
   {% for parent in [doculect.family.parent] recursive %}
     {% if parent != None %}
         {{ loop([parent.parent]) }}  {# I need to start at the top, so recursion comes first #}
-        <a href="/{{ request.locale_name }}/family/{{ parent.man_id }}?show_doculect={{ doculect.man_id }}">{{ parent[name_attr] }}</a> &rarr;
+        <a href="{{ request.route_path('families_localized', locale=request.locale_name, family_man_id=parent.man_id) }}?show_doculect={{ doculect.man_id }}">{{ parent[name_attr] }}</a> &rarr;
     {% endif %}
   {% endfor %}
-  <a href="/{{ request.locale_name }}/family/{{ doculect.family.man_id }}?show_doculect={{ doculect.man_id }}">{{ doculect.family[name_attr] }}</a>
+  <a href="{{ request.route_path('families_localized', locale=request.locale_name, family_man_id=doculect.family.man_id) }}?show_doculect={{ doculect.man_id }}">{{ doculect.family[name_attr] }}</a>
   </p>
 
   <h2 class="w3-text-darkest-blue-grey">{% trans %}География{% endtrans %}</h2>
     <p>{% trans %}Основная страна{% endtrans %}: <span class="font-normal">{{ doculect.main_country[name_attr] }}</span>
-    (<a href="/{{ request.locale_name }}/doculects/map?lat={{ doculect.latitude }}&long={{ doculect.longitude }}&show_doculect={{ doculect.man_id }}"><strong>{% trans %}посмотреть на карте{% endtrans %}</strong></a>)
+    (<a href="{{ request.route_path('all_doculects_map_localized', locale=request.locale_name) }}?lat={{ doculect.latitude }}&long={{ doculect.longitude }}&show_doculect={{ doculect.man_id }}"><strong>{% trans %}посмотреть на карте{% endtrans %}</strong></a>)
     </p>
     {% for encyclopedia_map in doculect.encyclopedia_maps %}
       {% if loop.first %}<h3 class="w3-text-darkest-blue-grey">{% trans %}Карты ареалов из энциклопедии{% endtrans %}</h3>
@@ -123,7 +123,7 @@
                 <tr>
                     <td class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id.replace('-', '‑') }}]</td>  {# replace simple hyphen with non-breaking hyphen #}
                     <td>
-                    <a href="/{{ request.locale_name }}/feature/{{ value.feature.man_id }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
+                    <a href="{{ request.route_path('feature_localized', locale=request.locale_name, feature_man_id=value.feature.man_id) }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
                         <strong>{{ value.feature[name_attr] }}</strong></a>
                     </td>
                     <td>{{ value[name_attr]}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-small">[{{ value.man_id.replace('-', '‑') }}]</span>{% endif %}</td>

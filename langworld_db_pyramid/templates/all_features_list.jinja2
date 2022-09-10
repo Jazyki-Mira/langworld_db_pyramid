@@ -11,7 +11,7 @@
       <h2 class="w3-text-darkest-blue-grey">{{ category[name_attr] }}</h2>
       <ul class="w3-ul">
         {% for feature in category.features %}
-        <li><span class="w3-text-dark-blue-grey w3-medium">[{{ feature.man_id }}]</span> <a href="/{{ request.locale_name }}/feature/{{ feature.man_id }}">{{ feature[name_attr] }}</a></li>
+        <li><span class="w3-text-dark-blue-grey w3-medium">[{{ feature.man_id }}]</span> <a href="{{ request.route_path('feature_localized', locale=request.locale_name, feature_man_id=feature.man_id) }}">{{ feature[name_attr] }}</a></li>
         {% endfor %}
       </ul>
   {% endfor %}

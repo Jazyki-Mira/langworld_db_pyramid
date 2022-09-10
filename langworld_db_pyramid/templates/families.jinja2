@@ -23,9 +23,9 @@
           {% for parent in [family.parent] recursive %}
             {% if parent != None %}
                 {{ loop([parent.parent]) }}  {# I need to start at the top, so recursion comes first #}
-                <a href="/{{ request.locale_name }}/family/{{ parent.man_id }}">{{ parent[name_attr] }}</a> &rarr;
+                <a href="{{ request.route_path('families_localized', locale=request.locale_name, family_man_id=parent.man_id) }}">{{ parent[name_attr] }}</a> &rarr;
             {% else %}
-                <a href="/{{ request.locale_name }}/family/_all">{% trans %}Все языки{% endtrans %}</a> &rarr;
+                <a href="{{ request.route_path('families_localized', locale=request.locale_name, family_man_id='_all') }}">{% trans %}Все языки{% endtrans %}</a> &rarr;
             {% endif %}
           {% endfor %}
           <strong>{{ family[name_attr] }}</strong>
@@ -56,7 +56,7 @@
                   <h2 class="w3-text-darkest-blue-grey">{{ icon_for_family[family].img_tag|safe }}{{ family[name_attr] }} ({% trans %}без деления на подсемьи{% endtrans %})</h2>
                   <ul>
               {% endif %}
-                  <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+                  <li><a href="{{ request.route_path('doculect_profile_localized', locale=request.locale_name, doculect_man_id=doculect.man_id) }}">{{ doculect[name_attr] }}</a></li>
               {% if loop.last %}
                   </ul>
               {% endif %}
@@ -69,13 +69,13 @@
         {% if subfamily.has_doculects_with_feature_profiles() %} {# This check is needed for recursive calls #}
             <li>
                 {% if loop.depth == 1 %}{{ icon_for_family[subfamily].img_tag|safe }}{% endif %}
-                <a href="/{{ request.locale_name }}/family/{{ subfamily.man_id }}">{{ subfamily[name_attr] }}</a>
+                <a href="{{ request.route_path('families_localized', locale=request.locale_name, family_man_id=subfamily.man_id) }}">{{ subfamily[name_attr] }}</a>
 
                 {{ loop(subfamily.children) }}
 
                 {% for doculect in subfamily.doculects|selectattr("has_feature_profile")|list|sort(attribute=name_attr) %}
                     {% if loop.first %}<ul>{% endif %}
-                    <li><a href="/{{ request.locale_name }}/doculect/{{ doculect.man_id }}">{{ doculect[name_attr] }}</a></li>
+                    <li><a href="{{ request.route_path('doculect_profile_localized', locale=request.locale_name, doculect_man_id=doculect.man_id) }}">{{ doculect[name_attr] }}</a></li>
                     {% if loop.last %}</ul>{% endif %}
                 {% endfor %}
             </li>
