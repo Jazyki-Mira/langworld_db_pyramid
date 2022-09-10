@@ -36,12 +36,12 @@
 
     <!-- Navbar -->
     {% macro nav_links_except_for_language_switch(css_class) -%}
-        <a href="/{{request.locale_name}}/home" class="{{ css_class }}">{% trans %}Главная{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/doculects/list" class="{{ css_class }}">{% trans %}Список языков{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/doculects/map" class="{{ css_class }}">{% trans %}Карта языков{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/features/list" class="{{ css_class }}">{% trans %}Признаки{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/family/_all" class="{{ css_class }}">{% trans %}Генеалогия{% endtrans %}</a>
-        <a href="/{{request.locale_name}}/query_wizard" class="{{ css_class }}">{% trans %}Мастер запросов{% endtrans %}</a>        
+        <a href="{{ request.route_path('home_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Главная{% endtrans %}</a>
+        <a href="{{ request.route_path('all_doculects_list_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Список языков{% endtrans %}</a>
+        <a href="{{ request.route_path('all_doculects_map_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Карта языков{% endtrans %}</a>
+        <a href="{{ request.route_path('all_features_list_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Признаки{% endtrans %}</a>
+        <a href="{{ request.route_path('families_localized', locale=request.locale_name, family_man_id='_all') }}" class="{{ css_class }}">{% trans %}Генеалогия{% endtrans %}</a>
+        <a href="{{ request.route_path('query_wizard_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Мастер запросов{% endtrans %}</a>
     {% endmacro %}
     
     <div class="w3-top">
