@@ -6,6 +6,6 @@
 {% block full_width %}
   <div class="w3-margin-left">
     <p>{{ request.exception.detail }}</p>
-    <p><a href="/{{ request.locale_name }}/home"><strong>{% trans %}Перейти на главную{% endtrans %}</strong></a></p>
+    <p><a href="{{ request.route_path('home_localized', locale=request.locale_name) }}"><strong>{% trans %}Перейти на главную{% endtrans %}</strong></a></p>
   </div>
 {% endblock full_width %}
