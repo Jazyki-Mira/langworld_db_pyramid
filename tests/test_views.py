@@ -23,16 +23,16 @@ NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES = 11  # only 11 out of 1
     'query, locale, expected_ids',
     [
         ('dut', 'en', ('afrikaans', 'dutch')),  # 'dut' is in aliases for Afrikaans and in main name for Dutch
-        # the request is in Russian but IDs received are English:
-        ('немец', 'ru', ('dutch', 'german', 'luxembourgian', 'swiss_german', 'yiddish')),
+        # the request is in Russian but IDs received are English. Sort results by Russian name:
+        ('немец', 'ru', ('yiddish', 'luxembourgian', 'german', 'dutch', 'swiss_german')),
         # this query produces 7 doculects without 'has_feature_profile' restriction but only 3 with it:
         ('пар', 'ru', ('parachi', 'parthian', 'middle_persian')),
         # glottocode
-        ('nucl1', 'ru', ('turkish', 'japanese', 'neo_mandaic', 'georgian', 'kannada', 'pashto')),
+        ('nucl1', 'ru', ('georgian', 'kannada', 'neo_mandaic', 'pashto', 'turkish', 'japanese')),
         # matches both ISO code and name (balochi), only part of name (karachay_balkar); balochi has 3 glottocodes
         ('bal', 'en', ('balochi', 'karachay_balkar')),
         # chagatai has turki as alias; turki has neither ISO code nor glottocode, which can affect search
-        ('тюрки', 'ru', ('chagatai', 'turki')),
+        ('тюрки', 'ru', ('turki', 'chagatai')),
         # biyabuneki has glottocode but no ISO code
         ('бия', 'ru', ('biyabuneki', )),  # searching by name
         ('biya', 'ru', ('biyabuneki', )),  # searching by glottocode
@@ -57,9 +57,9 @@ def test_get_doculects_by_substring(
         for key in ('id', 'name', 'aliases', 'iso639p3Codes', 'glottocodes'):
             assert key in doculect.keys()
 
-    for doculect_id in expected_ids:
+    for i, doculect_id in enumerate(expected_ids):
         ids = [doculect['id'] for doculect in doculects]
-        assert doculect_id in ids
+        assert doculect_id == ids[i]  # check not just membership, but also sorting
 
 
 def test_get_doculects_by_substring_returns_empty_list_if_nothing_found(dummy_request,

@@ -40,14 +40,14 @@ def get_doculects_by_substring(request):
                 models.Glottocode.code.contains(query),
                 models.Iso639P3Code.code.contains(query),
             ))
+        .order_by(getattr(models.Doculect, name_attr))
+        .distinct()
     )
 
-    data = [{
+    return [{
         "id": doculect.man_id,
         "name": getattr(doculect, name_attr),
         "aliases": getattr(doculect, aliases_attr),
         "iso639p3Codes": [code.code for code in doculect.iso_639p3_codes],
         "glottocodes": [code.code for code in doculect.glottocodes],
-    } for doculect in set(matching_doculects)]
-
-    return sorted(data, key=lambda item: item['name'])
+    } for doculect in matching_doculects]
