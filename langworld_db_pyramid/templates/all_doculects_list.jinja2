@@ -24,22 +24,24 @@
     <span class="slider-label w3-text-dark-blue-grey">{% trans %}С группировкой по томам{% endtrans %}</span>
   </div>
 
-  <div id="alphabetic">
+  {% macro ul_with_doculects(doculects_for_ul) -%}
     <ul class="w3-ul">
-    {% for item in doculects %}
-        <li><a href="/{{ request.locale_name }}/doculect/{{ item.man_id }}"><strong>{{ item[name_attr] }}</strong></a> {% if item[aliases_attr] %}({{ item[aliases_attr] }}){% endif %} </li>
+    {% for doculect in doculects_for_ul %}
+        <li><a href="{{ request.route_path('doculect_profile_localized', locale=request.locale_name, doculect_man_id=doculect.man_id) }}"><strong>{{ doculect[name_attr] }}</strong></a> {% if doculect[aliases_attr] %}({{ doculect[aliases_attr] }}){% endif %} </li>
     {% endfor %}
     </ul>
+  {%- endmacro %}
+
+  <div id="alphabetic">
+    {# No need to apply any filters here because the view returns sorted doculects with feature profiles #}
+    {{ ul_with_doculects(doculects) }}
   </div>
 
   <div id="by-volume" class="w3-hide">
     {% for volume in volumes %}
       <h3 class="w3-text-darkest-blue-grey">{% trans %}Том{% endtrans %} {{ volume.id }}. {{ volume[request.locale_name] }}</h2>
-      <ul class="w3-ul">
-        {% for item in volume.doculects|sort(attribute=name_attr)|selectattr("has_feature_profile") %}
-          <li><a href="/{{ request.locale_name }}/doculect/{{ item.man_id }}"><strong>{{ item[name_attr] }}</strong></a> {% if item[aliases_attr] %}({{ item[aliases_attr] }}){% endif %} </li>
-        {% endfor %}
-      </ul>
+      {# Here I must sort and check for presence of feature profile as I access `.doculects` attribute of `volume` #}
+      {{ ul_with_doculects(volume.doculects|sort(attribute=name_attr)|selectattr("has_feature_profile")) }}
     {% endfor %}
   </div>
 
