@@ -18,7 +18,11 @@ def view_all_doculects_map(request):
 @view_config(route_name='doculects_for_map_all', renderer='json')
 def get_doculects_for_map(request) -> list[dict]:
 
-    doculects = get_all(request, select(models.Doculect).where(models.Doculect.has_feature_profile))
+    doculects = get_all(
+        request,
+        select(models.Doculect).where(models.Doculect.has_feature_profile).order_by(
+            getattr(models.Doculect, f'name_{request.locale_name}')))
+
     icon = generate_one_icon()
 
     # for uniformity, I return not a dictionary, but a list consisting of one dictionary
@@ -27,7 +31,7 @@ def get_doculects_for_map(request) -> list[dict]:
             request,
             group_id='',
             group_name=request.localizer.translate(ALL_VISIBLE_DOCULECTS_HEADING),
-            doculects=sorted(doculects, key=lambda d: getattr(d, f'name_{request.locale_name}')),
+            doculects=doculects,
             div_icon_html=icon.svg_tag,
             img_src=icon.img_src,
         )
