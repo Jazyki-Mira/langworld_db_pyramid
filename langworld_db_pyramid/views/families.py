@@ -60,8 +60,7 @@ def view_families_for_map(request) -> list[dict]:
     marker_groups = []
 
     if family is not None:
-        href = f"/{request.locale_name}/family/{family.man_id}"
-
+        href = request.route_path('families_localized', locale=locale, family_man_id=family.man_id)
         marker_groups.append(
             generate_marker_group(request,
                                   group_id=family.man_id,
@@ -74,7 +73,7 @@ def view_families_for_map(request) -> list[dict]:
                                   additional_popup_text=f'(<a href="{href}">{getattr(family, name_attr)}</a>)'))
 
     for subfamily in immediate_subfamilies:
-        href = f'/{request.locale_name}/family/{subfamily.man_id}'
+        href = request.route_path('families_localized', locale=locale, family_man_id=subfamily.man_id)
         marker_groups.append(
             generate_marker_group(request,
                                   group_id=subfamily.man_id,
