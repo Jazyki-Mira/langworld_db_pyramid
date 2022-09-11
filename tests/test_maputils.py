@@ -51,6 +51,9 @@ def test_generate_fixed_number_of_map_icons():
 def test_generate_one_icon():
     icon = icons.generate_one_icon()
     assert isinstance(icon, icons.CLLDIcon)
+    assert icon.shape_and_color == f'{icons.SHAPES[0]}{icons.COLORS[0]}'
+    assert '<svg' in icon.svg_tag and icons.COLORS[0].upper() in icon.svg_tag
+    assert icon.img_tag.startswith('<img src="data:image/svg+xml')
 
 
 def test_generate_fixed_number_of_map_icons_fails_for_more_than_max_number():
