@@ -7,6 +7,8 @@ import langworld_db_pyramid.maputils.marker_icons as icons
 from langworld_db_pyramid.maputils.markers import _generate_marker_group_item, generate_marker_group
 from langworld_db_pyramid.models import Doculect
 
+NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS = len(icons.SHAPES) * len(icons.COLORS)
+
 
 class DummyObject(NamedTuple):
     x: int
@@ -33,13 +35,13 @@ def test_clld_icon___eq__hash__repr__():
 
 
 def test_generate_map_icons():
-    output_icons = [icon for icon, _ in zip(icons.generate_map_icons(), range(60))]
-    assert len(output_icons) == 60
+    output_icons = [icon for icon, _ in zip(icons.generate_map_icons(), range(NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS))]
+    assert len(output_icons) == NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS
     assert len(set(output_icons)) == len(output_icons)
 
 
 def test_generate_fixed_number_of_map_icons():
-    for number in (1, 60):
+    for number in (1, NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS):
         output_icons = icons.generate_fixed_number_of_map_icons(number)
         assert len(output_icons) == number
         assert len(set(output_icons)) == len(output_icons)
@@ -53,7 +55,7 @@ def test_generate_one_icon():
 
 def test_generate_fixed_number_of_map_icons_fails_for_more_than_max_number():
     with pytest.raises(ValueError) as e:
-        icons.generate_fixed_number_of_map_icons(61)
+        icons.generate_fixed_number_of_map_icons(NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS + 1)
     assert 'Cannot generate more than' in str(e)
 
 
@@ -106,18 +108,18 @@ def test_generate_marker_group(dbsession, app_request, setup_models_once_for_tes
 
 
 def test_icon_for_object():
-    dummy_objects = [DummyObject(i, i) for i in range(60)]
+    dummy_objects = [DummyObject(i, i) for i in range(NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS)]
     icon_for_dummy_object = icons.icon_for_object(dummy_objects)
 
-    assert len(icon_for_dummy_object) == 60
+    assert len(icon_for_dummy_object) == NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS
     for i, key in enumerate(icon_for_dummy_object):
         assert key == dummy_objects[i]
 
     # checking uniqueness of icons
-    assert len(set(icon_for_dummy_object.values())) == 60
+    assert len(set(icon_for_dummy_object.values())) == NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS
 
 
 def test_icon_for_object_fails_for_more_than_max_number():
     with pytest.raises(ValueError) as e:
-        _ = icons.icon_for_object([DummyObject(i, i) for i in range(61)])
+        _ = icons.icon_for_object([DummyObject(i, i) for i in range(NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS + 1)])
     assert 'Cannot generate more than' in str(e)
