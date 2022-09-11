@@ -19,8 +19,11 @@ def view_all_features_list_by_category(request):
 def get_feature_values_icons(request) -> tuple[models.Feature, list[models.FeatureValue], dict[Any, CLLDIcon]]:
     feature = get_by_man_id(request=request, model=models.Feature, man_id=request.matchdict['feature_man_id'])
 
+    # I sort values by number of doculects (descending), but if the number of doculects is the same,
+    # I have to sort by value ID (ascending). Hence, this trick with negative value ID (`.id` is auto-incremented
+    # integer): reverse sorting by negative value ID de facto produces ascending sorting by original value ID.
     values = sorted([value for value in feature.values if value.type.name == 'listed' and value.doculects],
-                    key=lambda value: (len(value.doculects), value.id),
+                    key=lambda value: (len(value.doculects), -value.id),
                     reverse=True)
 
     return feature, values, icon_for_object(values)
