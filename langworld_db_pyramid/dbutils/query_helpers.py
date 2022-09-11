@@ -1,8 +1,10 @@
 from typing import Any
 
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.request import Request
 from sqlalchemy import select
 from sqlalchemy.engine import ScalarResult
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.sql.expression import Select
 
 
@@ -16,10 +18,14 @@ def get_all(request: Request, select_: Select) -> list[Any]:
 
 def get_by_man_id(request: Request, model: type, man_id: str) -> Any:
     """Accepts a Pyramid request, mapped class (model) and 'man_id'
-    of the required object (e.g. doculect of family). Returns this object.
+    of the required object (e.g. doculect of family). Returns this object
+    or raises HTTPNotFound if no object was found.
     """
-    # noinspection PyUnresolvedReferences
-    return _get_one(request, select(model).where(model.man_id == man_id))
+    try:
+        # noinspection PyUnresolvedReferences
+        return _get_one(request, select(model).where(model.man_id == man_id))
+    except SQLAlchemyError:
+        raise HTTPNotFound(f"{model.__name__} with ID {man_id} does not exist.")
 
 
 def _get(request: Request, select_: Select) -> ScalarResult:

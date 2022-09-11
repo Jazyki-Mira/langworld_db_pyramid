@@ -1,9 +1,7 @@
 from typing import Optional
 
-from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 from sqlalchemy import select
-from sqlalchemy.exc import SQLAlchemyError
 
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all, get_by_man_id
@@ -29,12 +27,8 @@ def _get_family_immediate_subfamilies_and_icons(
         family = None
         immediate_subfamilies = get_all(request, select(models.Family).where(models.Family.parent == family))
     else:
-        try:
-            family = get_by_man_id(request=request, model=models.Family, man_id=family_man_id)
-        except SQLAlchemyError:
-            raise HTTPNotFound(f"Family with ID {family_man_id} does not exist")
-        else:
-            immediate_subfamilies = family.children
+        family = get_by_man_id(request=request, model=models.Family, man_id=family_man_id)
+        immediate_subfamilies = family.children
 
     # the point is to provide icons only for the requested family and its top-level children
     families_with_doculects_that_have_feature_profiles = [

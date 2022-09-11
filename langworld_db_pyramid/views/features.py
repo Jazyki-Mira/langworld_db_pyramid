@@ -1,9 +1,7 @@
 from typing import Any
 
-from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 from sqlalchemy import select
-from sqlalchemy.exc import SQLAlchemyError
 
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all, get_by_man_id
@@ -19,11 +17,7 @@ def view_all_features_list_by_category(request):
 
 
 def get_feature_values_icons(request) -> tuple[models.Feature, list[models.FeatureValue], dict[Any, CLLDIcon]]:
-    feature_man_id = request.matchdict['feature_man_id']
-    try:
-        feature = get_by_man_id(request=request, model=models.Feature, man_id=feature_man_id)
-    except SQLAlchemyError:
-        raise HTTPNotFound(f"Feature with ID {feature_man_id} does not exist")
+    feature = get_by_man_id(request=request, model=models.Feature, man_id=request.matchdict['feature_man_id'])
 
     values = sorted([value for value in feature.values if value.type.name == 'listed' and value.doculects],
                     key=lambda value: (len(value.doculects), value.id),

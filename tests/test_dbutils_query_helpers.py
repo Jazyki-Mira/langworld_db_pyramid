@@ -1,7 +1,8 @@
+from pyramid.httpexceptions import HTTPNotFound
 import pytest
 from sqlalchemy import select
 from sqlalchemy.engine import ScalarResult
-from sqlalchemy.exc import MultipleResultsFound, SQLAlchemyError
+from sqlalchemy.exc import MultipleResultsFound
 
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import _get, _get_one, get_all, get_by_man_id
@@ -39,10 +40,8 @@ def test_get_by_man_id(dummy_request, setup_models_once_for_test_module):
     assert family.name_en == 'Old Turkic'
 
 
-def test_get_by_man_id_crashes_on_non_existent_man_id(dummy_request, setup_models_once_for_test_module):
-    # The error will have to be caught in calling code, here I make sure it is raised
-    # (it will be raised automatically by sqlalchemy, I don't need any try... except... in the code for that
-    with pytest.raises(SQLAlchemyError):
+def test_get_by_man_id_raises_http_not_found_on_non_existent_man_id(dummy_request, setup_models_once_for_test_module):
+    with pytest.raises(HTTPNotFound):
         get_by_man_id(dummy_request, models.Doculect, 'foo')
 
 
