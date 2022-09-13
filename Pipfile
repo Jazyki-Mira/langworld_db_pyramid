@@ -17,6 +17,12 @@ toml = "~=0.10.2"
 transaction = "~=3.0.1"
 waitress = "~=2.1.2"
 zope.sqlalchemy = "~1.6"
+# If `editable` is set to `false`, pipenv gives a warning saying that in newer versions of pip
+# local packages will be built in-place without first copying to a temporary directory.
+# This is an equivalent of `editable=true`, so having `editable=true` not only is convenient
+# but also conforms with newer pip regulations.
+"langworld_db_data" = {path = "./langworld_db_data", editable = true}
+"langworld_db_pyramid" = {path = ".", editable = true}
 
 [dev-packages]
 cookiecutter = "~=2.1.1"
