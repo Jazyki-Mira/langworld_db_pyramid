@@ -28,9 +28,10 @@ git clone https://github.com/lemontree210/langworld_db_pyramid/; cd langworld_db
 pipenv install
 ```
 
-This will also automatically install `langworld_db_pyramid`  and `langworld_db_data` packages locally as they are mentioned in `Pipfile`. 
+_Note #1: This will also automatically install `langworld_db_pyramid`  and `langworld_db_data` packages locally as they are mentioned in [`Pipfile`](Pipfile). 
+There is no need to manually run `pip install -e .` (from [Pyramid docs](https://docs.pylonsproject.org/projects/pyramid/en/2.0-branch/narr/project.html#installing-your-newly-created-project-for-development)) separately._ 
 
-_Note: they will be installed in editable mode, which conforms to upcoming pip behavior that will install all local packages without copying them to the directory of the virtual environment._
+_Note #2: These two packages will be installed in editable mode, which conforms to upcoming `pip` behavior that will install all local packages without copying them to the directory of the virtual environment._
 
 To install with development dependencies (testing, linting):
 
@@ -53,7 +54,7 @@ pipenv shell
 
 ### Initialize database
 
-Apply `alembic` [migrations](langworld_db_pyramid/alembic/versions) to the database, then run the script that populates the database with data from [`langworld_db_data`](langworld_db_data).
+Apply [`alembic` migrations](langworld_db_pyramid/alembic/versions) to the database, then run the [`initialize_db` script](langworld_db_pyramid/scripts/initialize_db.py) that populates the database with data from [`langworld_db_data`](langworld_db_data).
 
 ```bash
 alembic -c config/production.ini upgrade head; initialize_langworld_db_pyramid_db config/production.ini
