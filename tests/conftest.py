@@ -26,7 +26,7 @@ def pytest_addoption(parser):
 @pytest.fixture(scope='session')
 def ini_file(request):
     # potentially grab this path from a pytest option
-    return os.path.abspath(request.config.option.ini or str(Path('wsgi_config') / 'testing.ini'))
+    return os.path.abspath(request.config.option.ini or str(Path('config') / 'testing.ini'))
 
 
 @pytest.fixture(scope='session')
