@@ -1,6 +1,7 @@
 # Jazyki Mira (Languages of the World) online database
 
-Jazyki Mira (Languages of the World) Database as a [Pyramid](https://trypyramid.com/) web app.
+Jazyki Mira (Languages of the World) Database as a [Pyramid](https://trypyramid.com/) web app
+with interactive UI components created in [React.js](https://reactjs.org/).
 
 The data is pulled with `git subtree` from a
 data repository into [*langworld_db_data*](langworld_db_data). The actual data files are in [*data*](langworld_db_data/data) subdirectory of that package.
