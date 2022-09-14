@@ -22,6 +22,16 @@ for this package are stored in a [separate directory](tests).
 git clone https://github.com/lemontree210/langworld_db_pyramid/; cd langworld_db_pyramid
 ```
 
+### Copy default [PasteDeploy](https://pastedeploy.readthedocs.io/en/latest/index.html) `.ini` files and edit them if necessary
+
+Copy `.ini` files from [`/config/default/`](config/default) to `/config/`. Edit if necessary (e.g. `sqlalchemy.url` for the database). 
+
+One thing that is missing there and **must** be entered is a [MapBox](https://www.mapbox.com/) token 
+(`mapbox_access_token` key in `[app:main]` section).
+
+No `.ini` files in `/config/` directory will be checked into VCS
+(as per [`.gitignore`](.gitignore)).
+
 ### Create a virtual environment and install dependencies (from [`Pipfile`](Pipfile))
 
 ```bash

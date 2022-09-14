@@ -12,6 +12,7 @@ from langworld_db_pyramid.views.families import (_get_family_immediate_subfamili
                                                  view_families_for_map)
 from langworld_db_pyramid.views.features import (get_feature_values_icons, view_all_features_list_by_category,
                                                  view_feature_list_of_values, view_feature_map_of_values)
+from langworld_db_pyramid.views.mapbox_token import get_mapbox_token
 from langworld_db_pyramid.views.notfound import notfound_view
 from langworld_db_pyramid.views.query_wizard import get_matching_doculects
 
@@ -172,6 +173,11 @@ def test_view_families_for_list(dummy_request, setup_models_once_for_test_module
 
     assert len(data['subfamilies']) == expected_number_of_families
     assert len(data['icon_for_family']) == expected_number_of_families + 1
+
+
+def test_mapbox_token_get_mapbox_token(app_request):  # dummy_request won't have access to request.registry.settings
+    token = get_mapbox_token(app_request)
+    assert token.startswith('sk.')
 
 
 @pytest.mark.parametrize(

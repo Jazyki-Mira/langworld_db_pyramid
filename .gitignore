@@ -23,5 +23,5 @@ test
 .idea/
 /langworld_db_pyramid/locale/en/LC_MESSAGES/messages.mo
 /testing.sqlite-journal
-/langworld_db_pyramid/maputils/mapbox_token_private.py
 .vscode/
+/config/*.ini
