@@ -41,6 +41,14 @@ export default function MapAndList({
   }, []); // only look for the form once, hence empty dependency list
 
   React.useEffect(() => {
+    /* Before the first fetch allDoculectGroups is null anyway, 
+    but in tools like Query Wizard there can be multiple fetches 
+    and it is good to explicitly set allDoculectGroups to null before fetching.
+    That way, for example, another element can detect that new fetch operation started
+    and a plaque with "data being loaded" message must be displayed.
+     */
+    setAllDoculectGroups(null);
+
     fetch(fetchUrl)
       .then((res) => res.json())
       .then((groups) => setAllDoculectGroups(groups))
