@@ -179,13 +179,13 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
   };
 
   const openPopupForDoculect = (doculectID) => {
-    if (doculectID != null) {
-      let marker = markerForDoculectIDRef.current[doculectID];
-      marker.openPopup();
-      marker.fire("mouseover"); // to make the marker rise to the top
-      // TODO if user returns to the same list item, the marker will not rise again
-      // I guess I have to trigger "mouseout" on PREVIOUS marker when ID changes
-    }
+    if (doculectID === null) return null;
+
+    let marker = markerForDoculectIDRef.current[doculectID];
+    marker.openPopup();
+    marker.fire("mouseover"); // to make the marker rise to the top
+    // TODO if user returns to the same list item, the marker will not rise again
+    // I guess I have to trigger "mouseout" on PREVIOUS marker when ID changes
   };
 
   const getGroupsInMapView = () => {
