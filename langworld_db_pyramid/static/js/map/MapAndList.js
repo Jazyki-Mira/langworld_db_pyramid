@@ -4,6 +4,7 @@ import {
   idOfDoculectToOpenPopupOnMapContext,
   fetchUrlContext,
 } from "./contexts.js";
+import DataLoadingPlaque from "./DataLoadingPlaque.js";
 import DoculectMap from "./DoculectMap.js";
 import doculectMapAndListStrings from "../i18n/doculectMapAndListStrings.js";
 import getLocale from "../tools/getLocale.js";
@@ -107,7 +108,8 @@ export default function MapAndList({
                 id: "interactive-list",
               },
               elem(InteractiveDoculectList)
-            )
+            ),
+            elem(DataLoadingPlaque)
           )
         )
       )
