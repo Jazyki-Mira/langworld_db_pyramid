@@ -75,7 +75,21 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
       zoomMapToFitAllMarkers(); // note that the map will not move if zoom doesn't need to change
 
     setDoculectGroupsInMapView(getGroupsInMapView());
-    openPopupForDoculect(idOfDoculectToShow);
+
+    /* Motivation for setTimeout()
+    If user opens the map from a doculect profile, it is likely that their mouse will 
+    end up pointing at a random doculect on the map, thus triggering its popup to open.
+    This is because of the position of the link to the map in doculect profiles.
+    This means that the user will not see the popup for the doculect they were meant to see.
+    Adding the timeout leads to the following chain of events: 
+    1. A popup opens for a doculect that user's mouse is pointing at,
+    2. after 0.5 seconds a popup opens for the correct doculect (closing the previous one).
+    Timeout of less than 0.5 seconds might not be enough for the map to show the popup for 
+    the random doculect the user's mouse is pointing at.
+     */
+    setTimeout(() => {
+      openPopupForDoculect(idOfDoculectToShow);
+    }, 500);
 
     mapRef.current.on("zoomend moveend", () => {
       // only change context, the list rendering is called from parent
