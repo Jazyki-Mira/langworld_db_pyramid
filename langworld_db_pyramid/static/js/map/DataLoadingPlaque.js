@@ -14,11 +14,14 @@ export default function DataLoadingPlaque() {
 
   return elem(
     "div",
-    { className: "w3-display-middle w3-pale-blue w3-round-large" },
+    {
+      className:
+        "w3-display-middle padding-side-32 w3-pale-blue w3-round-large",
+    },
     elem(
       "p",
       { className: "w3-large w3-center w3-text-dark-blue-grey" },
-      doculectMapAndListStrings["dataNotLoaded"][getLocale()]
+      doculectMapAndListStrings["loading"][getLocale()]
     )
   );
 }
