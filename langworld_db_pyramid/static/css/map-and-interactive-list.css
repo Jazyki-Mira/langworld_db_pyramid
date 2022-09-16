@@ -38,3 +38,9 @@ img.icon-in-map-legend:hover {
   filter: alpha(opacity=90);
   opacity: .9;
 }
+
+.fade-out {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 1s, opacity 1s linear;
+}

@@ -55,9 +55,8 @@ export default function MapAndList({
       .catch(console.error);
   }, [fetchUrl]);
 
-  /* If the page contains a DIV for alerts and there are no doculects to show, 
-  display the alert for 2.5 seconds.
-  */
+  /* If the page contains a DIV for alerts and there are no doculects to show, show the alert.
+   */
   React.useEffect(() => {
     let alertDiv = document.getElementById("user-alert");
     if (alertDiv === null) return null;
@@ -76,8 +75,14 @@ export default function MapAndList({
       where the user can create their own (multiple) groups!
       */
     ) {
+      // show the alert, then after .75 seconds fade out (fading out takes 1 second, see CSS)
       alertDiv.classList.remove("w3-hide");
-      setTimeout(() => alertDiv.classList.add("w3-hide"), 2500);
+      setTimeout(() => alertDiv.classList.add("fade-out"), 750);
+      setTimeout(() => {
+        // after a total of 2 seconds, revert classes to original state
+        alertDiv.classList.remove("fade-out");
+        alertDiv.classList.add("w3-hide");
+      }, 2000);
     }
   }, [allDoculectGroups]);
 
