@@ -81,8 +81,7 @@ class CustomModelInitializer:
             row['id']: {
                 'en': row['en'],
                 'ru': row['ru']
-            }
-            for row in read_dicts_from_csv(file_with_genealogy_names)
+            } for row in read_dicts_from_csv(file_with_genealogy_names)
         }
 
         # Dictionaries map identifiers to instances of mapped classes:
@@ -318,7 +317,8 @@ class CustomModelInitializer:
             doculect.comment_ru = ''
 
             for encyclopedia_map_id in [
-                    row['encyclopedia_map_id'] for row in rows_with_encyclopedia_map_to_doculect
+                    row['encyclopedia_map_id']
+                    for row in rows_with_encyclopedia_map_to_doculect
                     if row['doculect_id'] == doculect.man_id
             ]:
                 doculect.encyclopedia_maps.append(self.encyclopedia_map_for_id[encyclopedia_map_id])
