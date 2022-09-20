@@ -12,7 +12,7 @@ class TestCustomModelInitializer:
 
         NUMBER_OF_FEATURES = 126
         # CALCULATING EXPECTED NUMBER OF VALUES IN FeatureValue TABLE
-        number_of_listed_values = 1232
+        number_of_listed_values = 1235
         number_of_empty_values = NUMBER_OF_FEATURES * 3  # 3 value types with empty values
 
         unique_custom_values = set()
