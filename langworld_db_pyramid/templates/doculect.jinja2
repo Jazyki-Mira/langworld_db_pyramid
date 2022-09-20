@@ -4,14 +4,12 @@
 
 {% macro comment(value, add_parentheses_and_note=False) -%}
     {# comments are only available in Russian so far #}
-    {% if request.locale_name == 'ru' %}
-        {% for comment in value.doculect_comments if comment.doculect == doculect %}
-          <span class="w3-text-dark-blue-grey">
-            {%- if loop.first and add_parentheses_and_note %}(Комментарий: {% endif -%}
-            {{ comment.text_ru }}
-            {%- if loop.last and add_parentheses_and_note %}){% endif -%}
-          </span>
-        {% endfor %}
+    {% if value in comment_for_feature_value and request.locale_name == 'ru' %}
+      <span class="w3-text-dark-blue-grey">
+        {%- if add_parentheses_and_note %}(Комментарий: {% endif -%}
+        {{ comment_for_feature_value[value].text_ru }}
+        {%- if add_parentheses_and_note %}){% endif -%}
+      </span>
     {% endif %}
 {%- endmacro %}
 
