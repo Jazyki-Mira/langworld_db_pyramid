@@ -1,12 +1,45 @@
 from collections import Counter
+from collections.abc import Generator
+from contextlib import contextmanager
 import _csv  # for typing only
 import csv
 from pathlib import Path
-from typing import Literal, Union
+from typing import Iterable, Literal, Optional, Union
 
 from openpyxl import load_workbook
+# for typing:
+import openpyxl.cell
+import openpyxl.worksheet.worksheet
 
 CSVDelimiter = Literal[',', ';']
+
+
+def append_empty_column_to_csv(
+        path_to_file: Path,
+        name_of_new_column: str,
+        delimiter: CSVDelimiter = ',',
+        custom_path_to_output_file: Optional[Path] = None) -> None:
+    """Adds empty column (as last column) to CSV file. **Overwrites file**,
+    but optional output path can be specified to create a new file.
+
+    :raises ValueError if column name already exists in file.
+    :raises FileExistsError if custom output file is specified and already exists.
+    """
+    if custom_path_to_output_file is not None and custom_path_to_output_file.exists():
+        raise FileExistsError(f'You provided a custom path to output file {custom_path_to_output_file}, '
+                              f'but it already exists. To append column in place, do not indicate custom output path.')
+    output_path = custom_path_to_output_file if custom_path_to_output_file else path_to_file
+
+    rows = read_plain_rows_from_csv(path_to_file=path_to_file, delimiter=delimiter)
+    header_row, data_rows = rows[0], rows[1:]
+
+    if name_of_new_column in header_row:
+        raise ValueError(f'Column {name_of_new_column} already exists in {path_to_file.name}')
+
+    new_header_row: list[str] = header_row + [name_of_new_column]
+    new_data_rows = [row + [''] for row in data_rows]
+
+    write_csv([new_header_row] + new_data_rows, path_to_file=output_path, overwrite=True, delimiter=delimiter)
 
 
 def check_csv_for_malformed_rows(path_to_file: Path) -> None:
@@ -68,20 +101,47 @@ def convert_xls_to_csv(
     if not overwrite and path_to_output_csv_file.exists():
         raise FileExistsError(f'File {path_to_output_csv_file} already exists')
 
-    wb = load_workbook(path_to_input_excel_file, data_only=True)
-    ws = wb[sheet_name]
+    with _load_worksheet(path_to_workbook=path_to_input_excel_file, sheet_name=sheet_name) as ws:
+        rows_to_write = [_get_cell_values(row) for row in ws.iter_rows()]
 
-    rows_to_write = []
-    for row in ws.iter_rows():
-        rows_to_write.append([cell.value for cell in row])
+        write_csv(
+            rows=rows_to_write,
+            path_to_file=path_to_output_csv_file,
+            overwrite=overwrite,
+            delimiter=delimiter,
+        )
 
-    write_csv(
-        rows=rows_to_write,
-        path_to_file=path_to_output_csv_file,
-        overwrite=overwrite,
-        delimiter=delimiter,
-    )
-    wb.close()
+
+def _get_cell_values(row: Iterable[openpyxl.cell.Cell]) -> list[str]:
+    """Takes a row produced from `.iter_rows()` and
+    returns list of values of cells.
+
+    **Note**: `openpyxl` returns `None` as value of an empty cell.
+    This function changes this behavior in that
+    it returns **an empty string** as value of an empty cell.
+    """
+    cell_values = []
+
+    for cell in row:
+        if cell.value is None:
+            cell_values.append('')
+        else:
+            cell_values.append(cell.value)
+
+    return cell_values
+
+
+@contextmanager
+def _load_worksheet(path_to_workbook: Path, sheet_name: str
+                    ) -> Generator[openpyxl.worksheet.worksheet.Worksheet, None, None]:
+    """Opens Excel workbook, returns worksheet,
+    closes the workbook after operation is done.
+    """
+    wb = load_workbook(path_to_workbook, data_only=True)
+    try:
+        yield wb[sheet_name]
+    finally:
+        wb.close()
 
 
 def read_column_from_csv(path_to_file: Path, column_name: str) -> list[str]:
@@ -136,6 +196,29 @@ def read_dict_from_2_csv_columns(path_to_file: Path,
     value_column = [row[val_index] for row in data_rows]
 
     return {k: v for k, v in zip(key_column, value_column)}
+
+
+def read_dicts_from_xls(path_to_file: Path, sheet_name: str) -> list[dict[str, str]]:
+    """Opens Excel file and reads it as or list of dictionaries
+    (top row is considered row with keys, each row is a dictionary
+    with keys taken from top row).
+
+    Empty value cells will result in **empty strings** (not `None`)
+    as dictionary values.
+    """
+
+    with _load_worksheet(path_to_workbook=path_to_file, sheet_name=sheet_name) as ws:
+        rows = list(ws.iter_rows())
+
+        keys = _get_cell_values(rows[0])
+        data_rows = [_get_cell_values(row) for row in rows[1:]]
+
+        dicts = [
+            {keys[col]: cell_value for col, cell_value in enumerate(data_row)}
+            for data_row in data_rows
+        ]
+
+        return dicts
 
 
 def read_plain_rows_from_csv(path_to_file: Path,
