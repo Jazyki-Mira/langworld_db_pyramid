@@ -9,7 +9,7 @@ from langworld_db_pyramid.models.association_tables import (  # noqa: F401
     DoculectToFeatureValue, DoculectToGlottocode, DoculectToIso639P3Code)
 from langworld_db_pyramid.models.country import Country  # noqa: F401
 from langworld_db_pyramid.models.doculect import Doculect  # noqa: F401
-from langworld_db_pyramid.models.doculect_feature_value_comment import DoculectFeatureValueComment  # noqa: F401
+from langworld_db_pyramid.models.doculect_feature_value_info import DoculectFeatureValueInfo  # noqa: F401
 from langworld_db_pyramid.models.doculect_type import DoculectType  # noqa: F401
 from langworld_db_pyramid.models.encyclopedia_map import EncyclopediaMap  # noqa: F401
 from langworld_db_pyramid.models.encyclopedia_volume import EncyclopediaVolume  # noqa: F401

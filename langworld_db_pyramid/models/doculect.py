@@ -38,7 +38,7 @@ class Doculect(Base):
 
     encyclopedia_volume = relationship('EncyclopediaVolume', back_populates='doculects')
     family = relationship('Family', back_populates='doculects')
-    feature_value_comments = relationship('DoculectFeatureValueComment', back_populates='doculect')
+    feature_value_info_items = relationship('DoculectFeatureValueInfo', back_populates='doculect')
     main_country = relationship('Country', back_populates='doculects')
     type = relationship('DoculectType', back_populates='doculects')
 

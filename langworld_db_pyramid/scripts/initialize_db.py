@@ -49,7 +49,7 @@ class CustomModelInitializer:
             models.association_tables.DoculectToIso639P3Code,
             models.association_tables.EncyclopediaMapToDoculect,
             models.Doculect,
-            models.DoculectFeatureValueComment,
+            models.DoculectFeatureValueInfo,
             models.DoculectType,
             models.Country,
             models.EncyclopediaMap,
@@ -300,12 +300,14 @@ class CustomModelInitializer:
             type_of_this_doculect = self.doculect_type_for_id[doculect_row_to_write.pop('type')]
 
             glottocodes_for_this_doculect = [
-                self.glottocode_for_id[glottocode] for glottocode in doculect_row_to_write.pop('glottocode').split(', ')
+                self.glottocode_for_id[glottocode]
+                for glottocode in doculect_row_to_write.pop('glottocode').split(', ')
                 if glottocode
             ]
 
             iso_639p3_codes_for_this_doculect = [
-                self.iso639p3code_for_id[iso_code] for iso_code in doculect_row_to_write.pop('iso_639_3').split(', ')
+                self.iso639p3code_for_id[iso_code]
+                for iso_code in doculect_row_to_write.pop('iso_639_3').split(', ')
                 if iso_code
             ]
 
@@ -367,10 +369,12 @@ class CustomModelInitializer:
                     doculect.feature_values.append(value)
 
                     # 2. Processing comment
-                    if feature_profile_row['comment_ru'] or feature_profile_row['comment_en']:
-                        models.DoculectFeatureValueComment(
+                    if feature_profile_row['comment_ru'] or feature_profile_row['comment_en'] or feature_profile_row[
+                            'page_numbers']:
+                        models.DoculectFeatureValueInfo(
                             doculect=doculect,
                             feature_value=value,
+                            page_numbers=feature_profile_row['page_numbers'],
                             text_en=feature_profile_row['comment_en'],
                             text_ru=feature_profile_row['comment_ru'],
                         )  # will be added to dbsession automatically when doculect gets added

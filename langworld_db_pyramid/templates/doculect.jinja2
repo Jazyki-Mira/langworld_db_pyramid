@@ -4,10 +4,10 @@
 
 {% macro comment(value, add_parentheses_and_note=False) -%}
     {# comments are only available in Russian so far #}
-    {% if value in comment_for_feature_value and request.locale_name == 'ru' %}
+    {% if value in info_for_feature_value and request.locale_name == 'ru' %}
       <span class="w3-text-dark-blue-grey">
         {%- if add_parentheses_and_note %}(Комментарий: {% endif -%}
-        {{ comment_for_feature_value[value].text_ru }}
+        {{ info_for_feature_value[value].text_ru }}
         {%- if add_parentheses_and_note %}){% endif -%}
       </span>
     {% endif %}

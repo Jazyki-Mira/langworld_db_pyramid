@@ -30,7 +30,7 @@ class FeatureValue(Base):
     is_listed_and_has_doculects = Column(Boolean)
 
     doculects = relationship('Doculect', secondary='doculect_to_feature_value', back_populates='feature_values')
-    doculect_comments = relationship('DoculectFeatureValueComment', back_populates='feature_value')
+    doculect_comments = relationship('DoculectFeatureValueInfo', back_populates='feature_value')
     feature = relationship('Feature', back_populates='values')
     type = relationship('FeatureValueType', back_populates='values')
 

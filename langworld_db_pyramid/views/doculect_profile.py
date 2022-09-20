@@ -10,19 +10,19 @@ from langworld_db_pyramid.dbutils.query_helpers import get_all, get_by_man_id
 def view_doculect_profile(request):
     doculect = get_by_man_id(request=request, model=models.Doculect, man_id=request.matchdict['doculect_man_id'])
 
-    # Create a dictionary to easily find a comment for a given feature value and a given doculect:
-    # 1. Query to find comments only for this doculect
-    comments: list[models.DoculectFeatureValueComment] = get_all(
+    # Create a dictionary to easily find an info item for a given feature value and a given doculect:
+    # 1. Query to find info items only for this doculect
+    info_items: list[models.DoculectFeatureValueInfo] = get_all(
         request,
-        select(models.DoculectFeatureValueComment).where(models.DoculectFeatureValueComment.doculect_id == doculect.id))
-    # 2. Map feature values to comments for this doculect.
-    comment_for_feature_value: dict[str, models.DoculectFeatureValueComment] = {
-        comment.feature_value: comment for comment in comments
+        select(models.DoculectFeatureValueInfo).where(models.DoculectFeatureValueInfo.doculect_id == doculect.id))
+    # 2. Map feature values to info item for this doculect.
+    info_for_feature_value: dict[str, models.DoculectFeatureValueInfo] = {
+        item.feature_value: item for item in info_items
     }
 
     return {
         'doculect': doculect,
         'categories': get_all(request,
                               select(models.FeatureCategory).order_by(models.FeatureCategory.man_id)),
-        'comment_for_feature_value': comment_for_feature_value
+        'info_for_feature_value': info_for_feature_value
     }

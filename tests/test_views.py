@@ -222,7 +222,7 @@ def test_view_doculect_profile(dummy_request, setup_models_once_for_test_module)
 
     assert len(data['categories']) == 14
 
-    comment_for_value = data['comment_for_feature_value']
+    comment_for_value = data['info_for_feature_value']
     assert len(comment_for_value) == 21
 
     for man_id in ('K-1-3', 'K-2-3'):
