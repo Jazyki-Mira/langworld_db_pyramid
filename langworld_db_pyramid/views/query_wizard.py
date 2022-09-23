@@ -2,7 +2,7 @@ from pyramid.view import view_config
 from sqlalchemy import select
 
 from langworld_db_pyramid import models
-from langworld_db_pyramid.dbutils.query_helpers import get_all, get_by_man_id
+from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.locale.in_code_translation_strings import VISIBLE_MATCHING_DOCULECTS_HEADING
 from langworld_db_pyramid.maputils.marker_icons import generate_one_icon
 from langworld_db_pyramid.maputils.markers import generate_marker_group
@@ -53,7 +53,7 @@ def get_matching_doculects(request) -> list[dict]:
     for feature_id in params:
         doculects_with_any_of_requested_values_of_feature: set[models.Doculect] = set()
         for value_id in params[feature_id]:
-            value = get_by_man_id(request=request, model=models.FeatureValue, man_id=value_id)
+            value = models.FeatureValue.get_by_man_id(request=request, man_id=value_id)
             doculects_with_any_of_requested_values_of_feature.update(d for d in doculects if d in value.doculects)
 
         matching_doculects.intersection_update(doculects_with_any_of_requested_values_of_feature)

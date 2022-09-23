@@ -4,7 +4,7 @@ from pyramid.view import view_config
 from sqlalchemy import select
 
 from langworld_db_pyramid import models
-from langworld_db_pyramid.dbutils.query_helpers import get_all, get_by_man_id
+from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
 
@@ -17,7 +17,7 @@ def view_all_features_list_by_category(request):
 
 
 def get_feature_values_icons(request) -> tuple[models.Feature, list[models.FeatureValue], dict[Any, CLLDIcon]]:
-    feature = get_by_man_id(request=request, model=models.Feature, man_id=request.matchdict['feature_man_id'])
+    feature = models.Feature.get_by_man_id(request=request, man_id=request.matchdict['feature_man_id'])
 
     # I sort values by number of doculects (descending), but if the number of doculects is the same,
     # I have to sort by value ID (ascending). Hence, this trick with negative value ID (`.id` is auto-incremented

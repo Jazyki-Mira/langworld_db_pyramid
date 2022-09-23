@@ -6,10 +6,11 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 
+from langworld_db_pyramid.dbutils.query_mixin import QueryMixin
 from langworld_db_pyramid.models.meta import Base
 
 
-class Feature(Base):
+class Feature(QueryMixin, Base):
     __tablename__ = 'features'
     id = Column(Integer, primary_key=True)
     man_id = Column(String(10), index=True)

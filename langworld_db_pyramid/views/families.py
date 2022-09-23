@@ -4,7 +4,7 @@ from pyramid.view import view_config
 from sqlalchemy import select
 
 from langworld_db_pyramid import models
-from langworld_db_pyramid.dbutils.query_helpers import get_all, get_by_man_id
+from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
 
@@ -27,7 +27,7 @@ def _get_family_immediate_subfamilies_and_icons(
         family = None
         immediate_subfamilies = get_all(request, select(models.Family).where(models.Family.parent == family))
     else:
-        family = get_by_man_id(request=request, model=models.Family, man_id=family_man_id)
+        family = models.Family.get_by_man_id(request=request, man_id=family_man_id)
         immediate_subfamilies = family.children
 
     # the point is to provide icons only for the requested family and its top-level children

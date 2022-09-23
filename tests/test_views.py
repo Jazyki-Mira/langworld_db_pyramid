@@ -1,8 +1,6 @@
 import pyramid.httpexceptions
 import pytest
-from sqlalchemy import select
 
-from langworld_db_pyramid.dbutils.query_helpers import get_by_man_id, _get_one
 from langworld_db_pyramid.models.doculect import Doculect
 from langworld_db_pyramid.models.family import Family
 from langworld_db_pyramid.models.feature_category import FeatureCategory
@@ -226,7 +224,7 @@ def test_view_doculect_profile(dummy_request, setup_models_once_for_test_module)
     assert len(comment_for_value) == 21
 
     for man_id in ('K-1-3', 'K-2-3'):
-        value = get_by_man_id(request=dummy_request, model=FeatureValue, man_id=man_id)
+        value = FeatureValue.get_by_man_id(request=dummy_request, man_id=man_id)
         assert value in comment_for_value
 
 
