@@ -1,3 +1,4 @@
+from operator import attrgetter
 from typing import Optional
 
 from pyramid.view import view_config
@@ -63,7 +64,7 @@ def view_families_for_map(request) -> list[dict]:
                                   href_for_heading_in_list=href,
                                   img_src=icon_for_family[family].img_src,
                                   doculects=sorted([d for d in family.doculects if d.has_feature_profile],
-                                                   key=lambda d: getattr(d, name_attr)),
+                                                   key=attrgetter(name_attr)),
                                   additional_popup_text=f'(<a href="{href}">{getattr(family, name_attr)}</a>)'))
 
     for subfamily in immediate_subfamilies:
@@ -76,7 +77,7 @@ def view_families_for_map(request) -> list[dict]:
                                   href_for_heading_in_list=href,
                                   img_src=icon_for_family[subfamily].img_src,
                                   doculects=sorted(list(subfamily.iter_doculects_that_have_feature_profiles()),
-                                                   key=lambda d: getattr(d, name_attr)),
+                                                   key=attrgetter(name_attr)),
                                   additional_popup_text=f'(<a href="{href}">{getattr(subfamily, name_attr)}</a>)'))
 
     return marker_groups

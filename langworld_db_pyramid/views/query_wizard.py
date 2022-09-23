@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 from pyramid.view import view_config
 from sqlalchemy import select
 
@@ -33,7 +35,7 @@ def get_matching_doculects(request) -> list[dict]:
                 request,
                 group_id='',
                 group_name=request.localizer.translate(VISIBLE_MATCHING_DOCULECTS_HEADING),
-                doculects=sorted(doculects, key=lambda d: getattr(d, name_attr)),
+                doculects=sorted(doculects, key=attrgetter(name_attr)),
                 div_icon_html=icon.svg_tag,
                 img_src=icon.img_src,
             )
@@ -65,6 +67,6 @@ def get_matching_doculects(request) -> list[dict]:
             group_name=request.localizer.translate(VISIBLE_MATCHING_DOCULECTS_HEADING),
             div_icon_html=icon.svg_tag,
             img_src=icon.img_src,
-            doculects=sorted(matching_doculects, key=lambda d: getattr(d, name_attr)),
+            doculects=sorted(matching_doculects, key=attrgetter(name_attr)),
         )
     ]
