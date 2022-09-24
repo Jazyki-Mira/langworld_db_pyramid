@@ -112,8 +112,9 @@
           <colgroup>
             <col style="width:5%">
             <col style="width:30%">
-            <col style="width:40%">
+            <col style="width:37%">
             <col style="width:25%">
+            <col style="width:3%">
           </colgroup>
           <tbody>
           {% for value in values_to_list %}
@@ -126,6 +127,12 @@
                     </td>
                     <td>{{ value[name_attr]}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-small">[{{ value.man_id.replace('-', '‑') }}]</span>{% endif %}</td>
                     <td>{{ comment(value) }}</td>  {# calls macro defined above #}
+                    <td>
+                        {# for now only handling the case with a single page number for feature value. Change if more complex cases (ranges, comma-separated lists) arise #}
+                        {% if value in info_for_feature_value and info_for_feature_value[value].page_numbers%}
+                            <a href="https://iling-ran.ru/staff_only/langworld_proto/static/pdf_volumes/{{ doculect.encyclopedia_volume.file_name }}#page={{ info_for_feature_value[value].page_numbers|int + doculect.encyclopedia_volume.pagenum_offset|int }}" target="_blank"><img src="{{request.static_url('langworld_db_pyramid:static/images/pdf-30.png')}}" alt="PDF" height="20" title="{% trans %}В энциклопедии{% endtrans %}"/></a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endif %}
           {% endfor %}
@@ -159,3 +166,7 @@
 
 </div>
 {% endblock full_width %}
+
+{% block custom_footer_bottom %}
+  <p><a target="_blank" href="https://icons8.com/icon/39195/pdf">PDF</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></p>
+{% endblock custom_footer_bottom %}
