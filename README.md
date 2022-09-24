@@ -63,19 +63,13 @@ pipenv shell
 
 **All commands below must be run under virtual environment.**
 
-### Initialize database
-
-Apply [`alembic` migrations](langworld_db_pyramid/alembic/versions) to the database, then run the [`initialize_db` script](langworld_db_pyramid/scripts/initialize_db.py) that populates the database with data from [`langworld_db_data`](langworld_db_data).
+### Run initialization script (after making it executable) 
 
 ```bash
-alembic -c config/production.ini upgrade head; initialize_langworld_db_pyramid_db config/production.ini
+bash_scripts/init_compile.sh
 ```
 
-### Compile message catalog for multilingual support (i18n)
-
-```bash
-pybabel compile --directory=langworld_db_pyramid/locale --locale=en
-```
+This script applies [`alembic` migrations](langworld_db_pyramid/alembic/versions) to the database, runs the [`initialize_db` script](langworld_db_pyramid/scripts/initialize_db.py) that populates the database with data from [`langworld_db_data`](langworld_db_data) and compiles `Babel` message catalogs for the English version.
 
 ## Serve locally ...
 ```bash
