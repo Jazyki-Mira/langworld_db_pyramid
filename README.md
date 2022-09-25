@@ -69,7 +69,7 @@ pipenv shell
 bash_scripts/init_compile.sh
 ```
 
-This script applies [`alembic` migrations](langworld_db_pyramid/alembic/versions) to the database, runs the [`initialize_db` script](langworld_db_pyramid/scripts/initialize_db.py) that populates the database with data from [`langworld_db_data`](langworld_db_data) and compiles `Babel` message catalogs for the English version.
+This [bash script](bash_scripts) applies [`alembic` migrations](langworld_db_pyramid/alembic/versions) to the database, runs the [`initialize_db` script](langworld_db_pyramid/scripts/initialize_db.py) that populates the database with data from [`langworld_db_data`](langworld_db_data) and compiles `Babel` message catalogs for the English version.
 
 ## Serve locally ...
 ```bash
@@ -78,7 +78,31 @@ pserve config/production.ini
 
 ## ... or setup your WSGI server.
 
-I will add some information here as I go.
+Example WSGI config file for [PythonAnywhere](https://www.pythonanywhere.com):
+
+```py
+import sys
+
+# replace <username> with valid one
+path = '/home/<username>/langworld_db_pyramid'
+
+if path not in sys.path:
+    sys.path.append(path)
+
+from pyramid.paster import get_app
+ini_path = path + '/config/production.ini'
+application = get_app(ini_path, 'main')
+```
+
+## Update web app on remote server if the package has changed
+
+Use this [bash script](bash_scripts): 
+
+```bash
+bash_scripts/update.sh
+```
+
+Re-install package locally if its dependencies have changed.
 
 ## Use `development.ini` file in for development
 
