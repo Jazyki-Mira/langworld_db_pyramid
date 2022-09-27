@@ -1,5 +1,5 @@
 import getLocale from "./tools/getLocale.js";
-import hideListAndLegendToggleSwitch from "./hideListAndLegendToggleSwitch.js";
+import hideListAndLegendToggleSwitch from "./tools/hideListAndLegendToggleSwitch.js";
 import MapWithList from "./mapWithList/MapWithList.js";
 import queryWizardStrings from "./i18n/queryWizardStrings.js";
 
