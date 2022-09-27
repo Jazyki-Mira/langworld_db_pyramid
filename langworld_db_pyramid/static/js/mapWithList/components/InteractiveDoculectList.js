@@ -1,9 +1,9 @@
 import {
   doculectGroupsInMapViewContext,
   idOfDoculectToOpenPopupOnMapContext,
-} from "./contexts.js";
-import getLocale from "../tools/getLocale.js";
-import doculectMapAndListStrings from "../i18n/doculectMapAndListStrings.js";
+} from "../contexts.js";
+import getLocale from "../../tools/getLocale.js";
+import doculectMapAndListStrings from "../../i18n/doculectMapAndListStrings.js";
 
 const elem = React.createElement;
 

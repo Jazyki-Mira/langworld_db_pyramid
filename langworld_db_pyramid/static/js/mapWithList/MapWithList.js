@@ -4,15 +4,15 @@ import {
   idOfDoculectToOpenPopupOnMapContext,
   fetchUrlContext,
 } from "./contexts.js";
-import DataLoadingPlaque from "./DataLoadingPlaque.js";
-import DoculectMap from "./DoculectMap.js";
+import DataLoadingPlaque from "./components/DataLoadingPlaque.js";
+import DoculectMap from "./components/DoculectMap.js";
 import doculectMapAndListStrings from "../i18n/doculectMapAndListStrings.js";
 import getLocale from "../tools/getLocale.js";
-import InteractiveDoculectList from "./InteractiveDoculectList.js";
+import InteractiveDoculectList from "./components/InteractiveDoculectList.js";
 
 const elem = React.createElement;
 
-export default function MapAndList({
+export default function MapWithList({
   urlToFetch,
   formId = null,
   fetchUrlGenerator = null,

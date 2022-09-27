@@ -1,6 +1,6 @@
-import MapAndList from "./map/MapAndList.js";
 import getLocale from "./tools/getLocale.js";
 import hideListAndLegendToggleSwitch from "./hideListAndLegendToggleSwitch.js";
+import MapWithList from "./mapWithList/MapWithList.js";
 import queryWizardStrings from "./i18n/queryWizardStrings.js";
 
 const elem = React.createElement;
@@ -69,16 +69,16 @@ function QueryWizard() {
   // after the render: move the form into same container as interactive list, hide the list
   React.useEffect(() => {
     let formContainer = document.getElementById("query-wizard-form-container");
-    let mapAndListContainer = document.getElementById(
+    let mapWithListContainer = document.getElementById(
       "map-and-list-inside-container"
     );
-    mapAndListContainer.append(formContainer);
+    mapWithListContainer.append(formContainer);
 
     let interactiveListContainer = document.getElementById("interactive-list");
     interactiveListContainer.classList.toggle("w3-hide");
   }, []);
 
-  return elem(MapAndList, {
+  return elem(MapWithList, {
     urlToFetch: `/${locale}/json_api/doculects_for_map/all`,
     formId: "query-wizard-form",
     fetchUrlGenerator: generateFetchUrl,
@@ -93,4 +93,5 @@ clearButton.onclick = () => {
   for (let elem of document.querySelectorAll("select")) elem.slim.set([]);
 };
 
+// query wizard only has one group of doculects, so no need switch between list and legend
 hideListAndLegendToggleSwitch();
