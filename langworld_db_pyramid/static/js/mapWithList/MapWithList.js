@@ -2,7 +2,6 @@ import {
   allFetchedDoculectGroupsContext,
   doculectGroupsInMapViewContext,
   idOfDoculectToOpenPopupOnMapContext,
-  fetchUrlContext,
 } from "./contexts.js";
 import DataLoadingPlaque from "./components/DataLoadingPlaque.js";
 import DoculectMap from "./components/DoculectMap.js";
@@ -87,43 +86,39 @@ export default function MapWithList({
   }, [allDoculectGroups]);
 
   return elem(
-    fetchUrlContext.Provider,
-    { value: { fetchUrl, setFetchUrl } },
+    allFetchedDoculectGroupsContext.Provider,
+    { value: { allDoculectGroups, setAllDoculectGroups } },
     elem(
-      allFetchedDoculectGroupsContext.Provider,
-      { value: { allDoculectGroups, setAllDoculectGroups } },
+      doculectGroupsInMapViewContext.Provider,
+      { value: { doculectGroupsInMapView, setDoculectGroupsInMapView } },
       elem(
-        doculectGroupsInMapViewContext.Provider,
-        { value: { doculectGroupsInMapView, setDoculectGroupsInMapView } },
+        idOfDoculectToOpenPopupOnMapContext.Provider,
+        {
+          value: {
+            idOfDoculectToOpenPopupOnMap,
+            setIdOfDoculectToOpenPopupOnMap,
+          },
+        },
         elem(
-          idOfDoculectToOpenPopupOnMapContext.Provider,
+          "div",
           {
-            value: {
-              idOfDoculectToOpenPopupOnMap,
-              setIdOfDoculectToOpenPopupOnMap,
-            },
+            className: "w3-row w3-padding-small",
+            id: "map-and-list-inside-container",
           },
           elem(
             "div",
+            { className: "w3-twothird w3-container" },
+            elem(DoculectMap)
+          ),
+          elem(
+            "div",
             {
-              className: "w3-row w3-padding-small",
-              id: "map-and-list-inside-container",
+              className: "w3-third w3-container scrollable",
+              id: "interactive-list",
             },
-            elem(
-              "div",
-              { className: "w3-twothird w3-container" },
-              elem(DoculectMap)
-            ),
-            elem(
-              "div",
-              {
-                className: "w3-third w3-container scrollable",
-                id: "interactive-list",
-              },
-              elem(InteractiveDoculectList)
-            ),
-            elem(DataLoadingPlaque)
-          )
+            elem(InteractiveDoculectList)
+          ),
+          elem(DataLoadingPlaque)
         )
       )
     )
