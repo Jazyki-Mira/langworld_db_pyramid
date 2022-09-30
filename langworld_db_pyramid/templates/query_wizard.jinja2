@@ -76,7 +76,13 @@
 
 {% block scripts %}
   {{ super() }}
-  <script src="{{ request.static_url('langworld_db_pyramid:static/js/slimselect/slimselect.min.js') }}" type="module"></script>
-  <script src="{{ request.static_url('langworld_db_pyramid:static/js/queryWizard.js') }}" type="module"></script>
+  {# SlimSelect for the form, PubSub for fetching data for the map dynamically after user makes their choice #}
+  <script src="{{ request.static_url('langworld_db_pyramid:static/js/vendor/slimselect.min.js') }}" type="module"></script>
+  <script src="{{ request.static_url('langworld_db_pyramid:static/js/vendor/pubsub.min.js') }}" type="module"></script>
+
+  {# Initially load a general doculect map, then it will be managed interactively by query wizard's form #}
+  <script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectMapAll.js') }}" type="module"></script>
+  <script src="{{ request.static_url('langworld_db_pyramid:static/js/queryWizardForm.js') }}" type="module"></script>
+
   <script src="{{ request.static_url('langworld_db_pyramid:static/js/toggleListAndForm.js') }}" type="module"></script>
 {% endblock scripts %}

@@ -7,6 +7,9 @@ jquery is provided via a
 leaflet is provided via
 `this <https://raw.github.com/Leaflet/Leaflet/master/LICENSE>`_ license.
 
+PubSubJS is provided via a
+`MIT <https://raw.githubusercontent.com/mroderick/PubSubJS/master/LICENSE.md>`_ license.
+
 Pyramid is provided via a
 `BSD-like <https://raw.githubusercontent.com/Pylons/pyramid/2.0-branch/LICENSE.txt>`_ license.
 

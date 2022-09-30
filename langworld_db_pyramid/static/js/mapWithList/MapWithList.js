@@ -8,14 +8,11 @@ import DoculectMap from "./components/DoculectMap.js";
 import doculectMapAndListStrings from "../i18n/doculectMapAndListStrings.js";
 import getLocale from "../tools/getLocale.js";
 import InteractiveDoculectList from "./components/InteractiveDoculectList.js";
+import { urlTopic } from "../constants/pubSubTopics.js";
 
 const elem = React.createElement;
 
-export default function MapWithList({
-  urlToFetch,
-  formId = null,
-  fetchUrlGenerator = null,
-}) {
+export default function MapWithList({ urlToFetch }) {
   const [allDoculectGroups, setAllDoculectGroups] = React.useState(null);
   const [doculectGroupsInMapView, setDoculectGroupsInMapView] =
     React.useState(null);
@@ -23,21 +20,18 @@ export default function MapWithList({
     React.useState(null);
   const [fetchUrl, setFetchUrl] = React.useState(urlToFetch);
 
-  // fetchUrl can only change if there is some sort of form on the page
-  // For now I assume that the form is in HTML already, not being created by React
-  const formRef = React.useRef(null);
-
-  React.useEffect(() => {
-    if (formId != null) {
-      formRef.current = document.getElementById(formId);
-      formRef.current.addEventListener("change", () =>
-        setFetchUrl(fetchUrlGenerator())
-      );
-      formRef.current.onsubmit = (e) => {
-        e.preventDefault();
-      };
-    }
-  }, []); // only look for the form once, hence empty dependency list
+  // If there is a PubSub, subscribe to changes in URL to be fetched
+  try {
+    /* A callback passed to PubSub.subscribe (along with topic name) takes two arguments, 
+      first of which is topic. I don't need it.
+    */
+    PubSub.subscribe(urlTopic, (_, url) => setFetchUrl(url));
+  } catch (ReferenceError) {
+    /* PubSub is only needed if I need to fetch new data dynamically.
+       But if the page does not need to fetch new data, there is no need to import PubSub,
+       and it is OK to just let the ReferenceError pass silently.
+    */
+  }
 
   React.useEffect(() => {
     /* Before the first fetch allDoculectGroups is null anyway, 
