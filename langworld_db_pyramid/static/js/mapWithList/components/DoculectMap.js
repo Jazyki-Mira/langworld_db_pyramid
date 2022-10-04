@@ -138,14 +138,25 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
     let markersInThisGroup = [];
 
     doculectsInThisGroup.forEach((doculect) => {
+      const opacityForUnfocusedDoculects = 0.3;
+
       let marker = L.marker([doculect["latitude"], doculect["longitude"]], {
         icon: icon,
         riseOnHover: true,
+        // if one doculect is to be highlighted, make all markers transparent by default:
+        opacity: idOfDoculectToShow == null ? 1 : opacityForUnfocusedDoculects,
       });
 
       marker.bindPopup(doculect["popupText"]);
       marker.on("mouseover", function (e) {
+        this.setOpacity(1);
         this.openPopup();
+      });
+      marker.on("mouseout", function (e) {
+        this.closePopup();
+        this.setOpacity(
+          idOfDoculectToShow == null ? 1 : opacityForUnfocusedDoculects
+        );
       });
       marker.on("click", function (e) {
         window.open(doculect["url"], "_self");
@@ -181,21 +192,9 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
   const changeIconForDoculectToShow = (doculectID) => {
     if (doculectID === null) return null;
 
-    const svgTag = `
-    <svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-    height="40" width="40"> <circle cx="20" cy="20" r="11" 
-    style="fill:#E7298A;stroke:#808080;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;"/>
-    </svg>`;
-
-    const icon = L.divIcon({
-      html: svgTag,
-      className: "",
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
-    });
-
     const marker = markerForDoculectIDRef.current[doculectID];
-    marker.setIcon(icon);
+    marker.setOpacity(1);
+    marker.setZIndexOffset(1000);
   };
 
   const openPopupForDoculect = (doculectID) => {
