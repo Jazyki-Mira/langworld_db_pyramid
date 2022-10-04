@@ -9,6 +9,7 @@ const elem = React.createElement;
 export default function DoculectMap({ mapDivID = "map-default" }) {
   const leafletFeatureGroupsRef = React.useRef([]);
   const mapRef = React.useRef(null);
+  const selectedMarker = React.useRef(null);
 
   const { mapViewLat, mapViewLong, zoom, idOfDoculectToShow } = getURLParams();
   const markerForDoculectIDRef = React.useRef(new Map());
@@ -149,8 +150,13 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
 
       marker.bindPopup(doculect["popupText"]);
       marker.on("mouseover", function (e) {
+        if (selectedMarker.current != null)
+          selectedMarker.current.fire("mouseout");
         this.setOpacity(1);
         this.openPopup();
+        // keep opacity on the doculect that was in focus when page loaded
+        if (idOfDoculectToShow != null)
+          markerForDoculectIDRef.current[idOfDoculectToShow].setOpacity(1);
       });
       marker.on("mouseout", function (e) {
         this.closePopup();
@@ -200,11 +206,10 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
   const openPopupForDoculect = (doculectID) => {
     if (doculectID === null) return null;
 
-    let marker = markerForDoculectIDRef.current[doculectID];
-    marker.openPopup();
-    marker.fire("mouseover"); // to make the marker rise to the top
-    // TODO if user returns to the same list item, the marker will not rise again
-    // I guess I have to trigger "mouseout" on PREVIOUS marker when ID changes
+    if (selectedMarker.current != null) selectedMarker.current.fire("mouseout");
+
+    selectedMarker.current = markerForDoculectIDRef.current[doculectID];
+    selectedMarker.current.fire("mouseover");
   };
 
   const getGroupsInMapView = () => {
