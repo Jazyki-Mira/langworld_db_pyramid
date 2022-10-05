@@ -110,6 +110,7 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
       if (idOfDoculectToShow != null) {
         selectedMarker.current.setOpacity(opacityForUnfocusedDoculects);
         markerForDoculectIDRef.current[idOfDoculectToShow].openPopup();
+        changeIconForDoculectToShow(idOfDoculectToShow);
       }
     } else {
       openPopupForDoculect(idOfDoculectToOpenPopupOnMap);
