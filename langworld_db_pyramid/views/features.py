@@ -8,6 +8,7 @@ from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
+from langworld_db_pyramid.views import get_doculect_from_params
 
 
 @view_config(route_name='all_features_list', renderer='langworld_db_pyramid:templates/all_features_list.jinja2')
@@ -39,6 +40,7 @@ def view_feature_list_of_values(request):
     return {
         'feature_name': getattr(feature, f'name_{request.locale_name}'),
         'man_id': feature.man_id,
+        'doculect_in_focus': get_doculect_from_params(request)
     }
 
 

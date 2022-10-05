@@ -1,6 +1,15 @@
 {% extends "base_depth2_page_with_map.jinja2" %}
 
-{% block title %}{% trans %}Карта языков{% endtrans %}{% endblock title %}
+{% block title %}
+  {% if doculect_in_focus == None %}
+    {% trans %}Карта языков{% endtrans %}
+  {% else %}
+    {% set name_attr = "name_" + request.locale_name %}
+    {# capitalize is a macro defined in base.jinja2 #}
+    {{ capitalize(doculect_in_focus[name_attr]) }} {{ doculect_in_focus.type[name_attr] }} {% trans %}на общей карте{% endtrans %}
+  {% endif %}
+{% endblock title %}
+
 {% block h1 %}{{ self.title() }}{% endblock h1 %}
 
 {% block scripts %}

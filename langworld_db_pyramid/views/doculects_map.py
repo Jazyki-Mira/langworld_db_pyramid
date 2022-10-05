@@ -6,13 +6,14 @@ from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.locale.in_code_translation_strings import ALL_VISIBLE_DOCULECTS_HEADING
 from langworld_db_pyramid.maputils.marker_icons import generate_one_icon
 from langworld_db_pyramid.maputils.markers import generate_marker_group
+from langworld_db_pyramid.views import get_doculect_from_params
 
 
 @view_config(route_name='all_doculects_map', renderer='langworld_db_pyramid:templates/all_doculects_map.jinja2')
 @view_config(route_name='all_doculects_map_localized',
              renderer='langworld_db_pyramid:templates/all_doculects_map.jinja2')
 def view_all_doculects_map(request):
-    return {}
+    return {'doculect_in_focus': get_doculect_from_params(request)}
 
 
 @view_config(route_name='doculects_for_map_all', renderer='json')

@@ -6,7 +6,12 @@
   {% if family == None %}
     {% trans %}Генеалогия{% endtrans %}
   {% else %}
-    {{ family[name_attr] }} {% trans %}языки{% endtrans %}
+    {% if doculect_in_focus == None %}
+      {{ family[name_attr] }} {% trans %}языки{% endtrans %}
+    {% else %}
+      {# capitalize is a macro defined in base.jinja2 #}
+      {{ capitalize(doculect_in_focus[name_attr]) }} {% trans %}и другие{% endtrans %} {% if request.locale_name == 'ru' %}{{ family[name_attr].lower() }}{% else %}{{ family[name_attr] }}{% endif %} {% trans %}языки{% endtrans %}
+    {% endif %}
   {% endif %}
 {% endblock title %}
 {% block h1 %}{{ self.title() }}{% endblock h1 %}

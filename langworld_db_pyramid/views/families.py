@@ -8,6 +8,7 @@ from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
+from langworld_db_pyramid.views import get_doculect_from_params
 
 MATCHDICT_ID_FOR_ALL_FAMILIES = '_all'
 
@@ -44,7 +45,8 @@ def _get_family_immediate_subfamilies_and_icons(
 @view_config(route_name='families_localized', renderer='langworld_db_pyramid:templates/families.jinja2')
 def view_families_for_list(request):
     family, subfamilies, icon_for_family = _get_family_immediate_subfamilies_and_icons(request)
-    return {'family': family, 'subfamilies': subfamilies, 'icon_for_family': icon_for_family}
+    return {'family': family, 'subfamilies': subfamilies, 'icon_for_family': icon_for_family,
+            'doculect_in_focus': get_doculect_from_params(request)}
 
 
 @view_config(route_name='doculects_for_map_family', renderer='json')

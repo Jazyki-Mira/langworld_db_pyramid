@@ -1,3 +1,7 @@
+{% macro capitalize(str_) %}
+  {{ str_[0].upper() }}{{ str_[1:] }}
+{% endmacro %}
+
 <!DOCTYPE html>
 <html lang="{{request.locale_name}}">
     <head>

@@ -5,8 +5,9 @@ from langworld_db_pyramid.models.doculect import Doculect
 from langworld_db_pyramid.models.family import Family
 from langworld_db_pyramid.models.feature_category import FeatureCategory
 from langworld_db_pyramid.models.feature_value import FeatureValue
+from langworld_db_pyramid.views import get_doculect_from_params
 from langworld_db_pyramid.views.doculects_list import get_doculects_by_substring, view_all_doculects_list
-from langworld_db_pyramid.views.doculects_map import get_doculects_for_map
+from langworld_db_pyramid.views.doculects_map import get_doculects_for_map, view_all_doculects_map
 from langworld_db_pyramid.views.doculect_profile import view_doculect_profile
 from langworld_db_pyramid.views.families import (_get_family_immediate_subfamilies_and_icons,
                                                  MATCHDICT_ID_FOR_ALL_FAMILIES, view_families_for_list,
@@ -19,6 +20,15 @@ from langworld_db_pyramid.views.query_wizard import get_matching_doculects
 
 NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES = 338  # only those (out of 429) that have has_feature_profile set to '1'
 NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES = 11  # only 11 out of 13 have doculects with feature profiles
+
+
+def test_get_doculect_from_params_returns_doculect(dummy_request, setup_models_once_for_test_module):
+    dummy_request.params['show_doculect'] = 'french'
+    assert get_doculect_from_params(dummy_request).name_en == 'French'
+
+
+def test_get_doculect_from_params_returns_none_without_item_in_params(dummy_request, setup_models_once_for_test_module):
+    assert get_doculect_from_params(dummy_request) is None
 
 
 @pytest.mark.parametrize(
@@ -73,6 +83,15 @@ def test_get_doculects_by_substring_returns_empty_list_if_nothing_found(dummy_re
 
     assert isinstance(doculects, list)
     assert len(doculects) == 0
+
+
+def test_view_all_doculects_map_with_show_doculect(dummy_request, setup_models_once_for_test_module):
+    dummy_request.params['show_doculect'] = 'french'
+    assert view_all_doculects_map(dummy_request)['doculect_in_focus'].name_en == 'French'
+
+
+def test_view_all_doculects_map_without_show_doculect(dummy_request, setup_models_once_for_test_module):
+    assert view_all_doculects_map(dummy_request)['doculect_in_focus'] is None
 
 
 @pytest.mark.parametrize('locale, expected_first_doculect, expected_last_doculect', [
@@ -369,7 +388,6 @@ def test_notfound_view(dummy_request):
 def test_query_wizard_get_matching_doculects(dummy_request, dummy_config, setup_models_once_for_test_module, params,
                                              expected_number_of_items, selected_doculects_to_check):
     dummy_request.params = params
-    print(dummy_request.route_path('doculect_profile_localized', locale='en', doculect_man_id='french'))
     groups = get_matching_doculects(dummy_request)
     assert len(groups) == 1
     markers = groups[0]['doculects']
