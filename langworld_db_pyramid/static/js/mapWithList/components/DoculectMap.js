@@ -163,6 +163,8 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
         this.setOpacity(
           idOfDoculectToShow == null ? 1 : opacityForUnfocusedDoculects
         );
+        if (idOfDoculectToShow != null)
+          markerForDoculectIDRef.current[idOfDoculectToShow].openPopup();
       });
       marker.on("click", function (e) {
         window.open(doculect["url"], "_self");
