@@ -164,6 +164,15 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
           markerForDoculectIDRef.current[idOfDoculectToShow].setOpacity(1);
       });
       marker.on("mouseout", function (e) {
+        /* if marker corresponds to the doculect that needs to stay in focus,
+        don't do anything: it has to remain opaque and with pop-up open
+        */
+        if (
+          marker == markerForDoculectIDRef.current[idOfDoculectToShow] &&
+          idOfDoculectToShow != null
+        )
+          return null;
+
         this.closePopup();
         this.setOpacity(
           idOfDoculectToShow == null ? 1 : opacityForUnfocusedDoculects
