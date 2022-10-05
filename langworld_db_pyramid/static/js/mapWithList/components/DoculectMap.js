@@ -27,6 +27,8 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
   const [mapboxToken, setMapboxToken] = React.useState(null);
   const [mapLoaded, setMapLoaded] = React.useState(false);
 
+  const opacityForUnfocusedDoculects = 0.3;
+
   if (mapboxToken === null) {
     fetch("/json_api/mapbox_token")
       .then((res) => res.json())
@@ -98,12 +100,17 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
     });
   }, [allDoculectGroups, mapLoaded]);
 
-  // open pop-up if ID of language to pop up changes
+  // open pop-up if ID of language to pop-up changes
   React.useEffect(() => {
     if (mapRef.current === null || mapLoaded === false) return null;
 
     if (idOfDoculectToOpenPopupOnMap === null) {
       mapRef.current.closePopup();
+      // restore focus on doculect to show (that was indicated in URL)
+      if (idOfDoculectToShow != null) {
+        selectedMarker.current.setOpacity(opacityForUnfocusedDoculects);
+        markerForDoculectIDRef.current[idOfDoculectToShow].openPopup();
+      }
     } else {
       openPopupForDoculect(idOfDoculectToOpenPopupOnMap);
     }
@@ -139,8 +146,6 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
     let markersInThisGroup = [];
 
     doculectsInThisGroup.forEach((doculect) => {
-      const opacityForUnfocusedDoculects = 0.3;
-
       let marker = L.marker([doculect["latitude"], doculect["longitude"]], {
         icon: icon,
         riseOnHover: true,
