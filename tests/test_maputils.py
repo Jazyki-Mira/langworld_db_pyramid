@@ -57,9 +57,8 @@ def test_generate_one_icon():
 
 
 def test_generate_fixed_number_of_map_icons_fails_for_more_than_max_number():
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(ValueError, match='Cannot generate more than'):
         icons.generate_fixed_number_of_map_icons(NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS + 1)
-    assert 'Cannot generate more than' in str(e)
 
 
 # note that in some tests I have to use app_request because access to app's routes is needed
@@ -123,6 +122,5 @@ def test_icon_for_object():
 
 
 def test_icon_for_object_fails_for_more_than_max_number():
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(ValueError, match='Cannot generate more than'):
         _ = icons.icon_for_object([DummyObject(i, i) for i in range(NUMBER_OF_POSSIBLE_SHAPES_AND_COLORS + 1)])
-    assert 'Cannot generate more than' in str(e)
