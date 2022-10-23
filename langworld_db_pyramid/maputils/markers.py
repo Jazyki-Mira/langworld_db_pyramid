@@ -63,7 +63,7 @@ def generate_marker_group(
                             name=group_name,
                             divIconHTML=div_icon_html,
                             divIconSize=[40, 40],
-                            href=href_for_heading_in_list if href_for_heading_in_list else "",
+                            href=href_for_heading_in_list or "",
                             imgSrc=img_src,
                             doculects=[
                                 _generate_marker_group_item(

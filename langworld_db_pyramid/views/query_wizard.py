@@ -42,14 +42,13 @@ def get_matching_doculects(request) -> list[dict]:
         ]
 
     try:
-        family_man_ids = params['family']
+        family_man_ids = params.pop('family')
     except KeyError:
         matching_doculects = set(doculects)
     else:
         matching_doculects = set()
         for family_id in family_man_ids:
             matching_doculects.update(d for d in doculects if d.belongs_to_family(family_id))
-        del params['family']
 
     # every feature has to be an intersection, while every value within a feature has to be a union
     for feature_id in params:
