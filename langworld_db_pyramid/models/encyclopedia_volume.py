@@ -1,16 +1,11 @@
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    Text,
-)
+from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from langworld_db_pyramid.models.meta import Base
 
 
 class EncyclopediaVolume(Base):
-    __tablename__ = 'encyclopedia_volumes'
+    __tablename__ = "encyclopedia_volumes"
     id = Column(Integer, primary_key=True)
     en = Column(String(255))
     ru = Column(String(255))

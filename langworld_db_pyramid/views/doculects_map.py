@@ -9,20 +9,26 @@ from langworld_db_pyramid.maputils.markers import generate_marker_group
 from langworld_db_pyramid.views import get_doculect_from_params
 
 
-@view_config(route_name='all_doculects_map', renderer='langworld_db_pyramid:templates/all_doculects_map.jinja2')
-@view_config(route_name='all_doculects_map_localized',
-             renderer='langworld_db_pyramid:templates/all_doculects_map.jinja2')
+@view_config(
+    route_name="all_doculects_map",
+    renderer="langworld_db_pyramid:templates/all_doculects_map.jinja2",
+)
+@view_config(
+    route_name="all_doculects_map_localized",
+    renderer="langworld_db_pyramid:templates/all_doculects_map.jinja2",
+)
 def view_all_doculects_map(request):
-    return {'doculect_in_focus': get_doculect_from_params(request)}
+    return {"doculect_in_focus": get_doculect_from_params(request)}
 
 
-@view_config(route_name='doculects_for_map_all', renderer='json')
+@view_config(route_name="doculects_for_map_all", renderer="json")
 def get_doculects_for_map(request) -> list[dict]:
-
     doculects = get_all(
         request,
-        select(models.Doculect).where(models.Doculect.has_feature_profile).order_by(
-            getattr(models.Doculect, f'name_{request.locale_name}')))
+        select(models.Doculect)
+        .where(models.Doculect.has_feature_profile)
+        .order_by(getattr(models.Doculect, f"name_{request.locale_name}")),
+    )
 
     icon = generate_one_icon()
 
@@ -30,7 +36,7 @@ def get_doculects_for_map(request) -> list[dict]:
     return [
         generate_marker_group(
             request,
-            group_id='',
+            group_id="",
             group_name=request.localizer.translate(ALL_VISIBLE_DOCULECTS_HEADING),
             doculects=doculects,
             div_icon_html=icon.svg_tag,

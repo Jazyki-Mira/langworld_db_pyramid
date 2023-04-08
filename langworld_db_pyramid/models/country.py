@@ -1,16 +1,11 @@
-from sqlalchemy import (
-    Boolean,
-    Column,
-    Integer,
-    String,
-)
+from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.orm import relationship
 
 from langworld_db_pyramid.models.meta import Base
 
 
 class Country(Base):
-    __tablename__ = 'countries'
+    __tablename__ = "countries"
     id = Column(Integer, primary_key=True)
     man_id = Column(String(3))
     iso = Column(String(3))

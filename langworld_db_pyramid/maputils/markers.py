@@ -1,5 +1,6 @@
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
-from typing import Iterable, Optional
+from typing import Optional
 
 from pyramid.request import Request
 
@@ -12,6 +13,7 @@ class DoculectMarkerGroupItem:
     Cannot function outside group of markers
     because data for icon generation is stored in the group.
     """
+
     id: str
     name: str
     latitude: float
@@ -29,6 +31,7 @@ class DoculectMarkerGroup:
     For the list: `imgSrc` (icon next to heading), `href`
     (provide a non-empty string if a heading must be a link).
     """
+
     id: str
     name: str
 
@@ -59,44 +62,54 @@ def generate_marker_group(
     # NOTE that this function returns a plain dictionary
     # and only uses classes for clarity within the module.
     return asdict(
-        DoculectMarkerGroup(id=group_id,
-                            name=group_name,
-                            divIconHTML=div_icon_html,
-                            divIconSize=[40, 40],
-                            href=href_for_heading_in_list or "",
-                            imgSrc=img_src,
-                            doculects=[
-                                _generate_marker_group_item(
-                                    request,
-                                    doculect=doculect,
-                                    additional_popup_text=additional_popup_text,
-                                ) for doculect in doculects
-                            ]))  # this will convert nested dataclasses to dicts as well.
+        DoculectMarkerGroup(
+            id=group_id,
+            name=group_name,
+            divIconHTML=div_icon_html,
+            divIconSize=[40, 40],
+            href=href_for_heading_in_list or "",
+            imgSrc=img_src,
+            doculects=[
+                _generate_marker_group_item(
+                    request,
+                    doculect=doculect,
+                    additional_popup_text=additional_popup_text,
+                )
+                for doculect in doculects
+            ],
+        )
+    )  # this will convert nested dataclasses to dicts as well.
     # I am not using NamedTuple because this trick with nested conversion does not work with it.
 
 
-def _generate_marker_group_item(request: Request, *,
-                                doculect: Doculect,
-                                additional_popup_text: Optional[str] = None) -> DoculectMarkerGroupItem:
+def _generate_marker_group_item(
+    request: Request, *, doculect: Doculect, additional_popup_text: Optional[str] = None
+) -> DoculectMarkerGroupItem:
     """Generates a dictionary with data for an individual marker within a group.
 
     Pop-up text defaults to doculect name with hyperlink to profile,
     additional pop-up text can be added via `additional_popup_text`.
     """
     locale = request.locale_name
-    name_attr = f'name_{locale}'
+    name_attr = f"name_{locale}"
 
     longitude = float(doculect.longitude)
     if longitude < -170:
         longitude += 360
 
-    doculect_name = f'{getattr(doculect, name_attr)} (†)' if doculect.is_extinct else getattr(doculect, name_attr)
-    url = request.route_path('doculect_profile_localized', locale=locale, doculect_man_id=doculect.man_id)
+    doculect_name = (
+        f"{getattr(doculect, name_attr)} (†)"
+        if doculect.is_extinct
+        else getattr(doculect, name_attr)
+    )
+    url = request.route_path(
+        "doculect_profile_localized", locale=locale, doculect_man_id=doculect.man_id
+    )
 
     popup_text = f'<a href="{url}">{doculect_name}</a>'
 
     if additional_popup_text:
-        popup_text = f'{popup_text}<br/>{additional_popup_text}'
+        popup_text = f"{popup_text}<br/>{additional_popup_text}"
 
     return DoculectMarkerGroupItem(
         id=doculect.man_id,

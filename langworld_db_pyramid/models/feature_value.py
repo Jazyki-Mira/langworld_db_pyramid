@@ -1,11 +1,4 @@
-from sqlalchemy import (
-    Boolean,
-    Column,
-    ForeignKey,
-    Integer,
-    String,
-    UniqueConstraint,
-)
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from langworld_db_pyramid.dbutils.query_mixin import QueryMixin
@@ -13,10 +6,10 @@ from langworld_db_pyramid.models.meta import Base
 
 
 class FeatureValue(QueryMixin, Base):
-    __tablename__ = 'feature_values'
+    __tablename__ = "feature_values"
     id = Column(Integer, primary_key=True)
-    feature_id = Column(Integer, ForeignKey('features.id'))
-    type_id = Column(Integer, ForeignKey('feature_value_types.id'))
+    feature_id = Column(Integer, ForeignKey("features.id"))
+    type_id = Column(Integer, ForeignKey("feature_value_types.id"))
 
     man_id = Column(String(20), index=True)
     name_en = Column(String(255))
@@ -30,9 +23,11 @@ class FeatureValue(QueryMixin, Base):
     # because the expensive filtering no longer has to be done at rendering time.
     is_listed_and_has_doculects = Column(Boolean)
 
-    doculects = relationship('Doculect', secondary='doculect_to_feature_value', back_populates='feature_values')
-    doculect_comments = relationship('DoculectFeatureValueInfo', back_populates='feature_value')
-    feature = relationship('Feature', back_populates='values')
-    type = relationship('FeatureValueType', back_populates='values')
+    doculects = relationship(
+        "Doculect", secondary="doculect_to_feature_value", back_populates="feature_values"
+    )
+    doculect_comments = relationship("DoculectFeatureValueInfo", back_populates="feature_value")
+    feature = relationship("Feature", back_populates="values")
+    type = relationship("FeatureValueType", back_populates="values")
 
-    __table_args__ = (UniqueConstraint('feature_id', 'type_id', 'name_en', 'name_ru'), )
+    __table_args__ = (UniqueConstraint("feature_id", "type_id", "name_en", "name_ru"),)

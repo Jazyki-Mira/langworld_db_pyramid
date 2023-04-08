@@ -1,13 +1,25 @@
-from clldutils import svg
+from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Any, Iterator, Optional
+from typing import Any, Optional
+
+from clldutils import svg
 
 COLORS = [
-    'a6cee3', '1f78b4', 'b2df8a', '33a02c', 'fb9a99', 'e31a1c', 'fdbf6f', 'ff7f00', 'cab2d6', '6a3d9a', 'ffff99',
-    'b15928'
+    "a6cee3",
+    "1f78b4",
+    "b2df8a",
+    "33a02c",
+    "fb9a99",
+    "e31a1c",
+    "fdbf6f",
+    "ff7f00",
+    "cab2d6",
+    "6a3d9a",
+    "ffff99",
+    "b15928",
 ]
 
-SHAPES = ('c', 's', 't', 'd', 'f')
+SHAPES = ("c", "s", "t", "d", "f")
 
 
 @dataclass
@@ -22,6 +34,7 @@ class CLLDIcon:
     Note that use of `.img_tag` in Jinja templates will require `|safe` filter,
     otherwise some characters will be escaped.
     """
+
     shape_and_color: str
 
     def __post_init__(self) -> None:
@@ -36,7 +49,7 @@ class CLLDIcon:
         return hash((self.svg_tag, self.img_tag))
 
     def __repr__(self) -> str:
-        return f'CLLDIcon (shape {self.shape_and_color[0]}, color #{self.shape_and_color[1:]})'
+        return f"CLLDIcon (shape {self.shape_and_color[0]}, color #{self.shape_and_color[1:]})"
 
     @staticmethod
     def _generate_svg(spec: str, opacity: Optional[str] = None) -> str:
@@ -54,31 +67,33 @@ class CLLDIcon:
         """
         # different from clldutils.svg.icon() - smaller shapes:
         paths = {
-            's': 'path d="M10 10 H30 V30 H10 V10"',
-            'd': 'path d="M20 8 L32 20 L20 32 L8 20 L20 8"',
-            'c': 'circle cx="20" cy="20" r="11"',
-            'f': 'path d="M8 10 L32 10 L20 32 L8 10"',
-            't': 'path d="M8 32 L32 32 L20 10 L8 32"',
+            "s": 'path d="M10 10 H30 V30 H10 V10"',
+            "d": 'path d="M20 8 L32 20 L20 32 L8 20 L20 8"',
+            "c": 'circle cx="20" cy="20" r="11"',
+            "f": 'path d="M8 10 L32 10 L20 32 L8 10"',
+            "t": 'path d="M8 32 L32 32 L20 10 L8 32"',
         }
         # Changed calls to functions in clldutils.svg to dotted notation:
-        elem = '<{0} style="{1}"/>'.format(
+        elem = '<{} style="{}"/>'.format(
             # changed 'black' to dark grey hex (matter of taste)
             paths[spec[0]],
-            svg.style(stroke='#585858', fill=svg.rgb_as_hex(spec[1:]), opacity=opacity))
+            svg.style(stroke="#585858", fill=svg.rgb_as_hex(spec[1:]), opacity=opacity),
+        )
         return svg.svg(elem, height=40, width=40)
 
 
 def generate_map_icons() -> Iterator[CLLDIcon]:
-
     for shape in SHAPES:
         for color in COLORS:
-            yield CLLDIcon(f'{shape}{color}')
+            yield CLLDIcon(f"{shape}{color}")
 
 
 def generate_fixed_number_of_map_icons(number: int) -> list[CLLDIcon]:
     """Returns list of icon HTMLs or one string with icon HTML if `number` is 1."""
     if number > len(SHAPES) * len(COLORS):
-        raise ValueError(f'Cannot generate more than {len(COLORS) * len(SHAPES)} different markers')
+        raise ValueError(
+            f"Cannot generate more than {len(COLORS) * len(SHAPES)} different markers"
+        )
 
     return [icon for _, icon in zip(range(number), generate_map_icons())]
 
@@ -92,6 +107,8 @@ def icon_for_object(objects: list) -> dict[Any, CLLDIcon]:
     where each object is mapped to an icon.
     """
     if len(objects) > len(SHAPES) * len(COLORS):
-        raise ValueError(f'Cannot generate more than {len(COLORS) * len(SHAPES)} different markers')
+        raise ValueError(
+            f"Cannot generate more than {len(COLORS) * len(SHAPES)} different markers"
+        )
 
-    return {obj: icon for obj, icon in zip(objects, generate_map_icons())}
+    return dict(zip(objects, generate_map_icons()))
