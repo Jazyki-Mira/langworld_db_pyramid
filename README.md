@@ -1,3 +1,7 @@
+.. image:: https://codecov.io/gh/lemontree210/langworld_db_pyramid/branch/master/graph/badge.svg
+   :target: https://app.codecov.io/gh/lemontree210/langworld_db_pyramid
+   :alt: Code coverage
+
 # Jazyki Mira (Languages of the World) online database
 
 Jazyki Mira (Languages of the World) Database as a [Pyramid](https://trypyramid.com/) web app
