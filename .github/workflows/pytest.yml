@@ -28,6 +28,6 @@ jobs:
           pybabel compile --directory=langworld_db_pyramid/locale --locale=en
       - name: run tests
         run: |
-          pipenv run pytest -v --tb=short --cov
+          pipenv run pytest -v --tb=short --cov=./ --cov-report=xml
       - name: Submit coverage
         uses: codecov/codecov-action@v3
