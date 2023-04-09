@@ -36,7 +36,7 @@ def _get_by_man_id(request: Request, model: type, man_id: str) -> Any:
     """
     try:
         # noinspection PyUnresolvedReferences
-        return _get_one(request, select(model).where(model.man_id == man_id))
+        return _get_one(request, select(model).where(model.man_id == man_id))  # type: ignore
     except SQLAlchemyError:
         raise HTTPNotFound(f"{model.__name__} with ID {man_id} does not exist.")
 

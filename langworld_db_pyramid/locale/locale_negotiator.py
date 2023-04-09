@@ -1,9 +1,10 @@
+from pyramid.request import Request
 from pyramid.settings import aslist
 
 DEFAULT_LOCALE = "ru"
 
 
-def locale_negotiator_from_url(request) -> str:
+def locale_negotiator_from_url(request: Request) -> str:
     if not request.matchdict:
         return DEFAULT_LOCALE
 

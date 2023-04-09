@@ -3,7 +3,7 @@ from pyramid.config import Configurator
 from langworld_db_pyramid.locale.locale_negotiator import locale_negotiator_from_url
 
 
-def main(global_config, **settings):
+def main(global_config, **settings):  # type: ignore[no-untyped-def]  # noqa: ARG001
     """This function returns a Pyramid WSGI application."""
     with Configurator(settings=settings, locale_negotiator=locale_negotiator_from_url) as config:
         config.include("pyramid_jinja2")

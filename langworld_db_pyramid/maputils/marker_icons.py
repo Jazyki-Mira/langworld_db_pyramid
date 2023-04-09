@@ -42,8 +42,10 @@ class CLLDIcon:
         self.img_src = svg.data_url(self.svg_tag)
         self.img_tag = f'<img src="{self.img_src}"/>'
 
-    def __eq__(self, other) -> bool:
-        return self.svg_tag == other.svg_tag and self.img_tag == other.img_tag
+    def __eq__(self, other: object) -> bool:
+        return self.svg_tag == getattr(other, "svg_tag", None) and self.img_tag == getattr(
+            other, "img_tag", None
+        )
 
     def __hash__(self) -> int:
         return hash((self.svg_tag, self.img_tag))
@@ -59,8 +61,8 @@ class CLLDIcon:
         (since `icon()` does not allow to override the `paths`).
 
         Creates a SVG graphic according to a spec as used for map icons in `clld` apps.
-        :param spec: Icon spec of the form "(s|d|c|f|t)rrggbb" where the first character defines a \
-        shape (s=square, d=diamond, c=circle, f=upside-down triangle, t=triangle) and "rrggbb" \
+        :param spec: Icon spec of the form "(s|d|c|f|t)rrggbb" where the first character defines
+        a shape (s=square, d=diamond, c=circle, f=upside-down triangle, t=triangle) and "rrggbb"
         specifies a color as hex triple.
         :param opacity: Opacity
         :return: SVG XML
@@ -102,7 +104,7 @@ def generate_one_icon() -> CLLDIcon:
     return generate_fixed_number_of_map_icons(1)[0]
 
 
-def icon_for_object(objects: list) -> dict[Any, CLLDIcon]:
+def icon_for_object(objects: list[object]) -> dict[Any, CLLDIcon]:
     """Gets a list of objects and returns a dictionary
     where each object is mapped to an icon.
     """

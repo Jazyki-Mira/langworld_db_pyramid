@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from langworld_db_pyramid.models.meta import Base
 
 
-class FeatureCategory(Base):
+class FeatureCategory(Base):  # type: ignore[misc]
     __tablename__ = "feature_categories"
     id = Column(Integer, primary_key=True)
     man_id = Column(String(2), index=True)

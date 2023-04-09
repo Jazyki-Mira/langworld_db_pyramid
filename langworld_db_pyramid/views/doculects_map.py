@@ -1,3 +1,6 @@
+from typing import Any, Optional
+
+from pyramid.request import Request
 from pyramid.view import view_config
 from sqlalchemy import select
 
@@ -17,12 +20,12 @@ from langworld_db_pyramid.views import get_doculect_from_params
     route_name="all_doculects_map_localized",
     renderer="langworld_db_pyramid:templates/all_doculects_map.jinja2",
 )
-def view_all_doculects_map(request):
+def view_all_doculects_map(request: Request) -> dict[str, Optional[models.Doculect]]:
     return {"doculect_in_focus": get_doculect_from_params(request)}
 
 
 @view_config(route_name="doculects_for_map_all", renderer="json")
-def get_doculects_for_map(request) -> list[dict]:
+def get_doculects_for_map(request: Request) -> list[dict[str, Any]]:
     doculects = get_all(
         request,
         select(models.Doculect)

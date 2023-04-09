@@ -4,10 +4,11 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import backref, relationship
 
 from langworld_db_pyramid.dbutils.query_mixin import QueryMixin
+from langworld_db_pyramid.models import Doculect
 from langworld_db_pyramid.models.meta import Base
 
 
-class Family(QueryMixin, Base):
+class Family(QueryMixin, Base):  # type: ignore[misc]
     __tablename__ = "families"
     id = Column(Integer, primary_key=True)
     parent_id = Column(Integer, ForeignKey("families.id"))
@@ -40,7 +41,7 @@ class Family(QueryMixin, Base):
             man_id_of_presumable_parent
         )
 
-    def iter_doculects_that_have_feature_profiles(self) -> Iterable:
+    def iter_doculects_that_have_feature_profiles(self) -> Iterable[Doculect]:
         if not self.has_doculects_with_feature_profiles():
             return []
 

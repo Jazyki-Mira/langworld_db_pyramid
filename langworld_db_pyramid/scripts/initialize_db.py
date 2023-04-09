@@ -26,7 +26,7 @@ class CustomModelInitializer:
     to create separate methods for separate tasks, and to enable testing.
     """
 
-    def __init__(
+    def __init__(  # type: ignore[no-untyped-def]  # noqa: PLR0913
         self,
         dbsession,
         dir_with_feature_profiles: Path = paths.FEATURE_PROFILES_DIR,
@@ -85,7 +85,7 @@ class CustomModelInitializer:
 
         self.country_for_id: dict[str, models.Country] = {}
         self.encyclopedia_map_for_id: dict[str, models.EncyclopediaMap] = {}
-        self.encyclopedia_volume_for_id: dict[str, models.EncyclopediaVolume] = {}
+        self.encyclopedia_volume_for_id: dict[int, models.EncyclopediaVolume] = {}
         self.family_for_id: dict[str, models.Family] = {}
 
         self.category_for_id: dict[str, models.FeatureCategory] = {}
@@ -146,7 +146,7 @@ class CustomModelInitializer:
         for value_type_row in read_dicts_from_csv(self.file_with_value_types):
             value_type = models.FeatureValueType(
                 name=value_type_row["id"],
-                entails_empty_value=int(value_type_row["entails_empty_value"]),
+                entails_empty_value=bool(int(value_type_row["entails_empty_value"])),
             )
             self.value_type_for_name[value_type_row["id"]] = value_type
             self.dbsession.add(value_type)
@@ -181,8 +181,8 @@ class CustomModelInitializer:
         # populating values of type 'listed': from file with listed values
         for value_row in read_dicts_from_csv(self.file_with_listed_values):
             value = models.FeatureValue(
-                # This will be set to False later if there are no doculects.
-                # See comment in models/feature_value.py about conscious choice of this suboptimal algorithm
+                # This will be set to False later if there are no doculects. See comment in
+                # models/feature_value.py about conscious choice of this suboptimal algorithm
                 is_listed_and_has_doculects=True,
                 man_id=value_row["id"],
                 name_en=value_row["en"],
@@ -198,7 +198,7 @@ class CustomModelInitializer:
             country = models.Country(
                 man_id=country_row["id"],
                 iso=country_row["ISO 3166-1 alpha-3"],
-                is_historical=int(country_row["is_historical"]),
+                is_historical=bool(int(country_row["is_historical"])),
                 name_en=country_row["en"],
                 name_ru=country_row["ru"],
             )
@@ -220,11 +220,12 @@ class CustomModelInitializer:
             self.encyclopedia_volume_for_id[volume.id] = volume
 
     def _populate_families(self) -> None:
-        # make initial call to another function that will recursively call itself until all families are processed
+        # make initial call to another function that will recursively call itself
+        # until all families are processed
         self._process_genealogy_hierarchy(read_json_toml_yaml(self.file_with_genealogy_hierarchy))
 
     def _process_genealogy_hierarchy(
-        self, items: list, parent: Optional[models.family.Family] = None
+        self, items: list[str], parent: Optional[models.family.Family] = None
     ) -> None:
         if not isinstance(items, list):
             raise TypeError(f"This function cannot be called with {type(items)} ({items})")
@@ -252,7 +253,8 @@ class CustomModelInitializer:
                 self._process_genealogy_hierarchy(items=list(node.values())[0], parent=family)
 
     def _populate_glottocodes(self) -> None:
-        # for now, I see it reasonable to only add codes that are present in file with doculects (same for ISO-639-3)
+        # for now, I see it reasonable to only add codes that are present in file with doculects
+        # (same for ISO-639-3)
         for row in read_dicts_from_csv(self.file_with_doculects):
             glottocodes = row["glottocode"].split(", ")
             for item in glottocodes:
@@ -278,7 +280,7 @@ class CustomModelInitializer:
                     self.iso639p3code_for_id[item] = iso_code
                     self.dbsession.add(iso_code)
 
-    def _populate_doculects_custom_feature_values_and_comments(self) -> None:
+    def _populate_doculects_custom_feature_values_and_comments(self) -> None:  # noqa: PLR0912
         doculect_rows = read_dicts_from_csv(self.file_with_doculects)
         rows_with_encyclopedia_map_to_doculect = read_dicts_from_csv(
             self.file_with_encyclopedia_map_to_doculect
@@ -290,10 +292,12 @@ class CustomModelInitializer:
         for doculect_row in doculect_rows:
             doculect_row_to_write = copy(doculect_row)
 
-            # for typechecking only: Doculect has some boolean fields, while original dictionary values are all `str`
+            # for typechecking only: Doculect has some boolean fields, while original dictionary
+            # values are all `str`
             doculect_row_to_write = cast(dict[str, Union[str, bool]], doculect_row_to_write)
 
-            # popping attributes for future IDs as they will all be autogenerated (auto-incremented ID or ForeignKey)
+            # popping attributes for future IDs as they will all be autogenerated
+            # (auto-incremented ID or ForeignKey)
 
             doculect_row_to_write["man_id"] = doculect_row_to_write.pop("id")
 
@@ -357,7 +361,10 @@ class CustomModelInitializer:
                                 f"Feature profile prepared by {feature_profile_row['comment_en']}"
                             )
                         if feature_profile_row["comment_ru"]:
-                            doculect.comment_ru += f"Составитель/редактор реферата: {feature_profile_row['comment_ru']}"
+                            doculect.comment_ru += (
+                                "Составитель/редактор реферата: "
+                                f"{feature_profile_row['comment_ru']}"
+                            )
                         continue
 
                     # 1. Processing value
@@ -418,7 +425,7 @@ class CustomModelInitializer:
                 value.is_listed_and_has_doculects = False
 
 
-def setup_models(dbsession) -> None:
+def setup_models(dbsession) -> None:  # type: ignore
     """
     Add or update models / fixtures in the database.
 
@@ -426,7 +433,7 @@ def setup_models(dbsession) -> None:
     CustomModelInitializer(dbsession).setup_models()
 
 
-def parse_args(argv):
+def parse_args(argv):  # type: ignore
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "config_uri",
@@ -436,7 +443,7 @@ def parse_args(argv):
 
 
 # noinspection PyDefaultArgument
-def main(argv=sys.argv):
+def main(argv=sys.argv):  # type: ignore
     args = parse_args(argv)
     setup_logging(args.config_uri)
     env = bootstrap(args.config_uri)
@@ -446,7 +453,7 @@ def main(argv=sys.argv):
             dbsession = env["request"].dbsession
             setup_models(dbsession)
     except OperationalError as e:
-        print(
+        print(  # noqa: T201
             """
 Pyramid is having a problem using your SQL database.  The problem
 might be caused by one of the following things:
@@ -459,4 +466,4 @@ might be caused by one of the following things:
     your "development.ini" file is running.
             """
         )
-        print(str(e))
+        print(str(e))  # noqa: T201

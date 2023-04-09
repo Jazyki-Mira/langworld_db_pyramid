@@ -1,5 +1,7 @@
 from operator import attrgetter
+from typing import Any
 
+from pyramid.request import Request
 from pyramid.view import view_config
 from sqlalchemy import select
 
@@ -19,7 +21,7 @@ from langworld_db_pyramid.maputils.markers import generate_marker_group
     route_name="query_wizard_localized",
     renderer="langworld_db_pyramid:templates/query_wizard.jinja2",
 )
-def view_query_wizard(request):
+def view_query_wizard(request: Request) -> dict[str, Any]:
     return {
         "categories": get_all(request, select(models.FeatureCategory)),
         "families": get_all(
@@ -29,7 +31,7 @@ def view_query_wizard(request):
 
 
 @view_config(route_name="query_wizard_json", renderer="json")
-def get_matching_doculects(request) -> list[dict]:
+def get_matching_doculects(request: Request) -> list[dict[str, Any]]:
     name_attr = f"name_{request.locale_name}"
 
     doculects = get_all(

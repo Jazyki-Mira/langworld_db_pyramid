@@ -1,10 +1,12 @@
 from collections.abc import Iterable
 from dataclasses import asdict, dataclass
-from typing import Optional
+from typing import Any, Optional
 
 from pyramid.request import Request
 
 from langworld_db_pyramid.models import Doculect
+
+LONGITUDE_TOO_FAR_WEST_THAT_NEEDS_CORRECTION_FOR_LEAFLET = -170
 
 
 @dataclass
@@ -18,7 +20,7 @@ class DoculectMarkerGroupItem:
     name: str
     latitude: float
     longitude: float
-    popupText: str
+    popupText: str  # noqa: N815
     url: str
 
 
@@ -37,13 +39,13 @@ class DoculectMarkerGroup:
 
     doculects: list[DoculectMarkerGroupItem]
 
-    divIconHTML: str
-    divIconSize: list
+    divIconHTML: str  # noqa: N815
+    divIconSize: list[int]  # noqa: N815
     href: str
-    imgSrc: str
+    imgSrc: str  # noqa: N815
 
 
-def generate_marker_group(
+def generate_marker_group(  # noqa: PLR0913
     request: Request,
     group_id: str,
     group_name: str,
@@ -52,7 +54,7 @@ def generate_marker_group(
     img_src: str,
     additional_popup_text: Optional[str] = None,
     href_for_heading_in_list: Optional[str] = None,
-) -> dict:
+) -> dict[str, Any]:
     """
     Generates a group of markers sharing the same icon style.
 
@@ -94,7 +96,7 @@ def _generate_marker_group_item(
     name_attr = f"name_{locale}"
 
     longitude = float(doculect.longitude)
-    if longitude < -170:
+    if longitude < LONGITUDE_TOO_FAR_WEST_THAT_NEEDS_CORRECTION_FOR_LEAFLET:
         longitude += 360
 
     doculect_name = (

@@ -5,7 +5,7 @@ from langworld_db_pyramid.dbutils.query_mixin import QueryMixin
 from langworld_db_pyramid.models.meta import Base
 
 
-class Doculect(QueryMixin, Base):
+class Doculect(QueryMixin, Base):  # type: ignore[misc]
     __tablename__ = "doculects"
     id = Column(Integer, primary_key=True)
     man_id = Column(String(100), index=True)
@@ -16,8 +16,9 @@ class Doculect(QueryMixin, Base):
     name_ru = Column(String(255), index=True)
     custom_title_en = Column(String(255))
     custom_title_ru = Column(String(255))
-    # Aliases could be in a separate table, but they are not organized as pairs of English and Russian equivalents,
-    # which would mean separate tables (one per locale) or more complex queries. So far I don't think it's worth it.
+    # Aliases could be in a separate table, but they are not organized as pairs of English and
+    # Russian equivalents, which would mean separate tables (one per locale) or more complex
+    # queries.  So far I don't think it's worth it.
     aliases_en = Column(String, index=True)
     aliases_ru = Column(String, index=True)
     family_id = Column(Integer, ForeignKey("families.id"))
@@ -53,5 +54,6 @@ class Doculect(QueryMixin, Base):
     def belongs_to_family(self, family_man_id: str) -> bool:
         """Recursively (goes up the genealogy) checks
         if doculect belongs to a family with a given man_id."""
-        # calling method of Family may look like violating Demeter law, but Family is immediately related to Doculect
+        # calling method of Family may look like violating Demeter law, but Family
+        # is immediately related to Doculect
         return self.family.man_id == family_man_id or self.family.is_descendant_of(family_man_id)

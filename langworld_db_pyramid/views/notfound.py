@@ -1,8 +1,11 @@
+from typing import Any
+
+from pyramid.request import Request
 from pyramid.view import notfound_view_config
 
 
 @notfound_view_config(renderer="langworld_db_pyramid:templates/404.jinja2")
-def notfound_view(request):
+def notfound_view(request: Request) -> dict[Any, Any]:
     request.response.status = 404
 
     # This view is not registered in routes.py. This means that the common locale negotiator

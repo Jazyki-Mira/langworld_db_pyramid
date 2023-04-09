@@ -1,6 +1,7 @@
 from operator import attrgetter
 from typing import Any
 
+from pyramid.request import Request
 from pyramid.view import view_config
 from sqlalchemy import select
 
@@ -19,20 +20,23 @@ from langworld_db_pyramid.views import get_doculect_from_params
     route_name="all_features_list_localized",
     renderer="langworld_db_pyramid:templates/all_features_list.jinja2",
 )
-def view_all_features_list_by_category(request):
+def view_all_features_list_by_category(
+    request: Request,
+) -> dict[str, list[models.FeatureCategory]]:
     return {"categories": get_all(request, select(models.FeatureCategory))}
 
 
 def get_feature_values_icons(
-    request,
+    request: Request,
 ) -> tuple[models.Feature, list[models.FeatureValue], dict[Any, CLLDIcon]]:
     feature = models.Feature.get_by_man_id(
         request=request, man_id=request.matchdict["feature_man_id"]
     )
 
-    # I sort values by number of doculects (descending), but if the number of doculects is the same,
-    # I have to sort by value ID (ascending). Hence, this trick with negative value ID (`.id` is auto-incremented
-    # integer): reverse sorting by negative value ID de facto produces ascending sorting by original value ID.
+    # I sort values by number of doculects (descending), but if the number of doculects is
+    # the same, I have to sort by value ID (ascending). Hence, this trick with negative value ID
+    # (`.id` is auto-incremented integer): reverse sorting by negative value ID de facto produces
+    # ascending sorting by original value ID.
     values = sorted(
         [value for value in feature.values if value.type.name == "listed" and value.doculects],
         key=lambda value: (len(value.doculects), -value.id),
@@ -46,7 +50,7 @@ def get_feature_values_icons(
 @view_config(
     route_name="feature_localized", renderer="langworld_db_pyramid:templates/feature.jinja2"
 )
-def view_feature_list_of_values(request):
+def view_feature_list_of_values(request: Request) -> dict[str, Any]:
     # The list of values is no longer shown (because it would duplicate the interactive list),
     # but it still makes sense to use the common function
     feature, _, _ = get_feature_values_icons(request)
@@ -58,7 +62,7 @@ def view_feature_list_of_values(request):
 
 
 @view_config(route_name="doculects_for_map_feature", renderer="json")
-def view_feature_map_of_values(request) -> list[dict]:
+def view_feature_map_of_values(request: Request) -> list[dict[str, Any]]:
     feature, values, icon_for_value = get_feature_values_icons(request)
     locale = request.locale_name
     name_attr = "name_" + locale

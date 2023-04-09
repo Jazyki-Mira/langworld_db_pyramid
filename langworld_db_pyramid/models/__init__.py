@@ -4,43 +4,64 @@ from sqlalchemy.orm import configure_mappers, sessionmaker
 
 # Import or define all models here to ensure they are attached to the
 # ``Base.metadata`` prior to any initialization routines.
-from langworld_db_pyramid.models.association_tables import (  # noqa: F401
+from langworld_db_pyramid.models.association_tables import (
     DoculectToFeatureValue,
     DoculectToGlottocode,
     DoculectToIso639P3Code,
 )
-from langworld_db_pyramid.models.country import Country  # noqa: F401
-from langworld_db_pyramid.models.doculect import Doculect  # noqa: F401
-from langworld_db_pyramid.models.doculect_feature_value_info import (  # noqa: F401
-    DoculectFeatureValueInfo,
-)
-from langworld_db_pyramid.models.doculect_type import DoculectType  # noqa: F401
-from langworld_db_pyramid.models.encyclopedia_map import EncyclopediaMap  # noqa: F401
-from langworld_db_pyramid.models.encyclopedia_volume import EncyclopediaVolume  # noqa: F401
-from langworld_db_pyramid.models.family import Family  # noqa: F401
-from langworld_db_pyramid.models.feature import Feature  # noqa: F401
-from langworld_db_pyramid.models.feature_category import FeatureCategory  # noqa: F401
-from langworld_db_pyramid.models.feature_value import FeatureValue  # noqa: F401
-from langworld_db_pyramid.models.feature_value_type import FeatureValueType  # noqa: F401
-from langworld_db_pyramid.models.glottocode import Glottocode  # noqa: F401
-from langworld_db_pyramid.models.iso_639p3_code import Iso639P3Code  # noqa: F401
+from langworld_db_pyramid.models.country import Country
+from langworld_db_pyramid.models.doculect import Doculect
+from langworld_db_pyramid.models.doculect_feature_value_info import DoculectFeatureValueInfo
+from langworld_db_pyramid.models.doculect_type import DoculectType
+from langworld_db_pyramid.models.encyclopedia_map import EncyclopediaMap
+from langworld_db_pyramid.models.encyclopedia_volume import EncyclopediaVolume
+from langworld_db_pyramid.models.family import Family
+from langworld_db_pyramid.models.feature import Feature
+from langworld_db_pyramid.models.feature_category import FeatureCategory
+from langworld_db_pyramid.models.feature_value import FeatureValue
+from langworld_db_pyramid.models.feature_value_type import FeatureValueType
+from langworld_db_pyramid.models.glottocode import Glottocode
+from langworld_db_pyramid.models.iso_639p3_code import Iso639P3Code
+
+# for mypy
+__all__ = [
+    "DoculectToFeatureValue",
+    "DoculectToGlottocode",
+    "DoculectToIso639P3Code",
+    "Country",
+    "Doculect",
+    "DoculectFeatureValueInfo",
+    "DoculectType",
+    "EncyclopediaMap",
+    "EncyclopediaVolume",
+    "Family",
+    "Feature",
+    "FeatureCategory",
+    "FeatureValue",
+    "FeatureValueType",
+    "Glottocode",
+    "Iso639P3Code",
+]
+
 
 # Run ``configure_mappers`` after defining all of the models to ensure
 # all relationships can be setup.
 configure_mappers()
 
 
-def get_engine(settings, prefix="sqlalchemy."):
+def get_engine(settings, prefix="sqlalchemy."):  # type: ignore[no-untyped-def]
     return engine_from_config(settings, prefix)
 
 
-def get_session_factory(engine):
+def get_session_factory(engine):  # type: ignore[no-untyped-def]
     factory = sessionmaker()
     factory.configure(bind=engine)
     return factory
 
 
-def get_tm_session(session_factory, transaction_manager, request=None):
+def get_tm_session(  # type: ignore[no-untyped-def]
+    session_factory, transaction_manager, request=None
+):
     """
     Get a ``sqlalchemy.orm.Session`` instance backed by a transaction.
 
@@ -100,7 +121,7 @@ def get_tm_session(session_factory, transaction_manager, request=None):
     return dbsession
 
 
-def includeme(config):
+def includeme(config):  # type: ignore[no-untyped-def]
     """
     Initialize the model for a Pyramid app.
 
@@ -130,7 +151,7 @@ def includeme(config):
     config.registry["dbsession_factory"] = session_factory
 
     # make request.dbsession available for use in Pyramid
-    def dbsession(request):
+    def dbsession(request):  # type: ignore[no-untyped-def]
         # hook to share the dbsession fixture in testing
         dbsession = request.environ.get("app.dbsession")
         if dbsession is None:

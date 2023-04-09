@@ -1,6 +1,7 @@
 from operator import attrgetter
-from typing import Optional
+from typing import Any, Optional
 
+from pyramid.request import Request
 from pyramid.view import view_config
 from sqlalchemy import select
 
@@ -14,7 +15,7 @@ MATCHDICT_ID_FOR_ALL_FAMILIES = "_all"
 
 
 def _get_family_immediate_subfamilies_and_icons(
-    request,
+    request: Request,
 ) -> tuple[Optional[models.Family], list[models.Family], dict[models.Family, CLLDIcon]]:
     """Auxiliary function: returns the tuple consisting of
     the `Family` object from the database for the given family ID;
@@ -50,7 +51,7 @@ def _get_family_immediate_subfamilies_and_icons(
 @view_config(
     route_name="families_localized", renderer="langworld_db_pyramid:templates/families.jinja2"
 )
-def view_families_for_list(request):
+def view_families_for_list(request: Request) -> dict[str, Any]:
     family, subfamilies, icon_for_family = _get_family_immediate_subfamilies_and_icons(request)
     return {
         "family": family,
@@ -61,7 +62,7 @@ def view_families_for_list(request):
 
 
 @view_config(route_name="doculects_for_map_family", renderer="json")
-def view_families_for_map(request) -> list[dict]:
+def view_families_for_map(request: Request) -> list[dict[str, Any]]:
     family, immediate_subfamilies, icon_for_family = _get_family_immediate_subfamilies_and_icons(
         request
     )
@@ -100,7 +101,7 @@ def view_families_for_map(request) -> list[dict]:
                 href_for_heading_in_list=href,
                 img_src=icon_for_family[subfamily].img_src,
                 doculects=sorted(
-                    list(subfamily.iter_doculects_that_have_feature_profiles()),
+                    subfamily.iter_doculects_that_have_feature_profiles(),
                     key=attrgetter(name_attr),
                 ),
                 additional_popup_text=f'(<a href="{href}">{getattr(subfamily, name_attr)}</a>)',

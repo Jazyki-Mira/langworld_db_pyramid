@@ -1,8 +1,12 @@
+from typing import Union
+
+from pyramid.request import Request
 from pyramid.view import view_config
 from sqlalchemy import and_, or_, select
 
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
+from langworld_db_pyramid.models import Doculect, EncyclopediaVolume
 
 
 @view_config(
@@ -13,7 +17,9 @@ from langworld_db_pyramid.dbutils.query_helpers import get_all
     route_name="all_doculects_list_localized",
     renderer="langworld_db_pyramid:templates/all_doculects_list.jinja2",
 )
-def view_all_doculects_list(request):
+def view_all_doculects_list(
+    request: Request,
+) -> dict[str, list[Union[Doculect, EncyclopediaVolume]]]:
     all_doculects = get_all(
         request,
         select(models.Doculect)
@@ -29,7 +35,7 @@ def view_all_doculects_list(request):
 
 
 @view_config(route_name="doculects_by_substring", renderer="json")
-def get_doculects_by_substring(request):
+def get_doculects_by_substring(request: Request) -> list[dict[str, Union[list[str], str]]]:
     locale, query = request.locale_name, request.matchdict["query"]
     name_attr = f"name_{locale}"
     aliases_attr = f"aliases_{locale}"
@@ -37,7 +43,7 @@ def get_doculects_by_substring(request):
     matching_doculects = get_all(
         request,
         select(models.Doculect)
-        # Outer join is needed because there are doculects that have no glottocode / ISO-639-3 code.
+        # Outer join is needed because there are doculects that have no glottocode/ISO-639-3 code.
         # I explicitly state onclause because of many-to-many relationships.
         .join(models.Glottocode, onclause=models.Doculect.glottocodes, isouter=True)
         .join_from(

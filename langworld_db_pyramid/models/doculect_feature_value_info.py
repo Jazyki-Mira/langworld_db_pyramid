@@ -9,7 +9,7 @@ from langworld_db_pyramid.models.meta import Base
 # while this one is used to add a comment to a specific feature value in a specific doculect.
 
 
-class DoculectFeatureValueInfo(Base):
+class DoculectFeatureValueInfo(Base):  # type: ignore[misc]
     """Class for giving additional info (comments, page numbers)
     to a specific feature value in a specific doculect."""
 

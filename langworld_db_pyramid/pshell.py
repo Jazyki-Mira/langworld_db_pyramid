@@ -1,7 +1,7 @@
 from langworld_db_pyramid import models
 
 
-def setup(env):
+def setup(env):  # type: ignore
     request = env["request"]
 
     # start a transaction

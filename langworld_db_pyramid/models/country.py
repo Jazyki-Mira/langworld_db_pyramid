@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from langworld_db_pyramid.models.meta import Base
 
 
-class Country(Base):
+class Country(Base):  # type: ignore[misc]
     __tablename__ = "countries"
     id = Column(Integer, primary_key=True)
     man_id = Column(String(3))

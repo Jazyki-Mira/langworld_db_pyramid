@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from langworld_db_pyramid.models.meta import Base
 
 
-class EncyclopediaMap(Base):
+class EncyclopediaMap(Base):  # type: ignore[misc]
     __tablename__ = "encyclopedia_maps"
     id = Column(Integer, primary_key=True)
     man_id = Column(String(10))

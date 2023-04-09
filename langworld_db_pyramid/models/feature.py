@@ -5,7 +5,7 @@ from langworld_db_pyramid.dbutils.query_mixin import QueryMixin
 from langworld_db_pyramid.models.meta import Base
 
 
-class Feature(QueryMixin, Base):
+class Feature(QueryMixin, Base):  # type: ignore[misc]
     __tablename__ = "features"
     id = Column(Integer, primary_key=True)
     man_id = Column(String(10), index=True)

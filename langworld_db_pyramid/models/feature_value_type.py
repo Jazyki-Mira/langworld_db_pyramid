@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from langworld_db_pyramid.models.meta import Base
 
 
-class FeatureValueType(Base):
+class FeatureValueType(Base):  # type: ignore[misc]
     __tablename__ = "feature_value_types"
     id = Column(Integer, primary_key=True)
     name = Column(String(20))
