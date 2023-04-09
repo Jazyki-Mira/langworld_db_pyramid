@@ -29,3 +29,5 @@ jobs:
       - name: run tests
         run: |
           pipenv run pytest -v --tb=short --cov
+      - name: Submit coverage
+        uses: codecov/codecov-action@v3
