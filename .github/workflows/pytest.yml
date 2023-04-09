@@ -20,6 +20,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install pipenv
           pipenv install --dev
+      - name: copy settings
+        run: |
+          cp ./config/defalt/testing.ini ./config/testing.ini
       - name: run tests
         run: |
           pipenv run pytest -v
