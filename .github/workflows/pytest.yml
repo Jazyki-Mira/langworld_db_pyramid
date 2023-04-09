@@ -28,4 +28,4 @@ jobs:
           pybabel compile --directory=langworld_db_pyramid/locale --locale=en
       - name: run tests
         run: |
-          pipenv run pytest -v --tb=short
+          pipenv run pytest -v --tb=short --cov
