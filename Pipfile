@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-alembic= "~=1.8.0"
+alembic= "~=1.10.3"
 babel = "~=2.10.3"
 certifi = "~=2022.12.7"
 clldutils = "~=3.12.0"
