@@ -22,7 +22,7 @@ jobs:
           pipenv install --dev
       - name: copy settings
         run: |
-          cp ./config/defalt/testing.ini ./config/testing.ini
+          cp ./config/default/testing.ini ./config/testing.ini
       - name: run tests
         run: |
           pipenv run pytest -v
