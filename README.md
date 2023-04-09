@@ -1,3 +1,7 @@
+![GitHub Actions](https://github.com/lemontree210/langworld_db_pyramid/actions/workflows/pytest.yml/badge.svg)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/lemontree210/langworld_db_pyramid/master.svg)](https://results.pre-commit.ci/latest/github/lemontree210/langworld_db_pyramid/master)
+[![CodeCov](https://codecov.io/gh/lemontree210/langworld_db_pyramid/branch/master/graph/badge.svg)](https://app.codecov.io/gh/lemontree210/langworld_db_pyramid)
+
 # Jazyki Mira (Languages of the World) online database
 
 Jazyki Mira (Languages of the World) Database as a [Pyramid](https://trypyramid.com/) web app
