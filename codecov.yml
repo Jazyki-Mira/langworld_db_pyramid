@@ -1,0 +1,13 @@
+comment: false
+
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+        ignore:
+          - "langworld_db_data"
+          - "langworld_db_pyramid/alembic"
+          - "langworld_db_pyramid/pshell.py"
+          - "langworld_db_pyramid/routes.py"
