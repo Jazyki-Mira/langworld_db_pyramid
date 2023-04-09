@@ -24,6 +24,7 @@ jobs:
         run: |
           cp ./config/default/testing.ini ./config/testing.ini
       - name: compile Babel files
+        run: |
           pybabel compile --directory=langworld_db_pyramid/locale --locale=en
       - name: run tests
         run: |
