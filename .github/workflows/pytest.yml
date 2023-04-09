@@ -25,4 +25,4 @@ jobs:
           cp ./config/default/testing.ini ./config/testing.ini
       - name: run tests
         run: |
-          pipenv run pytest -v
+          pipenv run pytest -v --tb=short
