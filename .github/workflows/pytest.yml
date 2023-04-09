@@ -23,6 +23,8 @@ jobs:
       - name: copy settings
         run: |
           cp ./config/default/testing.ini ./config/testing.ini
+      - name: compile Babel files
+          pybabel compile --directory=langworld_db_pyramid/locale --locale=en
       - name: run tests
         run: |
           pipenv run pytest -v --tb=short
