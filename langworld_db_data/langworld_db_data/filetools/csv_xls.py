@@ -1,9 +1,9 @@
 import csv
 from collections import Counter
-from collections.abc import Generator, Iterable
+from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Literal, Optional, Union
+from typing import Any, Iterable, Literal, NamedTuple, Optional, Union
 
 import _csv  # for typing only
 
@@ -29,8 +29,9 @@ def append_empty_column_to_csv(
     """
     if custom_path_to_output_file is not None and custom_path_to_output_file.exists():
         raise FileExistsError(
-            f"You provided a custom path to output file {custom_path_to_output_file}, "
-            f"but it already exists. To append column in place, do not indicate custom output path."
+            f"You provided a custom path to output file {custom_path_to_output_file},"
+            " but it already exists. To append column in place, do not indicate custom"
+            " output path."
         )
     output_path = custom_path_to_output_file or path_to_file
 
@@ -62,17 +63,19 @@ def check_csv_for_malformed_rows(path_to_file: Path) -> None:
     if len(row_count_for_number_of_columns) == 1:
         return
 
-    # See what count is least frequent.  It is most likely that the least frequent number of columns
-    # indicates a mistake. Although it is theoretically possible that there are so many wrong rows
-    # in a file that the wrong number becomes more frequent, it is very unlikely.
+    # See what count is least frequent.  It is most likely that the least frequent
+    # number of columns indicates a mistake. Although it is theoretically possible that
+    # there are so many wrong rows in a file that the wrong number becomes more
+    # frequent, it is very unlikely.
     least_frequent_numbers_of_columns = [
         item
         for item in row_count_for_number_of_columns
         if row_count_for_number_of_columns[item]
         == sorted(row_count_for_number_of_columns.values())[0]
     ]
-    # I made it a list because it is theoretically possible that one row has one wrong number of columns
-    # and one more row has one more wrong number of columns (also wrong, but different)
+    # I made it a list because it is theoretically possible that one row has one wrong
+    # number of columns and one more row has one more wrong number of columns
+    # (also wrong, but different)
 
     indices_of_likely_invalid_rows = []
     for i, row in enumerate(rows, start=1):
@@ -81,7 +84,7 @@ def check_csv_for_malformed_rows(path_to_file: Path) -> None:
 
     raise IndexError(
         f"File {path_to_file.name}: Following rows have abnormal number of columns: "
-        f'{", ".join(indices_of_likely_invalid_rows)}'
+        f"{', '.join(indices_of_likely_invalid_rows)}"
     )
 
 
@@ -91,7 +94,8 @@ def check_csv_for_repetitions_in_column(path_to_file: Path, column_name: str) ->
 
     if column_name not in rows[0]:
         raise KeyError(
-            f"Cannot check uniqueness of value in column <{column_name}> because it does not exist"
+            f"Cannot check uniqueness of value in column <{column_name}> because it"
+            " does not exist"
         )
 
     values_in_column = [row[column_name] for row in rows]
@@ -102,7 +106,8 @@ def check_csv_for_repetitions_in_column(path_to_file: Path, column_name: str) ->
 
     if non_unique_keys:
         raise ValueError(
-            f'File {path_to_file} has repeating values in column <{column_name}>: {", ".join(non_unique_keys)}'
+            f"File {path_to_file} has repeating values in column <{column_name}>:"
+            f" {', '.join(non_unique_keys)}"
         )
 
 
@@ -179,7 +184,7 @@ def read_dicts_from_csv(path_to_file: Path, delimiter: CSVDelimiter = ",") -> li
 def read_dict_from_2_csv_columns(
     path_to_file: Path, key_col: str, val_col: str, delimiter: CSVDelimiter = ","
 ) -> dict[str, str]:
-    """Reads CSV file, returns data of two columns: one as keys, the other one as values."""
+    """Reads CSV file, returns data of two columns: one as keys, the other as values."""
     if key_col == val_col:
         raise ValueError(f"You passed same name for both key and value columns ({key_col})")
 
@@ -208,12 +213,12 @@ def read_dict_from_2_csv_columns(
     if len(set(key_column)) < len(key_column):
         raise ValueError(
             f"Values in column {key_col} are not unique. "
-            f"Using them as keys may lead to unpredictable behavior."
+            "Using them as keys may lead to unpredictable behavior."
         )
 
     value_column = [row[val_index] for row in data_rows]
 
-    return dict(zip(key_column, value_column))
+    return {k: v for k, v in zip(key_column, value_column)}
 
 
 def read_dicts_from_xls(path_to_file: Path, sheet_name: str) -> list[dict[str, str]]:
@@ -253,7 +258,22 @@ def read_plain_rows_from_csv(
 
 
 def write_csv(
-    rows: Union[list, tuple], path_to_file: Path, overwrite: bool, delimiter: CSVDelimiter
+    # can't use Iterable because mypy says it's not indexable
+    rows: Union[
+        list[list[str]],
+        list[tuple[str, str]],
+        list[tuple[str, ...]],
+        tuple[list[str], ...],
+        tuple[tuple[str, ...], ...],
+        tuple[tuple[str, str], ...],
+        list[dict[str, str]],
+        tuple[dict[str, str], ...],
+        tuple[NamedTuple, ...],
+        list[NamedTuple],
+    ],
+    path_to_file: Path,
+    overwrite: bool,
+    delimiter: CSVDelimiter,
 ) -> None:
     """Writes rows to CSV file. All rows (items of main list) must be
     of same type (all lists, all tuples, all dicts or all NamedTuples).
@@ -265,12 +285,12 @@ def write_csv(
     if not overwrite and path_to_file.exists():
         raise FileExistsError(f"File {path_to_file} already exists")
 
-    types_of_rows = {type(row) for row in rows}
+    types_of_rows = set([type(row) for row in rows])
     if len(types_of_rows) > 1:
-        # Strictly speaking, I should be able to write list of lists combined with tuples
-        # or list of dicts combined with NamedTuples, but this is overcomplicating
-        # and potentially unpredictable. I should not be doing these things in calling code.
-        # So for sake of simplicity, this is justified.
+        # Strictly speaking, I should be able to write list of lists combined with
+        # tuples or list of dicts combined with NamedTuples, but this is
+        # overcomplicating and potentially unpredictable. I should not be doing these
+        # things in calling code. So for sake of simplicity, this is justified.
         raise TypeError(
             f"Cannot write items of different types ({types_of_rows}) "
             "in the same set of rows. "
@@ -285,7 +305,7 @@ def write_csv(
     with path_to_file.open(mode="w+", encoding="utf-8", newline="") as fh:
         first_row = rows[0]
         # noinspection PyUnusedLocal, PyProtectedMember, PyUnresolvedReferences
-        writer: Union[csv.DictWriter, _csv._writer, None] = None  # for mypy typechecking only
+        writer: Union[csv.DictWriter[Any], _csv._writer, None] = None
         if hasattr(first_row, "_asdict"):
             # NamedTuple cannot be used in `isinstance` statement, so I use `hasattr`.
             # I have to put this check first, because isinstance(item, tuple)
@@ -293,10 +313,12 @@ def write_csv(
             # (absence of header row)
             # noinspection PyProtectedMember
             writer = csv.DictWriter(
-                fh, fieldnames=list(first_row._asdict().keys()), delimiter=delimiter
+                fh,
+                fieldnames=list(first_row._asdict().keys()),
+                delimiter=delimiter,
             )
             # noinspection PyProtectedMember
-            rows_to_write = [row._asdict() for row in rows]
+            rows_to_write = [row._asdict() for row in rows]  # type: ignore
         elif isinstance(first_row, dict):
             writer = csv.DictWriter(fh, fieldnames=list(first_row.keys()), delimiter=delimiter)
         elif isinstance(first_row, (list, tuple)):
@@ -311,5 +333,5 @@ def write_csv(
             print("Writing header")
             writer.writeheader()
 
-        writer.writerows(rows_to_write)
+        writer.writerows(rows_to_write)  # type: ignore
         print(f"Written {len(rows_to_write)} rows")

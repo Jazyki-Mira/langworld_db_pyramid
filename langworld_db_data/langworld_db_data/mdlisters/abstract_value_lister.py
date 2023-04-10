@@ -37,7 +37,10 @@ class AbstractValueLister(ABC):
 
         list_of_files = sorted(
             list(dir_with_feature_profiles.glob("*.csv")),
-            key=lambda f: (int(self.encyclopedia_volume_for_doculect_id[f.stem]), f.stem),
+            key=lambda f: (
+                int(self.encyclopedia_volume_for_doculect_id[f.stem]),
+                f.stem,
+            ),
         )
 
         for file in list_of_files:

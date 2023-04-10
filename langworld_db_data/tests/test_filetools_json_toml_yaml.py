@@ -10,7 +10,7 @@ from tests.paths import DIR_WITH_FILETOOLS_TEST_FILES
 
 def test_check_yaml_file_passes_with_valid_data():
     for file in DIR_WITH_FILETOOLS_TEST_FILES.glob("yaml_OK*.yaml"):
-        # no assert needed because exception will be thrown in function if something is wrong
+        # no assert needed because exception will be thrown if something is wrong
         check_yaml_file(file)
 
 
@@ -38,7 +38,10 @@ def test_read_json_toml_yaml():
 
 
 def test_read_json_toml_yaml_raises_exception_with_unsupported_file_type():
-    for file_name in ("test_convert_excel_to_csv_gold_standard.csv", "read_plain_text_utf8.txt"):
+    for file_name in (
+        "test_convert_excel_to_csv_gold_standard.csv",
+        "read_plain_text_utf8.txt",
+    ):
         with pytest.raises(TypeError):
             read_json_toml_yaml(DIR_WITH_FILETOOLS_TEST_FILES / file_name)
 

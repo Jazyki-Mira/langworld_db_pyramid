@@ -40,7 +40,14 @@ def test_read_plain_text_from_file():
 
 
 def test_remove_extra_space():
-    for str_ in ("foo bar", " foo bar", "foo bar ", " foo bar  ", "foo  bar", " foo   bar "):
+    for str_ in (
+        "foo bar",
+        " foo bar",
+        "foo bar ",
+        " foo bar  ",
+        "foo  bar",
+        " foo   bar ",
+    ):
         assert remove_extra_space(str_) == "foo bar"
 
 
@@ -79,7 +86,7 @@ def test_write_plain_text_to_file_overwrites_content_in_overwrite_mode():
     PATH_TO_TEST_OUTPUT_TXT_FILE.unlink()
 
 
-def test_write_plain_text_to_file_throws_exception_when_file_exists_and_overwrite_is_false():
+def test_write_plain_text_to_file_throws_exception_when_file_exists_and_overwrite_is_false():  # noqa E501
     with PATH_TO_TEST_OUTPUT_TXT_FILE.open(mode="w+", encoding="utf-8") as fh:
         fh.write("")
 

@@ -31,12 +31,16 @@ def test_adder():
     )
 
 
-def test__add_to_inventory_of_listed_values_throws_exception_with_invalid_feature_id(test_adder):
+def test__add_to_inventory_of_listed_values_throws_exception_with_invalid_feature_id(
+    test_adder,
+):
     with pytest.raises(ListedValueAdderError, match="Feature ID X-1 not found"):
         test_adder.add_listed_value("X-1", "Value", "значение")
 
 
-def test__add_to_inventory_of_listed_values_throws_exception_with_existing_value(test_adder):
+def test__add_to_inventory_of_listed_values_throws_exception_with_existing_value(
+    test_adder,
+):
     for bad_args in (
         {
             "feature_id": "A-3",
@@ -48,7 +52,11 @@ def test__add_to_inventory_of_listed_values_throws_exception_with_existing_value
             "new_value_en": "Some different value",
             "new_value_ru": "Средний и задний",
         },
-        {"feature_id": "A-3", "new_value_en": "Central and back", "new_value_ru": "Что-то новое"},
+        {
+            "feature_id": "A-3",
+            "new_value_en": "Central and back",
+            "new_value_ru": "Что-то новое",
+        },
     ):
         with pytest.raises(
             ListedValueAdderError, match="already contains value you are trying to add"
@@ -85,9 +93,10 @@ def test__mark_value_as_listed_in_feature_profiles(test_adder):
     )
 
     for stem in STEMS_OF_EXPECTED_OUTPUT_FILES:
-        assert (
-            OUTPUT_DIR_FOR_LISTED_VALUE_ADDER_FEATURE_PROFILES / f"{stem}.csv"
-        ).exists(), f"File {stem}.csv was not created. It means that no changes were made while there should have been changes"
+        assert (OUTPUT_DIR_FOR_LISTED_VALUE_ADDER_FEATURE_PROFILES / f"{stem}.csv").exists(), (
+            f"File {stem}.csv was not created. It means that no changes were made while"
+            " there should have been changes"
+        )
 
     for file in OUTPUT_DIR_FOR_LISTED_VALUE_ADDER_FEATURE_PROFILES.glob("*.csv"):
         assert (
@@ -130,9 +139,10 @@ def test_add_listed_value(test_adder):
     )
 
     for stem in STEMS_OF_EXPECTED_OUTPUT_FILES:
-        assert (
-            OUTPUT_DIR_FOR_LISTED_VALUE_ADDER_FEATURE_PROFILES / f"{stem}.csv"
-        ).exists(), f"File {stem}.csv was not created. It means that no changes were made while there should have been changes"
+        assert (OUTPUT_DIR_FOR_LISTED_VALUE_ADDER_FEATURE_PROFILES / f"{stem}.csv").exists(), (
+            f"File {stem}.csv was not created. It means that no changes were made while"
+            " there should have been changes"
+        )
 
     for file in OUTPUT_DIR_FOR_LISTED_VALUE_ADDER_FEATURE_PROFILES.glob("*.csv"):
         assert (
