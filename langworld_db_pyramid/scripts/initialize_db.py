@@ -327,6 +327,7 @@ class CustomModelInitializer:
             ]
 
             # POINT OF CREATION OF DOCULECT OBJECT
+            # (it will be persisted to DB at the end of the method)
             doculect = models.Doculect(**doculect_row_to_write)
 
             doculect.comment_en = ""
@@ -397,6 +398,7 @@ class CustomModelInitializer:
                                 )
                             ] = value
                     else:
+                        # all other types beside "custom" and "listed" entail empty values
                         value = self.empty_value_for_feature_id_and_type_name[
                             (feature_profile_row["feature_id"], value_type)
                         ]
