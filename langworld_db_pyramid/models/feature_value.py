@@ -31,19 +31,3 @@ class FeatureValue(QueryMixin, Base):  # type: ignore[misc]
     type = relationship("FeatureValueType", back_populates="values")
 
     __table_args__ = (UniqueConstraint("feature_id", "type_id", "name_en", "name_ru"),)
-
-
-class FeatureValueCompound(QueryMixin, Base):  # type: ignore[misc]
-    """Model for "compounds" of feature values that include elements (atomic values).
-
-    For example, a compound that in `langworld_db_data` has ID ``K-1-5&K-1-6`` has as its elements
-    values with IDs ``K-1-5`` and ``K-1-16``."""
-
-    __tablename__ = "feature_value_compounds"
-    id = Column(Integer, primary_key=True)
-
-    elements = relationship(
-        "FeatureValue",
-        backref="compounds",
-        secondary="feature_value_compound_to_element",
-    )
