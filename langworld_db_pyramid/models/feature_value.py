@@ -2,6 +2,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, UniqueConst
 from sqlalchemy.orm import backref, relationship
 
 from langworld_db_pyramid.dbutils.query_mixin import QueryMixin
+from langworld_db_pyramid.models.association_tables import FeatureValueCompoundToDoculect
 from langworld_db_pyramid.models.meta import Base
 
 
@@ -31,7 +32,13 @@ class FeatureValue(QueryMixin, Base):  # type: ignore[misc]
     type = relationship("FeatureValueType", back_populates="values")
 
     # for "compound" values like A-1-1&A-1-2
-    parent_id = Column(Integer, ForeignKey("feature_values.id"))
-    children = relationship("FeatureValue", backref=backref("parent", remote_side=[id]))
+    element_id = Column(Integer, ForeignKey("feature_values.id"))
+    elements = relationship(
+        "FeatureValue",
+        backref=backref("compound", remote_side=[element_id]),
+        secondary="feature_value_compound_to_element",
+        primaryjoin=id == FeatureValueCompoundToDoculect.compound_id,
+        secondaryjoin=id == FeatureValueCompoundToDoculect.element_id,
+    )
 
     __table_args__ = (UniqueConstraint("feature_id", "type_id", "name_en", "name_ru"),)
