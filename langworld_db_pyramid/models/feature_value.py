@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, UniqueConst
 from sqlalchemy.orm import backref, relationship
 
 from langworld_db_pyramid.dbutils.query_mixin import QueryMixin
-from langworld_db_pyramid.models.association_tables import FeatureValueCompoundToDoculect
+from langworld_db_pyramid.models.association_tables import FeatureValueCompoundToElement
 from langworld_db_pyramid.models.meta import Base
 
 
@@ -37,8 +37,8 @@ class FeatureValue(QueryMixin, Base):  # type: ignore[misc]
         "FeatureValue",
         backref=backref("compound", remote_side=[element_id]),
         secondary="feature_value_compound_to_element",
-        primaryjoin=id == FeatureValueCompoundToDoculect.compound_id,
-        secondaryjoin=id == FeatureValueCompoundToDoculect.element_id,
+        primaryjoin=id == FeatureValueCompoundToElement.compound_id,
+        secondaryjoin=id == FeatureValueCompoundToElement.element_id,
     )
 
     __table_args__ = (UniqueConstraint("feature_id", "type_id", "name_en", "name_ru"),)

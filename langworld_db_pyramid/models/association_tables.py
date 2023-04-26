@@ -47,7 +47,7 @@ class EncyclopediaMapToDoculect(Base):  # type: ignore[misc]
     doculect_id = Column(ForeignKey("doculects.id"), primary_key=True)
 
 
-class FeatureValueCompoundToDoculect(Base):  # type: ignore[misc]
+class FeatureValueCompoundToElement(Base):  # type: ignore[misc]
     """Class for **automatic** creation of objects by SQLAlchemy
     when establishing "many to many" relationship
     between `FeatureValue` (compound) and `FeatureValue` (element).
