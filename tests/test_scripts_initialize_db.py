@@ -12,6 +12,7 @@ class TestCustomModelInitializer:
         NUMBER_OF_FEATURES = 126
         # CALCULATING EXPECTED NUMBER OF VALUES IN FeatureValue TABLE
         number_of_listed_values = 1235
+        number_of_compound_listed_values = 1
         number_of_empty_values = NUMBER_OF_FEATURES * 3  # 3 value types with empty values
 
         unique_custom_values = set()
@@ -37,6 +38,7 @@ class TestCustomModelInitializer:
             models.FeatureCategory: 14,
             models.FeatureValue: number_of_listed_values
             + number_of_empty_values
+            + number_of_compound_listed_values
             + len(unique_custom_values),
             models.FeatureValueType: 5,
             models.Glottocode: 427,
@@ -141,6 +143,17 @@ class TestCustomModelInitializer:
             select(models.FeatureValue).where(models.FeatureValue.man_id == "A-3-2")
         ).one()
         assert a32.is_listed_and_has_doculects
+
+        # checking elements and compounds
+        compound_id = "K-14-4&K-14-5&K-14-6&K-14-7"
+        compound = dbsession.scalars(
+            select(models.FeatureValue).where(models.FeatureValue.man_id == compound_id)
+        ).one()
+        assert len(compound.elements) == len(compound_id.split("&"))
+        k14_4 = dbsession.scalars(
+            select(models.FeatureValue).where(models.FeatureValue.man_id == "K-14-4")
+        ).one()
+        assert k14_4.compounds[0] is compound
 
     def test__delete_all_data(self, dbsession, test_db_initializer):
         test_db_initializer.setup_models()
