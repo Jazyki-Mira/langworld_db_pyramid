@@ -129,7 +129,7 @@ class CustomModelInitializer:
         self._populate_glottocodes()
         self._populate_iso639p3_codes()
 
-        self._populate_doculects_custom_feature_values_and_comments()
+        self._populate_doculects_compound_and_custom_feature_values_and_comments()
         self._set_is_listed_and_has_doculect_to_false_for_listed_values_without_doculects()
 
     def _populate_categories_features_value_types_listed_and_empty_values(self) -> None:
@@ -282,7 +282,7 @@ class CustomModelInitializer:
                     self.iso639p3code_for_id[item] = iso_code
                     self.dbsession.add(iso_code)
 
-    def _populate_doculects_custom_feature_values_and_comments(
+    def _populate_doculects_compound_and_custom_feature_values_and_comments(
         self,
     ) -> None:
         doculect_rows = read_dicts_from_csv(self.file_with_doculects)
