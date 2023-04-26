@@ -47,6 +47,7 @@ class CustomModelInitializer:
             models.association_tables.DoculectToGlottocode,
             models.association_tables.DoculectToIso639P3Code,
             models.association_tables.EncyclopediaMapToDoculect,
+            models.association_tables.FeatureValueCompoundToElement,
             models.Doculect,
             models.DoculectFeatureValueInfo,
             models.DoculectType,
@@ -94,6 +95,7 @@ class CustomModelInitializer:
         self.iso639p3code_for_id: dict[str, models.Iso639P3Code] = {}
 
         self.listed_value_for_id: dict[str, models.FeatureValue] = {}
+        self.compound_listed_value_for_id: dict[str, models.FeatureValue] = {}
         self.value_type_for_name: dict[str, models.FeatureValueType] = {}
         self.custom_value_for_feature_id_and_value_ru: dict[
             tuple[str, str], models.FeatureValue
@@ -280,7 +282,9 @@ class CustomModelInitializer:
                     self.iso639p3code_for_id[item] = iso_code
                     self.dbsession.add(iso_code)
 
-    def _populate_doculects_custom_feature_values_and_comments(self) -> None:  # noqa: PLR0912
+    def _populate_doculects_custom_feature_values_and_comments(  # noqa: PLR0912, PLR0915
+        self,
+    ) -> None:
         doculect_rows = read_dicts_from_csv(self.file_with_doculects)
         rows_with_encyclopedia_map_to_doculect = read_dicts_from_csv(
             self.file_with_encyclopedia_map_to_doculect
@@ -371,8 +375,30 @@ class CustomModelInitializer:
                     # 1. Processing value
                     value_type = feature_profile_row["value_type"]
 
-                    if value_type == "listed":
+                    if value_type == "listed" and "&" not in feature_profile_row["value_id"]:
+                        # regular listed values
                         value = self.listed_value_for_id[feature_profile_row["value_id"]]
+                    elif value_type == "listed" and "&" in feature_profile_row["value_id"]:
+                        # compound listed values
+                        # if value is already in dictionary, use it, else create
+                        try:
+                            value = self.compound_listed_value_for_id[
+                                feature_profile_row["value_id"]
+                            ]
+                        except KeyError:
+                            value = models.FeatureValue(
+                                is_listed_and_has_doculects=True,
+                                man_id=feature_profile_row["value_id"],
+                                name_ru=feature_profile_row["value_ru"],
+                                name_en="",  # FIXME
+                                type=self.value_type_for_name["listed"],
+                                feature=self.feature_for_id[feature_profile_row["feature_id"]],
+                            )
+                            for element_id in feature_profile_row["value_id"].split("&"):
+                                value.elements.append(self.listed_value_for_id[element_id])
+                            self.compound_listed_value_for_id[
+                                feature_profile_row["value_id"]
+                            ] = value
                     elif value_type == "custom":
                         # if value is already in dictionary, use it, else create
                         try:
