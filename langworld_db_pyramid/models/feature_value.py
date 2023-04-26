@@ -32,10 +32,9 @@ class FeatureValue(QueryMixin, Base):  # type: ignore[misc]
     type = relationship("FeatureValueType", back_populates="values")
 
     # for "compound" values like A-1-1&A-1-2
-    element_id = Column(Integer, ForeignKey("feature_values.id"))
     elements = relationship(
         "FeatureValue",
-        backref=backref("compound", remote_side=[element_id]),
+        backref=backref("compounds", remote_side=[id]),
         secondary="feature_value_compound_to_element",
         primaryjoin=id == FeatureValueCompoundToElement.compound_id,
         secondaryjoin=id == FeatureValueCompoundToElement.element_id,
