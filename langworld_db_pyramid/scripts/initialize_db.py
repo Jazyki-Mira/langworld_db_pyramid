@@ -408,12 +408,13 @@ class CustomModelInitializer:
                     is_listed_and_has_doculects=True,
                     man_id=feature_profile_row["value_id"],
                     name_ru=feature_profile_row["value_ru"].replace("&", "; "),
-                    name_en="",  # FIXME
+                    name_en="",  # filled in a couple of lines below when the elements are analyzed
                     type=self.value_type_for_name["listed"],
                     feature=self.feature_for_id[feature_profile_row["feature_id"]],
                 )
                 for element_id in feature_profile_row["value_id"].split("&"):
                     value.elements.append(self.listed_value_for_id[element_id])
+                value.name_en = "; ".join(element.name_en for element in value.elements)
                 self.compound_listed_value_for_id[feature_profile_row["value_id"]] = value
         elif value_type == "custom":
             # if value is already in dictionary, use it, else create
