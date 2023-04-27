@@ -125,10 +125,7 @@
                     <a href="{{ request.route_path('feature_localized', locale=request.locale_name, feature_man_id=value.feature.man_id) }}{% if value.type.name=='listed' %}?show_doculect={{ doculect.man_id}}{% endif %}">
                         <strong>{{ value.feature[name_attr] }}</strong></a>
                     </td>
-                    <td>
-                        {# replace & with ; for names of compound values #}
-                        {{ value[name_attr].replace('&', '; ')}}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-small">[{{ value.man_id.replace('-', '‑') }}]</span>{% endif %}
-                    </td>
+                    <td>{{ value[name_attr] }}{%if value.man_id %}&nbsp;<span class="w3-text-dark-blue-grey w3-small">[{{ value.man_id.replace('-', '‑') }}]</span>{% endif %}</td>
                     <td>{{ comment(value) }}</td>  {# calls macro defined above #}
                     <td>
                         {# for now only handling the case with a single page number for feature value. Change if more complex cases (ranges, comma-separated lists) arise #}

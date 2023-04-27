@@ -407,7 +407,7 @@ class CustomModelInitializer:
                 value = models.FeatureValue(
                     is_listed_and_has_doculects=True,
                     man_id=feature_profile_row["value_id"],
-                    name_ru=feature_profile_row["value_ru"],
+                    name_ru=feature_profile_row["value_ru"].replace("&", "; "),
                     name_en="",  # FIXME
                     type=self.value_type_for_name["listed"],
                     feature=self.feature_for_id[feature_profile_row["feature_id"]],
