@@ -376,6 +376,10 @@ class CustomModelInitializer:
                     value = self._process_value(feature_profile_row)
                     doculect.feature_values.append(value)
 
+                    # for compound values, add each of the elements to the doculect as well
+                    for element in value.elements:
+                        doculect.feature_values.append(element)
+
                     # 2. Processing comment
                     if (
                         feature_profile_row["comment_ru"]
@@ -406,7 +410,7 @@ class CustomModelInitializer:
             except KeyError:
                 value = models.FeatureValue(
                     is_listed_and_has_doculects=True,
-                    man_id=feature_profile_row["value_id"],
+                    man_id=feature_profile_row["value_id"],  # TODO get rid of & here too?
                     name_ru=feature_profile_row["value_ru"].replace("&", "; "),
                     name_en="",  # filled in a couple of lines below when the elements are analyzed
                     type=self.value_type_for_name["listed"],
