@@ -7,7 +7,7 @@ import {
 const elem = React.createElement;
 
 export default function DoculectMap({ mapDivID = "map-default" }) {
-  const leafletFeatureGroupsRef = React.useRef([]);
+  const leafletFeatureGroupsRef = React.useRef([]);  // "featureGroup" in terms of Leaflet, not database
   const mapRef = React.useRef(null);
   const selectedMarker = React.useRef(null);
 
@@ -70,6 +70,7 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
     createFeatureGroups();
 
     addGroupsOfMarkersToMap();
+    addLegend();
     if (
       allDoculectGroups.length > 1 ||
       allDoculectGroups[0]["doculects"].length > 0
@@ -193,10 +194,27 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
   };
 
   const addGroupsOfMarkersToMap = () => {
-    leafletFeatureGroupsRef.current.forEach((featureGroup) =>
-      featureGroup.addTo(mapRef.current)
-    );
+    let layerControl = L.control.layers().addTo(mapRef.current);
+
+    for (let i = 0; i < allDoculectGroups.length; i++) {
+      layerControl.addOverlay(leafletFeatureGroupsRef.current[i], allDoculectGroups[i]["name"]);
+    }
   };
+
+  const addLegend = () => {
+    let legend = L.control({ position: "bottomright" });
+
+    legend.onAdd = () => {
+      let div = L.DomUtil.create("div", "legend");
+
+      allDoculectGroups.forEach((group) => {
+        div.innerHTML += `<img src="${group['imgSrc']}" height="20px"/><span>${group["name"]}</span><br>`;
+      });
+      return div;
+    };
+
+    legend.addTo(mapRef.current);
+  }
 
   const zoomMapToFitAllMarkers = () => {
     let allMarkers = [];
