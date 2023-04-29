@@ -77,5 +77,8 @@ def view_feature_map_of_values(request: Request) -> list[dict[str, Any]]:
             doculects=sorted(value.doculects, key=attrgetter(name_attr)),
             additional_popup_text=f"({getattr(feature, name_attr)}: {getattr(value, name_attr)})",
         )
+        # exclude compound values  # TODO make 2 versions of map
         for value in values
+        if not value.elements
+        # FIXME labels on popups become incorrect
     ]
