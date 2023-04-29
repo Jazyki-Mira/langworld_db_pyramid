@@ -85,9 +85,8 @@ class CLLDIcon:
 
 
 def generate_map_icons() -> Iterator[CLLDIcon]:
-    for shape in SHAPES:
-        for color in COLORS:
-            yield CLLDIcon(f"{shape}{color}")
+    icons = (CLLDIcon(f"{shape}{color}") for shape in SHAPES for color in COLORS)
+    yield from icons
 
 
 def generate_fixed_number_of_map_icons(number: int) -> list[CLLDIcon]:
