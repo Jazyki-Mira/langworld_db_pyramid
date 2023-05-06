@@ -194,11 +194,7 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
   };
 
   const addGroupsOfMarkersToMap = () => {
-    let layerControl = L.control.layers().addTo(mapRef.current);
-
-    for (let i = 0; i < allDoculectGroups.length; i++) {
-      layerControl.addOverlay(leafletFeatureGroupsRef.current[i], allDoculectGroups[i]["name"]);
-    }
+    leafletFeatureGroupsRef.current.forEach(group => group.addTo(mapRef.current));
   };
 
   const addLegend = () => {
