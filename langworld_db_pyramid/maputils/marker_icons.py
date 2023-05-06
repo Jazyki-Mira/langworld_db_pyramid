@@ -56,14 +56,15 @@ class CLLDIcon:
     @staticmethod
     def _generate_svg(spec: str, opacity: Optional[str] = None) -> str:
         """
+        Creates an SVG graphic according to a spec as used for map icons in `clld` apps.
+
         **This method is a copy** of function `icon()` in `clldutils.svg`
         with `paths` changed to produce smaller icons
         (since `icon()` does not allow to override the `paths`).
 
-        Creates a SVG graphic according to a spec as used for map icons in `clld` apps.
         :param spec: Icon spec of the form "(s|d|c|f|t)rrggbb" where the first character defines
-        a shape (s=square, d=diamond, c=circle, f=upside-down triangle, t=triangle) and "rrggbb"
-        specifies a color as hex triple.
+          a shape (s=square, d=diamond, c=circle, f=upside-down triangle, t=triangle) and "rrggbb"
+          specifies a color as hex triple.
         :param opacity: Opacity
         :return: SVG XML
         """
