@@ -1,5 +1,4 @@
 from collections.abc import Iterator
-from dataclasses import dataclass
 from typing import Any, Optional
 
 from clldutils import svg
@@ -22,7 +21,6 @@ COLORS = [
 SHAPES = ("c", "s", "t", "d", "f")
 
 
-@dataclass
 class CLLDIcon:
     """A convenience class that takes string in style of `clldutils.svg`
     and produces object with two attributes needed for displaying an icon
@@ -35,12 +33,8 @@ class CLLDIcon:
     otherwise some characters will be escaped.
     """
 
-    shape_and_color: str
-
-    def __post_init__(self) -> None:
-        self.svg_tag = self._generate_svg(self.shape_and_color)
-        self.img_src = svg.data_url(self.svg_tag)
-        self.img_tag = f'<img src="{self.img_src}"/>'
+    def __init__(self, shape_and_color: str) -> None:
+        self.shape_and_color = shape_and_color
 
     def __eq__(self, other: object) -> bool:
         return self.svg_tag == getattr(other, "svg_tag", None) and self.img_tag == getattr(
@@ -52,6 +46,18 @@ class CLLDIcon:
 
     def __repr__(self) -> str:
         return f"CLLDIcon (shape {self.shape_and_color[0]}, color #{self.shape_and_color[1:]})"
+
+    @property
+    def img_src(self) -> str:
+        return svg.data_url(self.svg_tag)
+
+    @property
+    def img_tag(self) -> str:
+        return f'<img src="{self.img_src}"/>'
+
+    @property
+    def svg_tag(self) -> str:
+        return self._generate_svg(self.shape_and_color)
 
     @staticmethod
     def _generate_svg(spec: str, opacity: Optional[str] = None) -> str:
