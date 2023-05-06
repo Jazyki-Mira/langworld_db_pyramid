@@ -194,6 +194,10 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
   };
 
   const addGroupsOfMarkersToMap = () => {
+    /* Compound values will be added to map after elementary ones,
+       which means that pie markers will simply cover the circles.
+       This is exactly what we need.
+    */
     leafletFeatureGroupsRef.current.forEach(group => group.addTo(mapRef.current));
   };
 
