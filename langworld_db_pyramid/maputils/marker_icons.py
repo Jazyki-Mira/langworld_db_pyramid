@@ -86,7 +86,7 @@ class CLLDIcon(AbstractCLLDIcon):
         paths = {
             "s": 'path d="M10 10 H30 V30 H10 V10"',
             "d": 'path d="M20 8 L32 20 L20 32 L8 20 L20 8"',
-            "c": 'circle cx="20" cy="20" r="11"',
+            "c": 'circle cx="12" cy="12" r="11"',  # cx and cy match positioning of CLLDPie
             "f": 'path d="M8 10 L32 10 L20 32 L8 10"',
             "t": 'path d="M8 32 L32 32 L20 10 L8 32"',
         }
@@ -96,7 +96,7 @@ class CLLDIcon(AbstractCLLDIcon):
             paths[spec[0]],
             svg.style(stroke="#585858", fill=svg.rgb_as_hex(spec[1:]), opacity=opacity),
         )
-        return svg.svg(elem, height=40, width=40)
+        return svg.svg(elem, height=25, width=25)
 
 
 class CLLDPie(AbstractCLLDIcon):
@@ -116,7 +116,6 @@ class CLLDPie(AbstractCLLDIcon):
             data=[100 / len(self.colors)] * len(self.colors),
             colors=self.colors,
             width=24,
-            stroke_circle=True,
         )
 
 
