@@ -51,9 +51,9 @@ def get_feature_values_icons(
     route_name="feature_localized", renderer="langworld_db_pyramid:templates/feature.jinja2"
 )
 def view_feature_list_of_values(request: Request) -> dict[str, Any]:
-    # The list of values is no longer shown (because it would duplicate the interactive list),
-    # but it still makes sense to use the common function
-    feature, _, _ = get_feature_values_icons(request)
+    feature = models.Feature.get_by_man_id(
+        request=request, man_id=request.matchdict["feature_man_id"]
+    )
     return {
         "feature_name": getattr(feature, f"name_{request.locale_name}"),
         "man_id": feature.man_id,
