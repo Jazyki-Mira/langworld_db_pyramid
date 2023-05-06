@@ -118,7 +118,16 @@
           </colgroup>
           <tbody>
           {% for value in values_to_list %}
-            {% if not (request.locale_name == 'en' and value.type.name == 'custom') %}
+            {#
+               Do not show:
+               1. custom values in English interface, as they are not translated
+               2. compound listed values because their elements will be shown anyway
+                  (excluding elementary values and only showing compounds is not a viable solution
+                  because it will lead to exclusion of valid values that can be elements of compounds
+                  but are not elements of compounds for this given language)
+            #}
+            {# TODO unify table cells for the same feature ID? (For elements of compound values) #}
+            {% if not (request.locale_name == 'en' and value.type.name == 'custom') and not value.elements %}
                 <tr>
                     <td class="w3-text-dark-blue-grey w3-medium">[{{ value.feature.man_id.replace('-', '‑') }}]</td>  {# replace simple hyphen with non-breaking hyphen #}
                     <td>
