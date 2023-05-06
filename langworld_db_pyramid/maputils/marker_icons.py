@@ -1,5 +1,5 @@
 from collections.abc import Iterator
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from clldutils import svg
 
@@ -21,7 +21,29 @@ COLORS = [
 SHAPES = ("c", "s", "t", "d", "f")
 
 
-class CLLDIcon:
+class AbstractCLLDIcon:
+    def __eq__(self, other: object) -> bool:
+        return self.svg_tag == getattr(other, "svg_tag", None) and self.img_tag == getattr(
+            other, "img_tag", None
+        )
+
+    def __hash__(self) -> int:
+        return hash((self.svg_tag, self.img_tag))
+
+    @property
+    def img_src(self) -> str:
+        return svg.data_url(self.svg_tag)
+
+    @property
+    def img_tag(self) -> str:
+        return f'<img src="{self.img_src}"/>'
+
+    @property
+    def svg_tag(self) -> str:
+        raise NotImplementedError
+
+
+class CLLDIcon(AbstractCLLDIcon):
     """A convenience class that takes string in style of `clldutils.svg`
     and produces object with two attributes needed for displaying an icon
     either inline (value of `.img_tag` gives `<img src="<svg_code_of_the_icon>" />`
@@ -34,26 +56,12 @@ class CLLDIcon:
     """
 
     def __init__(self, shape_and_color: str) -> None:
+        super().__init__()
         self.shape_and_color = shape_and_color
-
-    def __eq__(self, other: object) -> bool:
-        return self.svg_tag == getattr(other, "svg_tag", None) and self.img_tag == getattr(
-            other, "img_tag", None
-        )
-
-    def __hash__(self) -> int:
-        return hash((self.svg_tag, self.img_tag))
+        self.shape, self.color = self.shape_and_color[0], self.shape_and_color[1:]
 
     def __repr__(self) -> str:
-        return f"CLLDIcon (shape {self.shape_and_color[0]}, color #{self.shape_and_color[1:]})"
-
-    @property
-    def img_src(self) -> str:
-        return svg.data_url(self.svg_tag)
-
-    @property
-    def img_tag(self) -> str:
-        return f'<img src="{self.img_src}"/>'
+        return f"CLLDIcon (shape {self.shape}, color #{self.color})"
 
     @property
     def svg_tag(self) -> str:
@@ -91,6 +99,27 @@ class CLLDIcon:
         return svg.svg(elem, height=40, width=40)
 
 
+class CLLDPie(AbstractCLLDIcon):
+    """A class for a CLLD pie chart"""
+
+    def __init__(self, colors: list[str]) -> None:
+        super().__init__()
+        self.colors: list[str] = colors
+
+    def __repr__(self) -> str:
+        return f"CLLD pie (colors {', '.join(self.colors)})"
+
+    @property
+    def svg_tag(self) -> str:
+        return svg.pie(
+            # generate a list of equal numbers that add up to 100
+            data=[100 / len(self.colors)] * len(self.colors),
+            colors=self.colors,
+            width=24,
+            stroke_circle=True,
+        )
+
+
 def generate_map_icons() -> Iterator[CLLDIcon]:
     yield from (CLLDIcon(f"{shape}{color}") for shape in SHAPES for color in COLORS)
 
@@ -109,10 +138,8 @@ def generate_one_icon() -> CLLDIcon:
     return generate_fixed_number_of_map_icons(1)[0]
 
 
-def icon_for_object(objects: list[object]) -> dict[Any, CLLDIcon]:
-    """Gets a list of objects and returns a dictionary
-    where each object is mapped to an icon.
-    """
+def icon_for_object(objects: list[object]) -> dict[Any, Union[CLLDIcon, CLLDPie]]:
+    """Gets a list of objects and returns a dictionary where each object is mapped to an icon."""
     if len(objects) > len(SHAPES) * len(COLORS):
         raise ValueError(
             f"Cannot generate more than {len(COLORS) * len(SHAPES)} different markers"

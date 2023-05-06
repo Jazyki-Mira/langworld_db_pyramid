@@ -1,5 +1,5 @@
 from operator import attrgetter
-from typing import Any
+from typing import Any, Union
 
 from pyramid.request import Request
 from pyramid.view import view_config
@@ -7,7 +7,7 @@ from sqlalchemy import select
 
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
-from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, icon_for_object
+from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, CLLDPie, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
 from langworld_db_pyramid.views import get_doculect_from_params
 
@@ -28,7 +28,7 @@ def view_all_features_list_by_category(
 
 def get_feature_values_icons(
     request: Request,
-) -> tuple[models.Feature, list[models.FeatureValue], dict[Any, CLLDIcon]]:
+) -> tuple[models.Feature, list[models.FeatureValue], dict[Any, Union[CLLDIcon, CLLDPie]]]:
     feature = models.Feature.get_by_man_id(
         request=request, man_id=request.matchdict["feature_man_id"]
     )
@@ -43,7 +43,20 @@ def get_feature_values_icons(
         reverse=True,
     )
 
-    return feature, values, icon_for_object(values)
+    # This will generate icons for all values if feature is regular
+    # or for all elementary values if the feature is_multiselect
+    icon_for_value = icon_for_object([v for v in values if not v.elements])
+
+    # construct icons for compound values from same colors as the icons of their elements
+    for compound_value in [v for v in values if v.elements]:
+        colors = []
+        for element in compound_value.elements:
+            # dotted notation makes mypy complain: CLLDPie has no .color, while CLLDPie is in Union
+            colors.append(getattr(icon_for_value[element], "color"))
+
+        icon_for_value[compound_value] = CLLDPie(colors)
+
+    return feature, values, icon_for_value
 
 
 @view_config(route_name="feature", renderer="langworld_db_pyramid:templates/feature.jinja2")
@@ -77,8 +90,6 @@ def view_feature_map_of_values(request: Request) -> list[dict[str, Any]]:
             doculects=sorted(value.doculects, key=attrgetter(name_attr)),
             additional_popup_text=f"({getattr(feature, name_attr)}: {getattr(value, name_attr)})",
         )
-        # exclude compound values  # TODO make 2 versions of map
         for value in values
-        if not value.elements
-        # FIXME labels on popups become incorrect
+        # if not value.elements
     ]
