@@ -33,14 +33,9 @@ def get_feature_values_icons(
         request=request, man_id=request.matchdict["feature_man_id"]
     )
 
-    # I sort values by number of doculects (descending), but if the number of doculects is
-    # the same, I have to sort by value ID (ascending). Hence, this trick with negative value ID
-    # (`.id` is auto-incremented integer): reverse sorting by negative value ID de facto produces
-    # ascending sorting by original value ID.
     values = sorted(
         [value for value in feature.values if value.type.name == "listed" and value.doculects],
-        key=lambda value: (len(value.doculects), -value.id),
-        reverse=True,
+        key=lambda value: value.id,
     )
 
     # This will generate icons for all values if feature is regular
