@@ -32,6 +32,10 @@ export default function InteractiveDoculectList() {
 
   // these functions have to be inside top-level function to be able to use the context
   function DoculectGroup(doculectGroup) {
+    // return empty div for compound values (hence excluding them from interactive list)
+    // TODO in the future this can be toggled by the user
+    if (doculectGroup["id"].includes("&")) return elem("div", { key: doculectGroup["id"] });
+
     let headingText = `${doculectGroup["name"]} (${doculectGroup["doculects"].length})`;
     if (doculectGroup["href"] != "")
       headingText = elem("a", { href: doculectGroup["href"] }, headingText);
