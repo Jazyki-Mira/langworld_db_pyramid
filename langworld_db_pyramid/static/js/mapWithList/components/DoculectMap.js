@@ -136,6 +136,7 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
         className: "",
         iconSize: iconSize,
         iconAnchor: iconAnchor,
+        popupAnchor: [-7, -6],
       });
 
       leafletFeatureGroupsRef.current.push(
