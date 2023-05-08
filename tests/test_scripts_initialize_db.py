@@ -34,7 +34,7 @@ class TestCustomModelInitializer:
             models.EncyclopediaMap: 62,
             models.EncyclopediaVolume: 19,
             models.Family: 145,
-            models.Feature: 126,
+            models.Feature: NUMBER_OF_FEATURES,
             models.FeatureCategory: 14,
             models.FeatureValue: number_of_listed_values
             + number_of_empty_values
@@ -63,7 +63,9 @@ class TestCustomModelInitializer:
             if item.encyclopedia_volume_id:
                 assert isinstance(item.encyclopedia_volume, models.EncyclopediaVolume)
             if item.has_feature_profile:
-                assert len(item.feature_values) == NUMBER_OF_FEATURES
+                # With multi-select features, there can be more values than there are features:
+                # For each element of a compound value, a separate line in the table is created.
+                assert len(item.feature_values) >= NUMBER_OF_FEATURES
 
         afg = dbsession.scalars(
             select(models.Country).where(models.Country.name_en == "Afghanistan")
