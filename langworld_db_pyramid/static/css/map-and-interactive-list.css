@@ -44,3 +44,20 @@ img.icon-in-map-legend:hover {
   opacity: 0;
   transition: visibility 0s 1s, opacity 1s linear;
 }
+
+/*Legend in the bottom-left corner of the map*/
+.legend {
+  padding: 6px 8px;
+  font: .8rem "Raleway", Verdana, sans-serif;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  /*box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);*/
+  /*border-radius: 5px;*/
+  line-height: .5rem;
+  color: #555;
+}
+
+.legend span {
+  position: relative;
+  bottom: -1px;
+}
