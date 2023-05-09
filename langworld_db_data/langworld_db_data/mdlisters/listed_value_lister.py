@@ -33,7 +33,7 @@ class ListedValueLister(AbstractValueLister):
     ) -> None:
         feature_ids = read_column_from_csv(path_to_file=self.file_with_features, column_name="id")
 
-        feature_to_value_to_doculects: dict[str, list] = {
+        feature_to_value_to_doculects: dict[str, dict[str, list[str]]] = {
             feature_id: {
                 row["id"]: []
                 for row in read_dicts_from_csv(self.file_with_listed_values)
@@ -42,11 +42,23 @@ class ListedValueLister(AbstractValueLister):
             for feature_id in feature_ids
         }
 
+        feature_is_multiselect_for_feature_id = read_dict_from_2_csv_columns(
+            self.file_with_features,
+            key_col="id",
+            val_col="is_multiselect",
+        )
+
         for volume_and_doculect_id in self.filtered_rows_for_volume_doculect_id:
             for row in self.filtered_rows_for_volume_doculect_id[volume_and_doculect_id]:
-                feature_to_value_to_doculects[row["feature_id"]][row["value_id"]].append(
-                    volume_and_doculect_id
-                )
+                if feature_is_multiselect_for_feature_id[row["feature_id"]] == "1":
+                    for value_id in row["value_id"].split("&"):
+                        feature_to_value_to_doculects[row["feature_id"]][value_id].append(
+                            volume_and_doculect_id
+                        )
+                else:
+                    feature_to_value_to_doculects[row["feature_id"]][row["value_id"]].append(
+                        volume_and_doculect_id
+                    )
 
         feature_name_for_feature_id = read_dict_from_2_csv_columns(
             self.file_with_features,
@@ -59,8 +71,8 @@ class ListedValueLister(AbstractValueLister):
         )
 
         content = (
-            f"# Значения типа `{self.value_type}`\n"
-            "Оглавление файла открывается кнопкой сверху слева рядом с индикатором количества строк."
+            f"# Значения типа `{self.value_type}`\nОглавление файла открывается кнопкой"
+            " сверху слева рядом с индикатором количества строк."
         )
 
         for feature_id in feature_name_for_feature_id:
@@ -68,15 +80,10 @@ class ListedValueLister(AbstractValueLister):
 
             for value_id in feature_to_value_to_doculects[feature_id]:
                 content += (
-                    f"\n- **{value_name_for_value_id[value_id]}** ({value_id}): "
-                    f"кол-во языков — **{len(feature_to_value_to_doculects[feature_id][value_id])}**"
+                    f"\n- **{value_name_for_value_id[value_id]}** ({value_id}): кол-во"
+                    " языков —"
+                    f" **{len(feature_to_value_to_doculects[feature_id][value_id])}**"
                 )
-
-                # # This is good but leads to a very large file being generated. GitHub refuses to show its content.
-                # if not feature_to_value_to_doculects[feature_id][value_id]:
-                #
-                #     for volume_and_doculect_id in feature_to_value_to_doculects[feature_id][value_id]:
-                #         content += (
 
         with output_file.open(mode="w+", encoding="utf-8") as fh:
             fh.write(content)

@@ -1,5 +1,5 @@
 from operator import attrgetter
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from pyramid.request import Request
 from pyramid.view import view_config
@@ -7,7 +7,7 @@ from sqlalchemy import select
 
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
-from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, icon_for_object
+from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, CLLDPie, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
 from langworld_db_pyramid.views import get_doculect_from_params
 
@@ -16,7 +16,9 @@ MATCHDICT_ID_FOR_ALL_FAMILIES = "_all"
 
 def _get_family_immediate_subfamilies_and_icons(
     request: Request,
-) -> tuple[Optional[models.Family], list[models.Family], dict[models.Family, CLLDIcon]]:
+) -> tuple[
+    Optional[models.Family], list[models.Family], dict[models.Family, Union[CLLDIcon, CLLDPie]]
+]:
     """Auxiliary function: returns the tuple consisting of
     the `Family` object from the database for the given family ID;
     objects for its immediate children; map/list icons for them.

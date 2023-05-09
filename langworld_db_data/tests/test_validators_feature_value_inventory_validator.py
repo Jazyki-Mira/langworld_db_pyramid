@@ -46,7 +46,8 @@ def test__validate_listed_values_fails_for_malformed_ids():
     )
 
     with pytest.raises(
-        FeatureValueInventoryValidatorError, match="Value ID foo does not start with feature ID"
+        FeatureValueInventoryValidatorError,
+        match="Value ID foo does not start with feature ID",
     ):
         validator.validate()
 

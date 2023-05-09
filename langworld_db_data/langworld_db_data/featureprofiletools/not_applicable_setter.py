@@ -4,7 +4,7 @@ from pathlib import Path
 from langworld_db_data.constants.paths import FEATURE_PROFILES_DIR, FILE_WITH_NOT_APPLICABLE_RULES
 from langworld_db_data.featureprofiletools.data_structures import ValueForFeatureProfileDictionary
 from langworld_db_data.featureprofiletools.feature_profile_reader import FeatureProfileReader
-from langworld_db_data.featureprofiletools.feature_profile_writer_from_dictionary import (
+from langworld_db_data.featureprofiletools.feature_profile_writer_from_dictionary import (  # noqa E501
     FeatureProfileWriterFromDictionary,
 )
 from langworld_db_data.filetools.json_toml_yaml import read_json_toml_yaml
@@ -30,14 +30,20 @@ class NotApplicableSetter:
         file_with_rules: Path = FILE_WITH_NOT_APPLICABLE_RULES,
         output_dir: Path = FEATURE_PROFILES_DIR,
     ):
-        self.feature_profiles = sorted(dir_with_feature_profiles.glob("*.csv"))
+        self.feature_profiles = sorted(list(dir_with_feature_profiles.glob("*.csv")))
         self.rules = read_json_toml_yaml(file_with_rules)
         self.output_dir = output_dir
 
         self.reader = FeatureProfileReader
         self.writer = FeatureProfileWriterFromDictionary
 
-    def replace_not_stated_with_not_applicable_in_all_profiles_according_to_rules(self) -> None:
+    def replace_not_stated_with_not_applicable_in_all_profiles_according_to_rules(
+        self,
+    ) -> None:
+        # for mypy and PyCharm
+        if not isinstance(self.rules, dict):
+            raise TypeError("Rules for not_applicable are not a dictionary.")
+
         for file in self.feature_profiles:
             print(f"\nReading file {file.name}")
 
@@ -45,25 +51,24 @@ class NotApplicableSetter:
             new_data = copy(data_from_profile)
 
             for feature_id in self.rules:
-                # noinspection PyTypeChecker
                 print(
-                    f"Feature ID {feature_id}, value ID to trigger 'not_applicable' rules for this feature: "
-                    f"{self.rules[feature_id]['trigger']}. "
-                    f"Value in {file.stem}: {data_from_profile[feature_id].value_id}"
+                    f"Feature ID {feature_id}, value ID to trigger 'not_applicable'"
+                    f" rules for this feature: {self.rules[feature_id]['trigger']}."
+                    f" Value in {file.stem}: {data_from_profile[feature_id].value_id}"
                 )
 
-                # noinspection PyTypeChecker
                 if data_from_profile[feature_id].value_id == self.rules[feature_id]["trigger"]:
-                    # noinspection PyTypeChecker
                     for id_of_feature_to_be_changed in self.rules[feature_id][
                         "features_to_get_not_applicable"
                     ]:
                         print(
-                            f'Feature {id_of_feature_to_be_changed} to be set to "not applicable"'
+                            f'Feature {id_of_feature_to_be_changed} to be set to "not'
+                            ' applicable"'
                         )
 
                         # Only changing values that are of 'not_stated' type!
-                        # All other value types are wrong, but errors must be triggered in a validator, not here
+                        # All other value types are wrong, but errors must be triggered
+                        # in a validator, not here
                         if new_data[id_of_feature_to_be_changed].value_type == "not_stated":
                             new_data[
                                 id_of_feature_to_be_changed

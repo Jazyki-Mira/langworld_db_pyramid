@@ -56,7 +56,11 @@ def test_convert_xls_to_csv():
 
 def test_read_dicts_from_csv_read_plain_rows_from_csv():
     lines_to_write = ["col1,col2,col3\n", "foo,bar,baz\n", "фу,бар,баз"]
-    expected_rows = [["col1", "col2", "col3"], ["foo", "bar", "baz"], ["фу", "бар", "баз"]]
+    expected_rows = [
+        ["col1", "col2", "col3"],
+        ["foo", "bar", "baz"],
+        ["фу", "бар", "баз"],
+    ]
     expected_list_of_dicts = [
         {"col1": "foo", "col2": "bar", "col3": "baz"},
         {"col1": "фу", "col2": "бар", "col3": "баз"},
@@ -126,13 +130,13 @@ def test_check_csv_for_repetitions_in_column_throws_exception_with_wrong_column_
         check_csv_for_repetitions_in_column(path_to_file=file, column_name="foo")
 
 
-def test_check_csv_for_repetitions_in_column_throws_exception_with_repetition_in_column():
+def test_check_csv_for_repetitions_in_column_throws_error_with_repetition_in_column():
     file = DIR_WITH_FILETOOLS_TEST_FILES / "csv_doculects_with_duplicate_values.csv"
     with pytest.raises(ValueError, match="repeating values in column <id>: asturian, catalan"):
         check_csv_for_repetitions_in_column(path_to_file=file, column_name="id")
 
 
-def test_check_csv_for_repetitions_in_column_passes_for_file_with_repetition_in_column_if_different_column_is_checked():
+def test_check_csv_for_repetitions_in_column_passes_for_file_with_repetition_in_column_if_different_column_is_checked():  # noqa E501
     file = DIR_WITH_FILETOOLS_TEST_FILES / "csv_doculects_with_duplicate_values.csv"
     check_csv_for_repetitions_in_column(path_to_file=file, column_name="name_ru")
 

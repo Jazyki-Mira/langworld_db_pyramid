@@ -54,7 +54,7 @@ class FeatureProfileReader:
         dir_with_feature_profiles: Path = FEATURE_PROFILES_DIR,
         copy_to_clipboard: bool = True,
         verbose: bool = True,
-    ) -> dict:
+    ) -> dict[str, str]:
         """A helper function to get value for given feature in given doculect.
         Prints and returns found value type, ID, value text, and comment.
         **Copies value text to clipboard** (by default).
@@ -81,7 +81,7 @@ class FeatureProfileReader:
 
         if verbose:
             print(f"{doculect_id=}, {feature_id=}\n")
-            for key in data_to_return:
+            for key in data_to_return.keys():
                 key_for_print = (
                     key.replace("_ru", "").replace("_", " ").capitalize().replace("id", "ID")
                 )
@@ -90,7 +90,7 @@ class FeatureProfileReader:
                 else:
                     print(f"{key_for_print} is empty")
 
-        # sometimes a custom value can be written in comment while value itself is left empty
+        # sometimes a custom value can be written in comment while value itself is empty
         text_to_copy = data_to_return["value_ru"] or data_to_return["comment_ru"]
         if copy_to_clipboard and text_to_copy:
             pyperclip.copy(text_to_copy)

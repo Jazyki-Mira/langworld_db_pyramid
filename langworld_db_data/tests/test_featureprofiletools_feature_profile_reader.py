@@ -71,7 +71,12 @@ def test_read_feature_profile_as_dict_from_file_fails_with_bad_file(test_reader)
         (
             "catalan",
             "A-1",
-            {"value_type": "listed", "value_id": "A-1-2", "value_ru": "Три", "comment_ru": ""},
+            {
+                "value_type": "listed",
+                "value_id": "A-1-2",
+                "value_ru": "Три",
+                "comment_ru": "",
+            },
         ),
         (
             "catalan",

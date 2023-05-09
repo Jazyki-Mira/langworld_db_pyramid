@@ -48,8 +48,10 @@ class DoculectInCountryWriter:
         "совр. Сирия",
         "Kingdom of Van",
         # this is one long string, missing comma after 1st line is intended:
-        "present-day France, Luxembourg, Belgium, most of Switzerland, "
-        "and parts of Northern Italy, Netherlands, and Germany",
+        (
+            "present-day France, Luxembourg, Belgium, most of Switzerland, "
+            "and parts of Northern Italy, Netherlands, and Germany"
+        ),
     )
 
     def __init__(
@@ -76,14 +78,17 @@ class DoculectInCountryWriter:
                 if file.exists():
                     self.doculect_id_to_locale_to_file[(doculect_id, locale)] = file
 
-        self.sociolinguistic_profiles = sorted(dir_with_sociolinguistic_profiles.glob("*.yaml"))
+        self.sociolinguistic_profiles = sorted(
+            list(dir_with_sociolinguistic_profiles.glob("*.yaml"))
+        )
 
         if not self.sociolinguistic_profiles:
             raise DoculectInCountryWriterError(
-                f"No sociolinguistic profiles found in {dir_with_sociolinguistic_profiles}"
+                "No sociolinguistic profiles found in" f" {dir_with_sociolinguistic_profiles}"
             )
 
-        # this is the initial version that will have to be amended by reading the file with aliases
+        # this is the initial version that will have to be amended by reading the file
+        # with aliases
         self.doculect_id_to_countries: dict[str, set[str]] = {
             row["id"]: {row["main_country_id"]} for row in doculect_rows
         }
@@ -117,10 +122,12 @@ class DoculectInCountryWriter:
             for country_id in self.doculect_id_to_countries[doculect_id]:
                 rows_to_write.append((doculect_id, country_id))
 
+        rows_with_header = [("doculect_id", "country_id")] + sorted(rows_to_write, key=str)
         write_csv(
-            # Need sorting because otherwise the set will be written differently each time.
-            # `str(item)` will have effect equivalent to sorting by two items doculect ID and then by country ID
-            [("doculect_id", "country_id")] + sorted(rows_to_write, key=str),
+            # Need sorting because otherwise set will be written differently each time.
+            # `str(item)` will have effect equivalent to sorting by two items
+            # doculect ID and then by country ID
+            rows_with_header,
             path_to_file=self.output_file,
             overwrite=overwrite,
             delimiter=",",
@@ -137,7 +144,11 @@ class DoculectInCountryWriter:
 
         for doculect_id_and_locale, file in self.doculect_id_to_locale_to_file.items():
             doculect_id, locale = doculect_id_and_locale
-            country_section = read_json_toml_yaml(file)["1.1.3"]
+            data = read_json_toml_yaml(file)
+            if not isinstance(data, dict):
+                raise TypeError(f"Data loaded from {file} is of wrong type")
+
+            country_section = data["1.1.3"]
 
             for item in country_section:
                 if isinstance(item, str):
@@ -147,7 +158,11 @@ class DoculectInCountryWriter:
                 else:
                     raise TypeError
 
-                if clean_item in ("число говорящих", "number of speakers", "NUMBER OF SPEAKERS"):
+                if clean_item in (
+                    "число говорящих",
+                    "number of speakers",
+                    "NUMBER OF SPEAKERS",
+                ):
                     continue
 
                 try:
@@ -159,7 +174,10 @@ class DoculectInCountryWriter:
 
         if self.verbose:
             print("Doculect ID to countries:", self.doculect_id_to_countries)
-            print("Unrecognized countries:\n", "\n".join(sorted(unrecognized_countries)))
+            print(
+                "Unrecognized countries:\n",
+                "\n".join(sorted(list(unrecognized_countries))),
+            )
 
     def cleans_item(self, str_: str) -> str:
         clean_str = str_

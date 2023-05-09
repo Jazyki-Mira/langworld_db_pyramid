@@ -12,6 +12,7 @@ class TestCustomModelInitializer:
         NUMBER_OF_FEATURES = 126
         # CALCULATING EXPECTED NUMBER OF VALUES IN FeatureValue TABLE
         number_of_listed_values = 1235
+        number_of_compound_listed_values = 1
         number_of_empty_values = NUMBER_OF_FEATURES * 3  # 3 value types with empty values
 
         unique_custom_values = set()
@@ -33,10 +34,11 @@ class TestCustomModelInitializer:
             models.EncyclopediaMap: 62,
             models.EncyclopediaVolume: 19,
             models.Family: 145,
-            models.Feature: 126,
+            models.Feature: NUMBER_OF_FEATURES,
             models.FeatureCategory: 14,
             models.FeatureValue: number_of_listed_values
             + number_of_empty_values
+            + number_of_compound_listed_values
             + len(unique_custom_values),
             models.FeatureValueType: 5,
             models.Glottocode: 427,
@@ -61,7 +63,9 @@ class TestCustomModelInitializer:
             if item.encyclopedia_volume_id:
                 assert isinstance(item.encyclopedia_volume, models.EncyclopediaVolume)
             if item.has_feature_profile:
-                assert len(item.feature_values) == NUMBER_OF_FEATURES
+                # With multi-select features, there can be more values than there are features:
+                # For each element of a compound value, a separate line in the table is created.
+                assert len(item.feature_values) >= NUMBER_OF_FEATURES
 
         afg = dbsession.scalars(
             select(models.Country).where(models.Country.name_en == "Afghanistan")
@@ -141,6 +145,24 @@ class TestCustomModelInitializer:
             select(models.FeatureValue).where(models.FeatureValue.man_id == "A-3-2")
         ).one()
         assert a32.is_listed_and_has_doculects
+
+        # checking elements and compounds
+        compound_id = "K-14-4&K-14-5&K-14-6&K-14-7"
+        compound = dbsession.scalars(
+            select(models.FeatureValue).where(models.FeatureValue.man_id == compound_id)
+        ).one()
+        assert len(compound.elements) == len(compound_id.split("&"))
+        k14_4 = dbsession.scalars(
+            select(models.FeatureValue).where(models.FeatureValue.man_id == "K-14-4")
+        ).one()
+        assert k14_4.compounds[0] is compound
+
+        # checking compound value and its elements in a doculect
+        amharic: models.Doculect = dbsession.scalars(
+            select(models.Doculect).where(models.Doculect.name_en == "Amharic")
+        ).one()
+        for value_id in ("K-14-4&K-14-5&K-14-6&K-14-7", "K-14-4", "K-14-5", "K-14-6", "K-14-7"):
+            assert value_id in [value.man_id for value in amharic.feature_values]
 
     def test__delete_all_data(self, dbsession, test_db_initializer):
         test_db_initializer.setup_models()

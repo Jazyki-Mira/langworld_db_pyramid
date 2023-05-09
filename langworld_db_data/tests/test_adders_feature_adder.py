@@ -49,7 +49,12 @@ def test_add_feature_fails_with_empty_arg(test_feature_adder):
             "feature_en": "",
             "listed_values_to_add": dummy_values_to_add,
         },
-        {"category_id": "A", "feature_ru": "раз", "feature_en": "one", "listed_values_to_add": []},
+        {
+            "category_id": "A",
+            "feature_ru": "раз",
+            "feature_en": "one",
+            "listed_values_to_add": [],
+        },
     ):
         with pytest.raises(FeatureAdderError, match="Some of the values passed are empty"):
             test_feature_adder.add_feature(**incomplete_set_of_args)
@@ -67,7 +72,10 @@ def test_add_feature_fails_with_wrong_new_listed_values(test_feature_adder):
     }
     with pytest.raises(
         FeatureAdderError,
-        match="must have keys 'en' and 'ru'. Your value: {'this': 'should fail', 'en': 'this is fine'}",
+        match=(
+            "must have keys 'en' and 'ru'. Your value: {'this': 'should fail', 'en':"
+            " 'this is fine'}"
+        ),
     ):
         test_feature_adder.add_feature(**args)
 
@@ -75,7 +83,9 @@ def test_add_feature_fails_with_wrong_new_listed_values(test_feature_adder):
 def test_add_feature_fails_with_wrong_category_id(test_feature_adder):
     with pytest.raises(
         FeatureAdderError,
-        match=f"Category ID <X> not found in file {test_feature_adder.file_with_categories.name}",
+        match=(
+            "Category ID <X> not found in file" f" {test_feature_adder.file_with_categories.name}"
+        ),
     ):
         test_feature_adder.add_feature(
             category_id="X",
@@ -86,7 +96,10 @@ def test_add_feature_fails_with_wrong_category_id(test_feature_adder):
 
 
 def test_add_feature_fails_with_existing_feature_name(test_feature_adder):
-    for en, ru in (("Stress character ", "Новый признак"), ("New  feature", "Типы фонации")):
+    for en, ru in (
+        ("Stress character ", "Новый признак"),
+        ("New  feature", "Типы фонации"),
+    ):
         with pytest.raises(FeatureAdderError, match="English or Russian feature name is already"):
             test_feature_adder.add_feature(
                 category_id="A",
@@ -96,7 +109,9 @@ def test_add_feature_fails_with_existing_feature_name(test_feature_adder):
             )
 
 
-def test_add_feature_fails_with_non_existent_index_of_feature_to_insert_after(test_feature_adder):
+def test_add_feature_fails_with_non_existent_index_of_feature_to_insert_after(
+    test_feature_adder,
+):
     for number in (0, 22, 250):
         with pytest.raises(FeatureAdderError, match=f"Cannot add feature after A-{number}"):
             test_feature_adder.add_feature(
@@ -129,14 +144,23 @@ def test__build_feature_id_generates_auto_index(test_feature_adder):
     feature_id = test_feature_adder._generate_feature_id(
         category_id="A", custom_index_of_new_feature=None
     )
-    # note that there is a feature with ID A-211 in test file with features. Code must ignore this ID.
+    # note that there is a feature with ID A-211 in test file with features.
+    # Code must ignore this ID.
     assert feature_id == "A-22"
 
 
 def test_add_feature_writes_good_output_files(test_feature_adder):
     features_to_add = (
-        {"category_id": "A", "feature_en": "New feature in A", "feature_ru": "Новый признак в A"},
-        {"category_id": "C", "feature_en": "New feature in C", "feature_ru": "Новый признак в C"},
+        {
+            "category_id": "A",
+            "feature_en": "New feature in A",
+            "feature_ru": "Новый признак в A",
+        },
+        {
+            "category_id": "C",
+            "feature_en": "New feature in C",
+            "feature_ru": "Новый признак в C",
+        },
         {
             "category_id": "D",
             "feature_en": "New feature in D with custom index",
@@ -178,8 +202,8 @@ def test_add_feature_writes_good_output_files(test_feature_adder):
         test_feature_adder.input_feature_profiles = (
             test_feature_adder.output_dir_with_feature_profiles.glob("*.csv")
         )
-        # This is justified in test because in normal use output file is same as input file
-        # and features will be added one by one.
+        # This is justified in test because in normal use output file is same as input
+        # file and features will be added one by one.
 
     assert test_feature_adder.output_file_with_features.exists()
     assert test_feature_adder.input_file_with_listed_values.exists()

@@ -1120,13 +1120,6 @@
             "sqlalchemy": "~1.6",
             "version": "==5.8.1"
         },
-        "zope-sqlalchemy": {
-            "hashes": [
-                "sha256:63c4560fdd2d55c6e5658a22f6835a3c12eac1a3af8140a01400f7367aac91ed",
-                "sha256:9c53be9a57275566595ada79bdffcd624a12fcf6435f6e6807416541b912f5ab"
-            ],
-            "version": "==1.6"
-        },
         "zope.annotation": {
             "hashes": [
                 "sha256:714c401a9a74f07a6447413a0f10ff2684f2712bd4e5f069ef98c54c42bab42a",
@@ -1579,6 +1572,13 @@
                 "sha256:6e1bf7409759b4da7202e2fafda657583d40731f3aeb5570796688b493e99079"
             ],
             "version": "==4.4"
+        },
+        "zope.sqlalchemy": {
+            "hashes": [
+                "sha256:63c4560fdd2d55c6e5658a22f6835a3c12eac1a3af8140a01400f7367aac91ed",
+                "sha256:9c53be9a57275566595ada79bdffcd624a12fcf6435f6e6807416541b912f5ab"
+            ],
+            "version": "==1.6"
         },
         "zope.structuredtext": {
             "hashes": [

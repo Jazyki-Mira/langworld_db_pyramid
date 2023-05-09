@@ -15,7 +15,8 @@ FILE_WITH_GENEALOGY_NAMES = (
 
 def test__init__fails_with_file_with_non_unique_doculect_ids():
     with pytest.raises(
-        DoculectInventoryValidatorError, match="repeating values in column <id>: ukrainian"
+        DoculectInventoryValidatorError,
+        match="repeating values in column <id>: ukrainian",
     ):
         _ = DoculectInventoryValidator(
             dir_with_feature_profiles=DIR_WITH_TEST_FEATURE_PROFILES,
@@ -52,10 +53,12 @@ def test__match_doculects_to_files_fails_with_more_doculects_than_files():
         file_with_doculects=DIR_WITH_VALIDATORS_TEST_FILES
         / "doculects_bad_more_doculects_than_files.csv",
     )
-    validator._match_files_to_doculects()  # this must not fail because all files correspond to doculects
+    # this must not fail because all files correspond to doculects
+    validator._match_files_to_doculects()
 
     with pytest.raises(
-        DoculectInventoryValidatorError, match="Doculect nogai has no file with feature profile"
+        DoculectInventoryValidatorError,
+        match="Doculect nogai has no file with feature profile",
     ):
         validator._match_doculects_to_files()
 
@@ -66,7 +69,8 @@ def test__match_files_to_doculects_fails_with_less_doculects_than_files():
         file_with_doculects=DIR_WITH_VALIDATORS_TEST_FILES
         / "doculects_bad_less_doculects_than_files1.csv",
     )
-    validator._match_doculects_to_files()  # this must not fail because all doculects correspond to files
+    # this must not fail because all doculects correspond to files
+    validator._match_doculects_to_files()
 
     with pytest.raises(
         DoculectInventoryValidatorError,
@@ -79,7 +83,8 @@ def test__match_files_to_doculects_fails_with_less_doculects_than_files():
         file_with_doculects=DIR_WITH_VALIDATORS_TEST_FILES
         / "doculects_bad_less_doculects_than_files2.csv",
     )
-    validator._match_doculects_to_files()  # this must not fail because all doculects correspond to files
+    # this must not fail because all doculects correspond to files
+    validator._match_doculects_to_files()
 
     with pytest.raises(
         DoculectInventoryValidatorError,

@@ -1,5 +1,5 @@
 from operator import attrgetter
-from typing import Any
+from typing import Any, Union
 
 from pyramid.request import Request
 from pyramid.view import view_config
@@ -7,7 +7,7 @@ from sqlalchemy import select
 
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
-from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, icon_for_object
+from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, CLLDPie, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
 from langworld_db_pyramid.views import get_doculect_from_params
 
@@ -28,22 +28,30 @@ def view_all_features_list_by_category(
 
 def get_feature_values_icons(
     request: Request,
-) -> tuple[models.Feature, list[models.FeatureValue], dict[Any, CLLDIcon]]:
+) -> tuple[models.Feature, list[models.FeatureValue], dict[Any, Union[CLLDIcon, CLLDPie]]]:
     feature = models.Feature.get_by_man_id(
         request=request, man_id=request.matchdict["feature_man_id"]
     )
 
-    # I sort values by number of doculects (descending), but if the number of doculects is
-    # the same, I have to sort by value ID (ascending). Hence, this trick with negative value ID
-    # (`.id` is auto-incremented integer): reverse sorting by negative value ID de facto produces
-    # ascending sorting by original value ID.
     values = sorted(
         [value for value in feature.values if value.type.name == "listed" and value.doculects],
-        key=lambda value: (len(value.doculects), -value.id),
-        reverse=True,
+        key=lambda value: value.id,
     )
 
-    return feature, values, icon_for_object(values)
+    # This will generate icons for all values if feature is regular
+    # or for all elementary values if the feature is_multiselect
+    icon_for_value = icon_for_object([v for v in values if not v.elements])
+
+    # construct icons for compound values from same colors as the icons of their elements
+    for compound_value in [v for v in values if v.elements]:
+        colors = []
+        for element in compound_value.elements:
+            # dotted notation makes mypy complain: CLLDPie has no .color, while CLLDPie is in Union
+            colors.append(getattr(icon_for_value[element], "color"))
+
+        icon_for_value[compound_value] = CLLDPie(colors)
+
+    return feature, values, icon_for_value
 
 
 @view_config(route_name="feature", renderer="langworld_db_pyramid:templates/feature.jinja2")
@@ -51,9 +59,9 @@ def get_feature_values_icons(
     route_name="feature_localized", renderer="langworld_db_pyramid:templates/feature.jinja2"
 )
 def view_feature_list_of_values(request: Request) -> dict[str, Any]:
-    # The list of values is no longer shown (because it would duplicate the interactive list),
-    # but it still makes sense to use the common function
-    feature, _, _ = get_feature_values_icons(request)
+    feature = models.Feature.get_by_man_id(
+        request=request, man_id=request.matchdict["feature_man_id"]
+    )
     return {
         "feature_name": getattr(feature, f"name_{request.locale_name}"),
         "man_id": feature.man_id,
@@ -78,4 +86,5 @@ def view_feature_map_of_values(request: Request) -> list[dict[str, Any]]:
             additional_popup_text=f"({getattr(feature, name_attr)}: {getattr(value, name_attr)})",
         )
         for value in values
+        # if not value.elements
     ]

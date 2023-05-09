@@ -59,8 +59,8 @@ class ListedValueAdder(Adder):
                     f"Row {row} already contains value you are trying to add"
                 )
 
-            # Keep updating those with each row.
-            # This means that at the last row of the feature they will reach the required values.
+            # Keep updating those with each row. This means that at the last row of the
+            # feature they will reach the required values.
             index_of_last_row_for_given_feature = i
             last_digit_of_value_id = int(row["id"].split(SEPARATOR)[-1])
             id_of_new_value = feature_id + SEPARATOR + str(last_digit_of_value_id + 1)
@@ -105,15 +105,19 @@ class ListedValueAdder(Adder):
                     value_ru = row["value_ru"].strip()
                     value_ru = value_ru[:-1] if value_ru.endswith(".") else value_ru
 
-                    new_value_with_variants: list[str] = [
-                        v.lower() for v in [new_value_ru] + custom_values_to_rename
-                    ]
+                    new_value_with_variants: list[str] = (
+                        [new_value_ru] + custom_values_to_rename
+                        if custom_values_to_rename
+                        else [new_value_ru]
+                    )
+                    new_value_with_variants = [v.lower() for v in new_value_with_variants]
+
                     if value_ru.lower() not in new_value_with_variants:
                         break
 
                     print(
                         f"{file.name}: changing row {i + 2} (feature {feature_id}). "
-                        f'Custom value <{row["value_ru"]}> will become listed value '
+                        f"Custom value <{row['value_ru']}> will become listed value "
                         f"<{new_value_ru}> ({new_value_id})"
                     )
                     row["value_type"] = "listed"
