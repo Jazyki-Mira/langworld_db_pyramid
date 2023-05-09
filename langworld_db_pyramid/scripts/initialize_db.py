@@ -224,7 +224,7 @@ class CustomModelInitializer:
             self.encyclopedia_volume_for_id[volume.id] = volume
 
     def _populate_families(self) -> None:
-        # make initial call to another function that will recursively call itself
+        # Make initial call to another function that will recursively call itself
         # until all families are processed
         self._process_genealogy_hierarchy(read_json_toml_yaml(self.file_with_genealogy_hierarchy))
 
