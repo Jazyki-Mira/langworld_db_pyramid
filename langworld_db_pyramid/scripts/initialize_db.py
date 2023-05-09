@@ -412,7 +412,10 @@ class CustomModelInitializer:
             except KeyError:
                 value = models.FeatureValue(
                     is_listed_and_has_doculects=True,
-                    man_id=feature_profile_row["value_id"],  # TODO get rid of & here too?
+                    # We leave the compound value separator in the value ID because it can be used
+                    # e.g. in the frontend to hide compound values from the legend.
+                    # But the value name can be prettified right here already.
+                    man_id=feature_profile_row["value_id"],
                     name_ru=feature_profile_row["value_ru"].replace("&", "; "),
                     name_en="",  # filled in a couple of lines below when the elements are analyzed
                     type=self.value_type_for_name["listed"],
