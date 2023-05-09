@@ -157,7 +157,7 @@ class TestCustomModelInitializer:
         ).one()
         assert k14_4.compounds[0] is compound
 
-        # checking a compound value and its elements in a doculect
+        # checking compound value and its elements in a doculect
         amharic: models.Doculect = dbsession.scalars(
             select(models.Doculect).where(models.Doculect.name_en == "Amharic")
         ).one()
