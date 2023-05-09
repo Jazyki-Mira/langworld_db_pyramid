@@ -157,6 +157,13 @@ class TestCustomModelInitializer:
         ).one()
         assert k14_4.compounds[0] is compound
 
+        # checking a compound value and its elements in a doculect
+        amharic: models.Doculect = dbsession.scalars(
+            select(models.Doculect).where(models.Doculect.name_en == "Amharic")
+        ).one()
+        for value_id in ("K-14-4&K-14-5&K-14-6&K-14-7", "K-14-4", "K-14-5", "K-14-6", "K-14-7"):
+            assert value_id in [value.man_id for value in amharic.feature_values]
+
     def test__delete_all_data(self, dbsession, test_db_initializer):
         test_db_initializer.setup_models()
 
