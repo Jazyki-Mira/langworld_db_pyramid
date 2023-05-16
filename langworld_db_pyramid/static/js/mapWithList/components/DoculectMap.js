@@ -53,7 +53,7 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
       tileSize: 512,
       zoomOffset: -1,
       accessToken: mapboxToken,
-      minZoom: 2.5, // 2 will show all languages but will be too small
+      minZoom: 2,
     }).addTo(mapRef.current);
 
     setMapLoaded(true);
