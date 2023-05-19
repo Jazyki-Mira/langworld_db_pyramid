@@ -41,7 +41,10 @@
     {% for volume in volumes %}
       <h3 class="w3-text-darkest-blue-grey">{% trans %}Том{% endtrans %} {{ volume.id }}. {{ volume[request.locale_name] }}</h2>
       {# Here I must sort and check for presence of feature profile as I access `.doculects` attribute of `volume` #}
+      <details>
+      <summary class="w3-text-dark-blue-grey w3-large">{% trans %}Список языков{% endtrans %}</summary>
       {{ ul_with_doculects(volume.doculects|sort(attribute=name_attr)|selectattr("has_feature_profile")) }}
+      </details>
     {% endfor %}
   </div>
 
