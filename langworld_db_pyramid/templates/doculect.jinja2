@@ -39,8 +39,8 @@
   <hr/>
   <h2 class="w3-text-darkest-blue-grey">{% trans %}В энциклопедии{% endtrans %}</h2>
   {% if doculect.encyclopedia_volume.file_name %}
-    <p><a href="https://iling-ran.ru/staff_only/langworld_proto/static/pdf_volumes/{{ doculect.encyclopedia_volume.file_name }}#page={{ doculect.page|int + doculect.encyclopedia_volume.pagenum_offset|int }}" target="_blank"><span class="w3-large"><strong>{% trans %}Том{% endtrans %} {{ doculect.encyclopedia_volume.id }}. {{ doculect.encyclopedia_volume[request.locale_name] }}</strong></span></a><br/>
-    {% trans %}Файл PDF будет загружен полностью и затем открыт{% endtrans %} <strong>{% trans %}в новом окне{% endtrans %}</strong> {% trans %}на нужной странице{% endtrans %}.</p>
+    <p><a href="https://iling-ran.ru/staff_only/langworld_proto/static/pdf_volumes/{{ doculect.encyclopedia_volume.file_name }}#page={{ doculect.page|int + doculect.encyclopedia_volume.pagenum_offset|int }}" target="_blank"><img src="{{request.static_url('langworld_db_pyramid:static/images/pdf-30.png')}}" alt="PDF" title="PDF" height="25px" style="margin-right: 5px; vertical-align: text-bottom;"/><span class="w3-large"><strong>{% trans %}Том{% endtrans %} {{ doculect.encyclopedia_volume.id }}. {{ doculect.encyclopedia_volume[request.locale_name] }}</strong></span></a><br/>
+    ({% trans %}Файл PDF будет загружен полностью и затем открыт{% endtrans %} <strong>{% trans %}в новом окне{% endtrans %}</strong> {% trans %}на нужной странице{% endtrans %})</p>
   {% else %}
     <p><span class="w3-large">{% trans %}Том{% endtrans %} {{ doculect.encyclopedia_volume.id }}. {{ doculect.encyclopedia_volume[request.locale_name] }}</span><br/>
     <span class="w3-text-deep-orange">{% trans %}Том энциклопедии в формате PDF на данный момент недоступен{% endtrans %}</span>.</p>
