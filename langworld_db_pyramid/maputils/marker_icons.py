@@ -1,7 +1,10 @@
+import math
 from collections.abc import Iterator
 from typing import Any, Optional, Union
+from xml.sax.saxutils import escape
 
 from clldutils import svg
+from clldutils.color import qualitative_colors, rgb_as_hex
 
 COLORS = [
     "a6cee3",
@@ -17,7 +20,6 @@ COLORS = [
     "ffff99",
     "b15928",
 ]
-
 SHAPES = ("c", "s", "t", "d", "f")
 
 
@@ -86,7 +88,7 @@ class CLLDIcon(AbstractCLLDIcon):
         paths = {
             "s": 'path d="M10 10 H30 V30 H10 V10"',
             "d": 'path d="M20 8 L32 20 L20 32 L8 20 L20 8"',
-            "c": 'circle cx="12" cy="12" r="11"',  # cx and cy match positioning of CLLDPie
+            "c": 'circle cx="20" cy="20" r="11"',
             "f": 'path d="M8 10 L32 10 L20 32 L8 10"',
             "t": 'path d="M8 32 L32 32 L20 10 L8 32"',
         }
@@ -96,7 +98,7 @@ class CLLDIcon(AbstractCLLDIcon):
             paths[spec[0]],
             svg.style(stroke="#585858", fill=svg.rgb_as_hex(spec[1:]), opacity=opacity),
         )
-        return svg.svg(elem, height=25, width=25)
+        return svg.svg(elem, height=40, width=40)
 
 
 class CLLDPie(AbstractCLLDIcon):
@@ -111,12 +113,86 @@ class CLLDPie(AbstractCLLDIcon):
 
     @property
     def svg_tag(self) -> str:
-        return svg.pie(
+        return self.pie(
             # generate a list of equal numbers that add up to 100
             data=[100 / len(self.colors)] * len(self.colors),
             colors=self.colors,
             width=24,
         )
+
+    @staticmethod
+    def pie(
+        data: list[Union[float, int]],
+        colors: Optional[list[str]] = None,
+        titles: Optional[list[str]] = None,
+        width: int = 34,
+        stroke_circle: bool = False,
+    ) -> str:
+        """
+        An SVG pie chart.
+
+        **Copied** from `clldutils.svg` with **changed cx, cy and width**
+        to match coordinates of circle marker.
+        (Also changed some dotted syntax in imported modules).
+        """
+        colors = qualitative_colors(len(data)) if colors is None else colors
+        assert len(data) == len(colors)
+        zipped = [(d, c) for d, c in zip(data, colors) if d != 0]
+        data, colors = [z[0] for z in zipped], [z[1] for z in zipped]
+        # (width + width / 1.5) instead of just width ensures a match with circle marker's position
+        cx = cy = round((width + width / 1.5) / 2, 1)
+        radius = round((width - 2) / 2, 1)
+        current_angle_rad = 0
+        svg_content = []
+        total = sum(data)
+        titles = titles or [None] * len(data)  # type: ignore
+        stroke_circle = "black" if stroke_circle is True else stroke_circle or "none"  # type: ignore  # noqa
+
+        def endpoint(angle_rad: float) -> tuple[float, float]:
+            """
+            Calculate position of point on circle given an angle, a radius, and the location
+            of the center of the circle. Zero line points west.
+            """
+            return (
+                round(cx - (radius * math.cos(angle_rad)), 1),
+                round(cy - (radius * math.sin(angle_rad)), 1),
+            )
+
+        if len(data) == 1:
+            svg_content.append(
+                '<circle cx="{}" cy="{}" r="{}" style="stroke:{}; fill:{};">'.format(
+                    cx, cy, radius, stroke_circle, rgb_as_hex(colors[0])
+                )
+            )
+            if titles[0]:
+                svg_content.append(f"<title>{escape(titles[0])}</title>")
+            svg_content.append("</circle>")
+            return svg.svg("".join(svg_content), height=width, width=width)
+
+        for angle_deg, color, title in zip([360.0 / total * d for d in data], colors, titles):
+            radius1 = "M{},{} L{},{}".format(cx, cy, *endpoint(current_angle_rad))
+            current_angle_rad += math.radians(angle_deg)  # type: ignore
+            arc = "A{},{} 0 {},1 {} {}".format(
+                radius, radius, 1 if angle_deg > 180 else 0, *endpoint(current_angle_rad)  # noqa
+            )
+            radius2 = f"L{cx},{cy}"
+            svg_content.append(
+                '<path d="{} {} {}" style="{}" transform="rotate(90 {} {})">'.format(
+                    radius1, arc, radius2, svg.style(fill=rgb_as_hex(color)), cx, cy
+                )
+            )
+            if title:
+                svg_content.append(f"<title>{escape(title)}</title>")
+            svg_content.append("</path>")
+
+        if stroke_circle != "none":  # type: ignore
+            svg_content.append(
+                f'<circle cx="{cx}" cy="{cy}" r="{radius}" style="stroke:{stroke_circle}; '
+                f'fill:none;"/>'
+            )
+
+        width = int(width * 1.5)  # to show full pie while still matching circle marker's position
+        return svg.svg("".join(svg_content), height=width, width=width)
 
 
 def generate_map_icons() -> Iterator[CLLDIcon]:
