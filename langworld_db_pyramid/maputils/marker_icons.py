@@ -20,7 +20,6 @@ COLORS = [
     "ffff99",
     "b15928",
 ]
-COLOR_FOR_EMPTY_VALUE = "faf9f6"  # "off-white"
 SHAPES = ("c", "s", "t", "d", "f")
 
 
