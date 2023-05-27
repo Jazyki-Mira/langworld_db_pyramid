@@ -1,28 +1,32 @@
-# Translations template for PROJECT.
-# Copyright (C) 2022 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# Translations template for Jazyki Mira online database.
+# Copyright (C) 2023 Dmitry Kolomatskiy
+# This file is distributed under the same license as the Jazyki mira online database.
+# Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>, 2023.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-10-05 19:05+0300\n"
+"Report-Msgid-Bugs-To: 58207913+lemontree210@users.noreply.github.com\n"
+"POT-Creation-Date: 2023-05-27 13:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.12.1\n"
 
 #: locale/in_code_translation_strings.py:5
 msgid "Языки на видимой области карты"
 msgstr ""
 
-#: locale/in_code_translation_strings.py:6
+#: locale/in_code_translation_strings.py:7
 msgid "Подходящие языки на видимой области карты"
+msgstr ""
+
+#: locale/in_code_translation_strings.py:9
+msgid "Нет данных или неприменимо"
 msgstr ""
 
 #: templates/404.jinja2:3
@@ -33,7 +37,8 @@ msgstr ""
 msgid "Перейти на главную"
 msgstr ""
 
-#: templates/all_doculects_list.jinja2:5 templates/base.jinja2:44
+#: templates/all_doculects_list.jinja2:5 templates/all_doculects_list.jinja2:45
+#: templates/base.jinja2:44
 msgid "Список языков"
 msgstr ""
 
@@ -62,7 +67,7 @@ msgstr ""
 msgid "на общей карте"
 msgstr ""
 
-#: templates/all_features_list.jinja2:3 templates/base.jinja2:46
+#: templates/all_features_list.jinja2:3 templates/base.jinja2:47
 #: templates/doculect.jinja2:98 templates/query_wizard.jinja2:51
 msgid "Признаки"
 msgstr ""
@@ -75,7 +80,7 @@ msgstr ""
 msgid "Главная"
 msgstr ""
 
-#: templates/base.jinja2:47 templates/doculect.jinja2:49
+#: templates/base.jinja2:46 templates/doculect.jinja2:49
 #: templates/families.jinja2:7 templates/query_wizard.jinja2:41
 msgid "Генеалогия"
 msgstr ""
@@ -111,7 +116,7 @@ msgstr ""
 msgid "Варианты названия (в т.ч. исторические и самоназвания)"
 msgstr ""
 
-#: templates/doculect.jinja2:40 templates/doculect.jinja2:133
+#: templates/doculect.jinja2:40 templates/doculect.jinja2:142
 msgid "В энциклопедии"
 msgstr ""
 
@@ -163,19 +168,19 @@ msgstr ""
 msgid "Нет заполненных признаков для этого языка."
 msgstr ""
 
-#: templates/doculect.jinja2:145
+#: templates/doculect.jinja2:154
 msgid "Незаполненные признаки"
 msgstr ""
 
-#: templates/doculect.jinja2:149
+#: templates/doculect.jinja2:158
 msgid "В энциклопедии отсутствует информация"
 msgstr ""
 
-#: templates/doculect.jinja2:154
+#: templates/doculect.jinja2:163
 msgid "В энциклопедии присутствует явное указание на отсутствие данных"
 msgstr ""
 
-#: templates/doculect.jinja2:159
+#: templates/doculect.jinja2:168
 msgid "Признак неприменим к этому языку"
 msgstr ""
 

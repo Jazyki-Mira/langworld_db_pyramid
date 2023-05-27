@@ -335,7 +335,7 @@ def test_features_view_all_features_list_by_category(
 
 def test_features_get_feature_values_icons(dummy_request, setup_models_once_for_test_module):
     dummy_request.matchdict["feature_man_id"] = "H-6"
-    feature, values, icon_for_value = get_feature_values_icons(dummy_request)
+    feature, values, icon_for_value, empty_values = get_feature_values_icons(dummy_request)
 
     assert feature.man_id == "H-6"
     assert len(values) == 43 - 9  # there are 43 in total but 9 have no matching doculects
@@ -343,6 +343,7 @@ def test_features_get_feature_values_icons(dummy_request, setup_models_once_for_
     assert len({i.svg_tag for i in icon_for_value.values()}) == len(
         values
     )  # make sure all icons are unique
+    assert len(empty_values) == 1  # only not_stated
 
 
 def test_features_get_feature_values_icons_not_found(
@@ -368,8 +369,10 @@ def test_features_view_feature_map_of_values(
     dummy_request.matchdict["feature_man_id"] = "H-6"
     groups = view_feature_map_of_values(dummy_request)
     # the number of groups must be equal to number of values that have at least one doculect
-    assert len(groups) == 43 - 9
-    assert sum(len(group["doculects"]) for group in groups) == 104
+    # + 1 for one group with white markers for empty values
+    assert len(groups) == 43 - 9 + 1
+    # 104 doculects with listed values, 154 with empty values
+    assert sum(len(group["doculects"]) for group in groups) == 104 + 154
 
 
 def test_notfound_view(dummy_request):

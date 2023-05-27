@@ -22,6 +22,9 @@ COLORS = [
 ]
 SHAPES = ("c", "s", "t", "d", "f")
 
+COLOR_FOR_EMPTY_VALUE = "faf9f6"  # "off-white"
+OPACITY_FOR_EMPTY_VALUE = "45%"
+
 
 class AbstractCLLDIcon:
     def __eq__(self, other: object) -> bool:
@@ -57,20 +60,20 @@ class CLLDIcon(AbstractCLLDIcon):
     otherwise some characters will be escaped.
     """
 
-    def __init__(self, shape_and_color: str) -> None:
+    def __init__(self, shape_and_color: str, opacity: Union[str, None] = None) -> None:
         super().__init__()
         self.shape_and_color = shape_and_color
         self.shape, self.color = self.shape_and_color[0], self.shape_and_color[1:]
+        self.opacity = opacity
 
     def __repr__(self) -> str:
         return f"CLLDIcon (shape {self.shape}, color #{self.color})"
 
     @property
     def svg_tag(self) -> str:
-        return self._generate_svg(self.shape_and_color)
+        return self._generate_svg()
 
-    @staticmethod
-    def _generate_svg(spec: str, opacity: Optional[str] = None) -> str:
+    def _generate_svg(self) -> str:
         """
         Creates an SVG graphic according to a spec as used for map icons in `clld` apps.
 
@@ -78,10 +81,6 @@ class CLLDIcon(AbstractCLLDIcon):
         with `paths` changed to produce smaller icons
         (since `icon()` does not allow to override the `paths`).
 
-        :param spec: Icon spec of the form "(s|d|c|f|t)rrggbb" where the first character defines
-          a shape (s=square, d=diamond, c=circle, f=upside-down triangle, t=triangle) and "rrggbb"
-          specifies a color as hex triple.
-        :param opacity: Opacity
         :return: SVG XML
         """
         # different from clldutils.svg.icon() - smaller shapes:
@@ -95,8 +94,12 @@ class CLLDIcon(AbstractCLLDIcon):
         # Changed calls to functions in clldutils.svg to dotted notation:
         elem = '<{} style="{}"/>'.format(
             # changed 'black' to dark grey hex (matter of taste)
-            paths[spec[0]],
-            svg.style(stroke="#585858", fill=svg.rgb_as_hex(spec[1:]), opacity=opacity),
+            paths[self.shape_and_color[0]],
+            svg.style(
+                stroke="#585858",
+                fill=svg.rgb_as_hex(self.shape_and_color[1:]),
+                opacity=self.opacity,
+            ),
         )
         return svg.svg(elem, height=40, width=40)
 
