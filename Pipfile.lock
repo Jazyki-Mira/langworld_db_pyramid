@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d38eb2fe45764f0395266cd1c2accdf4e1a716ad4ab6b8906582907d29707578"
+            "sha256": "aea92c598a51c7a5ac320dc6c6855758e6a1fa226262464ddd1e42bf62c88d21"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -876,7 +876,7 @@
         },
         "sanitized-package": {
             "editable": true,
-            "path": "./langworld_db_data"
+            "path": "."
         },
         "setuptools": {
             "hashes": [
@@ -1653,7 +1653,7 @@
                 "sha256:3934b30ca1b9f292376d9db15b19446088d12ec58629bc3f0da28fd55fb633a1",
                 "sha256:5a49ab92e3b7b71d96cd6bfcc4df14efefc9dfa96ea19045815914a6ab6b1fe2"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==1.2.3"
         },
         "asttokens": {
@@ -2170,11 +2170,11 @@
         },
         "pytest": {
             "hashes": [
-                "sha256:cdcbd012c9312258922f8cd3f1b62a6580fdced17db6014896053d47cddf9295",
-                "sha256:ee990a3cc55ba808b80795a79944756f315c67c12b56abd3ac993a7b8c17030b"
+                "sha256:78bf16451a2eb8c7a2ea98e32dc119fd2aa758f1d5d66dbf0a59d69a3969df32",
+                "sha256:b4bf8c45bd59934ed84001ad51e11b4ee40d40a1229d2c79f9c592b0a3f6bd8a"
             ],
             "index": "pypi",
-            "version": "==7.3.2"
+            "version": "==7.4.0"
         },
         "pytest-cov": {
             "hashes": [
