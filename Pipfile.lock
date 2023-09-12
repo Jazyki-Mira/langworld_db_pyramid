@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4ade7d8270433ffa0a359dac4cf513cefd14b222b7395492a88c37a12e9ad87c"
+            "sha256": "fc221a03a286902875bc032f6adfcc1eddc8115fb9d8c83c2e6a838c8ac71d7c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -923,11 +923,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:3d4dfa6d95f1b101d695a6160a7626e15583af71a5f52176efa5d39a054d475d",
-                "sha256:3d8083eed2d13afc9426f227b24fd1659489ec107c0e86cec2ffdde5c92e790b"
+                "sha256:4ac1475276d2f1c48684874089fefcd83bd7162ddaafb81fac866ba0db282a87",
+                "sha256:b454a35605876da60632df1a60f736524eb73cc47bbc9f3f1ef1b644de74fd2a"
             ],
             "index": "pypi",
-            "version": "==68.1.2"
+            "version": "==68.2.2"
         },
         "six": {
             "hashes": [
@@ -1173,11 +1173,11 @@
         },
         "zope-sqlalchemy": {
             "hashes": [
-                "sha256:1b8f2d1fbb792577026a384969ef7e172944d0cd39b5d1a04d1e6288ba490b0b",
-                "sha256:332ddcb71851ab3081b765a4dc659d1f8f822f870265b7add390fba5aceb5411"
+                "sha256:d9c2c3be695c213c5e22b7f7c6a4a214fa8eb5940b033465ba1c10a9d8b346db",
+                "sha256:fdc7d65d8da335a34b90fb993e8217ef12808bad3025d2e3a6720db4138e4985"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==3.0"
+            "version": "==3.1"
         },
         "zope.annotation": {
             "hashes": [
@@ -1989,11 +1989,11 @@
         },
         "identify": {
             "hashes": [
-                "sha256:287b75b04a0e22d727bc9a41f0d4f3c1bcada97490fa6eabb5b28f0e9097e733",
-                "sha256:fdb527b2dfe24602809b2201e033c2a113d7bdf716db3ca8e3243f735dcecaba"
+                "sha256:87816de144bf46d161bd5b3e8f5596b16cade3b80be537087334b26bc5c177f3",
+                "sha256:94bb59643083ebd60dc996d043497479ee554381fbc5307763915cda49b0e78f"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==2.5.27"
+            "version": "==2.5.28"
         },
         "idna": {
             "hashes": [
@@ -2351,11 +2351,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:3d4dfa6d95f1b101d695a6160a7626e15583af71a5f52176efa5d39a054d475d",
-                "sha256:3d8083eed2d13afc9426f227b24fd1659489ec107c0e86cec2ffdde5c92e790b"
+                "sha256:4ac1475276d2f1c48684874089fefcd83bd7162ddaafb81fac866ba0db282a87",
+                "sha256:b454a35605876da60632df1a60f736524eb73cc47bbc9f3f1ef1b644de74fd2a"
             ],
             "index": "pypi",
-            "version": "==68.1.2"
+            "version": "==68.2.2"
         },
         "six": {
             "hashes": [
