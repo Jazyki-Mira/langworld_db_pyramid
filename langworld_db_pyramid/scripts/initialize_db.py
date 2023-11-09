@@ -238,7 +238,11 @@ class CustomModelInitializer:
             if not isinstance(node, (str, dict)):
                 raise TypeError(f"Node cannot be of type {type(node)} ({node})")
 
-            manual_id = list(node.keys())[0] if isinstance(node, dict) else node
+            # ternary operator is shorter but mypy will not like it
+            if isinstance(node, dict):  # noqa:SIM108
+                manual_id = list(node.keys())[0]
+            else:
+                manual_id = node
 
             family = models.Family(
                 man_id=manual_id,
