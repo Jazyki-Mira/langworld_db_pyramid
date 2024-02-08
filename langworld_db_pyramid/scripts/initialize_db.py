@@ -159,6 +159,8 @@ class CustomModelInitializer:
                 name_en=feature_row["en"],
                 name_ru=feature_row["ru"],
                 category=self.category_for_id[feature_row["id"].split("-")[0]],
+                description_html_en=feature_row["description_formatted_en"],
+                description_html_ru=feature_row["description_formatted_ru"],
                 # no zeros in this column, so bool(int()) will fail
                 is_multiselect=feature_row["is_multiselect"] == "1",
             )
