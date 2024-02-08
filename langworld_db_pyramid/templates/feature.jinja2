@@ -13,6 +13,19 @@
 
 {% block h1 %}{{ self.title() }}{% endblock h1 %}
 
+{% block map_and_list %}
+
+    <div class="feature-description" id="feature-description">
+        <details title="Click to expand">
+            <summary class="w3-text-dark-blue-grey w3-large"><em><strong>Описание признака</strong></em></summary>
+            {{ description }}
+        </details>
+    </div>
+
+    <div id="map-and-list"></div>
+{% endblock map_and_list %}
+
+
 {% block scripts %}
 {{ super() }}
 <script src="{{ request.static_url('langworld_db_pyramid:static/js/doculectMapForFeature.js') }}" type="module"></script>

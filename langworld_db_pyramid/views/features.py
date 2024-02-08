@@ -83,9 +83,11 @@ def view_feature_list_of_values(request: Request) -> dict[str, Any]:
     feature = models.Feature.get_by_man_id(
         request=request, man_id=request.matchdict["feature_man_id"]
     )
+    locale = request.locale_name
     return {
-        "feature_name": getattr(feature, f"name_{request.locale_name}"),
+        "feature_name": getattr(feature, f"name_{locale}"),
         "man_id": feature.man_id,
+        "description": getattr(feature, f"description_html_{locale}"),
         "doculect_in_focus": get_doculect_from_params(request),
     }
 
