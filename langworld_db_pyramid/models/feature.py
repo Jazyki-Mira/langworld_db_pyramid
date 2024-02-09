@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from langworld_db_pyramid.dbutils.query_mixin import QueryMixin
@@ -13,6 +13,8 @@ class Feature(QueryMixin, Base):  # type: ignore[misc]
     is_multiselect = Column(Boolean)
     name_en = Column(String(100))
     name_ru = Column(String(100))
+    description_html_en = Column(Text)
+    description_html_ru = Column(Text)
 
     category = relationship("FeatureCategory", back_populates="features")
     values = relationship("FeatureValue", back_populates="feature")
