@@ -6,7 +6,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd ${SCRIPT_DIR}/../
 
 echo "Downloading data: an editor will be opened for you to enter a commit message"
-git subtree pull --prefix langworld_db_data https://github.com/lemontree210/langworld_db_data/ master --squash
+git subtree pull --prefix langworld_db_data https://github.com/jazyki-mira/langworld_db_data/ master --squash
 
 echo "Re-populating the database"
 initialize_langworld_db_pyramid_db config/production.ini
