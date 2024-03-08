@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+toml = "*"
+pyyaml = "*"
+openpyxl = "~=3.1.2"
+pycldf = "==1.27.0"
+pyperclip = "~=1.8.2"
+setuptools = "~= 69.1.1"
+certifi = "~=2024.2.2"
+
+[dev-packages]
+black = "*"
+flake8 = "*"
+icecream = "*"
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
+ruff = "*"
+isort = "*"
+pre-commit = "*"
+
+[requires]
+python_version = "3.9"
