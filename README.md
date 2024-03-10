@@ -1,6 +1,6 @@
 ![GitHub Actions](https://github.com/lemontree210/langworld_db_pyramid/actions/workflows/pytest.yml/badge.svg)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/lemontree210/langworld_db_pyramid/master.svg)](https://results.pre-commit.ci/latest/github/lemontree210/langworld_db_pyramid/master)
-[![codecov](https://codecov.io/gh/lemontree210/langworld_db_pyramid/branch/master/graph/badge.svg?token=WUYWPQ6CJ6)](https://codecov.io/gh/lemontree210/langworld_db_pyramid)
+[![codecov](https://codecov.io/gh/Jazyki-Mira/langworld_db_pyramid/graph/badge.svg?token=WUYWPQ6CJ6)](https://codecov.io/gh/Jazyki-Mira/langworld_db_pyramid)
 
 # Jazyki Mira (Languages of the World) online database
 
