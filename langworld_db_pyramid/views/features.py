@@ -87,7 +87,8 @@ def view_feature_list_of_values(request: Request) -> dict[str, Any]:
     return {
         "feature_name": getattr(feature, f"name_{locale}"),
         "man_id": feature.man_id,
-        "description": getattr(feature, f"description_html_{locale}"),
+        "feature_description": getattr(feature, f"description_html_{locale}"),
+        "values": feature.values,
         "doculect_in_focus": get_doculect_from_params(request),
     }
 
