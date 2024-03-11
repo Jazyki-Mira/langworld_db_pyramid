@@ -1,15 +1,17 @@
 # English translations for Jazyki Mira online database.
-# Copyright (C) 2023 Dmitry Kolomatskiy
-# This file is distributed under the same license as the Jazyki Mira online database.
-# Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>, 2023.
+# Copyright (C) 2024 Dmitry Kolomatskiy
+# This file is distributed under the same license as the Jazyki Mira online
+# database.
+# Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: 58207913+lemontree210@users.noreply.github.com\n"
-"POT-Creation-Date: 2023-05-27 13:54+0300\n"
+"POT-Creation-Date: 2024-03-11 13:39+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
-"Last-Translator: Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>\n"
+"Last-Translator: Dmitry Kolomatskiy "
+"<58207913+lemontree210@users.noreply.github.com>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -215,9 +217,17 @@ msgstr "without further subdivision"
 msgid "Языки, принадлежащие к подсемьям выбранной семьи"
 msgstr "Languages belonging to subfamilies of the selected family"
 
-#: templates/feature.jinja2:10
+#: templates/feature.jinja2:11
 msgid "на карте значений признака"
 msgstr "on the map of values of feature"
+
+#: templates/feature.jinja2:21
+msgid "Описание признака и значений"
+msgstr "Description of feature and its values"
+
+#: templates/feature.jinja2:24
+msgid "Значения"
+msgstr "Values"
 
 #: templates/home.jinja2:8
 msgid "Версия 4 (онлайн). Веб-приложение находится в процессе разработки."

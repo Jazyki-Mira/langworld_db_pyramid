@@ -1,6 +1,7 @@
 {% extends "base_depth2_page_with_map.jinja2" %}
 
 {% set name_attr = "name_" + request.locale_name %}
+{% set description_attr = "description_html_" + request.locale_name %}
 
 {% block title %}
   {% if doculect_in_focus == None %}
@@ -14,11 +15,19 @@
 {% block h1 %}{{ self.title() }}{% endblock h1 %}
 
 {% block map_and_list %}
-    {% if description %}
+    {% if feature_description %}
         <div class="feature-description" id="feature-description">
             <details title="Click to expand">
-                <summary class="w3-text-deep-orange w3-large"><strong>Описание признака</strong></summary>
-                <div class="feature-description">{{ description | safe }}</div>
+                <summary class="w3-text-deep-orange w3-large"><strong>{% trans %}Описание признака и значений{% endtrans %}</strong></summary>
+                <span class="feature-description">{{ feature_description | safe }}</span>
+                {% for value in values | sort(attribute="man_id") | selectattr("is_listed_and_has_doculects") %}
+                    {% if loop.first %}<br><br><span class="w3-text-deep-orange feature-description"><strong>{% trans %}Значения{% endtrans %}:</strong></span><ol>{% endif %}
+                    <li>
+                        <strong>{{ value[name_attr] }}</strong> <span class="w3-text-dark-blue-grey w3-small">[{{ value.man_id }}]</span>
+                        {% if value[description_attr] %}&mdash; <span class="value-description">{{ value[description_attr] }}</span>{% endif %}
+                    </li>
+                    {% if loop.last %}</ol>{% endif %}
+                {% endfor %}
             </details>
         </div>
     {% endif %}

@@ -193,6 +193,8 @@ class CustomModelInitializer:
                 man_id=value_row["id"],
                 name_en=value_row["en"],
                 name_ru=value_row["ru"],
+                description_html_en=value_row["description_formatted_en"],
+                description_html_ru=value_row["description_formatted_ru"],
                 feature=self.feature_for_id[value_row["feature_id"]],
                 type=self.value_type_for_name["listed"],
             )
