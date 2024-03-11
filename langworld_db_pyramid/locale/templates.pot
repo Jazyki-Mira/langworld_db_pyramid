@@ -212,12 +212,16 @@ msgstr ""
 msgid "Языки, принадлежащие к подсемьям выбранной семьи"
 msgstr ""
 
-#: templates/feature.jinja2:10
+#: templates/feature.jinja2:11
 msgid "на карте значений признака"
 msgstr ""
 
-#: templates/feature.jinja2:20
+#: templates/feature.jinja2:21
 msgid "Описание признака и значений"
+msgstr ""
+
+#: templates/feature.jinja2:24
+msgid "Значения"
 msgstr ""
 
 #: templates/home.jinja2:8
