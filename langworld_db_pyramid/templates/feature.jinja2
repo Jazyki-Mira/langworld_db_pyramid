@@ -17,8 +17,8 @@
     {% if description %}
         <div class="feature-description" id="feature-description">
             <details title="Click to expand">
-                <summary class="w3-text-deep-orange w3-large"><strong>Описание признака</strong></summary>
-                <div class="feature-description">{{ description | safe }}</div>
+                <summary class="w3-text-deep-orange w3-large"><strong>{% trans %}Описание признака и значений{% endtrans %}</strong></summary>
+                <div class="feature-description"><p>{{ description | safe }}</p></div>
             </details>
         </div>
     {% endif %}

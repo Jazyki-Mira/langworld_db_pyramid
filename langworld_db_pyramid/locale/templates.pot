@@ -1,14 +1,14 @@
 # Translations template for Jazyki Mira online database.
-# Copyright (C) 2023 Dmitry Kolomatskiy
+# Copyright (C) 2024 Dmitry Kolomatskiy
 # This file is distributed under the same license as the Jazyki mira online database.
-# Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>, 2023.
+# Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: 58207913+lemontree210@users.noreply.github.com\n"
-"POT-Creation-Date: 2023-05-27 13:54+0300\n"
+"POT-Creation-Date: 2024-03-11 12:11+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -214,6 +214,10 @@ msgstr ""
 
 #: templates/feature.jinja2:10
 msgid "на карте значений признака"
+msgstr ""
+
+#: templates/feature.jinja2:20
+msgid "Описание признака и значений"
 msgstr ""
 
 #: templates/home.jinja2:8
