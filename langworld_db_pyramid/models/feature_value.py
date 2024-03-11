@@ -19,6 +19,9 @@ class FeatureValue(QueryMixin, Base):  # type: ignore[misc]
     # because comments relate to an occurrence of a particular value
     # in a particular doculect - not to the abstract value itself
 
+    description_html_en = Column(String(255))
+    description_html_ru = Column(String(255))
+
     # Values for this column must be calculated after the database is filled with doculects
     # This may not be optimal, but it speeds up the rendering of query wizard significantly
     # because the expensive filtering no longer has to be done at rendering time.
