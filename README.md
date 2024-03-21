@@ -1,5 +1,5 @@
-![GitHub Actions](https://github.com/lemontree210/langworld_db_pyramid/actions/workflows/pytest.yml/badge.svg)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/lemontree210/langworld_db_pyramid/master.svg)](https://results.pre-commit.ci/latest/github/lemontree210/langworld_db_pyramid/master)
+![GitHub Actions](https://github.com/Jazyki-Mira/langworld_db_pyramid/actions/workflows/pytest.yml/badge.svg)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Jazyki-Mira/langworld_db_pyramid/master.svg)](https://results.pre-commit.ci/latest/github/Jazyki-Mira/langworld_db_pyramid/master)
 [![codecov](https://codecov.io/gh/Jazyki-Mira/langworld_db_pyramid/graph/badge.svg?token=WUYWPQ6CJ6)](https://codecov.io/gh/Jazyki-Mira/langworld_db_pyramid)
 
 # Jazyki Mira (Languages of the World) online database
@@ -24,7 +24,7 @@ for this package are stored in a [separate directory](tests).
 ### Clone repository (and `cd` into package directory)
 
 ```bash
-git clone https://github.com/lemontree210/langworld_db_pyramid/; cd langworld_db_pyramid
+git clone https://github.com/Jazyki-Mira/langworld_db_pyramid/; cd langworld_db_pyramid
 ```
 
 ### Copy default [PasteDeploy](https://pastedeploy.readthedocs.io/en/latest/index.html) `.ini` files and edit them if necessary
