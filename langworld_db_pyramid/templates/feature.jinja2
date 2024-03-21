@@ -20,7 +20,7 @@
             <details title="Click to expand">
                 <summary class="w3-text-deep-orange w3-large"><strong>{% trans %}Описание признака и значений{% endtrans %}</strong></summary>
                 <span class="feature-description">{{ feature_description | safe }}</span>
-                {% for value in values | sort(attribute="man_id") | selectattr("is_listed_and_has_doculects") %}
+                {% for value in values | sort(attribute="man_id") | selectattr("is_listed_and_has_doculects") | rejectattr("elements") %}
                     {% if loop.first %}<br><br><span class="w3-text-deep-orange feature-description"><strong>{% trans %}Значения{% endtrans %}:</strong></span><ol>{% endif %}
                     <li>
                         <strong>{{ value[name_attr] }}</strong> <span class="w3-text-dark-blue-grey w3-small">[{{ value.man_id }}]</span>
