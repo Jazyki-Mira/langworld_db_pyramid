@@ -796,46 +796,35 @@
 
 - Рудиментарное противопоставление - недифференцированность именительного и винительного падежей у имен среднего рода: [древнеперсидский](../feature_profiles/old_persian.csv)
 - не очень понятный признак. может ли быть так, что (не)одушевленность не выражается никак?: [джого](../feature_profiles/jogo.csv)
-## G-1: Структура числа
+## G-1: Категория числа у существительных
 
 - Единственное, множественное и собирательное: [ванеци](../feature_profiles/waneci.csv)
-## G-2: Маркирование единственного числа
+## G-2: Маркирование единственного числа существительных
 
 - Нулевой показатель ед. числа существительных. Морфологические показатели ед. и мн. числа в системе глагола: [йезди и кермани](../feature_profiles/yazdi_and_kermani.csv)
 - Нулевой показатель ед.числа существительных; личные окончания ед. и мн. числа в системе глагола: [ласгерди](../feature_profiles/lasgerdi.csv)
-## G-3: Гонорифические формы числа
+## G-3: Формы вежливости в местоимениях и глаголах
 
 - Вежливая и почтительная форма обращения к одному лицу или торжественного самоназвания (множественного числа 2 и 1 лица соответственно): [среднеперсидский](../feature_profiles/middle_persian.csv)
-## G-5: Форма имен после числительного
+## G-5: Форма числа существительного в сочетании с числительными
 
-- Единственное, двойственное и множественное число: [древнерусский](../feature_profiles/old_russian.csv)
 - Единственное, множественное и двойственное число (старые формы): [кашубский](../feature_profiles/kashubian.csv)
 - Единственное, множественное и особая "счетная форма" существительных м.р. в сочетании с количественными числительными от двух и выше: [болгарский](../feature_profiles/bulgarian.csv)
 - Единственное, множественное и особая счетная форма (для некоторых существительных в сочетании с числительными "два", "три" и "четыре"): [белорусский](../feature_profiles/belorussian.csv)
-- Категория числа у имени отсутствует: [земиаки](../feature_profiles/zemiaki.csv)
 - нет данных: [ликийский](../feature_profiles/lycian.csv), [лидийский](../feature_profiles/lydian.csv), [милийский](../feature_profiles/milyan.csv)
-- числительные не засвидетельствованы: [палайский](../feature_profiles/palaic.csv)
 ## G-6: Система счисления
 
-- Десятичная с элементами пятеричной: [лоома](../feature_profiles/looma.csv)
 - Других данных нет: [меймеи](../feature_profiles/meimei.csv)
-- Смешанная с элементами пятеричной, десятеричной и двадцатеричной: [гуро](../feature_profiles/guro.csv), [кла-дан](../feature_profiles/kla_dan.csv)
-- двадцатиричная: [абхазский](../feature_profiles/abkhaz.csv)
 - нет данных: [лидийский](../feature_profiles/lydian.csv), [милийский](../feature_profiles/milyan.csv)
 - пятеричная-десятичная: [корякский](../feature_profiles/koryak.csv)
-## G-7: Неопределенный артикль и числительное "один"
+## G-7: Неопределенный артикль и числительное «один»
 
 - В буддийских текстах отмечено использование числительного "один" в функции неопределенного артикля: [согдийский](../feature_profiles/sogdian.csv)
-- В качестве неопределенного артикля выступает числительное "один": [гилянский](../feature_profiles/gilaki.csv)
 - В качестве неопределенного артикля могут выступать: постпозитивный артикль единичности  и/или числительное "один": [дари](../feature_profiles/dari.csv)
 - Единичность-неопределенность выражается: числительным "один", постпозитивным показателем  -i или их одновременным употреблением: [сурхеи](../feature_profiles/surkhei.csv)
-- Неопределенность и единичность существительного выражается посредством числительного "один" в функции неопределенного артикля: [ласгерди](../feature_profiles/lasgerdi.csv)
-- Неопределенность/единичность выражается числительным "один" в функции неопределенного артикля: [биябунеки](../feature_profiles/biyabuneki.csv)
 - Постопозитивный показатель неопределенности/единичности и числительное "один" в функции неопределенного артикля: [меймеи](../feature_profiles/meimei.csv)
 - Препозитвный неопределенный артикль, выраженный числительным "один" и постпозитивный энклитический показатель непределенности/единичности: [вонишуни](../feature_profiles/vonishuni.csv)
-- Числительное "один" в функции неопределенного артикля: [сангесари](../feature_profiles/sangesari.csv), [сивенди](../feature_profiles/sivandi.csv), [таджриши](../feature_profiles/tajrishi.csv)
 - Числительное один в функции неопределенного артикля и постпозитивный неопределенных артикль: [зефреи](../feature_profiles/zefrei.csv)
-- Числительное один в функции показателя неопределенности/единичности: [джавшакани](../feature_profiles/jawshakani.csv)
 ## H-1: Количество падежей у имени существительного
 
 - В имени категория падежа почти полностью утрачена: [абдуи](../feature_profiles/abdui.csv)
@@ -958,19 +947,16 @@
 - Прямой падеж: [рушанский](../feature_profiles/rushani.csv), [сангличский](../feature_profiles/sanglechi.csv), [кашмири](../feature_profiles/kashmiri.csv), [кати](../feature_profiles/kati.csv), [банджари](../feature_profiles/banjari.csv)
 - Творительный падеж: [русский](../feature_profiles/russian.csv)
 - нет данных: [ликийский](../feature_profiles/lycian.csv)
-## H-4: Падежное оформление посессивного отношения
+## H-4: Падежное оформление посессивного отношения в именной группе
 
 - Генитив или аккузатив: [цыганский](../feature_profiles/romani.csv)
 - Генитив или локатив: [сингальский](../feature_profiles/sinhala.csv)
-- Косвенный падеж: [курдский](../feature_profiles/kurdish.csv), [бактрийский](../feature_profiles/bactrian.csv)
 - Косвенный падеж в функции родительного принадлежности или родительного отношения: [талышский](../feature_profiles/talysh.csv)
 - Косвенный падеж с предлогами: [пашто](../feature_profiles/pashto.csv)
-- Косвенный падеж существительных и субстантивных местоимений: [сангесари](../feature_profiles/sangesari.csv)
 - Отсутствует: [майян](../feature_profiles/mayan.csv)
 - Поссесивный падеж личных имен и местоимений: [парачи](../feature_profiles/parachi.csv)
 - Притяжательный комплекс с роли вторичной падежной формы генитива: [татский](../feature_profiles/tati.csv)
 - Притяжательный падеж и рудиментарная форма родительного падежа определенного артикля: [нидерландский](../feature_profiles/dutch.csv)
-- Притяжательный падеж, в том числе "групповой притяжательный падеж": [английский](../feature_profiles/english.csv)
 - Прямой: [прасун](../feature_profiles/prasun.csv), [торвали](../feature_profiles/torwali.csv)
 - Родительно-дательный или косвенный падеж: [согдийский](../feature_profiles/sogdian.csv)
 - Родительно-дательный падеж: [истрорумынский](../feature_profiles/istro_romanian.csv)
@@ -1118,12 +1104,13 @@
 - Указательные местоимения, предлоги послелоги: [бартангский](../feature_profiles/bartangi.csv)
 - Упрелоги.казательные местоимения, местоимения-наречия и: [рошорвский](../feature_profiles/roshorvi.csv)
 - именные аффиксы и специальный подкласс адвербиальных слов, предлоги и послелоги: [ительменский](../feature_profiles/itelmen.csv)
-## H-7: Маркирование зависимого имени в генитивной конструкции
+## H-7: Маркирование в посессивной конструкции
 
 - Генитив отсутствует: [гавар](../feature_profiles/gawar.csv), [кашмири](../feature_profiles/kashmiri.csv), [катаркалаи](../feature_profiles/katarkalai.csv), [кати](../feature_profiles/kati.csv), [кховар](../feature_profiles/khowar.csv), [майян](../feature_profiles/mayan.csv), [прасун](../feature_profiles/prasun.csv), [шина](../feature_profiles/shina.csv), [тирахи](../feature_profiles/tirahi.csv), [торвали](../feature_profiles/torwali.csv)
+- Маркирование есть, требует уточнения: [удмуртский](../feature_profiles/udmurt.csv), [хорезмийский](../feature_profiles/khwaresmian.csv), [скифский](../feature_profiles/scythian.csv), [ашкун](../feature_profiles/ashkun.csv), [гарви](../feature_profiles/garwi.csv), [глангали](../feature_profiles/grangali.csv), [калаша](../feature_profiles/kalasha.csv), [пашаи](../feature_profiles/pashai.csv), [пхалура](../feature_profiles/phalura.csv), [сави](../feature_profiles/sawi.csv), [шумашти](../feature_profiles/shumashti.csv), [вайгали](../feature_profiles/waigali.csv), [земиаки](../feature_profiles/zemiaki.csv), [кельтиберский](../feature_profiles/celtiberian.csv), [датский](../feature_profiles/danish.csv), [нидерландский](../feature_profiles/dutch.csv), [английский](../feature_profiles/english.csv), [фарерский](../feature_profiles/faroese.csv), [фризский](../feature_profiles/frisian.csv), [галльский](../feature_profiles/gaulish.csv), [немецкий](../feature_profiles/german.csv), [исландский](../feature_profiles/icelandic.csv), [ирландский](../feature_profiles/irish_gaelic.csv), [лепонтийский](../feature_profiles/lepontic.csv), [норвежский](../feature_profiles/norwegian.csv), [шотландский](../feature_profiles/scottish_gaelic.csv), [шведский](../feature_profiles/swedish.csv), [идиш](../feature_profiles/yiddish.csv), [мегленорумынский](../feature_profiles/megleno_romanian.csv), [белорусский](../feature_profiles/belorussian.csv), [чешский](../feature_profiles/czech.csv), [кашубский](../feature_profiles/kashubian.csv), [старославянский](../feature_profiles/old_church_slavonic.csv), [древненовгородский](../feature_profiles/old_novgorod.csv), [древнерусский](../feature_profiles/old_russian.csv), [полабский](../feature_profiles/polabian.csv), [польский](../feature_profiles/polish.csv), [русский](../feature_profiles/russian.csv), [сербохорватский](../feature_profiles/serbocroatian.csv), [словацкий](../feature_profiles/slovak.csv), [словенский](../feature_profiles/slovene.csv), [серболужицкий](../feature_profiles/sorbian.csv), [украинский](../feature_profiles/ukrainian.csv), [древнееврейский](../feature_profiles/ancient_hebrew.csv), [классический сирийский](../feature_profiles/classical_syriac.csv), [современный иврит](../feature_profiles/modern_hebrew.csv), [финикийский](../feature_profiles/phoenician.csv), [ассамский](../feature_profiles/assamese.csv), [банджари](../feature_profiles/banjari.csv), [бенгальский](../feature_profiles/bengali.csv), [бходжпури](../feature_profiles/bhojpuri.csv), [домари](../feature_profiles/domari.csv), [гуджарати](../feature_profiles/gujarati.csv), [конкани](../feature_profiles/konkani.csv), [майтхили](../feature_profiles/maithili.csv), [мальдивский/дивехи](../feature_profiles/maldivian_dhivehi.csv), [маратхи](../feature_profiles/marathi.csv), [панджаби](../feature_profiles/punjabi.csv), [раджбанши/камта (в Индии и Бангладеш)](../feature_profiles/rajbanshi_kamta.csv), [раджбанши (Непал)](../feature_profiles/rajbanshi_nepal.csv), [цыганский](../feature_profiles/romani.csv), [садани/садри](../feature_profiles/sadani_sadri.csv), [саураштра](../feature_profiles/saurashtra.csv), [сингальский](../feature_profiles/sinhala.csv), [геэз](../feature_profiles/geez.csv), [зай](../feature_profiles/zay.csv), [бадага](../feature_profiles/badaga.csv), [ирула](../feature_profiles/irula.csv), [каннада](../feature_profiles/kannada.csv), [кодагу](../feature_profiles/kodagu.csv), [кота](../feature_profiles/kota.csv), [малаялам](../feature_profiles/malayalam.csv), [тамильский](../feature_profiles/tamil.csv), [телугу](../feature_profiles/telugu.csv), [древнеармянский](../feature_profiles/classical_armenian.csv), [лувийский](../feature_profiles/luwian.csv), [ликийский](../feature_profiles/lycian.csv), [лидийский](../feature_profiles/lydian.csv), [милийский](../feature_profiles/milyan.csv), [палайский](../feature_profiles/palaic.csv), [фригийский](../feature_profiles/phrygian.csv), [восточноармянский литературный](../feature_profiles/standard_eastern_armenian.csv), [западноармянский литературный](../feature_profiles/standard_western_armenian.csv), [тохарский А](../feature_profiles/tocharian_a.csv), [тохарский В](../feature_profiles/tocharian_b.csv), [бамана](../feature_profiles/bamana.csv), [гуро](../feature_profiles/guro.csv), [джого](../feature_profiles/jogo.csv), [какабе](../feature_profiles/kakabe.csv), [кла-дан](../feature_profiles/kla_dan.csv), [локо](../feature_profiles/loko.csv), [мандинка](../feature_profiles/mandinka.csv)
 - Маркированное и немаркированное: [дан](../feature_profiles/dan.csv), [яурэ](../feature_profiles/yaoure.csv)
 - Маркированное/немаркированное: [тода](../feature_profiles/toda.csv)
-## H-8: Падежное оформление одушевленных и неодушевленных имен
+## H-8: Падежное оформление одушевленных и неодушевленных имен существительных
 
 - иногда различное: [корейский](../feature_profiles/korean.csv)
 ## I-1: Способ выражения залоговых форм в глаголе
@@ -1203,19 +1190,14 @@
 - Пассив, реципрок, возвратно-медиальный залог и безличный "псевдопассив" непереходных глаголов: [шведский](../feature_profiles/swedish.csv)
 - Пассивный, собственно-возвратный, взаимно-возвратный и общевозвратный: [древнерусский](../feature_profiles/old_russian.csv)
 - Совпадают переходный и непереходный глаголы (лабильность): [сусу](../feature_profiles/susu.csv)
-## I-5: Основные временные противопоставления
+## I-5: Грамматические формы времени
 
 - Есть отдельная конструкция для будущего времени: [кпелле](../feature_profiles/kpelle.csv)
 - Есть отдельные конструкции с семантикой будущего времени: [локо](../feature_profiles/loko.csv)
 - Есть отдельные формы претерита и футурума: [бен](../feature_profiles/beng.csv)
-- Настояще-будущее и прошедшее: [валлийский](../feature_profiles/welsh.csv)
 - Настояще-будущее, простое прошедшее, преждепрошедшее и будущее: [курдшули](../feature_profiles/kurdshuli.csv)
 - Настояще-будущее, простое прошедшее, прошедшее длительное, перфект, преждепрошедшее: [давани](../feature_profiles/davani.csv)
 - Настояще-будущее, прошедшее и длительная форма (безотносительна ко времени): [хазара](../feature_profiles/hazaragi.csv)
-- Настоящее и будущее: [гуджарати](../feature_profiles/gujarati.csv), [саураштра](../feature_profiles/saurashtra.csv)
-- Настоящее, настоящее-будущее и прошедшее: [калаша](../feature_profiles/kalasha.csv), [кховар](../feature_profiles/khowar.csv)
-- Настоящее, прошедшее и общее: [домааки](../feature_profiles/domaaki.csv)
-- Прошедшее, непрошедшее и будущее: [кота](../feature_profiles/kota.csv)
 - Что делать с языками, в которых нет никаких времен? В яурэ, например, отмечено только недавнее прошедшее, но это не означает, что в языке есть настоящее и будущее: [яурэ](../feature_profiles/yaoure.csv)
 - нет данных: [джого](../feature_profiles/jogo.csv)
 ## I-6: Выражение вида и времени
@@ -1549,16 +1531,11 @@
 
 - В заимствованиях из персидского языка употребляется постпозитивный артикль -i/-e  со значением неопределенности и единичности: [гилянский](../feature_profiles/gilaki.csv)
 - Неопределенность существительного выражается: 1) числительным "один", 2) постпозитивным показателем неопределенности/единичности: [фаризанди](../feature_profiles/farizandi.csv)
-- Неопределенный артикль и числительное "один" в функции неопределенного артикля, указательные местоимения в функции определенного артикля: [велатру](../feature_profiles/velatru.csv)
-- Неопределенный, определенный и партитивный: [французский](../feature_profiles/french.csv), [итальянский](../feature_profiles/italian.csv)
+- Неопределенный артикль и числительное «один» в функции неопределенного артикля, указательные местоимения в функции определенного артикля: [велатру](../feature_profiles/velatru.csv)
 - Неопределенный, определенный, посессивный и детерминативный: [румынский](../feature_profiles/romanian.csv)
 - Постопозитивный показатель неопределенности/единичности и числительное "один" в функции неопределенного артикля: [меймеи](../feature_profiles/meimei.csv)
 - Постпозитивный артикль единичности  и/или числительное "один" (неопределенный) и указательные местоимения (определенный): [дари](../feature_profiles/dari.csv)
 - Числительное "один" в функции неопределенного артикля и указательные местоимения в функции определенного артикля: [ванеци](../feature_profiles/waneci.csv)
-## K-3: Расположение артикля
-
-- Препозиция (неопределенный и свободностоящий определенный) и постпозиция (суффигированный определенный): [датский](../feature_profiles/danish.csv)
-- Суффигированный и препозитивный свободностоящий: [исландский](../feature_profiles/icelandic.csv)
 ## K-4: Постановка артикля в именной группе
 
 - В изафетной конструкции артикль может оформлять определение-прилагательное: [абдуи](../feature_profiles/abdui.csv)
@@ -1656,12 +1633,6 @@
 - не всегда присутствует: [каратинский](../feature_profiles/karata.csv)
 ## K-14: Типы атрибутивного согласования
 
-- По личности/неличности, роду, числу и падежу: [кашубский](../feature_profiles/kashubian.csv)
-- По роду, числу, исчисляемости/неисчисляемости (только в постпозиции): [астурийский](../feature_profiles/asturian.csv)
-- По роду, числу, падежу и одушевленности/неодушевленности: [сербохорватский](../feature_profiles/serbocroatian.csv), [словенский](../feature_profiles/slovene.csv)
-- По роду, числу, падежу и определенности: [исландский](../feature_profiles/icelandic.csv), [старославянский](../feature_profiles/old_church_slavonic.csv)
-- По роду, числу, падежу, одушевленности/неодушевленности и личности/неличности: [серболужицкий](../feature_profiles/sorbian.csv)
-- По числу и определенности/непределенности: [кумзари](../feature_profiles/kumzari.csv), [хунсари](../feature_profiles/khunsari.csv)
 - по классу, числу, прямой/косвенной форме (???): [хваршинский](../feature_profiles/khvarshi.csv)
 ## K-15: Изменяемые грамматические категории, выражаемые существительным
 
