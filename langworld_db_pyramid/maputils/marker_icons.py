@@ -163,9 +163,8 @@ class CLLDPie(AbstractCLLDIcon):
 
         if len(data) == 1:
             svg_content.append(
-                '<circle cx="{}" cy="{}" r="{}" style="stroke:{}; fill:{};">'.format(
-                    cx, cy, radius, stroke_circle, rgb_as_hex(colors[0])
-                )
+                f'<circle cx="{cx}" cy="{cy}" r="{radius}" style="stroke:{stroke_circle}; '
+                f'fill:{rgb_as_hex(colors[0])};">'
             )
             if titles[0]:
                 svg_content.append(f"<title>{escape(titles[0])}</title>")
@@ -180,9 +179,8 @@ class CLLDPie(AbstractCLLDIcon):
             )
             radius2 = f"L{cx},{cy}"
             svg_content.append(
-                '<path d="{} {} {}" style="{}" transform="rotate(90 {} {})">'.format(
-                    radius1, arc, radius2, svg.style(fill=rgb_as_hex(color)), cx, cy
-                )
+                f'<path d="{radius1} {arc} {radius2}" style="{svg.style(fill=rgb_as_hex(color))}" '
+                f'transform="rotate(90 {cx} {cy})">'
             )
             if title:
                 svg_content.append(f"<title>{escape(title)}</title>")
