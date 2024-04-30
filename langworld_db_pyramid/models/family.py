@@ -43,7 +43,7 @@ class Family(QueryMixin, Base):  # type: ignore[misc]
 
     def iter_doculects_that_have_feature_profiles(self) -> Iterable[Doculect]:
         if not self.has_doculects_with_feature_profiles():
-            return []
+            yield from []
 
         yield from (d for d in self.doculects if d.has_feature_profile)
 
