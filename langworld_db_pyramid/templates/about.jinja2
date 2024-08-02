@@ -1,0 +1,10 @@
+{% extends "base_depth1_single_full_width.jinja2" %}
+
+{% block title %}{% trans %}О проекте{% endtrans %}{% endblock title %}
+{% block h1 %}{{ self.title() }}{% endblock h1 %}
+
+{% block full_width %}
+  <div class="w3-margin-left">
+    <p>Текст о проекте</p>
+  </div>
+{% endblock full_width %}

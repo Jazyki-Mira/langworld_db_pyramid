@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-03 00:11+0300\n"
+"POT-Creation-Date: 2024-08-03 00:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,6 +35,10 @@ msgstr ""
 
 #: templates/404.jinja2:9
 msgid "Перейти на главную"
+msgstr ""
+
+#: templates/about.jinja2:3 templates/base.jinja2:44
+msgid "О проекте"
 msgstr ""
 
 #: templates/all_doculects_list.jinja2:5 templates/all_doculects_list.jinja2:45
@@ -66,7 +70,7 @@ msgstr ""
 msgid "на общей карте"
 msgstr ""
 
-#: templates/all_features_list.jinja2:3 templates/base.jinja2:47
+#: templates/all_features_list.jinja2:3 templates/base.jinja2:49
 #: templates/doculect.jinja2:98 templates/query_wizard.jinja2:51
 msgid "Признаки"
 msgstr ""
@@ -79,31 +83,35 @@ msgstr ""
 msgid "Главная"
 msgstr ""
 
-#: templates/base.jinja2:44 templates/base.jinja2:45 templates/base.jinja2:46
+#: templates/base.jinja2:45 templates/howto.jinja2:3
+msgid "Как пользоваться"
+msgstr ""
+
+#: templates/base.jinja2:46 templates/base.jinja2:47 templates/base.jinja2:48
 msgid "Языки"
 msgstr ""
 
-#: templates/base.jinja2:44
+#: templates/base.jinja2:46
 msgid "список"
 msgstr ""
 
-#: templates/base.jinja2:45
+#: templates/base.jinja2:47
 msgid "карта"
 msgstr ""
 
-#: templates/base.jinja2:46
+#: templates/base.jinja2:48
 msgid "генеалогия"
 msgstr ""
 
-#: templates/base.jinja2:48 templates/query_wizard.jinja2:10
+#: templates/base.jinja2:50 templates/query_wizard.jinja2:10
 msgid "Запросы"
 msgstr ""
 
-#: templates/base.jinja2:103 templates/home.jinja2:4
+#: templates/base.jinja2:105 templates/home.jinja2:4
 msgid "База данных «Языки мира»"
 msgstr ""
 
-#: templates/base.jinja2:103
+#: templates/base.jinja2:105
 msgid "Института языкознания РАН"
 msgstr ""
 

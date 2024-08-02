@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: 58207913+lemontree210@users.noreply.github.com\n"
-"POT-Creation-Date: 2024-08-03 00:11+0300\n"
+"POT-Creation-Date: 2024-08-03 00:29+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: Dmitry Kolomatskiy "
 "<58207913+lemontree210@users.noreply.github.com>\n"
@@ -40,6 +40,10 @@ msgstr "Page not found"
 msgid "Перейти на главную"
 msgstr "To the main page"
 
+#: templates/about.jinja2:3 templates/base.jinja2:44
+msgid "О проекте"
+msgstr "About"
+
 #: templates/all_doculects_list.jinja2:5 templates/all_doculects_list.jinja2:45
 msgid "Список языков"
 msgstr "List of languages"
@@ -69,7 +73,7 @@ msgstr "Map of languages"
 msgid "на общей карте"
 msgstr "on the overview map"
 
-#: templates/all_features_list.jinja2:3 templates/base.jinja2:47
+#: templates/all_features_list.jinja2:3 templates/base.jinja2:49
 #: templates/doculect.jinja2:98 templates/query_wizard.jinja2:51
 msgid "Признаки"
 msgstr "Features"
@@ -82,31 +86,35 @@ msgstr "Languages of the World"
 msgid "Главная"
 msgstr "Home"
 
-#: templates/base.jinja2:44 templates/base.jinja2:45 templates/base.jinja2:46
+#: templates/base.jinja2:45 templates/howto.jinja2:3
+msgid "Как пользоваться"
+msgstr "How to Use"
+
+#: templates/base.jinja2:46 templates/base.jinja2:47 templates/base.jinja2:48
 msgid "Языки"
 msgstr "Languages"
 
-#: templates/base.jinja2:44
+#: templates/base.jinja2:46
 msgid "список"
 msgstr "List"
 
-#: templates/base.jinja2:45
+#: templates/base.jinja2:47
 msgid "карта"
 msgstr "Map"
 
-#: templates/base.jinja2:46
+#: templates/base.jinja2:48
 msgid "генеалогия"
 msgstr "Genealogy"
 
-#: templates/base.jinja2:48 templates/query_wizard.jinja2:10
+#: templates/base.jinja2:50 templates/query_wizard.jinja2:10
 msgid "Запросы"
 msgstr "Queries"
 
-#: templates/base.jinja2:103 templates/home.jinja2:4
+#: templates/base.jinja2:105 templates/home.jinja2:4
 msgid "База данных «Языки мира»"
 msgstr "The Languages of the World Database"
 
-#: templates/base.jinja2:103
+#: templates/base.jinja2:105
 msgid "Института языкознания РАН"
 msgstr "(Institute of Linguistics, RAS)"
 
@@ -267,3 +275,4 @@ msgstr "Results"
 #: templates/query_wizard.jinja2:27
 msgid "Сбросить выбор"
 msgstr "Discard selection"
+

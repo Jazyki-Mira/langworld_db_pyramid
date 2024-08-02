@@ -41,6 +41,8 @@
     <!-- Navbar -->
     {% macro nav_links_except_for_language_switch(css_class) -%}
         <a href="{{ request.route_path('home_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Главная{% endtrans %}</a>
+        <a href="{{ request.route_path('about_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}О проекте{% endtrans %}</a>
+        <a href="{{ request.route_path('howto_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Как пользоваться{% endtrans %}</a>
         <a href="{{ request.route_path('all_doculects_list_localized', locale=request.locale_name) }}" class="{{ css_class }}"><b>{% trans %}Языки{% endtrans %}</b>: {% trans %}список{% endtrans %}</a>
         <a href="{{ request.route_path('all_doculects_map_localized', locale=request.locale_name) }}" class="{{ css_class }}"><b>{% trans %}Языки{% endtrans %}</b>: {% trans %}карта{% endtrans %}</a>
         <a href="{{ request.route_path('families_localized', locale=request.locale_name, family_man_id='_all') }}" class="{{ css_class }}"><b>{% trans %}Языки{% endtrans %}</b>: {% trans %}генеалогия{% endtrans %}</a>
