@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: 58207913+lemontree210@users.noreply.github.com\n"
-"POT-Creation-Date: 2024-03-11 13:39+0300\n"
+"POT-Creation-Date: 2024-08-03 00:11+0300\n"
 "PO-Revision-Date: 2022-07-04 18:22+0300\n"
 "Last-Translator: Dmitry Kolomatskiy "
 "<58207913+lemontree210@users.noreply.github.com>\n"
@@ -41,7 +41,6 @@ msgid "Перейти на главную"
 msgstr "To the main page"
 
 #: templates/all_doculects_list.jinja2:5 templates/all_doculects_list.jinja2:45
-#: templates/base.jinja2:44
 msgid "Список языков"
 msgstr "List of languages"
 
@@ -62,7 +61,7 @@ msgstr "Grouped by encyclopedia volume"
 msgid "Том"
 msgstr "Volume"
 
-#: templates/all_doculects_map.jinja2:5 templates/base.jinja2:45
+#: templates/all_doculects_map.jinja2:5
 msgid "Карта языков"
 msgstr "Map of languages"
 
@@ -83,14 +82,25 @@ msgstr "Languages of the World"
 msgid "Главная"
 msgstr "Home"
 
-#: templates/base.jinja2:46 templates/doculect.jinja2:49
-#: templates/families.jinja2:7 templates/query_wizard.jinja2:41
-msgid "Генеалогия"
+#: templates/base.jinja2:44 templates/base.jinja2:45 templates/base.jinja2:46
+msgid "Языки"
+msgstr "Languages"
+
+#: templates/base.jinja2:44
+msgid "список"
+msgstr "List"
+
+#: templates/base.jinja2:45
+msgid "карта"
+msgstr "Map"
+
+#: templates/base.jinja2:46
+msgid "генеалогия"
 msgstr "Genealogy"
 
 #: templates/base.jinja2:48 templates/query_wizard.jinja2:10
-msgid "Мастер запросов"
-msgstr "Query Wizard"
+msgid "Запросы"
+msgstr "Queries"
 
 #: templates/base.jinja2:103 templates/home.jinja2:4
 msgid "База данных «Языки мира»"
@@ -140,6 +150,11 @@ msgstr "on the relevant page"
 #: templates/doculect.jinja2:46
 msgid "Том энциклопедии в формате PDF на данный момент недоступен"
 msgstr "The PDF volume of the encyclopedia is not available yet"
+
+#: templates/doculect.jinja2:49 templates/families.jinja2:7
+#: templates/query_wizard.jinja2:41
+msgid "Генеалогия"
+msgstr "Genealogy"
 
 #: templates/doculect.jinja2:61
 msgid "География"

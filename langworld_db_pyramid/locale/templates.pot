@@ -1,16 +1,16 @@
-# Translations template for Jazyki Mira online database.
-# Copyright (C) 2024 Dmitry Kolomatskiy
-# This file is distributed under the same license as the Jazyki mira online database.
-# Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>, 2024.
+# Translations template for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: 58207913+lemontree210@users.noreply.github.com\n"
-"POT-Creation-Date: 2024-03-11 12:11+0300\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-08-03 00:11+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -38,7 +38,6 @@ msgid "Перейти на главную"
 msgstr ""
 
 #: templates/all_doculects_list.jinja2:5 templates/all_doculects_list.jinja2:45
-#: templates/base.jinja2:44
 msgid "Список языков"
 msgstr ""
 
@@ -59,7 +58,7 @@ msgstr ""
 msgid "Том"
 msgstr ""
 
-#: templates/all_doculects_map.jinja2:5 templates/base.jinja2:45
+#: templates/all_doculects_map.jinja2:5
 msgid "Карта языков"
 msgstr ""
 
@@ -80,13 +79,24 @@ msgstr ""
 msgid "Главная"
 msgstr ""
 
-#: templates/base.jinja2:46 templates/doculect.jinja2:49
-#: templates/families.jinja2:7 templates/query_wizard.jinja2:41
-msgid "Генеалогия"
+#: templates/base.jinja2:44 templates/base.jinja2:45 templates/base.jinja2:46
+msgid "Языки"
+msgstr ""
+
+#: templates/base.jinja2:44
+msgid "список"
+msgstr ""
+
+#: templates/base.jinja2:45
+msgid "карта"
+msgstr ""
+
+#: templates/base.jinja2:46
+msgid "генеалогия"
 msgstr ""
 
 #: templates/base.jinja2:48 templates/query_wizard.jinja2:10
-msgid "Мастер запросов"
+msgid "Запросы"
 msgstr ""
 
 #: templates/base.jinja2:103 templates/home.jinja2:4
@@ -134,6 +144,11 @@ msgstr ""
 
 #: templates/doculect.jinja2:46
 msgid "Том энциклопедии в формате PDF на данный момент недоступен"
+msgstr ""
+
+#: templates/doculect.jinja2:49 templates/families.jinja2:7
+#: templates/query_wizard.jinja2:41
+msgid "Генеалогия"
 msgstr ""
 
 #: templates/doculect.jinja2:61
