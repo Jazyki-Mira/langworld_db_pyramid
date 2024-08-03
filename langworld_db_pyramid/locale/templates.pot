@@ -1,14 +1,14 @@
-# Translations template for PROJECT.
-# Copyright (C) 2024 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+# Translations template for Jazyki Mira online database.
+# Copyright (C) 2024 Dmitry Kolomatskiy
+# This file is distributed under the same license as the Jazyki mira online database.
+# Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-03 00:29+0300\n"
+"Report-Msgid-Bugs-To: 58207913+lemontree210@users.noreply.github.com\n"
+"POT-Creation-Date: 2024-08-03 12:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,7 +76,7 @@ msgid "Признаки"
 msgstr ""
 
 #: templates/base.jinja2:15
-msgid "БД «Языки мира»"
+msgid "Языки мира"
 msgstr ""
 
 #: templates/base.jinja2:43 templates/home.jinja2:3
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Запросы"
 msgstr ""
 
-#: templates/base.jinja2:105 templates/home.jinja2:4
+#: templates/base.jinja2:105
 msgid "База данных «Языки мира»"
 msgstr ""
 
@@ -247,15 +247,91 @@ msgstr ""
 msgid "Значения"
 msgstr ""
 
-#: templates/home.jinja2:8
-msgid "Версия 4 (онлайн). Веб-приложение находится в процессе разработки."
+#: templates/home.jinja2:4
+msgid "Энциклопедическая база данных и атлас «Языки мира онлайн»"
 msgstr ""
 
 #: templates/home.jinja2:9
-msgid "С любыми вопросами и комментариями просьба обращаться к разработчику"
+msgid ""
+"Энциклопедическая база данных и атлас «Языки мира онлайн» (ЯМОЛ) "
+"представляет собой цифровой продукт, дополняющий"
 msgstr ""
 
 #: templates/home.jinja2:9
+msgid "многотомное энциклопедическое издание «Языки мира»"
+msgstr ""
+
+#: templates/home.jinja2:9
+msgid ""
+"издаваемое Институтом языкознания Российской академии наук с 1990-х "
+"годов. Это своего рода путеводитель по энциклопедии, предоставляющий "
+"пользователю интерактивные инструменты для поиска и визуализации данных "
+"из энциклопедических статей"
+msgstr ""
+
+#: templates/home.jinja2:11
+msgid "В нынешнем виде проект разрабатывается в"
+msgstr ""
+
+#: templates/home.jinja2:11
+msgid "отделе прикладной лингвистики"
+msgstr ""
+
+#: templates/home.jinja2:11
+msgid ""
+"ИЯз РАН с конца 2022 года, однако идея и первые наработки в области "
+"создания базы данных по энциклопедии датируются 1980-ми годами. Более "
+"подробное изложение истории см. в разделе «О проекте»"
+msgstr ""
+
+#: templates/home.jinja2:13
+msgid ""
+"База данных может быть использована не только для лингвистических "
+"исследований: она также адресована преподавателям, студентам и всем "
+"интересующимся языковым разнообразием. Подробнее об устройстве и "
+"использовании базы данных вы можете узнать из раздела «Как пользоваться»."
+msgstr ""
+
+#: templates/home.jinja2:15
+msgid ""
+"Информация о языках, данные которых представлены в базе, размещена в "
+"разделах «Языки: список/карта/генеалогия», а о лингвистических признаках,"
+" которые отражены на картах, — в разделе «Признаки». В разделе «Запросы» "
+"вы можете задать свой запрос к базе данных"
+msgstr ""
+
+#: templates/home.jinja2:17
+msgid ""
+"На страницах большинства языков вы можете открыть соответствующую статью "
+"энциклопедии. Чтобы просмотреть полный список томов энциклопедии «Языки "
+"мира», на которых основана эта база данных, перейдите"
+msgstr ""
+
+#: templates/home.jinja2:17
+msgid "на сайт ИЯз РАН"
+msgstr ""
+
+#: templates/home.jinja2:19
+msgid "Цитирование"
+msgstr ""
+
+#: templates/home.jinja2:21
+msgid ""
+"При цитировании материалов из базы данных просим использовать следующую "
+"библиографическую ссылку"
+msgstr ""
+
+#: templates/home.jinja2:25
+msgid "Контакты"
+msgstr ""
+
+#: templates/home.jinja2:27
+msgid ""
+"С вопросами и комментариями о базе данных вы можете обращаться к "
+"разработчику"
+msgstr ""
+
+#: templates/home.jinja2:27
 msgid "Дмитрию Коломацкому"
 msgstr ""
 
