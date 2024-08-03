@@ -253,6 +253,7 @@ summary {
     margin-left: .6rem;
 }
 
-p > a {
+/* hyperlinks in text in main container */
+div.w3-margin-left > p > a {
     color: #009688;
 }
