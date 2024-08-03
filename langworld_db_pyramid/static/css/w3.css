@@ -252,3 +252,7 @@ summary {
     cursor:pointer;
     margin-left: .6rem;
 }
+
+p > a {
+    color: #009688;
+}
