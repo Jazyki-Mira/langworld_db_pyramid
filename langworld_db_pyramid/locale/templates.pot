@@ -91,15 +91,15 @@ msgstr ""
 msgid "Языки"
 msgstr ""
 
-#: templates/base.jinja2:46
+#: templates/base.jinja2:46 templates/home.jinja2:17
 msgid "список"
 msgstr ""
 
-#: templates/base.jinja2:47
+#: templates/base.jinja2:47 templates/home.jinja2:18
 msgid "карта"
 msgstr ""
 
-#: templates/base.jinja2:48
+#: templates/base.jinja2:48 templates/home.jinja2:19
 msgid "генеалогия"
 msgstr ""
 
@@ -107,8 +107,8 @@ msgstr ""
 msgid "Запросы"
 msgstr ""
 
-#: templates/base.jinja2:105
-msgid "База данных «Языки мира»"
+#: templates/base.jinja2:105 templates/home.jinja2:4
+msgid "Энциклопедическая база данных и атлас «Языки мира онлайн»"
 msgstr ""
 
 #: templates/base.jinja2:105
@@ -247,10 +247,6 @@ msgstr ""
 msgid "Значения"
 msgstr ""
 
-#: templates/home.jinja2:4
-msgid "Энциклопедическая база данных и атлас «Языки мира онлайн»"
-msgstr ""
-
 #: templates/home.jinja2:9
 msgid ""
 "Энциклопедическая база данных и атлас «Языки мира онлайн» (ЯМОЛ) "
@@ -274,14 +270,18 @@ msgid "В нынешнем виде проект разрабатывается 
 msgstr ""
 
 #: templates/home.jinja2:11
-msgid "отделе прикладной лингвистики"
+msgid "отделе прикладной лингвистики ИЯз РАН"
 msgstr ""
 
 #: templates/home.jinja2:11
 msgid ""
-"ИЯз РАН с конца 2022 года, однако идея и первые наработки в области "
-"создания базы данных по энциклопедии датируются 1980-ми годами. Более "
-"подробное изложение истории см. в разделе «О проекте»"
+"с конца 2022 года, однако идея и первые наработки в области создания базы"
+" данных по энциклопедии датируются 1980-ми годами. Более подробное "
+"изложение истории см. в разделе"
+msgstr ""
+
+#: templates/home.jinja2:11
+msgid "«О проекте»"
 msgstr ""
 
 #: templates/home.jinja2:13
@@ -289,49 +289,75 @@ msgid ""
 "База данных может быть использована не только для лингвистических "
 "исследований: она также адресована преподавателям, студентам и всем "
 "интересующимся языковым разнообразием. Подробнее об устройстве и "
-"использовании базы данных вы можете узнать из раздела «Как пользоваться»."
+"использовании базы данных вы можете узнать из раздела"
 msgstr ""
 
-#: templates/home.jinja2:15
+#: templates/home.jinja2:13
+msgid "«Как пользоваться»"
+msgstr ""
+
+#: templates/home.jinja2:16
 msgid ""
 "Информация о языках, данные которых представлены в базе, размещена в "
-"разделах «Языки: список/карта/генеалогия», а о лингвистических признаках,"
-" которые отражены на картах, — в разделе «Признаки». В разделе «Запросы» "
-"вы можете задать свой запрос к базе данных"
+"разделах\n"
+"        «Языки:"
 msgstr ""
 
-#: templates/home.jinja2:17
+#: templates/home.jinja2:19
+msgid ""
+"»,\n"
+"        а о лингвистических признаках, которые отражены на картах, — в "
+"разделе"
+msgstr ""
+
+#: templates/home.jinja2:21
+msgid "«Признаки»"
+msgstr ""
+
+#: templates/home.jinja2:22
+msgid "В разделе"
+msgstr ""
+
+#: templates/home.jinja2:22
+msgid "«Запросы»"
+msgstr ""
+
+#: templates/home.jinja2:22
+msgid "вы можете задать свой запрос к базе данных"
+msgstr ""
+
+#: templates/home.jinja2:24
 msgid ""
 "На страницах большинства языков вы можете открыть соответствующую статью "
 "энциклопедии. Чтобы просмотреть полный список томов энциклопедии «Языки "
 "мира», на которых основана эта база данных, перейдите"
 msgstr ""
 
-#: templates/home.jinja2:17
+#: templates/home.jinja2:24
 msgid "на сайт ИЯз РАН"
 msgstr ""
 
-#: templates/home.jinja2:19
+#: templates/home.jinja2:26
 msgid "Цитирование"
 msgstr ""
 
-#: templates/home.jinja2:21
+#: templates/home.jinja2:28
 msgid ""
 "При цитировании материалов из базы данных просим использовать следующую "
 "библиографическую ссылку"
 msgstr ""
 
-#: templates/home.jinja2:25
+#: templates/home.jinja2:32
 msgid "Контакты"
 msgstr ""
 
-#: templates/home.jinja2:27
+#: templates/home.jinja2:34
 msgid ""
 "С вопросами и комментариями о базе данных вы можете обращаться к "
 "разработчику"
 msgstr ""
 
-#: templates/home.jinja2:27
+#: templates/home.jinja2:34
 msgid "Дмитрию Коломацкому"
 msgstr ""
 
