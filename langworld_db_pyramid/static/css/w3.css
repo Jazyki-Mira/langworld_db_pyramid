@@ -257,3 +257,7 @@ summary {
 div.w3-margin-left > p > a {
     color: #009688;
 }
+
+div.w3-margin-left > p > a:hover {
+    color: #ff5722;
+}
