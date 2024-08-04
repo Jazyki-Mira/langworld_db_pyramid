@@ -41,7 +41,7 @@ def add_routes_for_page_views_with_i18n(config: Configurator) -> None:
         ("feature", "feature/{feature_man_id}"),
         ("families", "family/{family_man_id}"),
         ("home", "home"),
-        ("howto", "howto"),  # leading slash will be added in the loop
+        ("howto", "howto"),
         ("query_wizard", "query_wizard"),
     )
     for name, path in names_and_paths:
