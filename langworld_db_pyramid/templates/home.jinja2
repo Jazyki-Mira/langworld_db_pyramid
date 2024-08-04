@@ -1,11 +1,37 @@
 {% extends "base_depth1_single_full_width.jinja2" %}
 
 {% block title %}{% trans %}Главная{% endtrans %}{% endblock title %}
-{% block h1 %}{% trans %}База данных «Языки мира»{% endtrans %}{% endblock h1 %}
+{% block h1 %}{% trans %}Энциклопедическая база данных и атлас «Языки мира онлайн»{% endtrans %}{% endblock h1 %}
 
 {% block full_width %}
   <div class="w3-margin-left">
-    <p>{% trans %}Версия 4 (онлайн). Веб-приложение находится в процессе разработки.{% endtrans %}</p>
-    <p>{% trans %}С любыми вопросами и комментариями просьба обращаться к разработчику{% endtrans %} <a href="https://iling-ran.ru/web/{{ request.locale_name}}/scholars/kolomatskiy" target="_blank">{% trans %}Дмитрию Коломацкому{% endtrans %}</a>.</p>
-  </div>
+
+    <p>{% trans %}Энциклопедическая база данных и атлас «Языки мира онлайн» (ЯМОЛ) представляет собой цифровой продукт, дополняющий{% endtrans %} <a href="https://iling-ran.ru/web/ru/publications/langworld" target="_blank">{% trans %}многотомное энциклопедическое издание «Языки мира»{% endtrans %}↗</a>, {% trans %}издаваемое Институтом языкознания Российской академии наук с 1990-х годов. Это своего рода путеводитель по энциклопедии, предоставляющий пользователю интерактивные инструменты для поиска и визуализации данных из энциклопедических статей{% endtrans %}.</p>
+
+    <p>{% trans %}В нынешнем виде проект разрабатывается в{% endtrans %} <a href="https://iling-ran.ru/web/ru/departments/linguistics/applied" target="_blank">{% trans %}отделе прикладной лингвистики ИЯз РАН{% endtrans %}↗</a> {% trans %}с конца 2022 года, однако идея и первые наработки в области создания базы данных по энциклопедии датируются 1980-ми годами. Более подробное изложение истории см. в разделе{% endtrans %} <a href="{{ request.route_path('about_localized', locale=request.locale_name) }}">{% trans %}«О проекте»{% endtrans %}</a>.</p>
+
+    <p>{% trans %}База данных может быть использована не только для лингвистических исследований: она также адресована преподавателям, студентам и всем интересующимся языковым разнообразием. Подробнее об устройстве и использовании базы данных вы можете узнать из раздела{% endtrans %} <a href="{{ request.route_path('howto_localized', locale=request.locale_name) }}">{% trans %}«Как пользоваться»{% endtrans %}</a>.</p>
+
+    <p>
+        {% trans %}Информация о языках, данные которых представлены в базе, размещена в разделах
+        «Языки:{% endtrans %} <a href="{{ request.route_path('all_doculects_list_localized', locale=request.locale_name) }}">{% trans %}список{% endtrans %}</a>
+        / <a href="{{ request.route_path('all_doculects_map_localized', locale=request.locale_name) }}">{% trans %}карта{% endtrans %}</a>
+        / <a href="{{ request.route_path('families_localized', locale=request.locale_name, family_man_id='_all') }}">{% trans %}генеалогия{% endtrans %}</a>{% trans %}»,
+        а о лингвистических признаках, которые отражены на картах, — в разделе{% endtrans %}
+        <a href="{{ request.route_path('all_features_list_localized', locale=request.locale_name) }}">{% trans %}«Признаки»{% endtrans %}</a>.
+        {% trans %}В разделе{% endtrans %} <a href="{{ request.route_path('query_wizard_localized', locale=request.locale_name) }}">{% trans %}«Запросы»{% endtrans %}</a> {% trans %}вы можете задать свой запрос к базе данных{% endtrans %}.</p>
+
+    <p>{% trans %}На страницах большинства языков вы можете открыть соответствующую статью энциклопедии. Чтобы просмотреть полный список томов энциклопедии «Языки мира», на которых основана эта база данных, перейдите{% endtrans %} <a href="https://iling-ran.ru/web/ru/publications/langworld/volumes" target="_blank">{% trans %}на сайт ИЯз РАН{% endtrans %}↗</a>.</p>
+
+    <h2>{% trans %}Цитирование{% endtrans %}</h2>
+
+    <p>{% trans %}При цитировании материалов из базы данных просим использовать следующую библиографическую ссылку{% endtrans %}:</p>
+
+    <p><tt>Формат ссылки уточняется.</tt></p>
+
+    <h2>{% trans %}Контакты{% endtrans %}</h2>
+
+    <p>{% trans %}С вопросами и комментариями о базе данных вы можете обращаться к разработчику{% endtrans %} <a href="https://iling-ran.ru/web/ru/scholars/kolomatskiy" target="_blank">{% trans %}Дмитрию Коломацкому{% endtrans %}↗</a>.</p>
+
+</div>
 {% endblock full_width %}

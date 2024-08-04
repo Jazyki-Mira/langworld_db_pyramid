@@ -33,13 +33,15 @@ def add_routes_for_page_views_with_i18n(config: Configurator) -> None:
     # routes for Jinja rendering all come in two variations: plain (with implicit default locale)
     # and with explicit locale
     names_and_paths = (
-        ("all_doculects_list", "doculects/list"),  # leading slash will be added in the loop
+        ("about", "about"),  # leading slash will be added in the loop
+        ("all_doculects_list", "doculects/list"),
         ("all_doculects_map", "doculects/map"),
         ("doculect_profile", "doculect/{doculect_man_id}"),
         ("all_features_list", "features/list"),
         ("feature", "feature/{feature_man_id}"),
         ("families", "family/{family_man_id}"),
         ("home", "home"),
+        ("howto", "howto"),
         ("query_wizard", "query_wizard"),
     )
     for name, path in names_and_paths:

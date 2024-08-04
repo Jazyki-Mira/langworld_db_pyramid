@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: 58207913+lemontree210@users.noreply.github.com\n"
-"POT-Creation-Date: 2024-03-11 12:11+0300\n"
+"POT-Creation-Date: 2024-08-03 12:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Dmitry Kolomatskiy <58207913+lemontree210@users.noreply.github.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,8 +37,11 @@ msgstr ""
 msgid "Перейти на главную"
 msgstr ""
 
+#: templates/about.jinja2:3 templates/base.jinja2:44
+msgid "О проекте"
+msgstr ""
+
 #: templates/all_doculects_list.jinja2:5 templates/all_doculects_list.jinja2:45
-#: templates/base.jinja2:44
 msgid "Список языков"
 msgstr ""
 
@@ -59,7 +62,7 @@ msgstr ""
 msgid "Том"
 msgstr ""
 
-#: templates/all_doculects_map.jinja2:5 templates/base.jinja2:45
+#: templates/all_doculects_map.jinja2:5
 msgid "Карта языков"
 msgstr ""
 
@@ -67,33 +70,48 @@ msgstr ""
 msgid "на общей карте"
 msgstr ""
 
-#: templates/all_features_list.jinja2:3 templates/base.jinja2:47
+#: templates/all_features_list.jinja2:3 templates/base.jinja2:49
 #: templates/doculect.jinja2:98 templates/query_wizard.jinja2:51
 msgid "Признаки"
 msgstr ""
 
 #: templates/base.jinja2:15
-msgid "БД «Языки мира»"
+msgid "Языки мира"
 msgstr ""
 
 #: templates/base.jinja2:43 templates/home.jinja2:3
 msgid "Главная"
 msgstr ""
 
-#: templates/base.jinja2:46 templates/doculect.jinja2:49
-#: templates/families.jinja2:7 templates/query_wizard.jinja2:41
-msgid "Генеалогия"
+#: templates/base.jinja2:45 templates/howto.jinja2:3
+msgid "Как пользоваться"
 msgstr ""
 
-#: templates/base.jinja2:48 templates/query_wizard.jinja2:10
-msgid "Мастер запросов"
+#: templates/base.jinja2:46 templates/base.jinja2:47 templates/base.jinja2:48
+msgid "Языки"
 msgstr ""
 
-#: templates/base.jinja2:103 templates/home.jinja2:4
-msgid "База данных «Языки мира»"
+#: templates/base.jinja2:46 templates/home.jinja2:17
+msgid "список"
 msgstr ""
 
-#: templates/base.jinja2:103
+#: templates/base.jinja2:47 templates/home.jinja2:18
+msgid "карта"
+msgstr ""
+
+#: templates/base.jinja2:48 templates/home.jinja2:19
+msgid "генеалогия"
+msgstr ""
+
+#: templates/base.jinja2:50 templates/query_wizard.jinja2:10
+msgid "Запросы"
+msgstr ""
+
+#: templates/base.jinja2:105 templates/home.jinja2:4
+msgid "Энциклопедическая база данных и атлас «Языки мира онлайн»"
+msgstr ""
+
+#: templates/base.jinja2:105
 msgid "Института языкознания РАН"
 msgstr ""
 
@@ -134,6 +152,11 @@ msgstr ""
 
 #: templates/doculect.jinja2:46
 msgid "Том энциклопедии в формате PDF на данный момент недоступен"
+msgstr ""
+
+#: templates/doculect.jinja2:49 templates/families.jinja2:7
+#: templates/query_wizard.jinja2:41
+msgid "Генеалогия"
 msgstr ""
 
 #: templates/doculect.jinja2:61
@@ -224,15 +247,117 @@ msgstr ""
 msgid "Значения"
 msgstr ""
 
-#: templates/home.jinja2:8
-msgid "Версия 4 (онлайн). Веб-приложение находится в процессе разработки."
+#: templates/home.jinja2:9
+msgid ""
+"Энциклопедическая база данных и атлас «Языки мира онлайн» (ЯМОЛ) "
+"представляет собой цифровой продукт, дополняющий"
 msgstr ""
 
 #: templates/home.jinja2:9
-msgid "С любыми вопросами и комментариями просьба обращаться к разработчику"
+msgid "многотомное энциклопедическое издание «Языки мира»"
 msgstr ""
 
 #: templates/home.jinja2:9
+msgid ""
+"издаваемое Институтом языкознания Российской академии наук с 1990-х "
+"годов. Это своего рода путеводитель по энциклопедии, предоставляющий "
+"пользователю интерактивные инструменты для поиска и визуализации данных "
+"из энциклопедических статей"
+msgstr ""
+
+#: templates/home.jinja2:11
+msgid "В нынешнем виде проект разрабатывается в"
+msgstr ""
+
+#: templates/home.jinja2:11
+msgid "отделе прикладной лингвистики ИЯз РАН"
+msgstr ""
+
+#: templates/home.jinja2:11
+msgid ""
+"с конца 2022 года, однако идея и первые наработки в области создания базы"
+" данных по энциклопедии датируются 1980-ми годами. Более подробное "
+"изложение истории см. в разделе"
+msgstr ""
+
+#: templates/home.jinja2:11
+msgid "«О проекте»"
+msgstr ""
+
+#: templates/home.jinja2:13
+msgid ""
+"База данных может быть использована не только для лингвистических "
+"исследований: она также адресована преподавателям, студентам и всем "
+"интересующимся языковым разнообразием. Подробнее об устройстве и "
+"использовании базы данных вы можете узнать из раздела"
+msgstr ""
+
+#: templates/home.jinja2:13
+msgid "«Как пользоваться»"
+msgstr ""
+
+#: templates/home.jinja2:16
+msgid ""
+"Информация о языках, данные которых представлены в базе, размещена в "
+"разделах\n"
+"        «Языки:"
+msgstr ""
+
+#: templates/home.jinja2:19
+msgid ""
+"»,\n"
+"        а о лингвистических признаках, которые отражены на картах, — в "
+"разделе"
+msgstr ""
+
+#: templates/home.jinja2:21
+msgid "«Признаки»"
+msgstr ""
+
+#: templates/home.jinja2:22
+msgid "В разделе"
+msgstr ""
+
+#: templates/home.jinja2:22
+msgid "«Запросы»"
+msgstr ""
+
+#: templates/home.jinja2:22
+msgid "вы можете задать свой запрос к базе данных"
+msgstr ""
+
+#: templates/home.jinja2:24
+msgid ""
+"На страницах большинства языков вы можете открыть соответствующую статью "
+"энциклопедии. Чтобы просмотреть полный список томов энциклопедии «Языки "
+"мира», на которых основана эта база данных, перейдите"
+msgstr ""
+
+#: templates/home.jinja2:24
+msgid "на сайт ИЯз РАН"
+msgstr ""
+
+#: templates/home.jinja2:26
+msgid "Цитирование"
+msgstr ""
+
+#: templates/home.jinja2:28
+msgid ""
+"При цитировании материалов из базы данных просим использовать следующую "
+"библиографическую ссылку"
+msgstr ""
+
+#: templates/home.jinja2:32
+msgid "Контакты"
+msgstr ""
+
+#: templates/home.jinja2:34
+msgid ""
+"С вопросами и комментариями о базе данных вы можете обращаться к "
+"разработчику"
+msgstr ""
+
+#: templates/home.jinja2:34
 msgid "Дмитрию Коломацкому"
 msgstr ""
 

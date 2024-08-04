@@ -12,7 +12,7 @@
         <meta name="author" content="Institute of Linguistics, Russian Academy of Sciences">
         <link rel="shortcut icon" href="{{request.static_url('langworld_db_pyramid:static/images/favicon.png')}}">
 
-        <title>{% trans %}БД «Языки мира»{% endtrans %}: {% block title %}{% endblock title %}</title>
+        <title>{% trans %}Языки мира{% endtrans %}: {% block title %}{% endblock title %}</title>
 
         <link href="{{request.static_url('langworld_db_pyramid:static/css/w3.css')}}" rel="stylesheet">
         <link href="{{request.static_url('langworld_db_pyramid:static/css/w3-theme-blue-grey.css')}}" rel="stylesheet">
@@ -41,11 +41,13 @@
     <!-- Navbar -->
     {% macro nav_links_except_for_language_switch(css_class) -%}
         <a href="{{ request.route_path('home_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Главная{% endtrans %}</a>
-        <a href="{{ request.route_path('all_doculects_list_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Список языков{% endtrans %}</a>
-        <a href="{{ request.route_path('all_doculects_map_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Карта языков{% endtrans %}</a>
-        <a href="{{ request.route_path('families_localized', locale=request.locale_name, family_man_id='_all') }}" class="{{ css_class }}">{% trans %}Генеалогия{% endtrans %}</a>
-        <a href="{{ request.route_path('all_features_list_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Признаки{% endtrans %}</a>
-        <a href="{{ request.route_path('query_wizard_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Мастер запросов{% endtrans %}</a>
+        <a href="{{ request.route_path('about_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}О проекте{% endtrans %}</a>
+        <a href="{{ request.route_path('howto_localized', locale=request.locale_name) }}" class="{{ css_class }}">{% trans %}Как пользоваться{% endtrans %}</a>
+        <a href="{{ request.route_path('all_doculects_list_localized', locale=request.locale_name) }}" class="{{ css_class }}"><b>{% trans %}Языки{% endtrans %}</b>: {% trans %}список{% endtrans %}</a>
+        <a href="{{ request.route_path('all_doculects_map_localized', locale=request.locale_name) }}" class="{{ css_class }}"><b>{% trans %}Языки{% endtrans %}</b>: {% trans %}карта{% endtrans %}</a>
+        <a href="{{ request.route_path('families_localized', locale=request.locale_name, family_man_id='_all') }}" class="{{ css_class }}"><b>{% trans %}Языки{% endtrans %}</b>: {% trans %}генеалогия{% endtrans %}</a>
+        <a href="{{ request.route_path('all_features_list_localized', locale=request.locale_name) }}" class="{{ css_class }}"><b>{% trans %}Признаки{% endtrans %}</b></a>
+        <a href="{{ request.route_path('query_wizard_localized', locale=request.locale_name) }}" class="{{ css_class }}"><b>{% trans %}Запросы{% endtrans %}</b></a>
     {% endmacro %}
     
     <div class="w3-top">
@@ -99,12 +101,10 @@
       {% endblock content_main %}
 
       <footer id="myFooter">
-        <div class="w3-container w3-theme-l2 w3-padding-32">
-          <p class="w3-large w3-text-darkest-blue-grey">{% trans %}База данных «Языки мира»{% endtrans %} <a href="https://iling-ran.ru/web/{{ request.locale_name }}" target="_blank">{% trans %}Института языкознания РАН{% endtrans %}</a></p>
-        </div>
-
         <div class="w3-container w3-theme-l1">
-          <p><a href="https://github.com/lemontree210/langworld_db_pyramid" target="_blank"><img src="{{request.static_url('langworld_db_pyramid:static/images/github-mark-32px-light.png')}}" /></a>&nbsp;&nbsp;&nbsp;<a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license"><img alt="Creative Commons License" data-entity-type="" data-entity-uuid="" src="https://i.creativecommons.org/l/by/4.0/88x31.png" style="border-width:0" /></a></p>
+          <p>{% trans %}Энциклопедическая база данных и атлас «Языки мира онлайн»{% endtrans %} <a href="https://iling-ran.ru/web/{{ request.locale_name }}" target="_blank">{% trans %}Института языкознания РАН{% endtrans %}↗</a>.</p>
+          <p><a href="https://github.com/Jazyki-Mira/langworld_db_pyramid" target="_blank"><img src="{{request.static_url('langworld_db_pyramid:static/images/github-mark-32px-light.png')}}" /></a>&nbsp;&nbsp;&nbsp;<a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license"><img alt="Creative Commons License" data-entity-type="" data-entity-uuid="" src="https://i.creativecommons.org/l/by/4.0/88x31.png" style="border-width:0" /></a></p>
+          <p>&copy; ИЯз РАН, 2024</p>
           {% block custom_footer_bottom %}
           {% endblock custom_footer_bottom %}
         </div>
