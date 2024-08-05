@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from operator import attrgetter
 from typing import Any, Union
 
@@ -80,6 +81,14 @@ def get_feature_values_icons(
     route_name="feature_localized", renderer="langworld_db_pyramid:templates/feature.jinja2"
 )
 def view_feature_list_of_values(request: Request) -> dict[str, Any]:
+    def _get_sorted_listed_values_for_feature_description(
+        values: Iterable[models.FeatureValue],
+    ) -> tuple[models.FeatureValue, ...]:
+        """Sorts feature values by integer value of `man_id`."""
+        values_to_return = [v for v in values if v.type.name == "listed"]
+        values_to_return.sort(key=lambda v: int(v.man_id.split("-")[-1]))
+        return tuple(values_to_return)
+
     feature = models.Feature.get_by_man_id(
         request=request, man_id=request.matchdict["feature_man_id"]
     )
@@ -88,7 +97,7 @@ def view_feature_list_of_values(request: Request) -> dict[str, Any]:
         "feature_name": getattr(feature, f"name_{locale}"),
         "man_id": feature.man_id,
         "feature_description": getattr(feature, f"description_html_{locale}"),
-        "values": feature.values,
+        "values": _get_sorted_listed_values_for_feature_description(feature.values),
         "doculect_in_focus": get_doculect_from_params(request),
     }
 
