@@ -51,11 +51,12 @@
     {% endmacro %}
     
     <div class="w3-top">
+      <!-- Navbar on PC screens -->
       <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
         <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="openMenu()"><i class="fa fa-bars"></i></a>
 
         {% if request.locale_name == 'ru' %}
-            {% set link_text = "Switch to English" %}
+            {% set link_text = "EN" %}
             {% if '/ru/' in request.url %}
                 {% set target = request.url.replace('/ru/', '/en/') %}
             {% elif request.url == request.host_url + "/" %}
@@ -64,7 +65,7 @@
                 {% set target = request.host_url + "/en" + request.url.replace(request.host_url, "") %}
             {% endif %}
         {% else %}
-            {% set link_text = "Русская версия" %}
+            {% set link_text = "РУС" %}
             {% set target = request.url.replace('/en/', '/ru/') %}
         {% endif %}
 
@@ -80,7 +81,7 @@
     </div>
 
     <div class="w3-main">
-      <div class="w3-row w3-padding-top-32 w3-margin-left">
+      <div class="w3-row w3-padding-top-64 w3-margin-left">
         {% block h1_container %}  {# add the ability to override the whole container if needed #}
           <div class="w3-col w3-container negative-margin-bottom">
             <h1 class="w3-text-dark-blue-grey">
