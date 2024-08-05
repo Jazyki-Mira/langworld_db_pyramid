@@ -123,6 +123,30 @@
       }
     }
     </script>
+
+    <script>
+        // checks navbar buttons and highlights one of them if this is the page user is on
+
+        const navBarLinks = document.querySelectorAll("a.w3-bar-item.w3-button");
+        const currentURL = window.location.href;
+        navBarLinks.forEach(hyperlink => {
+            if (hyperlink.href === currentURL) {
+                // styling gets adjusted for both screen sizes in case user can change window size
+
+                // for large screens
+                if (hyperlink.classList.contains("w3-hover-white")) {
+                    hyperlink.classList.add("w3-theme-l1");
+                }
+
+                // for small screens
+                if (hyperlink.classList.contains("w3-sand")) {
+                    hyperlink.classList.remove("w3-sand");
+                    hyperlink.classList.add("w3-pale-green");
+                }
+            }
+        });
+    </script>
+
     {% block scripts %}
     {% endblock scripts %}
 
