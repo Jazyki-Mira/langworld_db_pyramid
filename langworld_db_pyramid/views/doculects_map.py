@@ -9,7 +9,7 @@ from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.locale.in_code_translation_strings import ALL_VISIBLE_DOCULECTS_HEADING
 from langworld_db_pyramid.maputils.marker_icons import generate_one_icon
 from langworld_db_pyramid.maputils.markers import generate_marker_group
-from langworld_db_pyramid.views import get_doculect_from_params
+from langworld_db_pyramid.views import get_doculect_from_params, localized_name_case_insensitive
 
 
 @view_config(
@@ -27,10 +27,7 @@ def view_all_doculects_map(request: Request) -> dict[str, Optional[models.Docule
 @view_config(route_name="doculects_for_map_all", renderer="json")
 def get_doculects_for_map(request: Request) -> list[dict[str, Any]]:
     doculects = get_all(
-        request,
-        select(models.Doculect)
-        .where(models.Doculect.has_feature_profile)
-        .order_by(getattr(models.Doculect, f"name_{request.locale_name}")),
+        request, select(models.Doculect).where(models.Doculect.has_feature_profile)
     )
 
     icon = generate_one_icon()
@@ -41,7 +38,7 @@ def get_doculects_for_map(request: Request) -> list[dict[str, Any]]:
             request,
             group_id="",
             group_name=request.localizer.translate(ALL_VISIBLE_DOCULECTS_HEADING),
-            doculects=doculects,
+            doculects=sorted(doculects, key=localized_name_case_insensitive(request.locale_name)),
             div_icon_html=icon.svg_tag,
             img_src=icon.img_src,
         )

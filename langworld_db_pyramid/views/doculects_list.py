@@ -7,6 +7,7 @@ from sqlalchemy import and_, or_, select
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.models import Doculect, EncyclopediaVolume
+from langworld_db_pyramid.views import localized_name_case_insensitive
 
 
 @view_config(
@@ -20,18 +21,20 @@ from langworld_db_pyramid.models import Doculect, EncyclopediaVolume
 def view_all_doculects_list(
     request: Request,
 ) -> dict[str, list[Union[Doculect, EncyclopediaVolume]]]:
-    all_doculects = get_all(
-        request,
-        select(models.Doculect)
-        .where(models.Doculect.has_feature_profile)
-        .order_by(getattr(models.Doculect, f"name_{request.locale_name}")),
+    doculects = get_all(
+        request, select(models.Doculect).where(models.Doculect.has_feature_profile)
     )
 
     volumes = get_all(
         request, select(models.EncyclopediaVolume).order_by(models.EncyclopediaVolume.id)
     )
 
-    return {"doculects": all_doculects, "volumes": volumes}
+    return {
+        # TODO this case insensitive sorting is repeated in several views.
+        #  Should something be included in Doculect model itself?
+        "doculects": sorted(doculects, key=localized_name_case_insensitive(request.locale_name)),
+        "volumes": volumes,
+    }
 
 
 @view_config(route_name="doculects_by_substring", renderer="json")
@@ -61,7 +64,6 @@ def get_doculects_by_substring(request: Request) -> list[dict[str, Union[list[st
                 models.Iso639P3Code.code.contains(query),
             ),
         )
-        .order_by(getattr(models.Doculect, name_attr))
         .distinct(),
     )
 
@@ -73,5 +75,7 @@ def get_doculects_by_substring(request: Request) -> list[dict[str, Union[list[st
             "iso639p3Codes": [code.code for code in doculect.iso_639p3_codes],
             "glottocodes": [code.code for code in doculect.glottocodes],
         }
-        for doculect in matching_doculects
+        for doculect in sorted(
+            matching_doculects, key=localized_name_case_insensitive(request.locale_name)
+        )
     ]

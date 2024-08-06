@@ -1,5 +1,4 @@
 from collections.abc import Iterable
-from operator import attrgetter
 from typing import Any, Union
 
 from pyramid.request import Request
@@ -19,7 +18,7 @@ from langworld_db_pyramid.maputils.marker_icons import (
     icon_for_object,
 )
 from langworld_db_pyramid.maputils.markers import generate_marker_group
-from langworld_db_pyramid.views import get_doculect_from_params
+from langworld_db_pyramid.views import get_doculect_from_params, localized_name_case_insensitive
 
 
 @view_config(
@@ -117,7 +116,7 @@ def view_feature_map_of_values(request: Request) -> list[dict[str, Any]]:
             group_name=getattr(value, name_attr),
             div_icon_html=icon_for_listed_value[value].svg_tag,
             img_src=icon_for_listed_value[value].img_src,
-            doculects=sorted(value.doculects, key=attrgetter(name_attr)),
+            doculects=sorted(value.doculects, key=localized_name_case_insensitive(locale)),
             additional_popup_text=f"({getattr(feature, name_attr)}: {getattr(value, name_attr)})",
         )
         for value in listed_values
@@ -128,7 +127,8 @@ def view_feature_map_of_values(request: Request) -> list[dict[str, Any]]:
             group_name=request.localizer.translate(NAME_OF_GROUP_WITH_EMPTY_VALUES_FOR_MAP),
             div_icon_html=empty_value_icon.svg_tag,
             doculects=sorted(
-                (d for value in empty_values for d in value.doculects), key=attrgetter(name_attr)
+                (doculects for value in empty_values for doculects in value.doculects),
+                key=localized_name_case_insensitive(locale),
             ),
             img_src=empty_value_icon.img_src,
             additional_popup_text=(
