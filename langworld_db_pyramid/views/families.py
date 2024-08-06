@@ -1,4 +1,3 @@
-from operator import attrgetter
 from typing import Any, Optional, Union
 
 from pyramid.request import Request
@@ -9,7 +8,7 @@ from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, CLLDPie, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
-from langworld_db_pyramid.views import get_doculect_from_params
+from langworld_db_pyramid.views import get_doculect_from_params, localized_name_case_insensitive
 
 MATCHDICT_ID_FOR_ALL_FAMILIES = "_all"
 
@@ -84,7 +83,7 @@ def view_families_for_map(request: Request) -> list[dict[str, Any]]:
                 img_src=icon_for_family[family].img_src,
                 doculects=sorted(
                     [d for d in family.doculects if d.has_feature_profile],
-                    key=attrgetter(name_attr),
+                    key=localized_name_case_insensitive(locale),
                 ),
                 additional_popup_text=f'(<a href="{href}">{getattr(family, name_attr)}</a>)',
             )
@@ -104,7 +103,7 @@ def view_families_for_map(request: Request) -> list[dict[str, Any]]:
                 img_src=icon_for_family[subfamily].img_src,
                 doculects=sorted(
                     subfamily.iter_doculects_that_have_feature_profiles(),
-                    key=attrgetter(name_attr),
+                    key=localized_name_case_insensitive(locale),
                 ),
                 additional_popup_text=f'(<a href="{href}">{getattr(subfamily, name_attr)}</a>)',
             )

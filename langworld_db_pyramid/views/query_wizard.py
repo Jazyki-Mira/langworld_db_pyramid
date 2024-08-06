@@ -1,4 +1,3 @@
-from operator import attrgetter
 from typing import Any
 
 from pyramid.request import Request
@@ -12,6 +11,7 @@ from langworld_db_pyramid.locale.in_code_translation_strings import (
 )
 from langworld_db_pyramid.maputils.marker_icons import generate_one_icon
 from langworld_db_pyramid.maputils.markers import generate_marker_group
+from langworld_db_pyramid.views import localized_name_case_insensitive
 
 
 @view_config(
@@ -32,7 +32,7 @@ def view_query_wizard(request: Request) -> dict[str, Any]:
 
 @view_config(route_name="query_wizard_json", renderer="json")
 def get_matching_doculects(request: Request) -> list[dict[str, Any]]:
-    name_attr = f"name_{request.locale_name}"
+    locale = request.locale_name
 
     doculects = get_all(
         request, select(models.Doculect).where(models.Doculect.has_feature_profile)
@@ -48,7 +48,7 @@ def get_matching_doculects(request: Request) -> list[dict[str, Any]]:
                 request,
                 group_id="",
                 group_name=request.localizer.translate(VISIBLE_MATCHING_DOCULECTS_HEADING),
-                doculects=sorted(doculects, key=attrgetter(name_attr)),
+                doculects=sorted(doculects, key=localized_name_case_insensitive(locale)),
                 div_icon_html=icon.svg_tag,
                 img_src=icon.img_src,
             )
@@ -81,6 +81,6 @@ def get_matching_doculects(request: Request) -> list[dict[str, Any]]:
             group_name=request.localizer.translate(VISIBLE_MATCHING_DOCULECTS_HEADING),
             div_icon_html=icon.svg_tag,
             img_src=icon.img_src,
-            doculects=sorted(matching_doculects, key=attrgetter(name_attr)),
+            doculects=sorted(matching_doculects, key=localized_name_case_insensitive(locale)),
         )
     ]
