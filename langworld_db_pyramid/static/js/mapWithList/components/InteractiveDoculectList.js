@@ -34,7 +34,8 @@ export default function InteractiveDoculectList() {
   function DoculectGroup(doculectGroup) {
     // return empty div for compound values (hence excluding them from interactive list)
     // TODO in the future this can be toggled by the user
-    if (doculectGroup["id"].includes("&")) return elem("div", { key: doculectGroup["id"] });
+    if (doculectGroup["id"].includes("&"))
+      return elem("div", { key: doculectGroup["id"] });
 
     let headingText = `${doculectGroup["name"]} (${doculectGroup["doculects"].length})`;
     if (doculectGroup["href"] != "")
@@ -60,7 +61,10 @@ export default function InteractiveDoculectList() {
       ),
       elem(
         "ul",
-        { className: "doculects-in-group w3-ul", id: doculectGroup["id"] },
+        {
+          className: "doculects-in-group w3-ul w3-hide",
+          id: doculectGroup["id"],
+        },
         doculects.map((doculect) => DoculectListItem(doculect))
       )
     );

@@ -14,13 +14,16 @@
 
 {% block two_thirds %}
 {# this <div> will be moved above the list using the script imported below #}
-<div id="doculects-in-list-toggle-container">
-  <span class="slider-label w3-text-dark-blue-grey">{% trans %}Развернуть все{% endtrans %}</span>
-  <label class="switch">
-    <input id="doculects-in-list-toggle" type="checkbox">
-    <span class="slider round"  title="{% trans %}Используйте этот переключатель, чтобы свернуть/развернуть все группы. Нажатие на цветной маркер конкретной группы языков сворачивает/разворачивает выбранную группу.{% endtrans %}"></span>
-  </label>
-  <span class="slider-label w3-text-dark-blue-grey">{% trans %}Свернуть все{% endtrans %}</span>
+<div id="doculect-list-expand-collapse-container">
+  <button id="doculect-list-expand-all-button" class="w3-button w3-theme-l3">{% trans %}Развернуть все{% endtrans %}</button>
+  <button id="doculect-list-collapse-all-button" class="w3-button w3-theme-l3">{% trans %}Свернуть все{% endtrans %}</button>
+  <details>
+    <summary class="w3-margin-top w3-text-deep-orange w3-medium">{% trans %}Об интерактивном списке языков{% endtrans %}</summary>
+    <ul class="w3-text-darkest-blue-grey w3-medium">
+      <li>{% trans %}Список содержит{% endtrans %} <strong>{% trans %}только те языки, которые сейчас видны на карте</strong>. При движении или изменении масштаба карты он меняется{% endtrans %}.</li>
+      <li>{% trans %}Чтобы развернуть/свернуть{% endtrans %} <strong>{% trans %}только одну группу{% endtrans %}</strong> {% trans %}языков, нажмите на цветной маркер перед её названием.{% endtrans %}</li>
+    </ul>
+  </details>
 </div>
 {% endblock two_thirds %}
 
