@@ -3,7 +3,7 @@ so including it without eventListener will cause it to run
 while the child template is still not fully rendered.
 */
 
-function setUpExpandCollapseContainer() {
+function setUpExpandCollapseContainerInInteractiveList() {
   {
     const markerGroups = document.querySelectorAll(
       "ul.doculects-in-group.w3-ul.w3-hide"
@@ -11,7 +11,7 @@ function setUpExpandCollapseContainer() {
 
     // even when DOM content is loaded and this function is called, data may still not have been fetched yet
     if (markerGroups.length === 0) {
-      setTimeout(setUpExpandCollapseContainer, 100);
+      setTimeout(setUpExpandCollapseContainerInInteractiveList, 100);
     }
 
     const expandAllButton = document.getElementById(
@@ -41,4 +41,4 @@ function setUpExpandCollapseContainer() {
   }
 }
 
-window.addEventListener("DOMContentLoaded", setUpExpandCollapseContainer);
+window.addEventListener("DOMContentLoaded", setUpExpandCollapseContainerInInteractiveList);
