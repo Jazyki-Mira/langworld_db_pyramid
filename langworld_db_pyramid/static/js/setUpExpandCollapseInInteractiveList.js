@@ -3,19 +3,22 @@ so including it without eventListener will cause it to run
 while the child template is still not fully rendered.
 */
 
-window.addEventListener("DOMContentLoaded", () => {
-  /* Additional timeout is needed for the <ul>'s to be rendered.
-  TODO think about reworking without explicit timeout
-  */
-  setTimeout(() => {
+function setUpExpandCollapseContainerInInteractiveList() {
+  {
+    const markerGroups = document.querySelectorAll(
+      "ul.doculects-in-group.w3-ul.w3-hide"
+    );
+
+    // even when DOM content is loaded and this function is called, data may still not have been fetched yet
+    if (markerGroups.length === 0) {
+      setTimeout(setUpExpandCollapseContainerInInteractiveList, 100);
+    }
+
     const expandAllButton = document.getElementById(
       "doculect-list-expand-all-button"
     );
     const collapseAllButton = document.getElementById(
       "doculect-list-collapse-all-button"
-    );
-    const markerGroups = document.querySelectorAll(
-      "ul.doculects-in-group.w3-ul.w3-hide"
     );
 
     expandAllButton.onclick = () => {
@@ -35,5 +38,7 @@ window.addEventListener("DOMContentLoaded", () => {
     );
     const listContainer = document.getElementById("interactive-list");
     if (listContainer != null) listContainer.prepend(expandCollapseContainer);
-  }, 750);
-});
+  }
+}
+
+window.addEventListener("DOMContentLoaded", setUpExpandCollapseContainerInInteractiveList);
