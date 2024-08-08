@@ -4,7 +4,7 @@ import renderMapWithList from "./tools/renderMapWithList.js";
 renderMapWithList("all");
 
 /* using event listener to wait for DOM the template to be rendered
-PLUS a timeout to wait for data to be loaded.
+PLUS a timeout to wait for data to be loaded and <ul>'s to be created.
 Returning a promise from `renderMapWithList` and using `.then()` on it doesn't work: 
 throws `<name of promise> is undefined`.
 TODO: maybe some changes could be made to `renderMapWithList()`
