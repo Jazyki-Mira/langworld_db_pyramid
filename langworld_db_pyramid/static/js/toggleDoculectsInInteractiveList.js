@@ -1,21 +1,24 @@
+import getMarkerGroupsWhenRendered from "./tools/getMarkerGroupsWhenRendered.js";
+
 /* This script is imported in a parent Jinja template,
 so including it without eventListener will cause it to run
 while the child template is still not fully rendered.
 */
 
-window.addEventListener("DOMContentLoaded", () => {
-  /* Additional timeout is needed for the <ul>'s to be rendered.
-  TODO think about reworking without explicit timeout
-  */
-  setTimeout(() => {
+function setUpExpandCollapseContainer() {
+  {
+    // even when DOM content is loaded, data still hasn't been fetched yet
+    let markerGroups = getMarkerGroupsWhenRendered();
+
+    if (markerGroups.length === 0) {
+      setTimeout(setUpExpandCollapseContainer, 100);
+    }
+
     const expandAllButton = document.getElementById(
       "doculect-list-expand-all-button"
     );
     const collapseAllButton = document.getElementById(
       "doculect-list-collapse-all-button"
-    );
-    const markerGroups = document.querySelectorAll(
-      "ul.doculects-in-group.w3-ul.w3-hide"
     );
 
     expandAllButton.onclick = () => {
@@ -35,5 +38,7 @@ window.addEventListener("DOMContentLoaded", () => {
     );
     const listContainer = document.getElementById("interactive-list");
     if (listContainer != null) listContainer.prepend(expandCollapseContainer);
-  }, 750);
-});
+  }
+}
+
+window.addEventListener("DOMContentLoaded", setUpExpandCollapseContainer);
