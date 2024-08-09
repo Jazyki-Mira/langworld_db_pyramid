@@ -36,7 +36,7 @@ def get_doculects_for_map(request: Request) -> list[dict[str, Any]]:
     return [
         generate_marker_group(
             request,
-            group_id="",
+            group_id="all",
             group_name=request.localizer.translate(ALL_VISIBLE_DOCULECTS_HEADING),
             doculects=sorted(doculects, key=localized_name_case_insensitive(request.locale_name)),
             div_icon_html=icon.svg_tag,
