@@ -3,11 +3,12 @@ import {
   doculectGroupsInMapViewContext,
   idOfDoculectToOpenPopupOnMapContext,
 } from "../contexts.js";
+import connectExpandAndCollapseButtonsWithGroups from "../../tools/connectExpandAndCollapseButtonsToListsOfDoculects.js";
 
 const elem = React.createElement;
 
 export default function DoculectMap({ mapDivID = "map-default" }) {
-  const leafletFeatureGroupsRef = React.useRef([]);  // "featureGroup" in terms of Leaflet, not database
+  const leafletFeatureGroupsRef = React.useRef([]); // "featureGroup" in terms of Leaflet, not database
   const mapRef = React.useRef(null);
   const selectedMarker = React.useRef(null);
 
@@ -98,6 +99,10 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
     mapRef.current.on("zoomend moveend", () => {
       // only change context, the list rendering is called from parent
       setDoculectGroupsInMapView(getGroupsInMapView());
+      /* "expand all" / "collapse all" buttons should be updated
+         in case some groups reappeared on the map.
+      */
+      connectExpandAndCollapseButtonsWithGroups();
     });
   }, [allDoculectGroups, mapLoaded]);
 
@@ -198,7 +203,9 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
        which means that pie markers will simply cover the circles.
        This is exactly what we need.
     */
-    leafletFeatureGroupsRef.current.forEach(group => group.addTo(mapRef.current));
+    leafletFeatureGroupsRef.current.forEach((group) =>
+      group.addTo(mapRef.current)
+    );
   };
 
   const addLegend = () => {
@@ -208,14 +215,16 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
       let div = L.DomUtil.create("div", "legend");
 
       // exclude compound values from legend
-      allDoculectGroups.filter(g => ! g["id"].includes("&")).forEach((group) => {
-        div.innerHTML += `<img src="${group['imgSrc']}" height="20px"/><span>${group["name"]}</span><br>`;
-      });
+      allDoculectGroups
+        .filter((g) => !g["id"].includes("&"))
+        .forEach((group) => {
+          div.innerHTML += `<img src="${group["imgSrc"]}" height="20px"/><span>${group["name"]}</span><br>`;
+        });
       return div;
     };
 
     legend.addTo(mapRef.current);
-  }
+  };
 
   const zoomMapToFitAllMarkers = () => {
     let allMarkers = [];

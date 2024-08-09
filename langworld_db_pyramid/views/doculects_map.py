@@ -9,7 +9,11 @@ from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.locale.in_code_translation_strings import ALL_VISIBLE_DOCULECTS_HEADING
 from langworld_db_pyramid.maputils.marker_icons import generate_one_icon
 from langworld_db_pyramid.maputils.markers import generate_marker_group
-from langworld_db_pyramid.views import get_doculect_from_params, localized_name_case_insensitive
+from langworld_db_pyramid.views import (
+    ID_TO_SHOW_ALL_DOCULECTS,
+    get_doculect_from_params,
+    localized_name_case_insensitive,
+)
 
 
 @view_config(
@@ -36,7 +40,7 @@ def get_doculects_for_map(request: Request) -> list[dict[str, Any]]:
     return [
         generate_marker_group(
             request,
-            group_id="",
+            group_id=ID_TO_SHOW_ALL_DOCULECTS,
             group_name=request.localizer.translate(ALL_VISIBLE_DOCULECTS_HEADING),
             doculects=sorted(doculects, key=localized_name_case_insensitive(request.locale_name)),
             div_icon_html=icon.svg_tag,
