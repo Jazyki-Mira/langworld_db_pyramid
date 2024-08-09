@@ -8,9 +8,11 @@ from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.maputils.marker_icons import CLLDIcon, CLLDPie, icon_for_object
 from langworld_db_pyramid.maputils.markers import generate_marker_group
-from langworld_db_pyramid.views import get_doculect_from_params, localized_name_case_insensitive
-
-MATCHDICT_ID_FOR_ALL_FAMILIES = "_all"
+from langworld_db_pyramid.views import (
+    ID_TO_SHOW_ALL_DOCULECTS,
+    get_doculect_from_params,
+    localized_name_case_insensitive,
+)
 
 
 def _get_family_immediate_subfamilies_and_icons(
@@ -28,7 +30,7 @@ def _get_family_immediate_subfamilies_and_icons(
     """
     family_man_id = request.matchdict["family_man_id"]
 
-    if family_man_id == MATCHDICT_ID_FOR_ALL_FAMILIES:
+    if family_man_id == ID_TO_SHOW_ALL_DOCULECTS:
         family = None
         immediate_subfamilies = get_all(
             request, select(models.Family).where(models.Family.parent == family)
