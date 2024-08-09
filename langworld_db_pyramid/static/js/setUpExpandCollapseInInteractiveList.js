@@ -1,7 +1,4 @@
-/* This script is imported in a parent Jinja template,
-so including it without eventListener will cause it to run
-while the child template is still not fully rendered.
-*/
+import connectExpandAndCollapseButtonsToListsOfDoculects from "./tools/connectExpandAndCollapseButtonsToListsOfDoculects";
 
 function setUpExpandCollapseContainerInInteractiveList() {
   {
@@ -14,24 +11,7 @@ function setUpExpandCollapseContainerInInteractiveList() {
       setTimeout(setUpExpandCollapseContainerInInteractiveList, 100);
     }
 
-    const expandAllButton = document.getElementById(
-      "doculect-list-expand-all-button"
-    );
-    const collapseAllButton = document.getElementById(
-      "doculect-list-collapse-all-button"
-    );
-
-    expandAllButton.onclick = () => {
-      markerGroups.forEach((ul) => {
-        ul.classList.remove("w3-hide");
-      });
-    };
-
-    collapseAllButton.onclick = () => {
-      markerGroups.forEach((ul) => {
-        ul.classList.add("w3-hide");
-      });
-    };
+    connectExpandAndCollapseButtonsToListsOfDoculects();
 
     const expandCollapseContainer = document.getElementById(
       "doculect-list-expand-collapse-container"
@@ -41,4 +21,11 @@ function setUpExpandCollapseContainerInInteractiveList() {
   }
 }
 
-window.addEventListener("DOMContentLoaded", setUpExpandCollapseContainerInInteractiveList);
+/* This script is imported in a parent Jinja template,
+so including it without eventListener will cause it to run
+while the child template is still not fully rendered.
+*/
+window.addEventListener(
+  "DOMContentLoaded",
+  setUpExpandCollapseContainerInInteractiveList
+);
