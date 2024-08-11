@@ -15,7 +15,6 @@ export default function adjustInteractiveListForSolitaryGroup() {
     /* the following could be outside of braces,
        but it would trigger error in console while group is null
     */
-    console.log("Expand doculects automatically")
     group.classList.remove("w3-hide");
 
     // 2. hide expand/collapse buttons
