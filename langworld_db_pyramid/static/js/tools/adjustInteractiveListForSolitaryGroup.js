@@ -22,6 +22,4 @@ export default function adjustInteractiveListForSolitaryGroup() {
       .getElementById("doculect-list-expand-collapse-container")
       .classList.add("w3-hide");
   }
-  // FIXME group is shown collapsed again if user zooms in so much
-  //  that there are no doculects to show and then zooms out again
 }
