@@ -215,6 +215,9 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
   };
 
   const addLegend = () => {
+    // legend not needed if this map is only intended to show a single group of doculects
+    if (allDoculectGroups.length === 1) return null;
+
     let legend = L.control({ position: "bottomright" });
 
     legend.onAdd = () => {

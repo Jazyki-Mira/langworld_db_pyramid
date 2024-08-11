@@ -15,11 +15,17 @@ export default function adjustInteractiveListForSolitaryGroup() {
     /* the following could be outside of braces,
        but it would trigger error in console while group is null
     */
+    console.log("Expand doculects automatically")
     group.classList.remove("w3-hide");
 
     // 2. hide expand/collapse buttons
     document
       .getElementById("doculect-list-expand-collapse-container")
+      .classList.add("w3-hide");
+
+    // 3. remove color marker from interactive list
+    document
+      .getElementsByClassName("icon-in-map-legend")[0]
       .classList.add("w3-hide");
   }
 }
