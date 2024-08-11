@@ -12,7 +12,7 @@ export default function adjustInteractiveListForSolitaryGroup() {
   if (group === null) {
     setTimeout(adjustInteractiveListForSolitaryGroup, 100);
   } else {
-    /* the following could be outside of 'if' 
+    /* the following could be outside of braces,
        but it would trigger error in console while group is null
     */
     group.classList.remove("w3-hide");
@@ -24,5 +24,4 @@ export default function adjustInteractiveListForSolitaryGroup() {
   }
   // FIXME group is shown collapsed again if user zooms in so much
   //  that there are no doculects to show and then zooms out again
-  // TODO add ID to ul so that solitary group can still be collapsed if user so wishes?
 }

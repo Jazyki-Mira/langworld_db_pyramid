@@ -3,6 +3,7 @@ import {
   doculectGroupsInMapViewContext,
   idOfDoculectToOpenPopupOnMapContext,
 } from "../contexts.js";
+import adjustInteractiveListForSolitaryGroup from "../../tools/adjustInteractiveListForSolitaryGroup.js";
 import connectExpandAndCollapseButtonsWithGroups from "../../tools/connectExpandAndCollapseButtonsToListsOfDoculects.js";
 
 const elem = React.createElement;
@@ -99,10 +100,15 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
     mapRef.current.on("zoomend moveend", () => {
       // only change context, the list rendering is called from parent
       setDoculectGroupsInMapView(getGroupsInMapView());
-      /* "expand all" / "collapse all" buttons should be updated
-         in case some groups reappeared on the map.
-      */
+
+      /* Reconnect "expand all" / "collapse all" buttons in case some groups reappeared on the map
+      that had previously disappeared from it during moving or zooming in. */
       connectExpandAndCollapseButtonsWithGroups();
+
+      /* If this map is meant to show only one group of doculects (e.g. all doculects, query wizard)
+      and the preceding zooming in had made it disappear,
+      properties of the interactive list must be restored after zooming out again.*/
+      adjustInteractiveListForSolitaryGroup();
     });
   }, [allDoculectGroups, mapLoaded]);
 

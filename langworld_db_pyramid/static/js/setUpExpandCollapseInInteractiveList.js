@@ -1,4 +1,4 @@
-import connectExpandAndCollapseButtonsToListsOfDoculects from "./tools/connectExpandAndCollapseButtonsToListsOfDoculects";
+import connectExpandAndCollapseButtonsToListsOfDoculects from "./tools/connectExpandAndCollapseButtonsToListsOfDoculects.js";
 
 function setUpExpandCollapseContainerInInteractiveList() {
   {
