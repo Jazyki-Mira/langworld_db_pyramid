@@ -108,7 +108,7 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
       /* If this map is meant to show only one group of doculects (e.g. all doculects, query wizard)
       and the preceding zooming in had made it disappear,
       properties of the interactive list must be restored after zooming out again.*/
-      adjustInteractiveListForSolitaryGroup();
+      if (allDoculectGroups.length === 1) adjustInteractiveListForSolitaryGroup();
     });
   }, [allDoculectGroups, mapLoaded]);
 
