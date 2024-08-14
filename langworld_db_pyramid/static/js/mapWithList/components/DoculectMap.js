@@ -82,15 +82,15 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
     setDoculectGroupsInMapView(getGroupsInMapView());
 
     /* Motivation for setTimeout()
-    If user opens the map from a doculect profile, it is likely that their mouse will 
-    end up pointing at a random doculect on the map, thus triggering its popup to open.
-    This is because of the position of the link to the map in doculect profiles.
-    This means that the user will not see the popup for the doculect they were meant to see.
-    Adding the timeout leads to the following chain of events: 
-    1. A popup opens for a doculect that user's mouse is pointing at,
-    2. after 0.5 seconds a popup opens for the correct doculect (closing the previous one).
-    Timeout of less than 0.5 seconds might not be enough for the map to show the popup for 
-    the random doculect the user's mouse is pointing at.
+       If user opens the map from a doculect profile, it is likely that their mouse will
+       end up pointing at a random doculect on the map, thus triggering its popup to open.
+       This is because of the position of the link to the map in doculect profiles.
+       This means that the user will not see the popup for the doculect they were meant to see.
+       Adding the timeout leads to the following chain of events:
+       1. A popup opens for a doculect that user's mouse is pointing at,
+       2. after 0.5 seconds a popup opens for the correct doculect (closing the previous one).
+          Timeout of less than 0.5 seconds might not be enough for the map to show the popup for
+          the random doculect the user's mouse is pointing at.
      */
     setTimeout(() => {
       changeIconForDoculectToShow(idOfDoculectToShow);
@@ -101,14 +101,20 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
       // only change context, the list rendering is called from parent
       setDoculectGroupsInMapView(getGroupsInMapView());
 
-      /* Reconnect "expand all" / "collapse all" buttons in case some groups reappeared on the map
-      that had previously disappeared from it during moving or zooming in. */
+      /* Reconnect "expand all" / "collapse all" buttons with all marker groups
+         currently in view.
+         This has to be done every time the set of marker groups changes.
+         Instead of checking whether the groups have changed (which will complicate the code),
+         we just do it every time after zooming/moving has occurred.
+      */
       connectExpandAndCollapseButtonsWithGroups();
 
       /* If this map is meant to show only one group of doculects (e.g. all doculects, query wizard)
-      and the preceding zooming in had made it disappear,
-      properties of the interactive list must be restored after zooming out again.*/
-      if (allDoculectGroups.length === 1) adjustInteractiveListForSolitaryGroup();
+         and the preceding zooming in had made it disappear,
+         properties of the interactive list must be restored after zooming out again.
+      */
+      if (allDoculectGroups.length === 1)
+        adjustInteractiveListForSolitaryGroup();
     });
   }, [allDoculectGroups, mapLoaded]);
 
@@ -177,8 +183,8 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
           markerForDoculectIDRef.current[idOfDoculectToShow].setOpacity(1);
       });
       marker.on("mouseout", function (e) {
-        /* if marker corresponds to the doculect that needs to stay in focus,
-        don't do anything: it has to remain opaque and with pop-up open
+        /* If marker corresponds to the doculect that needs to stay in focus,
+           don't do anything: it has to remain opaque and with pop-up open
         */
         if (
           marker == markerForDoculectIDRef.current[idOfDoculectToShow] &&
