@@ -13,7 +13,7 @@ from langworld_db_pyramid.views.doculects_list import (
 )
 from langworld_db_pyramid.views.doculects_map import get_doculects_for_map, view_all_doculects_map
 from langworld_db_pyramid.views.families import (
-    MATCHDICT_ID_FOR_ALL_FAMILIES,
+    ID_TO_SHOW_ALL_DOCULECTS,
     _get_family_immediate_subfamilies_and_icons,
     view_families_for_list,
     view_families_for_map,
@@ -206,7 +206,7 @@ def test_families__get_family_immediate_subfamilies_and_icons(
 ):
     dummy_request.matchdict["family_man_id"] = family_man_id
     parent, families, dict_with_icons = _get_family_immediate_subfamilies_and_icons(dummy_request)
-    if family_man_id == MATCHDICT_ID_FOR_ALL_FAMILIES:
+    if family_man_id == ID_TO_SHOW_ALL_DOCULECTS:
         assert parent is None
     else:
         assert parent.man_id == family_man_id
@@ -222,7 +222,7 @@ def test_families__get_family_immediate_subfamilies_and_icons_not_found(dummy_re
 @pytest.mark.parametrize(
     "family_man_id, parent_is_none, expected_number_of_families",
     [  # subtracted numbers indicate families that have no doculects with profiles and must not be in data['families']
-        (MATCHDICT_ID_FOR_ALL_FAMILIES, True, 13 - 2),
+        (ID_TO_SHOW_ALL_DOCULECTS, True, 13 - 2),
         ("isolate", False, 0),
         ("eskimo", False, 2 - 1),
         ("slav", False, 3),
@@ -259,7 +259,7 @@ def test_mapbox_token_get_mapbox_token(
     "family_man_id, expected_number_of_groups, expected_number_of_doculects",
     [
         (
-            MATCHDICT_ID_FOR_ALL_FAMILIES,
+            ID_TO_SHOW_ALL_DOCULECTS,
             NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES,
             NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES,
         ),

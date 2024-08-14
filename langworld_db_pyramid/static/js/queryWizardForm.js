@@ -1,3 +1,4 @@
+import adjustInteractiveListForSolitaryGroup from "./tools/adjustInteractiveListForSolitaryGroup.js";
 import getLocale from "./tools/getLocale.js";
 import queryWizardStrings from "./i18n/queryWizardStrings.js";
 import { urlTopic } from "./constants/pubSubTopics.js";
@@ -27,6 +28,7 @@ window.addEventListener("load", () => {
   form.onchange = () => {
     markLabelsOfCategories(); // to let the user see in which categories they have selected values
     PubSub.publish(urlTopic, generateFetchUrl()); // pass the result of calling the function, not the function itself
+    adjustInteractiveListForSolitaryGroup();
   };
   form.onsubmit = (e) => e.preventDefault();
 
