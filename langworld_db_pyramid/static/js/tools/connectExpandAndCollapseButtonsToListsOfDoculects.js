@@ -1,13 +1,10 @@
 export default function connectExpandAndCollapseButtonsToListsOfDoculects() {
   /* Update "expand all/collapse all" buttons by linking them
      to <ul>'s actually present in the DOM.
-     This has to be done every time something changes on the map
-     that makes some groups disappear from the interactive list,
-     not just when the map is first rendered.
   */
 
   const subListsOfDoculects = document.querySelectorAll(
-    "ul.doculects-in-group.w3-ul.w3-hide"
+    "ul.doculects-in-group.w3-ul"
   );
 
   const expandAllButton = document.getElementById(
