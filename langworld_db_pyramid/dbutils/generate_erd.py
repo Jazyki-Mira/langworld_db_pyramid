@@ -1,10 +1,18 @@
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, create_engine
 from sqlalchemy_schemadisplay import create_schema_graph
 
 
 def generate_erd(path_to_database: str = "sqlite:///../../langworld_db_pyramid.sqlite") -> None:
+    # before creating ERD, we must 1. initialize an engine, 2. reflect DB's metadata,
+    # 3. bind all tables' metadata to the engine
+    engine = create_engine(path_to_database)
+    metadata = MetaData()
+    metadata.reflect(bind=engine)
+    for table in metadata.tables.values():
+        table.metadata.bind = engine
+
     graph = create_schema_graph(
-        metadata=MetaData(path_to_database), show_indexes=False, rankdir="LR", concentrate="False"
+        metadata=metadata, show_indexes=False, rankdir="LR", concentrate="False"
     )
     graph.write_png("erd.png")
 
