@@ -108,26 +108,27 @@ def _get_doculects_for_one_feature(
     doculects_for_feature: set[models.Doculect] = set()
 
     for value_id in parsed_params[feature_id]:
+        doculects_for_union: set[models.Doculect] = set()
+
         if INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING not in value_id:
             # "normal", non-compound value: make UNION
             value = models.FeatureValue.get_by_man_id(request=request, man_id=value_id)
-            doculects_for_feature.update(d for d in doculects if d in value.doculects)
+            doculects_for_union = {d for d in doculects if d in value.doculects}
+
         else:
             # This is a compound value.  Get INTERSECTION of doculects for all atomic values
             # to get a set of doculects that have all atomic values.  Make UNION in the end.
-            doculects_that_have_all_elements_of_compound_value: set[models.Doculect] = set()
             for atomic_value_id in value_id.split(INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING):
                 atomic_value = models.FeatureValue.get_by_man_id(
                     request=request, man_id=atomic_value_id
                 )
-                if not doculects_that_have_all_elements_of_compound_value:  # first loop cycle
-                    doculects_that_have_all_elements_of_compound_value = {
-                        d for d in doculects if d in atomic_value.doculects
-                    }
+                if not doculects_for_union:  # first loop cycle
+                    doculects_for_union = {d for d in doculects if d in atomic_value.doculects}
                 else:
-                    doculects_that_have_all_elements_of_compound_value.intersection_update(
+                    doculects_for_union.intersection_update(
                         d for d in doculects if d in atomic_value.doculects
                     )
-            doculects_for_feature.update(doculects_that_have_all_elements_of_compound_value)
+
+        doculects_for_feature.update(doculects_for_union)
 
     return doculects_for_feature
