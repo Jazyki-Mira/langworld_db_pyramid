@@ -109,12 +109,12 @@ def _get_doculects_for_one_feature(
 
     for value_id in parsed_params[feature_id]:
         if INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING not in value_id:
-            # "normal", non-compound value
+            # "normal", non-compound value: make UNION
             value = models.FeatureValue.get_by_man_id(request=request, man_id=value_id)
             doculects_for_feature.update(d for d in doculects if d in value.doculects)
         else:
-            # This is a compound value.  Get intersection of doculects for all atomic values
-            # to get a set of doculects that have all atomic values.
+            # This is a compound value.  Get INTERSECTION of doculects for all atomic values
+            # to get a set of doculects that have all atomic values.  Make UNION in the end.
             doculects_that_have_all_elements_of_compound_value: set[models.Doculect] = set()
             for atomic_value_id in value_id.split(INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING):
                 atomic_value = models.FeatureValue.get_by_man_id(
