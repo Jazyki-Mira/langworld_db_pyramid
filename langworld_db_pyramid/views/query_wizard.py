@@ -117,7 +117,7 @@ def _get_doculects_for_one_feature(
 
         else:
             # This is a compound value.  Get INTERSECTION of doculects for all atomic values
-            # to get a set of doculects that have all atomic values.  Make UNION in the end.
+            # to get a set of doculects that have all atomic values.
             for atomic_value_id in value_id.split(INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING):
                 atomic_value = models.FeatureValue.get_by_man_id(
                     request=request, man_id=atomic_value_id
