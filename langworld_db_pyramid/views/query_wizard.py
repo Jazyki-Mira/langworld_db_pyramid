@@ -111,7 +111,7 @@ def _get_doculects_for_one_feature(
         doculects_for_value: set[models.Doculect] = set()
 
         if INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING not in value_id:
-            # "normal", non-compound value: make UNION
+            # "normal", non-compound value
             value = models.FeatureValue.get_by_man_id(request=request, man_id=value_id)
             doculects_for_value = {d for d in doculects if d in value.doculects}
 
