@@ -11,7 +11,11 @@ from langworld_db_pyramid.locale.in_code_translation_strings import (
 )
 from langworld_db_pyramid.maputils.marker_icons import generate_one_icon
 from langworld_db_pyramid.maputils.markers import generate_marker_group
-from langworld_db_pyramid.views import localized_name_case_insensitive
+from langworld_db_pyramid.views import (
+    INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING,
+    UNION_VALUE_DELIMITER_IN_QUERY_STRING,
+    localized_name_case_insensitive,
+)
 
 
 @view_config(
@@ -39,7 +43,10 @@ def get_matching_doculects(request: Request) -> list[dict[str, Any]]:
     )
     icon = generate_one_icon()
 
-    params = {key: value.split(",") for key, value in request.params.items()}
+    params = {
+        key: value.split(UNION_VALUE_DELIMITER_IN_QUERY_STRING)
+        for key, value in request.params.items()
+    }
 
     if not params:
         # for uniformity, I return not a dictionary, but a list consisting of one dictionary
@@ -67,10 +74,32 @@ def get_matching_doculects(request: Request) -> list[dict[str, Any]]:
     for feature_id in params:
         doculects_with_any_of_requested_values_of_feature: set[models.Doculect] = set()
         for value_id in params[feature_id]:
-            value = models.FeatureValue.get_by_man_id(request=request, man_id=value_id)
-            doculects_with_any_of_requested_values_of_feature.update(
-                d for d in doculects if d in value.doculects
-            )
+            if INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING in value_id:
+                # This is a compound value.  Get intersection of doculects for all atomic values
+                # to get a set of doculects that have all atomic values.
+                doculects_that_have_all_elements_of_compound_value: set[models.Doculect] = set()
+                for atomic_value_id in value_id.split(
+                    INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING
+                ):
+                    atomic_value = models.FeatureValue.get_by_man_id(
+                        request=request, man_id=atomic_value_id
+                    )
+                    if not doculects_that_have_all_elements_of_compound_value:
+                        doculects_that_have_all_elements_of_compound_value = {
+                            d for d in doculects if d in atomic_value.doculects
+                        }
+                    else:
+                        doculects_that_have_all_elements_of_compound_value.intersection_update(
+                            d for d in doculects if d in atomic_value.doculects
+                        )
+                doculects_with_any_of_requested_values_of_feature.update(
+                    doculects_that_have_all_elements_of_compound_value
+                )
+            else:
+                value = models.FeatureValue.get_by_man_id(request=request, man_id=value_id)
+                doculects_with_any_of_requested_values_of_feature.update(
+                    d for d in doculects if d in value.doculects
+                )
 
         matching_doculects.intersection_update(doculects_with_any_of_requested_values_of_feature)
 
