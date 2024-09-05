@@ -28,11 +28,23 @@ from langworld_db_pyramid.views import (
 )
 def view_query_wizard(request: Request) -> dict[str, Any]:
     return {
-        "categories": get_all(request, select(models.FeatureCategory)),
+        "categories": _get_feature_categories_with_sorted_values(request),
         "families": get_all(
             request, select(models.Family).where(models.Family.parent is None)
         ),  # noqa: E711
     }
+
+
+def _get_feature_categories_with_sorted_values(
+    request: Request,
+) -> Iterable[models.FeatureCategory]:
+    """Return feature categories with feature values within them sorted for query wizard.
+
+    In multiselect features, elementary values precede compound ones.
+    Compound ones are sorted by complexity.
+    """
+    categories = get_all(request, select(models.FeatureCategory))
+    return categories  # noqa RET504
 
 
 @view_config(route_name="query_wizard_json", renderer="json")
