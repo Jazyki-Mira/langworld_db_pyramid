@@ -458,6 +458,17 @@ def test_notfound_view(dummy_request):
                 "classical_syriac",
             ],
         ),
+        # compound feature:
+        (
+            {"family": "yupik,aram", "K-14": "K-14-2|K-14-4|K-14-9"},
+            4,
+            [
+                "official_aramaic",
+                "jewish_palestinian_aramaic",
+                "classical_mandaic",
+                "classical_syriac",
+            ],
+        ),
     ],
 )
 def test_query_wizard_get_matching_doculects(

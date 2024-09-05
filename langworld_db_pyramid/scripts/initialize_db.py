@@ -9,9 +9,11 @@ from sqlalchemy import delete
 from sqlalchemy.exc import OperationalError
 
 from langworld_db_data.constants import paths
+from langworld_db_data.constants.literals import ATOMIC_VALUE_SEPARATOR
 from langworld_db_data.filetools.csv_xls import read_dicts_from_csv
 from langworld_db_data.filetools.json_toml_yaml import read_json_toml_yaml
 from langworld_db_pyramid import models
+from langworld_db_pyramid.views import INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING
 
 
 class CustomModelInitializer:
@@ -422,9 +424,14 @@ class CustomModelInitializer:
                     is_listed_and_has_doculects=True,
                     # We leave the compound value separator in the value ID because it can be used
                     # e.g. in the frontend to hide compound values from the legend.
-                    # But the value name can be prettified right here already.
-                    man_id=feature_profile_row["value_id"],
-                    name_ru=feature_profile_row["value_ru"].replace("&", "; "),
+                    # But character used in CSV files is bad for parsing queries, so we replace it.
+                    # Note the use of a special symbol for "intersection value"
+                    # because these elements will have to be connected "AND" (not "OR") in queries.
+                    man_id=feature_profile_row["value_id"].replace(
+                        ATOMIC_VALUE_SEPARATOR, INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING
+                    ),
+                    # Semicolon is more readable for end user:
+                    name_ru=feature_profile_row["value_ru"].replace(ATOMIC_VALUE_SEPARATOR, "; "),
                     name_en="",  # filled in a couple of lines below when the elements are analyzed
                     type=self.value_type_for_name["listed"],
                     feature=self.feature_for_id[feature_profile_row["feature_id"]],

@@ -2,6 +2,7 @@ from sqlalchemy import select
 
 from langworld_db_data.filetools.csv_xls import read_dicts_from_csv
 from langworld_db_pyramid import models
+from langworld_db_pyramid.views import INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING
 
 
 class TestCustomModelInitializer:
@@ -10,9 +11,9 @@ class TestCustomModelInitializer:
         # since the dummy dbsession is passed to constructor or CustomModelInitializer
 
         NUMBER_OF_FEATURES = 126
-        # CALCULATING EXPECTED NUMBER OF VALUES IN FeatureValue TABLE
+        # EXPECTED NUMBER OF VALUES IN FeatureValue TABLE
         number_of_listed_values = 1235
-        number_of_compound_listed_values = 1
+        number_of_compound_listed_values = 2
         number_of_empty_values = NUMBER_OF_FEATURES * 3  # 3 value types with empty values
 
         unique_custom_values = set()
@@ -147,21 +148,23 @@ class TestCustomModelInitializer:
         assert a32.is_listed_and_has_doculects
 
         # checking elements and compounds
-        compound_id = "K-14-4&K-14-5&K-14-6&K-14-7"
+        compound_id = "K-14-4|K-14-5|K-14-6|K-14-7"
         compound = dbsession.scalars(
             select(models.FeatureValue).where(models.FeatureValue.man_id == compound_id)
         ).one()
-        assert len(compound.elements) == len(compound_id.split("&"))
+        assert len(compound.elements) == len(
+            compound_id.split(INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING)
+        )
         k14_4 = dbsession.scalars(
             select(models.FeatureValue).where(models.FeatureValue.man_id == "K-14-4")
         ).one()
-        assert k14_4.compounds[0] is compound
+        assert compound in k14_4.compounds
 
         # checking compound value and its elements in a doculect
         amharic: models.Doculect = dbsession.scalars(
             select(models.Doculect).where(models.Doculect.name_en == "Amharic")
         ).one()
-        for value_id in ("K-14-4&K-14-5&K-14-6&K-14-7", "K-14-4", "K-14-5", "K-14-6", "K-14-7"):
+        for value_id in ("K-14-4|K-14-5|K-14-6|K-14-7", "K-14-4", "K-14-5", "K-14-6", "K-14-7"):
             assert value_id in [value.man_id for value in amharic.feature_values]
 
     def test__delete_all_data(self, dbsession, test_db_initializer):

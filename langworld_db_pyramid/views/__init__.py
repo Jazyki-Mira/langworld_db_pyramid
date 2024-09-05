@@ -7,6 +7,9 @@ from langworld_db_pyramid.models import Doculect
 
 ID_TO_SHOW_ALL_DOCULECTS = "_all"
 
+INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING = "|"
+UNION_VALUE_DELIMITER_IN_QUERY_STRING = ","
+
 
 def get_doculect_from_params(request: Request) -> Union[Doculect, None]:
     """Gets Doculect object by ID mentioned in URL param `?show_doculect=...`.
