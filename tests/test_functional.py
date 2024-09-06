@@ -54,12 +54,25 @@ def test_notfound(testapp, setup_models_once_for_test_module):
         ("/ru/family/_all", ["Все языки"]),
         ("/ru/family/altai", ["Алтайские языки"]),
         ("/ru/query_wizard", ["Форма запроса"]),
+        # repeat opening of a doculect page to make sure query wizard didn't break it
+        (
+            "/doculect/french",
+            [
+                "французский язык",
+                "Том 11. Романские языки",
+                "stan1290",
+                "fra</a>",
+                "Признаки",
+                "doculects/map?",
+            ],
+        ),
         ("/", ["База данных"]),
         ("/ru/home", ["База данных"]),
         ("/en/home", ["Database"]),
     ],
 )
 def test_doculect(testapp, setup_models_once_for_test_module, url, expected_strings):
+    print(f"\nTEST: trying to access {url=}")
     res = testapp.get(url, status=200)
     for str_ in expected_strings:
         assert str_ in res

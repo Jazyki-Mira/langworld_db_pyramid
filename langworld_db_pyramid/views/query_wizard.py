@@ -1,5 +1,5 @@
+import copy
 from collections.abc import Iterable
-from copy import deepcopy
 from typing import Any
 
 from pyramid.request import Request
@@ -64,7 +64,7 @@ def _get_feature_categories_with_sorted_listed_values(
     categories_with_values_prepared_for_query_wizard = []
 
     for category in categories:
-        category_for_query_wizard = deepcopy(category)
+        category_for_query_wizard = copy.deepcopy(category)
 
         for feature in category_for_query_wizard.features:
             only_listed_values_with_doculects = [
