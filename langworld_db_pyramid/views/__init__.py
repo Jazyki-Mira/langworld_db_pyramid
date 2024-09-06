@@ -7,7 +7,7 @@ from langworld_db_pyramid.models import Doculect
 
 ID_TO_SHOW_ALL_DOCULECTS = "_all"
 
-INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING = "|"
+INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING = "|"  # TODO rename constant, move to FeatureValue
 UNION_VALUE_DELIMITER_IN_QUERY_STRING = ","
 
 

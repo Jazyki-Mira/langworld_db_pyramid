@@ -7,6 +7,7 @@ from pyramid.view import view_config
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
+from langworld_db_data.constants.literals import ID_SEPARATOR
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.locale.in_code_translation_strings import (
@@ -71,10 +72,16 @@ def _get_feature_categories_with_sorted_listed_values(
             ]
             feature.values = only_listed_values_with_doculects
 
+            # sort first by complexity, then by integer index of first element of compound value
+            # (or the only element if value is simple)
             feature.values.sort(
                 key=lambda value: (
-                    int(len(value.elements)),
-                    value.man_id,
+                    len(value.elements),
+                    int(
+                        value.man_id.split(INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING)[0].split(
+                            ID_SEPARATOR
+                        )[-1]
+                    ),
                 )
             )
 
