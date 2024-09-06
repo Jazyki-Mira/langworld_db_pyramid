@@ -47,7 +47,7 @@ def _get_feature_categories_with_sorted_listed_values(
     2. Sorting: in multiselect features, elementary values precede compound ones.
        Compound ones are sorted by number of elements.
     """
-    # Can't use `get_all` helper here because of options that must be applied before .all()
+    # Can't use `get_all` helper here because options must be applied before .all()
     categories = (
         request.dbsession.scalars(
             select(models.FeatureCategory).options(
