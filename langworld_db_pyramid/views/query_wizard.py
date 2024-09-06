@@ -57,7 +57,7 @@ def _get_feature_categories_with_sorted_listed_values(
                 .joinedload(models.FeatureValue.elements)
             )
         )
-        .unique()  # .unique must be called because of eager load against collections
+        .unique()  # must be called because of eager load against collections
         .all()
     )
 
