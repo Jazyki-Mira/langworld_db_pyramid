@@ -1,9 +1,11 @@
 from collections.abc import Iterable
+from copy import deepcopy
 from typing import Any
 
 from pyramid.request import Request
 from pyramid.view import view_config
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
@@ -28,23 +30,57 @@ from langworld_db_pyramid.views import (
 )
 def view_query_wizard(request: Request) -> dict[str, Any]:
     return {
-        "categories": _get_feature_categories_with_sorted_values(request),
+        "categories": _get_feature_categories_with_sorted_listed_values(request),
         "families": get_all(
             request, select(models.Family).where(models.Family.parent is None)
         ),  # noqa: E711
     }
 
 
-def _get_feature_categories_with_sorted_values(
+def _get_feature_categories_with_sorted_listed_values(
     request: Request,
 ) -> Iterable[models.FeatureCategory]:
-    """Return feature categories with feature values within them sorted for query wizard.
+    """Return feature categories with feature values prepared for query wizard.
 
-    In multiselect features, elementary values precede compound ones.
-    Compound ones are sorted by complexity.
+    1. Filtering: only listed values with doculects remain in categories
+    2. Sorting: in multiselect features, elementary values precede compound ones.
+       Compound ones are sorted by number of elements.
     """
-    categories = get_all(request, select(models.FeatureCategory))
-    return categories  # noqa RET504
+    # Can't use `get_all` helper here because of options that must be applied before .all()
+    categories = (
+        request.dbsession.scalars(
+            select(models.FeatureCategory).options(
+                # eager load instead of lazy load, so we can reorder values within features
+                joinedload(models.FeatureCategory.features)
+                .joinedload(models.Feature.values)
+                .joinedload(models.FeatureValue.elements)
+            )
+        )
+        .unique()  # .unique must be called because of eager load against collections
+        .all()
+    )
+
+    categories_with_values_prepared_for_query_wizard = []
+
+    for category in categories:
+        category_for_query_wizard = deepcopy(category)
+
+        for feature in category_for_query_wizard.features:
+            only_listed_values_with_doculects = [
+                value for value in feature.values if value.is_listed_and_has_doculects
+            ]
+            feature.values = only_listed_values_with_doculects
+
+            feature.values.sort(
+                key=lambda value: (
+                    int(len(value.elements)),
+                    value.man_id,
+                )
+            )
+
+        categories_with_values_prepared_for_query_wizard.append(category_for_query_wizard)
+
+    return categories_with_values_prepared_for_query_wizard  # noqa RET504
 
 
 @view_config(route_name="query_wizard_json", renderer="json")

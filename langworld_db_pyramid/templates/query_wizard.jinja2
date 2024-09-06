@@ -58,7 +58,7 @@
                 {% for feature in category.features %}
                     <label>{{ feature[name_attr] }}</label><br/>
                     <select id="{{ feature.man_id }}" for-category="{{ category.man_id }}" multiple>
-                    {% for value in feature.values|selectattr("is_listed_and_has_doculects") %}
+                    {% for value in feature.values %}
                         <option value="{{ value.man_id }}">{{ value[name_attr] }}</option>
                     {% endfor %}
                     </select><br/>
