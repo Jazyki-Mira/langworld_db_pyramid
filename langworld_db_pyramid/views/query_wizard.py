@@ -4,7 +4,6 @@ from typing import Any
 from pyramid.request import Request
 from pyramid.view import view_config
 from sqlalchemy import select
-from sqlalchemy.orm import joinedload
 
 from langworld_db_data.constants.literals import ID_SEPARATOR
 from langworld_db_pyramid import models
@@ -50,19 +49,7 @@ def _get_feature_categories_with_sorted_listed_values(
     we return dictionaries instead of objects. This also allows to only pass to the template
     the attributes that are actually needed there.
     """
-    # Can't use `get_all` helper here because options must be applied before .all()
-    categories: Iterable[models.FeatureCategory] = (
-        request.dbsession.scalars(
-            select(models.FeatureCategory).options(
-                # eager load instead of lazy load, so we  # noqa RET504 can reorder values within features
-                joinedload(models.FeatureCategory.features)
-                .joinedload(models.Feature.values)
-                .joinedload(models.FeatureValue.elements)
-            )
-        )
-        .unique()  # must be called because of eager load against collections
-        .all()
-    )
+    categories: Iterable[models.FeatureCategory] = get_all(request, select(models.FeatureCategory))
 
     prepared_categories: list[dict[str, Any]] = []
 
