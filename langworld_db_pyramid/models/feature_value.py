@@ -5,6 +5,8 @@ from langworld_db_pyramid.dbutils.query_mixin import QueryMixin
 from langworld_db_pyramid.models.association_tables import FeatureValueCompoundToElement
 from langworld_db_pyramid.models.meta import Base
 
+COMPOUND_VALUE_DELIMITER = "|"
+
 
 class FeatureValue(QueryMixin, Base):  # type: ignore[misc]
     __tablename__ = "feature_values"
