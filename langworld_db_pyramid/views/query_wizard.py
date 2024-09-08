@@ -1,4 +1,3 @@
-import copy
 from collections.abc import Iterable
 from typing import Any
 
@@ -40,18 +39,22 @@ def view_query_wizard(request: Request) -> dict[str, Any]:
 
 def _get_feature_categories_with_sorted_listed_values(
     request: Request,
-) -> Iterable[models.FeatureCategory]:
+) -> tuple[dict[str, Any], ...]:
     """Return feature categories with feature values prepared for query wizard.
 
     1. Filtering: only listed values with doculects remain in categories
     2. Sorting: in multiselect features, elementary values precede compound ones.
        Compound ones are sorted by number of elements.
+
+    Because of potential deepcopy issues (known issue is test failing because of deepcopy),
+    we return dictionaries instead of objects. This also allows to only pass to the template
+    the attributes that are actually needed there.
     """
     # Can't use `get_all` helper here because options must be applied before .all()
-    categories = (
+    categories: Iterable[models.FeatureCategory] = (
         request.dbsession.scalars(
             select(models.FeatureCategory).options(
-                # eager load instead of lazy load, so we can reorder values within features
+                # eager load instead of lazy load, so we  # noqa RET504 can reorder values within features
                 joinedload(models.FeatureCategory.features)
                 .joinedload(models.Feature.values)
                 .joinedload(models.FeatureValue.elements)
@@ -61,20 +64,35 @@ def _get_feature_categories_with_sorted_listed_values(
         .all()
     )
 
-    categories_with_values_prepared_for_query_wizard = []
+    prepared_categories: list[dict[str, Any]] = []
 
     for category in categories:
-        category_for_query_wizard = copy.deepcopy(category)
+        # instead of creating a deepcopy of the object
+        # (that e.g. makes tests fail because of deepcopy issues),
+        # prepare a dictionary with only the attributes that the Jinja template needs.
+        prepared_category = {
+            "man_id": category.man_id,
+            "name_en": category.name_en,
+            "name_ru": category.name_ru,
+            "features": [],
+        }
 
-        for feature in category_for_query_wizard.features:
-            only_listed_values_with_doculects = [
+        for feature in category.features:
+            prepared_feature = {
+                "man_id": feature.man_id,
+                "name_en": feature.name_en,
+                "name_ru": feature.name_ru,
+                "values": [],
+            }
+
+            listed_values_with_doculects = [
                 value for value in feature.values if value.is_listed_and_has_doculects
             ]
-            feature.values = only_listed_values_with_doculects
 
             # sort first by complexity, then by integer index of first element of compound value
             # (or the only element if value is simple)
-            feature.values.sort(
+
+            listed_values_with_doculects.sort(
                 key=lambda value: (
                     len(value.elements),
                     int(
@@ -85,9 +103,20 @@ def _get_feature_categories_with_sorted_listed_values(
                 )
             )
 
-        categories_with_values_prepared_for_query_wizard.append(category_for_query_wizard)
+            prepared_feature["values"] = [
+                {
+                    "man_id": value.man_id,
+                    "name_en": value.name_en,
+                    "name_ru": value.name_ru,
+                }
+                for value in listed_values_with_doculects
+            ]
 
-    return categories_with_values_prepared_for_query_wizard  # noqa RET504
+            prepared_category["features"].append(prepared_feature)
+
+        prepared_categories.append(prepared_category)
+
+    return tuple(prepared_categories)
 
 
 @view_config(route_name="query_wizard_json", renderer="json")
