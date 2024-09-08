@@ -13,7 +13,6 @@ from langworld_db_data.constants.literals import ATOMIC_VALUE_SEPARATOR
 from langworld_db_data.filetools.csv_xls import read_dicts_from_csv
 from langworld_db_data.filetools.json_toml_yaml import read_json_toml_yaml
 from langworld_db_pyramid import models
-from langworld_db_pyramid.views import INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING
 
 
 class CustomModelInitializer:
@@ -424,11 +423,14 @@ class CustomModelInitializer:
                     is_listed_and_has_doculects=True,
                     # We leave the compound value separator in the value ID because it can be used
                     # e.g. in the frontend to hide compound values from the legend.
-                    # But character used in CSV files is bad for parsing queries, so we replace it.
-                    # Note the use of a special symbol for "intersection value"
+                    # Character used in CSV files is bad for parsing queries, so we replace it.
+                    # Note the use of a special symbol for separating elements of a compound value
                     # because these elements will have to be connected "AND" (not "OR") in queries.
                     man_id=feature_profile_row["value_id"].replace(
-                        ATOMIC_VALUE_SEPARATOR, INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING
+                        ATOMIC_VALUE_SEPARATOR,
+                        # delimiter is a constant in a module, not attribute of FeatureValue model,
+                        # therefore models.feature_value, not models.FeatureValue
+                        models.feature_value.COMPOUND_VALUE_DELIMITER,
                     ),
                     # Semicolon is more readable for end user:
                     name_ru=feature_profile_row["value_ru"].replace(ATOMIC_VALUE_SEPARATOR, "; "),

@@ -13,8 +13,8 @@ from langworld_db_pyramid.locale.in_code_translation_strings import (
 )
 from langworld_db_pyramid.maputils.marker_icons import generate_one_icon
 from langworld_db_pyramid.maputils.markers import generate_marker_group
+from langworld_db_pyramid.models.feature_value import COMPOUND_VALUE_DELIMITER
 from langworld_db_pyramid.views import (
-    INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING,
     UNION_VALUE_DELIMITER_IN_QUERY_STRING,
     localized_name_case_insensitive,
 )
@@ -82,11 +82,7 @@ def _get_feature_categories_with_sorted_listed_values(
             listed_values_with_doculects.sort(
                 key=lambda value: (
                     len(value.elements),
-                    int(
-                        value.man_id.split(INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING)[0].split(
-                            ID_SEPARATOR
-                        )[-1]
-                    ),
+                    int(value.man_id.split(COMPOUND_VALUE_DELIMITER)[0].split(ID_SEPARATOR)[-1]),
                 )
             )
 
@@ -181,7 +177,7 @@ def _get_doculects_for_one_feature(
     for value_id in parsed_params[feature_id]:
         doculects_for_value: set[models.Doculect] = set()
 
-        if INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING not in value_id:
+        if COMPOUND_VALUE_DELIMITER not in value_id:
             # "normal", non-compound value
             value = models.FeatureValue.get_by_man_id(request=request, man_id=value_id)
             doculects_for_value = {d for d in doculects if d in value.doculects}
@@ -189,7 +185,7 @@ def _get_doculects_for_one_feature(
         else:
             # This is a compound value.  Get INTERSECTION of doculects for all atomic values
             # to get a set of doculects that have all atomic values.
-            for atomic_value_id in value_id.split(INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING):
+            for atomic_value_id in value_id.split(COMPOUND_VALUE_DELIMITER):
                 atomic_value = models.FeatureValue.get_by_man_id(
                     request=request, man_id=atomic_value_id
                 )

@@ -2,7 +2,6 @@ from sqlalchemy import select
 
 from langworld_db_data.filetools.csv_xls import read_dicts_from_csv
 from langworld_db_pyramid import models
-from langworld_db_pyramid.views import INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING
 
 
 class TestCustomModelInitializer:
@@ -153,7 +152,7 @@ class TestCustomModelInitializer:
             select(models.FeatureValue).where(models.FeatureValue.man_id == compound_id)
         ).one()
         assert len(compound.elements) == len(
-            compound_id.split(INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING)
+            compound_id.split(models.feature_value.COMPOUND_VALUE_DELIMITER)
         )
         k14_4 = dbsession.scalars(
             select(models.FeatureValue).where(models.FeatureValue.man_id == "K-14-4")
