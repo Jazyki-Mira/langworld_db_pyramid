@@ -55,10 +55,10 @@
           <label id="category-label-{{ category.man_id }}" for="{{ category.man_id }}" class="lbl-toggle">{{ category[name_attr] }}</label>
           <div class="collapsible-content">
             <div class="content-inner">
-                {% for feature in category.features %}
+                {% for feature in category["features"] %}
                     <label>{{ feature[name_attr] }}</label><br/>
                     <select id="{{ feature.man_id }}" for-category="{{ category.man_id }}" multiple>
-                    {% for value in feature.values|selectattr("is_listed_and_has_doculects") %}
+                    {% for value in feature["values"] %}
                         <option value="{{ value.man_id }}">{{ value[name_attr] }}</option>
                     {% endfor %}
                     </select><br/>

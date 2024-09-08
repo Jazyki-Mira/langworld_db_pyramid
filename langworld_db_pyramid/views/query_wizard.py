@@ -5,6 +5,7 @@ from pyramid.request import Request
 from pyramid.view import view_config
 from sqlalchemy import select
 
+from langworld_db_data.constants.literals import ID_SEPARATOR
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.locale.in_code_translation_strings import (
@@ -28,11 +29,81 @@ from langworld_db_pyramid.views import (
 )
 def view_query_wizard(request: Request) -> dict[str, Any]:
     return {
-        "categories": get_all(request, select(models.FeatureCategory)),
+        "categories": _get_feature_categories_with_sorted_listed_values(request),
         "families": get_all(
             request, select(models.Family).where(models.Family.parent is None)
         ),  # noqa: E711
     }
+
+
+def _get_feature_categories_with_sorted_listed_values(
+    request: Request,
+) -> tuple[dict[str, Any], ...]:
+    """Return feature categories with feature values prepared for query wizard.
+
+    1. Filtering: only listed values with doculects remain in categories
+    2. Sorting: in multiselect features, elementary values precede compound ones.
+       Compound ones are sorted by number of elements.
+
+    Because of potential deepcopy issues (known issue is test failing because of deepcopy),
+    we return dictionaries instead of objects. This also allows to only pass to the template
+    the attributes that are actually needed there.
+    """
+    categories: Iterable[models.FeatureCategory] = get_all(request, select(models.FeatureCategory))
+
+    prepared_categories: list[dict[str, Any]] = []
+
+    for category in categories:
+        # instead of creating a deepcopy of the object
+        # (that e.g. makes tests fail because of deepcopy issues),
+        # prepare a dictionary with only the attributes that the Jinja template needs.
+        prepared_category = {
+            "man_id": category.man_id,
+            "name_en": category.name_en,
+            "name_ru": category.name_ru,
+            "features": [],
+        }
+
+        for feature in category.features:
+            prepared_feature = {
+                "man_id": feature.man_id,
+                "name_en": feature.name_en,
+                "name_ru": feature.name_ru,
+                "values": [],
+            }
+
+            listed_values_with_doculects = [
+                value for value in feature.values if value.is_listed_and_has_doculects
+            ]
+
+            # sort first by complexity, then by integer index of first element of compound value
+            # (or the only element if value is simple)
+
+            listed_values_with_doculects.sort(
+                key=lambda value: (
+                    len(value.elements),
+                    int(
+                        value.man_id.split(INTERSECTION_VALUE_DELIMITER_IN_QUERY_STRING)[0].split(
+                            ID_SEPARATOR
+                        )[-1]
+                    ),
+                )
+            )
+
+            prepared_feature["values"] = [
+                {
+                    "man_id": value.man_id,
+                    "name_en": value.name_en,
+                    "name_ru": value.name_ru,
+                }
+                for value in listed_values_with_doculects
+            ]
+
+            prepared_category["features"].append(prepared_feature)
+
+        prepared_categories.append(prepared_category)
+
+    return tuple(prepared_categories)
 
 
 @view_config(route_name="query_wizard_json", renderer="json")
