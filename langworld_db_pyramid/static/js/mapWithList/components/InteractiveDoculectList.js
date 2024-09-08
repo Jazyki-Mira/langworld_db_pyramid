@@ -4,6 +4,7 @@ import {
 } from "../contexts.js";
 import getLocale from "../../tools/getLocale.js";
 import doculectMapAndListStrings from "../../i18n/doculectMapAndListStrings.js";
+import {compoundValueSeparator} from "../../constants/literals.js";
 
 const elem = React.createElement;
 
@@ -34,7 +35,7 @@ export default function InteractiveDoculectList() {
   function DoculectGroup(doculectGroup) {
     // return empty div for compound values (hence excluding them from interactive list)
     // TODO in the future this can be toggled by the user
-    if (doculectGroup["id"].includes("&"))
+    if (doculectGroup["id"].includes(compoundValueSeparator))
       return elem("div", { key: doculectGroup["id"] });
 
     let headingText = `${doculectGroup["name"]} (${doculectGroup["doculects"].length})`;

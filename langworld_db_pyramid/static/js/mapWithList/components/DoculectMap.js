@@ -5,6 +5,7 @@ import {
 } from "../contexts.js";
 import adjustInteractiveListForSolitaryGroup from "../../tools/adjustInteractiveListForSolitaryGroup.js";
 import connectExpandAndCollapseButtonsWithGroups from "../../tools/connectExpandAndCollapseButtonsToListsOfDoculects.js";
+import {compoundValueSeparator} from "../../constants/literals.js";
 
 const elem = React.createElement;
 
@@ -231,7 +232,7 @@ export default function DoculectMap({ mapDivID = "map-default" }) {
 
       // exclude compound values from legend
       allDoculectGroups
-        .filter((g) => !g["id"].includes("&"))
+        .filter((g) => !g["id"].includes(compoundValueSeparator))
         .forEach((group) => {
           div.innerHTML += `<img src="${group["imgSrc"]}" height="20px"/><span>${group["name"]}</span><br>`;
         });
