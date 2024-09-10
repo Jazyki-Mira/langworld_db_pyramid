@@ -73,7 +73,13 @@ def view_families_for_map(request: Request) -> list[dict[str, Any]]:
     name_attr = "name_" + locale
     marker_groups = []
 
-    if family is not None:
+    # We need to show a separate marker group for a family being requested only in two cases:
+    # 1. This family is the terminal node on a family tree, e.g. has no children, OR
+    # 2. This family has children but also has doculects "attached" immediately to it
+    #    (this is likely due to a mistake in data, but we must be able to show doculects anyway)
+    #
+    # Check for truthiness of family is practically superfluous but is needed for mypy.
+    if family and (family.doculects or not immediate_subfamilies):
         href = request.route_path("families_localized", locale=locale, family_man_id=family.man_id)
         marker_groups.append(
             generate_marker_group(
