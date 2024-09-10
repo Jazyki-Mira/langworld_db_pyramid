@@ -263,12 +263,11 @@ def test_mapbox_token_get_mapbox_token(
             NUMBER_OF_TEST_TOP_LEVEL_FAMILIES_WITH_FEATURE_PROFILES,
             NUMBER_OF_TEST_DOCULECTS_WITH_FEATURE_PROFILES,
         ),
-        # addition indicates that a family that has subfamilies gets a group created for its immediate doculects
-        # (even if this group ends up being empty)
         ("isolate", 1, 4),
         ("yupik", 1, 1),
-        ("slav", 3 + 1, 16),
-        ("avar_andi", 2 + 1, 14),
+        ("slav", 3, 16),  # has subfamilies. 3 = number of subfamilies
+        # this family has 2 subfamilies and one doculect attached immediately to it
+        ("avar_andi", 2 + 1, 14),  # 2 subfamilies + avar_andi itself
     ],
 )
 def test_view_families_for_map(
