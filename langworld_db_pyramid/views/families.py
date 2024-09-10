@@ -75,8 +75,8 @@ def view_families_for_map(request: Request) -> list[dict[str, Any]]:
 
     # We need to show a separate marker group for a family being requested ONLY in case
     # this family is the terminal node on a family tree, e.g. has no children.
-    # Check for "not None" is practically superfluous but is needed for mypy.
-    if family is not None and not immediate_subfamilies:
+    # Check for truthiness of family is practically superfluous but is needed for mypy.
+    if family and not immediate_subfamilies:
         href = request.route_path("families_localized", locale=locale, family_man_id=family.man_id)
         marker_groups.append(
             generate_marker_group(
