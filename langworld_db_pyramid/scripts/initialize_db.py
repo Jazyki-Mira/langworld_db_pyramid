@@ -94,6 +94,7 @@ class CustomModelInitializer:
         self.feature_for_id: dict[str, models.Feature] = {}
         self.glottocode_for_id: dict[str, models.Glottocode] = {}
         self.iso639p3code_for_id: dict[str, models.Iso639P3Code] = {}
+        self.walscode_for_id: dict[str, models.WalsCode] = {}
 
         self.listed_value_for_id: dict[str, models.FeatureValue] = {}
         self.compound_listed_value_for_id: dict[str, models.FeatureValue] = {}
@@ -128,6 +129,7 @@ class CustomModelInitializer:
         self._populate_encyclopedia_volumes()
         self._populate_families()
         self._populate_glottocodes()
+        self._populate_wals_codes()
         self._populate_iso639p3_codes()
 
         self._populate_doculects_compound_and_custom_feature_values_and_comments()
@@ -280,6 +282,19 @@ class CustomModelInitializer:
                     self.glottocode_for_id[item] = glottocode
                     self.dbsession.add(glottocode)
 
+    def _populate_wals_codes(self) -> None:
+        for row in read_dicts_from_csv(self.file_with_doculects):
+            wals_codes = row["wals_code"].split(", ")
+            for item in wals_codes:
+                if not item:
+                    continue
+                try:
+                    self.walscode_for_id[item]
+                except KeyError:
+                    wals_code = models.WalsCode(code=item)
+                    self.walscode_for_id[item] = wals_code
+                    self.dbsession.add(wals_code)
+
     def _populate_iso639p3_codes(self) -> None:
         for row in read_dicts_from_csv(self.file_with_doculects):
             iso_codes = row["iso_639_3"].split(", ")
@@ -335,6 +350,12 @@ class CustomModelInitializer:
                 if glottocode
             ]
 
+            wals_codes_for_this_doculect = [
+                self.walscode_for_id[wals_code]
+                for wals_code in doculect_row_to_write.pop("wals_code").split(", ")
+                if wals_code
+            ]
+
             iso_639p3_codes_for_this_doculect = [
                 self.iso639p3code_for_id[iso_code]
                 for iso_code in doculect_row_to_write.pop("iso_639_3").split(", ")
@@ -361,6 +382,7 @@ class CustomModelInitializer:
                 doculect.encyclopedia_volume = encyclopedia_volume
             doculect.family = family
             doculect.glottocodes = glottocodes_for_this_doculect
+            doculect.wals_codes = wals_codes_for_this_doculect
             doculect.iso_639p3_codes = iso_639p3_codes_for_this_doculect
             doculect.main_country = main_country
             doculect.type = type_of_this_doculect
