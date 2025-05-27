@@ -22,12 +22,14 @@ from langworld_db_pyramid.models.feature_value import FeatureValue
 from langworld_db_pyramid.models.feature_value_type import FeatureValueType
 from langworld_db_pyramid.models.glottocode import Glottocode
 from langworld_db_pyramid.models.iso_639p3_code import Iso639P3Code
+from langworld_db_pyramid.models.wals_code import WalsCode
 
 # for mypy
 __all__ = [
     "DoculectToFeatureValue",
     "DoculectToGlottocode",
     "DoculectToIso639P3Code",
+    "DoculectToWalsCode",
     "Country",
     "Doculect",
     "DoculectFeatureValueInfo",
@@ -41,6 +43,7 @@ __all__ = [
     "FeatureValueType",
     "Glottocode",
     "Iso639P3Code",
+    "WalsCode",
 ]
 
 

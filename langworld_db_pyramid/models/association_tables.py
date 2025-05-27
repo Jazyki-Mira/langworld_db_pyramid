@@ -36,6 +36,17 @@ class DoculectToIso639P3Code(Base):  # type: ignore[misc]
     iso_639p3_code_id = Column(ForeignKey("iso_639p3_codes.id"), primary_key=True)
 
 
+class DoculectToWalsCode(Base):  # type: ignore[misc]
+    """Class for **automatic** creation of objects by SQLAlchemy
+    when establishing "many to many" relationship
+    between `Doculect` and `WalsCode`.
+    """
+
+    __tablename__ = "doculect_to_wals_code"
+    doculect_id = Column(ForeignKey("doculects.id"), primary_key=True)
+    wals_code_id = Column(ForeignKey("wals_codes.id"), primary_key=True)
+
+
 class EncyclopediaMapToDoculect(Base):  # type: ignore[misc]
     """Class for **automatic** creation of objects by SQLAlchemy
     when establishing "many to many" relationship
