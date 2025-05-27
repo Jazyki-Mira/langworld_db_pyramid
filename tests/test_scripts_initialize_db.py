@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from langworld_db_data.filetools.csv_xls import read_dicts_from_csv
+from langworld_db_data.tools.files.csv_xls import read_dicts_from_csv
 from langworld_db_pyramid import models
 
 
