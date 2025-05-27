@@ -71,7 +71,7 @@
       {%- endif -%}
     {% endfor %}
 
-  {% if doculect.glottocodes or doculect.iso_639p3_codes %}
+  {% if doculect.glottocodes or doculect.iso_639p3_codes or doculect.wals_codes %}
       <h2 class="w3-text-darkest-blue-grey">{% trans %}Идентификаторы{% endtrans %}</h2>
       <ul>
 
@@ -87,6 +87,14 @@
       <li>ISO-639-3:
         {% for iso_code in doculect.iso_639p3_codes|sort(attribute="code") %}
         <span class="font-normal"><a href="https://iso639-3.sil.org/code/{{ iso_code.code }}" target="_blank">{{ iso_code.code }}</a></span>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </li>
+      {% endif %}
+
+      {% if doculect.wals_codes %}
+      <li>WALS:
+        {% for wals_code in doculect.wals_codes|sort(attribute="code") %}
+        <span class="font-normal"><a href="https://wals.info/languoid/lect/wals_code_{{ wals_code.code }}" target="_blank">{{ wals_code.code }}</a></span>{% if not loop.last %}, {% endif %}
         {% endfor %}
       </li>
       {% endif %}
