@@ -43,6 +43,7 @@ black = "*"
 isort = "*"
 ruff = "*"
 pre-commit = "*"
+langworld-db-pyramid = {editable = true, path = "."}
 
 [requires]
 python_version = "3.9"
