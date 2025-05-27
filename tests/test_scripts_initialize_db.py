@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from langworld_db_data.tools.files.csv_xls import read_dicts_from_csv
+from langworld_db_data.filetools.csv_xls import read_dicts_from_csv
 from langworld_db_pyramid import models
 
 
@@ -9,10 +9,10 @@ class TestCustomModelInitializer:
         # dbsession and test_initializer.dbsession is the same object
         # since the dummy dbsession is passed to constructor or CustomModelInitializer
 
-        NUMBER_OF_FEATURES = 129
+        NUMBER_OF_FEATURES = 126
         # EXPECTED NUMBER OF VALUES IN FeatureValue TABLE
-        number_of_listed_values = 1219
-        number_of_compound_listed_values = 28
+        number_of_listed_values = 1235
+        number_of_compound_listed_values = 2
         number_of_empty_values = NUMBER_OF_FEATURES * 3  # 3 value types with empty values
 
         unique_custom_values = set()
@@ -27,15 +27,12 @@ class TestCustomModelInitializer:
 
         test_db_initializer.setup_models()
 
-        # TODO create functions that read CSV files and check?
-        #  Otherwise it's not very reliable where I can't check
-        #  number of items manually.
         expected_number_of_items_for_model = {
             models.Country: 283,
-            models.Doculect: 438,
+            models.Doculect: 429,
             models.DoculectType: 3,
             models.EncyclopediaMap: 62,
-            models.EncyclopediaVolume: 21,
+            models.EncyclopediaVolume: 19,
             models.Family: 145,
             models.Feature: NUMBER_OF_FEATURES,
             models.FeatureCategory: 14,
@@ -44,9 +41,8 @@ class TestCustomModelInitializer:
             + number_of_compound_listed_values
             + len(unique_custom_values),
             models.FeatureValueType: 5,
-            models.Glottocode: 441,
-            models.Iso639P3Code: 418,
-            models.WalsCode: 271,
+            models.Glottocode: 427,
+            models.Iso639P3Code: 405,
         }
 
         for model in expected_number_of_items_for_model:
@@ -74,7 +70,7 @@ class TestCustomModelInitializer:
         afg = dbsession.scalars(
             select(models.Country).where(models.Country.name_en == "Afghanistan")
         ).one()
-        assert len(afg.doculects) == 23
+        assert len(afg.doculects) == 21
 
         rom_volume = dbsession.scalars(
             select(models.EncyclopediaVolume).where(models.EncyclopediaVolume.id == "11")
@@ -131,7 +127,7 @@ class TestCustomModelInitializer:
         assert old_russian.encyclopedia_volume.id == "13"
         assert old_russian.page == "449"
         assert old_russian.has_feature_profile
-        assert "A-9-2" in [value.man_id for value in old_russian.feature_values]
+        assert "A-9-1" in [value.man_id for value in old_russian.feature_values]
         assert "A-10-1" not in [value.man_id for value in old_russian.feature_values]
 
         # `is_listed_and_has_doculects` attribute in non-listed feature values must be False
@@ -151,23 +147,23 @@ class TestCustomModelInitializer:
         assert a32.is_listed_and_has_doculects
 
         # checking elements and compounds
-        compound_id = "K-15-4|K-15-2|K-15-3|K-15-8"
+        compound_id = "K-14-4|K-14-5|K-14-6|K-14-7"
         compound = dbsession.scalars(
             select(models.FeatureValue).where(models.FeatureValue.man_id == compound_id)
         ).one()
         assert len(compound.elements) == len(
             compound_id.split(models.feature_value.COMPOUND_VALUE_DELIMITER)
         )
-        k15_4 = dbsession.scalars(
-            select(models.FeatureValue).where(models.FeatureValue.man_id == "K-15-4")
+        k14_4 = dbsession.scalars(
+            select(models.FeatureValue).where(models.FeatureValue.man_id == "K-14-4")
         ).one()
-        assert compound in k15_4.compounds
+        assert compound in k14_4.compounds
 
         # checking compound value and its elements in a doculect
         amharic: models.Doculect = dbsession.scalars(
             select(models.Doculect).where(models.Doculect.name_en == "Amharic")
         ).one()
-        for value_id in ("K-15-4|K-15-2|K-15-3|K-15-8", "K-15-4", "K-15-2", "K-15-3", "K-15-8"):
+        for value_id in ("K-14-4|K-14-5|K-14-6|K-14-7", "K-14-4", "K-14-5", "K-14-6", "K-14-7"):
             assert value_id in [value.man_id for value in amharic.feature_values]
 
     def test__delete_all_data(self, dbsession, test_db_initializer):
