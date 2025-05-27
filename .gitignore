@@ -1,6 +1,9 @@
 # PyCharm
 .idea/
 
+# VSCode
+.vscode/settings.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -136,5 +139,6 @@ dmypy.json
 /langworld_db_data/get_value.py
 /langworld_db_data/add_feature.py
 
-# one-off scripts
+# one-off scripts and data files
 temp_*.py
+temp_*.csv
