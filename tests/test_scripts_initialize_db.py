@@ -7,47 +7,69 @@ from langworld_db_pyramid import models
 
 from .utils.test_data_counter import TestDataCounter
 
+TEST_DATA_DIR = Path(__file__).parent / "test_data" / "initialize_db"
+
 
 class TestCustomModelInitializer:
+
     def test_setup_models(self, dbsession, test_db_initializer):
-        # dbsession and test_initializer.dbsession is the same object
-        # since the dummy dbsession is passed to constructor or CustomModelInitializer
-
-        # Initialize counter with test data directory
-        counter = TestDataCounter(Path(__file__).parent / "test_data" / "initialize_db")
-        expected_number_of_items_for_model = counter.get_expected_model_counts()
-
         test_db_initializer.setup_models()
+        self._verify_model_counts(dbsession, test_db_initializer)
+        self._verify_doculect_properties(dbsession, test_db_initializer)
+        self._verify_selected_instances(dbsession, test_db_initializer)
 
-        # The expected counts are now calculated dynamically from CSV files
-        # using the TestDataCounter class, so we don't need to maintain hardcoded numbers
+    def _verify_model_counts(self, dbsession, test_db_initializer):
+        """Verify that all models have the expected number of items.
 
-        for model in expected_number_of_items_for_model:
-            all_items = dbsession.scalars(select(model)).all()
-            assert len(list(all_items)) == expected_number_of_items_for_model[model]
+        Collects all model count mismatches and raises a single error if any are found.
+        """
+        counter = TestDataCounter(TEST_DATA_DIR)
+        expected_counts = counter.get_expected_model_counts()
+        mismatches = []
 
-        all_doculects = dbsession.scalars(select(models.Doculect)).all()
+        for model, expected_count in expected_counts.items():
+            actual_count = len(dbsession.scalars(select(model)).all())
+            if actual_count != expected_count:
+                mismatches.append((model.__name__, expected_count, actual_count))
 
-        assert len([d for d in all_doculects if d.has_feature_profile]) == len(
-            list(test_db_initializer.dir_with_feature_profiles.glob("*.csv"))
-        )
+        if mismatches:
+            error_message = "Model count mismatches found:\n" + "\n".join(
+                f"{model} (CSV: {expected} vs DB: {actual})"
+                for model, expected, actual in mismatches
+            )
+            raise AssertionError(error_message)
 
-        for item in all_doculects:
-            assert item.man_id
-            assert isinstance(item.main_country, models.Country)
-            assert isinstance(item.type, models.DoculectType)
+    def _verify_doculect_properties(self, dbsession, test_db_initializer):
+        """Verify properties of all doculects in the database."""
+        doculects = dbsession.scalars(select(models.Doculect)).all()
+        feature_profiles = list(test_db_initializer.dir_with_feature_profiles.glob("*.csv"))
 
-            if item.encyclopedia_volume_id:
-                assert isinstance(item.encyclopedia_volume, models.EncyclopediaVolume)
-            if item.has_feature_profile:
-                # With multi-select features, there can be more values than there are features:
-                # For each element of a compound value, a separate line in the table is created.
-                assert len(item.feature_values) >= NUMBER_OF_FEATURES
+        # Verify number of doculects with feature profiles
+        doculects_with_profiles = [d for d in doculects if d.has_feature_profile]
+        assert len(doculects_with_profiles) == len(feature_profiles)
+
+        # Verify individual doculect properties
+        for doculect in doculects:
+            self._verify_single_doculect(doculect)
+
+    def _verify_single_doculect(self, doculect):
+        """Verify properties of a single doculect."""
+        counter = TestDataCounter(TEST_DATA_DIR)
+        assert doculect.man_id
+        assert isinstance(doculect.main_country, models.Country)
+        assert isinstance(doculect.type, models.DoculectType)
+
+        if doculect.encyclopedia_volume_id:
+            assert isinstance(doculect.encyclopedia_volume, models.EncyclopediaVolume)
+        if doculect.has_feature_profile:
+            assert len(doculect.feature_values) >= counter.count_features()
+
+    def _verify_selected_instances(self, dbsession, test_db_initializer):
 
         afg = dbsession.scalars(
             select(models.Country).where(models.Country.name_en == "Afghanistan")
         ).one()
-        assert len(afg.doculects) == 21
+        assert len(afg.doculects) == 21, "Expected 21 doculects for Afghanistan"
 
         rom_volume = dbsession.scalars(
             select(models.EncyclopediaVolume).where(models.EncyclopediaVolume.id == "11")

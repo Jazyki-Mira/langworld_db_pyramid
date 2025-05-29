@@ -52,7 +52,8 @@ class TestDataCounter:
             glottocode = doculect["glottocode"]
             if glottocode:
                 # Split by comma in case there are multiple codes
-                unique_glottocodes.update(glottocode.split(","))
+                unique_glottocodes.update(glottocode.split(", "))
+
         return len(unique_glottocodes)
 
     def count_iso639p3codes(self) -> int:
@@ -63,7 +64,7 @@ class TestDataCounter:
             iso_code = doculect["iso_639_3"]
             if iso_code:
                 # Split by comma in case there are multiple codes
-                unique_iso_codes.update(iso_code.split(","))
+                unique_iso_codes.update(iso_code.split(", "))
         return len(unique_iso_codes)
 
     def count_listed_values(self) -> int:
