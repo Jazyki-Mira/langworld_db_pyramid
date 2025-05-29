@@ -8,4 +8,6 @@ cd ${SCRIPT_DIR}/../
 git fetch origin
 git merge origin/master
 
+pipenv install
+
 ${SCRIPT_DIR}/init_compile.sh
