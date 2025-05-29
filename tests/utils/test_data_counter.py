@@ -96,6 +96,30 @@ class TestDataCounter:
             unique_custom_values.update(rows_with_custom_values)
         return len(unique_custom_values)
 
+    def count_doculects_by_country(self, country_id: str) -> int:
+        """Count number of doculects in doculects.csv that belong to a specific country.
+
+        Args:
+            country_id: The country ID (e.g., 'afg' for Afghanistan)
+
+        Returns:
+            Number of doculects associated with the given country
+        """
+        doculects = read_dicts_from_csv(self.test_data_dir / "doculects.csv")
+        return len([d for d in doculects if d["main_country_id"] == country_id])
+
+    def count_doculects_by_encyclopedia_volume(self, volume_id: str) -> int:
+        """Count number of doculects in doculects.csv that belong to a specific encyclopedia volume.
+
+        Args:
+            volume_id: The ID of the encyclopedia volume (e.g., '11')
+
+        Returns:
+            Number of doculects associated with the given encyclopedia volume
+        """
+        doculects = read_dicts_from_csv(self.test_data_dir / "doculects.csv")
+        return len([d for d in doculects if d["encyclopedia_volume_id"] == volume_id])
+
     def get_expected_model_counts(self) -> Dict[type, int]:
         """Get expected counts for all models based on CSV files."""
         return {

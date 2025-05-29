@@ -65,16 +65,16 @@ class TestCustomModelInitializer:
             assert len(doculect.feature_values) >= counter.count_features()
 
     def _verify_selected_instances(self, dbsession, test_db_initializer):
-
+        counter = TestDataCounter(TEST_DATA_DIR)
         afg = dbsession.scalars(
             select(models.Country).where(models.Country.name_en == "Afghanistan")
         ).one()
-        assert len(afg.doculects) == 21, "Expected 21 doculects for Afghanistan"
+        assert len(afg.doculects) == counter.count_doculects_by_country("afg")
 
         rom_volume = dbsession.scalars(
             select(models.EncyclopediaVolume).where(models.EncyclopediaVolume.id == "11")
         ).one()
-        assert len(rom_volume.doculects) == 24
+        assert len(rom_volume.doculects) == counter.count_doculects_by_encyclopedia_volume("11")
 
         # family top to bottom
         mande = dbsession.scalars(
