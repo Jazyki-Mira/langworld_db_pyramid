@@ -9,6 +9,7 @@ from langworld_db_pyramid import models
 class TestDataCounter:
     def __init__(self, test_data_dir: Path):
         self.test_data_dir = test_data_dir
+        self.doculects = read_dicts_from_csv(self.test_data_dir / "doculects.csv")
         self.feature_profiles_dir = test_data_dir / "feature_profiles"
 
     def count_countries(self) -> int:
@@ -17,12 +18,11 @@ class TestDataCounter:
 
     def count_doculects(self) -> int:
         """Count number of doculects in doculects.csv."""
-        return len(read_dicts_from_csv(self.test_data_dir / "doculects.csv"))
+        return len(self.doculects)
 
     def count_doculect_types(self) -> int:
         """Count number of doculect types in doculects.csv."""
-        doculects = read_dicts_from_csv(self.test_data_dir / "doculects.csv")
-        return len({d["type"] for d in doculects})
+        return len({d["type"] for d in self.doculects})
 
     def count_encyclopedia_maps(self) -> int:
         """Count number of encyclopedia maps in encyclopedia_maps.csv."""
@@ -47,8 +47,7 @@ class TestDataCounter:
     def count_glottocodes(self) -> int:
         """Count number of unique glottocodes in doculects.csv."""
         unique_glottocodes: Set[str] = set()
-        doculects = read_dicts_from_csv(self.test_data_dir / "doculects.csv")
-        for doculect in doculects:
+        for doculect in self.doculects:
             glottocode = doculect["glottocode"]
             if glottocode:
                 # Split by comma in case there are multiple codes
@@ -59,8 +58,7 @@ class TestDataCounter:
     def count_iso639p3codes(self) -> int:
         """Count number of unique ISO 639-3 codes in doculects.csv."""
         unique_iso_codes: Set[str] = set()
-        doculects = read_dicts_from_csv(self.test_data_dir / "doculects.csv")
-        for doculect in doculects:
+        for doculect in self.doculects:
             iso_code = doculect["iso_639_3"]
             if iso_code:
                 # Split by comma in case there are multiple codes
@@ -105,8 +103,7 @@ class TestDataCounter:
         Returns:
             Number of doculects associated with the given country
         """
-        doculects = read_dicts_from_csv(self.test_data_dir / "doculects.csv")
-        return len([d for d in doculects if d["main_country_id"] == country_id])
+        return len([d for d in self.doculects if d["main_country_id"] == country_id])
 
     def count_doculects_by_encyclopedia_volume(self, volume_id: str) -> int:
         """Count number of doculects in doculects.csv that belong to a specific encyclopedia volume.
@@ -117,8 +114,7 @@ class TestDataCounter:
         Returns:
             Number of doculects associated with the given encyclopedia volume
         """
-        doculects = read_dicts_from_csv(self.test_data_dir / "doculects.csv")
-        return len([d for d in doculects if d["encyclopedia_volume_id"] == volume_id])
+        return len([d for d in self.doculects if d["encyclopedia_volume_id"] == volume_id])
 
     def get_expected_model_counts(self) -> Dict[type, int]:
         """Get expected counts for all models based on CSV files."""
