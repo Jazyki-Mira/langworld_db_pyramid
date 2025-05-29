@@ -1,7 +1,11 @@
+from pathlib import Path
+
 from sqlalchemy import select
 
 from langworld_db_data.tools.files.csv_xls import read_dicts_from_csv
 from langworld_db_pyramid import models
+
+from .utils.test_data_counter import TestDataCounter
 
 
 class TestCustomModelInitializer:
@@ -9,41 +13,14 @@ class TestCustomModelInitializer:
         # dbsession and test_initializer.dbsession is the same object
         # since the dummy dbsession is passed to constructor or CustomModelInitializer
 
-        NUMBER_OF_FEATURES = 126
-        # EXPECTED NUMBER OF VALUES IN FeatureValue TABLE
-        number_of_listed_values = 1235
-        number_of_compound_listed_values = 2
-        number_of_empty_values = NUMBER_OF_FEATURES * 3  # 3 value types with empty values
-
-        unique_custom_values = set()
-        for file in test_db_initializer.dir_with_feature_profiles.glob("*.csv"):
-            rows_with_custom_values = {
-                # comment not included because FeatureValue table contains values without comments
-                (row["feature_id"], row["value_ru"])
-                for row in read_dicts_from_csv(file)
-                if row["value_type"] == "custom"
-            }
-            unique_custom_values.update(rows_with_custom_values)
+        # Initialize counter with test data directory
+        counter = TestDataCounter(Path(__file__).parent / "test_data" / "initialize_db")
+        expected_number_of_items_for_model = counter.get_expected_model_counts()
 
         test_db_initializer.setup_models()
 
-        expected_number_of_items_for_model = {
-            models.Country: 283,
-            models.Doculect: 429,
-            models.DoculectType: 3,
-            models.EncyclopediaMap: 62,
-            models.EncyclopediaVolume: 19,
-            models.Family: 145,
-            models.Feature: NUMBER_OF_FEATURES,
-            models.FeatureCategory: 14,
-            models.FeatureValue: number_of_listed_values
-            + number_of_empty_values
-            + number_of_compound_listed_values
-            + len(unique_custom_values),
-            models.FeatureValueType: 5,
-            models.Glottocode: 427,
-            models.Iso639P3Code: 405,
-        }
+        # The expected counts are now calculated dynamically from CSV files
+        # using the TestDataCounter class, so we don't need to maintain hardcoded numbers
 
         for model in expected_number_of_items_for_model:
             all_items = dbsession.scalars(select(model)).all()
