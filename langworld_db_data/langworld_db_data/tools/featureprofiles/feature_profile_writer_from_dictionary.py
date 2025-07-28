@@ -1,11 +1,12 @@
 from dataclasses import asdict
 from pathlib import Path
 
+from tinybear.csv_xls import write_csv
+
 from langworld_db_data.constants.literals import KEY_FOR_FEATURE_ID
-from langworld_db_data.tools.featureprofiles.data_structures import (
+from langworld_db_data.tools.featureprofiles import (
     ValueForFeatureProfileDictionary,
 )
-from langworld_db_data.tools.files.csv_xls import write_csv
 
 
 class FeatureProfileWriterFromDictionary:
@@ -18,7 +19,8 @@ class FeatureProfileWriterFromDictionary:
     some other functionality that manipulates feature profile data.
 
     If you already have rows of data ready to be written to CSV,
-    you do not need this class. Just write them to CSV with `filetools`.
+    you do not need this class. Just write them to CSV
+    with `tools.common.files.csv_xls` module.
     """
 
     @staticmethod
