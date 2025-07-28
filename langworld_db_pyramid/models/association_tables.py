@@ -46,6 +46,7 @@ class DoculectToPhoibleCode(Base):  # type: ignore[misc]
     doculect_id = Column(ForeignKey("doculects.id"), primary_key=True)
     phoible_code_id = Column(ForeignKey("phoible_codes.id"), primary_key=True)
 
+
 class DoculectToIso639P3Code(Base):  # type: ignore[misc]
     """Class for **automatic** creation of objects by SQLAlchemy
     when establishing "many to many" relationship
