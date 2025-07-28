@@ -390,13 +390,17 @@ class CustomModelInitializer:
 
             grambank_codes_for_this_doculect = [
                 self.grambank_code_for_id[grambank_code]
-                for grambank_code in cast(str, doculect_row_to_write.pop("grambank_code")).split(", ")
+                for grambank_code in cast(str, doculect_row_to_write.pop("grambank_code")).split(
+                    ", "
+                )
                 if grambank_code
             ]
 
             phoible_codes_for_this_doculect = [
                 self.phoible_code_for_id[phoible_code]
-                for phoible_code in cast(str, doculect_row_to_write.pop("phoible_code")).split(", ")
+                for phoible_code in cast(str, doculect_row_to_write.pop("phoible_code")).split(
+                    ", "
+                )
                 if phoible_code
             ]
 
