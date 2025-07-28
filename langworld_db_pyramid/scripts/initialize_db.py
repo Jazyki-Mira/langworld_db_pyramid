@@ -97,7 +97,7 @@ class CustomModelInitializer:
         self.glottocode_for_id: dict[str, models.Glottocode] = {}
         self.iso639p3code_for_id: dict[str, models.Iso639P3Code] = {}
         self.walscode_for_id: dict[str, models.WalsCode] = {}
-        self.grambankcode_for_id: dict[str, models.GrambankCode] = {}
+        self.grambank_code_for_id: dict[str, models.GrambankCode] = {}
 
         self.listed_value_for_id: dict[str, models.FeatureValue] = {}
         self.compound_listed_value_for_id: dict[str, models.FeatureValue] = {}
@@ -293,10 +293,10 @@ class CustomModelInitializer:
                 if not item:
                     continue
                 try:
-                    self.grambankcode_for_id[item]
+                    self.grambank_code_for_id[item]
                 except KeyError:
                     grambank_code = models.GrambankCode(code=item)
-                    self.grambankcode_for_id[item] = grambank_code
+                    self.grambank_code_for_id[item] = grambank_code
                     self.dbsession.add(grambank_code)
 
     def _populate_wals_codes(self) -> None:
@@ -373,6 +373,12 @@ class CustomModelInitializer:
                 if glottocode
             ]
 
+            grambank_codes_for_this_doculect = [
+                self.grambank_code_for_id[grambank_code]
+                for grambank_code in cast(str, doculect_row_to_write.pop("grambank_code")).split(", ")
+                if grambank_code
+            ]
+
             wals_codes_for_this_doculect = [
                 self.walscode_for_id[wals_code]
                 for wals_code in cast(str, doculect_row_to_write.pop("wals_code")).split(", ")
@@ -405,6 +411,7 @@ class CustomModelInitializer:
                 doculect.encyclopedia_volume = encyclopedia_volume
             doculect.family = family
             doculect.glottocodes = glottocodes_for_this_doculect
+            doculect.grambank_codes = grambank_codes_for_this_doculect
             doculect.wals_codes = wals_codes_for_this_doculect
             doculect.iso_639p3_codes = iso_639p3_codes_for_this_doculect
             doculect.main_country = main_country
