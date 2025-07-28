@@ -47,6 +47,9 @@ class Doculect(QueryMixin, Base):  # type: ignore[misc]
     glottocodes = relationship(
         "Glottocode", back_populates="doculects", secondary="doculect_to_glottocode"
     )
+    grambank_codes = relationship(
+        "GrambankCode", back_populates="doculects", secondary="doculect_to_grambank_code"
+    )
     iso_639p3_codes = relationship(
         "Iso639P3Code", back_populates="doculects", secondary="doculect_to_iso_639p3_code"
     )

@@ -47,6 +47,8 @@ class CustomModelInitializer:
             models.association_tables.DoculectToFeatureValue,
             models.association_tables.DoculectToGlottocode,
             models.association_tables.DoculectToIso639P3Code,
+            models.association_tables.DoculectToWalsCode,
+            models.association_tables.DoculectToGrambankCode,
             models.association_tables.EncyclopediaMapToDoculect,
             models.association_tables.FeatureValueCompoundToElement,
             models.Doculect,
@@ -95,6 +97,7 @@ class CustomModelInitializer:
         self.glottocode_for_id: dict[str, models.Glottocode] = {}
         self.iso639p3code_for_id: dict[str, models.Iso639P3Code] = {}
         self.walscode_for_id: dict[str, models.WalsCode] = {}
+        self.grambankcode_for_id: dict[str, models.GrambankCode] = {}
 
         self.listed_value_for_id: dict[str, models.FeatureValue] = {}
         self.compound_listed_value_for_id: dict[str, models.FeatureValue] = {}
@@ -129,8 +132,9 @@ class CustomModelInitializer:
         self._populate_encyclopedia_volumes()
         self._populate_families()
         self._populate_glottocodes()
-        self._populate_wals_codes()
+        self._populate_grambank_codes()
         self._populate_iso639p3_codes()
+        self._populate_wals_codes()
 
         self._populate_doculects_compound_and_custom_feature_values_and_comments()
         self._set_is_listed_and_has_doculect_to_false_for_listed_values_without_doculects()
@@ -281,6 +285,19 @@ class CustomModelInitializer:
                     glottocode = models.Glottocode(code=item)
                     self.glottocode_for_id[item] = glottocode
                     self.dbsession.add(glottocode)
+
+    def _populate_grambank_codes(self) -> None:
+        for row in read_dicts_from_csv(self.file_with_doculects):
+            grambank_codes = row.get("grambank_code", "").split(", ")
+            for item in grambank_codes:
+                if not item:
+                    continue
+                try:
+                    self.grambankcode_for_id[item]
+                except KeyError:
+                    grambank_code = models.GrambankCode(code=item)
+                    self.grambankcode_for_id[item] = grambank_code
+                    self.dbsession.add(grambank_code)
 
     def _populate_wals_codes(self) -> None:
         for row in read_dicts_from_csv(self.file_with_doculects):
