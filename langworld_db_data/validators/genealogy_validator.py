@@ -2,16 +2,18 @@ import re
 from collections import Counter
 from pathlib import Path
 
+from tinybear.csv_xls import (
+    check_csv_for_malformed_rows,
+    check_csv_for_repetitions_in_column,
+)
+from tinybear.json_toml_yaml import check_yaml_file
+from tinybear.txt import read_non_empty_lines_from_txt_file
+
+from langworld_db_data.constants.literals import KEY_FOR_ID
 from langworld_db_data.constants.paths import (
     FILE_WITH_GENEALOGY_HIERARCHY,
     FILE_WITH_GENEALOGY_NAMES,
 )
-from langworld_db_data.filetools.csv_xls import (
-    check_csv_for_malformed_rows,
-    check_csv_for_repetitions_in_column,
-)
-from langworld_db_data.filetools.json_toml_yaml import check_yaml_file
-from langworld_db_data.filetools.txt import read_non_empty_lines_from_txt_file
 from langworld_db_data.validators.validator import Validator, ValidatorError
 
 
@@ -36,7 +38,7 @@ class GenealogyValidator(Validator):
         check_yaml_file(self.file_with_hierarchy, verbose=False)
 
         check_csv_for_malformed_rows(self.file_with_names)
-        check_csv_for_repetitions_in_column(self.file_with_names, "id")
+        check_csv_for_repetitions_in_column(self.file_with_names, KEY_FOR_ID)
 
         family_ids_from_hierarchy = self._check_and_get_ids_from_hierarchy()
         self._check_ids_in_list_of_names(family_ids_from_hierarchy)
@@ -67,7 +69,7 @@ class GenealogyValidator(Validator):
                     "It can only contain lowercase letters and underscores"
                 )
 
-            family_id = match.group("id")
+            family_id = match.group(KEY_FOR_ID)
 
             if family_id not in self.family_ids_from_file_with_names:
                 raise GenealogyValidatorError(
@@ -124,4 +126,4 @@ class GenealogyValidator(Validator):
 
 
 if __name__ == "__main__":
-    GenealogyValidator().validate()
+    GenealogyValidator().validate()  # pragma: no cover

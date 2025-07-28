@@ -1,11 +1,14 @@
 from pycldf import Dataset
+from tinybear.csv_xls import check_csv_for_malformed_rows
+from tinybear.json_toml_yaml import check_yaml_file
 
-from langworld_db_data.cldfwriters.cldf_dataset_writer import CLDFDatasetWriter
 from langworld_db_data.constants.paths import DATA_DIR, FILE_WITH_CLDF_DATASET_METADATA
-from langworld_db_data.filetools.csv_xls import check_csv_for_malformed_rows
-from langworld_db_data.filetools.json_toml_yaml import check_yaml_file
+from langworld_db_data.export.cldf_dataset_writer import CLDFDatasetWriter
 from langworld_db_data.mdlisters.custom_value_lister import CustomValueLister
 from langworld_db_data.mdlisters.listed_value_lister import ListedValueLister
+from langworld_db_data.tools.featureprofiles.sort_compound_listed_values import (
+    sort_compound_listed_values_in_feature_profiles,
+)
 from langworld_db_data.validators.asset_validator import AssetValidator
 from langworld_db_data.validators.doculect_inventory_validator import DoculectInventoryValidator
 from langworld_db_data.validators.feature_profile_validator import FeatureProfileValidator
@@ -13,6 +16,7 @@ from langworld_db_data.validators.feature_value_inventory_validator import (
     FeatureValueInventoryValidator,
 )
 from langworld_db_data.validators.genealogy_validator import GenealogyValidator
+from langworld_db_data.validators.html_validator import HTMLValidator
 
 
 def main() -> None:
@@ -35,12 +39,16 @@ def main() -> None:
     DoculectInventoryValidator().validate()
     GenealogyValidator().validate()
     FeatureValueInventoryValidator().validate()
-    # By default, exception will be thrown if value name does not match value name in an
-    # inventory for given value ID.  Value name in feature profile is only there for
-    # readability, so I could disable this behavior, but for now it seems OK for the
-    # exception to be thrown.  Argument `must_throw_error_at_not_applicable_rule_breach`
-    # can be set to True at a later stage.
+    HTMLValidator().validate()
+    sort_compound_listed_values_in_feature_profiles()
     FeatureProfileValidator().validate()
+    # In this last validator, exception will be thrown if value name does not match
+    # value name in an inventory for given value ID.
+    # Value name in feature profile is only there for readability, so this behavior
+    # is not required, but for now it seems OK for the exception to be thrown.
+    # In an opposite way, rules for `not_applicable` are not strictly enforced yet.
+    # Argument `must_throw_error_at_not_applicable_rule_breach`
+    # can be set to True at a later stage.
 
     print("\nWriting Markdown files")
     CustomValueLister().write_grouped_by_feature()
