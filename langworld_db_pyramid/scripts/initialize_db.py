@@ -97,6 +97,7 @@ class CustomModelInitializer:
         self.glottocode_for_id: dict[str, models.Glottocode] = {}
         self.iso639p3code_for_id: dict[str, models.Iso639P3Code] = {}
         self.walscode_for_id: dict[str, models.WalsCode] = {}
+        self.phoible_code_for_id: dict[str, models.PhoibleCode] = {}
         self.grambank_code_for_id: dict[str, models.GrambankCode] = {}
 
         self.listed_value_for_id: dict[str, models.FeatureValue] = {}
@@ -133,6 +134,7 @@ class CustomModelInitializer:
         self._populate_families()
         self._populate_glottocodes()
         self._populate_grambank_codes()
+        self._populate_phoible_codes()
         self._populate_iso639p3_codes()
         self._populate_wals_codes()
 
@@ -299,6 +301,19 @@ class CustomModelInitializer:
                     self.grambank_code_for_id[item] = grambank_code
                     self.dbsession.add(grambank_code)
 
+    def _populate_phoible_codes(self) -> None:
+        for row in read_dicts_from_csv(self.file_with_doculects):
+            phoible_codes = row.get("phoible_code", "").split(", ")
+            for item in phoible_codes:
+                if not item:
+                    continue
+                try:
+                    self.phoible_code_for_id[item]
+                except KeyError:
+                    phoible_code = models.PhoibleCode(code=item)
+                    self.phoible_code_for_id[item] = phoible_code
+                    self.dbsession.add(phoible_code)
+
     def _populate_wals_codes(self) -> None:
         for row in read_dicts_from_csv(self.file_with_doculects):
             wals_codes = row["wals_code"].split(", ")
@@ -379,6 +394,12 @@ class CustomModelInitializer:
                 if grambank_code
             ]
 
+            phoible_codes_for_this_doculect = [
+                self.phoible_code_for_id[phoible_code]
+                for phoible_code in cast(str, doculect_row_to_write.pop("phoible_code")).split(", ")
+                if phoible_code
+            ]
+
             wals_codes_for_this_doculect = [
                 self.walscode_for_id[wals_code]
                 for wals_code in cast(str, doculect_row_to_write.pop("wals_code")).split(", ")
@@ -412,8 +433,9 @@ class CustomModelInitializer:
             doculect.family = family
             doculect.glottocodes = glottocodes_for_this_doculect
             doculect.grambank_codes = grambank_codes_for_this_doculect
-            doculect.wals_codes = wals_codes_for_this_doculect
             doculect.iso_639p3_codes = iso_639p3_codes_for_this_doculect
+            doculect.phoible_codes = phoible_codes_for_this_doculect
+            doculect.wals_codes = wals_codes_for_this_doculect
             doculect.main_country = main_country
             doculect.type = type_of_this_doculect
 

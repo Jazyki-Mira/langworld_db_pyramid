@@ -36,6 +36,16 @@ class DoculectToGrambankCode(Base):  # type: ignore[misc]
     grambank_code_id = Column(ForeignKey("grambank_codes.id"), primary_key=True)
 
 
+class DoculectToPhoibleCode(Base):  # type: ignore[misc]
+    """Class for **automatic** creation of objects by SQLAlchemy
+    when establishing "many to many" relationship
+    between `Doculect` and `PhoibleCode`.
+    """
+
+    __tablename__ = "doculect_to_phoible_code"
+    doculect_id = Column(ForeignKey("doculects.id"), primary_key=True)
+    phoible_code_id = Column(ForeignKey("phoible_codes.id"), primary_key=True)
+
 class DoculectToIso639P3Code(Base):  # type: ignore[misc]
     """Class for **automatic** creation of objects by SQLAlchemy
     when establishing "many to many" relationship

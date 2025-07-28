@@ -47,14 +47,17 @@ class Doculect(QueryMixin, Base):  # type: ignore[misc]
     glottocodes = relationship(
         "Glottocode", back_populates="doculects", secondary="doculect_to_glottocode"
     )
-    grambank_codes = relationship(
-        "GrambankCode", back_populates="doculects", secondary="doculect_to_grambank_code"
-    )
     iso_639p3_codes = relationship(
         "Iso639P3Code", back_populates="doculects", secondary="doculect_to_iso_639p3_code"
     )
     wals_codes = relationship(
         "WalsCode", back_populates="doculects", secondary="doculect_to_wals_code"
+    )
+    grambank_codes = relationship(
+        "GrambankCode", back_populates="doculects", secondary="doculect_to_grambank_code"
+    )
+    phoible_codes = relationship(
+        "PhoibleCode", back_populates="doculects", secondary="doculect_to_phoible_code"
     )
 
     def belongs_to_family(self, family_man_id: str) -> bool:
