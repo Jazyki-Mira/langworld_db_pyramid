@@ -71,7 +71,7 @@
       {%- endif -%}
     {% endfor %}
 
-  {% if doculect.glottocodes or doculect.iso_639p3_codes or doculect.wals_codes %}
+  {% if doculect.glottocodes or doculect.iso_639p3_codes or doculect.wals_codes or doculect.grambank_codes or doculect.phoible_codes %}
       <h2 class="w3-text-darkest-blue-grey">{% trans %}Идентификаторы{% endtrans %}</h2>
       <ul>
 
@@ -83,10 +83,26 @@
       </li>
       {% endif %}
 
+      {% if doculect.grambank_codes %}
+      <li>Grambank:
+        {% for grambank_code in doculect.grambank_codes|sort(attribute="code") %}
+        <span class="font-normal"><a href="https://grambank.clld.org/languages/{{ grambank_code.code }}" target="_blank">{{ grambank_code.code }}</a></span>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </li>
+      {% endif %}
+
       {% if doculect.iso_639p3_codes %}
       <li>ISO-639-3:
         {% for iso_code in doculect.iso_639p3_codes|sort(attribute="code") %}
         <span class="font-normal"><a href="https://iso639-3.sil.org/code/{{ iso_code.code }}" target="_blank">{{ iso_code.code }}</a></span>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </li>
+      {% endif %}
+
+     {% if doculect.phoible_codes %}
+      <li>PHOIBLE:
+        {% for phoible_code in doculect.phoible_codes|sort(attribute="code") %}
+        <span class="font-normal"><a href="https://phoible.org/languages/{{ phoible_code.code }}" target="_blank">{{ phoible_code.code }}</a></span>{% if not loop.last %}, {% endif %}
         {% endfor %}
       </li>
       {% endif %}
