@@ -53,6 +53,12 @@ class Doculect(QueryMixin, Base):  # type: ignore[misc]
     wals_codes = relationship(
         "WalsCode", back_populates="doculects", secondary="doculect_to_wals_code"
     )
+    grambank_codes = relationship(
+        "GrambankCode", back_populates="doculects", secondary="doculect_to_grambank_code"
+    )
+    phoible_codes = relationship(
+        "PhoibleCode", back_populates="doculects", secondary="doculect_to_phoible_code"
+    )
 
     def belongs_to_family(self, family_man_id: str) -> bool:
         """Recursively (goes up the genealogy) checks

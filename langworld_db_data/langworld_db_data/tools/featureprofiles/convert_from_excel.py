@@ -1,7 +1,11 @@
 from functools import partial
 from pathlib import Path
 
+from tinybear.csv_xls import read_dicts_from_xls
+from tinybear.json_toml_yaml import read_json_toml_yaml
+
 from langworld_db_data.constants.literals import (
+    ATOMIC_VALUE_SEPARATOR,
     KEY_FOR_ENGLISH_COMMENT,
     KEY_FOR_FEATURE_ID,
     KEY_FOR_RUSSIAN_COMMENT,
@@ -10,14 +14,12 @@ from langworld_db_data.constants.literals import (
     KEY_FOR_VALUE_TYPE,
 )
 from langworld_db_data.constants.paths import CONFIG_DIR
-from langworld_db_data.tools.featureprofiles.data_structures import (
+from langworld_db_data.tools.featureprofiles import (
     ValueForFeatureProfileDictionary,
 )
 from langworld_db_data.tools.featureprofiles.feature_profile_writer_from_dictionary import (  # noqa E501
     FeatureProfileWriterFromDictionary,
 )
-from langworld_db_data.tools.files.csv_xls import read_dicts_from_xls
-from langworld_db_data.tools.files.json_toml_yaml import read_json_toml_yaml
 
 
 def convert_from_excel(path_to_input_excel: Path) -> Path:
@@ -85,8 +87,8 @@ def convert_from_excel(path_to_input_excel: Path) -> Path:
             processed_feature_ids.add(feature_id)
         else:
             # otherwise add the value to the existing dictionary entry
-            value_for_feature_id[feature_id].value_id += f"&{value_id}"
-            value_for_feature_id[feature_id].value_ru += f"&{value_ru}"
+            value_for_feature_id[feature_id].value_id += f"{ATOMIC_VALUE_SEPARATOR}{value_id}"
+            value_for_feature_id[feature_id].value_ru += f"{ATOMIC_VALUE_SEPARATOR}{value_ru}"
 
     output_path = path_to_input_excel.parent / f"{path_to_input_excel.stem}.csv"
     print(f"Saving converted Excel file as {output_path}")

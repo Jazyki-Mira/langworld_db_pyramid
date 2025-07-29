@@ -1,6 +1,12 @@
 import re
 from pathlib import Path
 
+from tinybear.csv_xls import (
+    check_csv_for_malformed_rows,
+    check_csv_for_repetitions_in_column,
+    read_dict_from_2_csv_columns,
+)
+
 from langworld_db_data.constants.literals import (
     ATOMIC_VALUE_SEPARATOR,
     AUX_ROW_MARKER,
@@ -17,15 +23,10 @@ from langworld_db_data.constants.paths import (
     FILE_WITH_NAMES_OF_FEATURES,
     FILE_WITH_VALUE_TYPES,
 )
-from langworld_db_data.tools.featureprofiles.data_structures import (
+from langworld_db_data.tools.featureprofiles import (
     ValueForFeatureProfileDictionary,
 )
 from langworld_db_data.tools.featureprofiles.feature_profile_reader import FeatureProfileReader
-from langworld_db_data.tools.files.csv_xls import (
-    check_csv_for_malformed_rows,
-    check_csv_for_repetitions_in_column,
-    read_dict_from_2_csv_columns,
-)
 from langworld_db_data.validators.validator import Validator, ValidatorError
 
 
@@ -203,7 +204,7 @@ class FeatureProfileValidator(Validator):
                 if self.must_throw_error_at_feature_or_value_name_mismatch:
                     raise FeatureProfileValidatorError(message)
                 else:
-                    print(message)
+                    print(message)  # pragma: no cover
 
     def check_all_features_that_may_need_not_applicable_type(
         self,

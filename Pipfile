@@ -43,6 +43,7 @@ black = "*"
 isort = "*"
 ruff = "*"
 pre-commit = "*"
+tinybear = "*"
 
 [requires]
 python_version = "3.9"
