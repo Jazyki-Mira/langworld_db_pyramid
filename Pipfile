@@ -33,7 +33,7 @@ zope = {sqlalchemy = "~1.6"}
 
 [dev-packages]
 cookiecutter = "~=2.6.0"
-graphviz = "~=0.20.3"
+graphviz = "~=0.21"
 icecream = "~=2.1.4"
 mypy = "~=1.17"
 pydot = "~=3.0.4"
