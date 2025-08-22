@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4645fd92a7ce9343d953ad5e1e7e32c7d274ed624951568cf2dc8e0d490ee8c1"
+            "sha256": "a47aae79ee22794ed517c31a3523c3704ab6072b632e7aa212cb1a1c754de79b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -2158,11 +2158,11 @@
         },
         "icecream": {
             "hashes": [
-                "sha256:2ff97c7624340e4791cbb439df7bfe16c35095a7864fef412f9bbaaaaab09463",
-                "sha256:f5e7955472aaef413fe84dad8d53b02d8a8637273c1f0fa1eaf08ce239462ce9"
+                "sha256:936df053e65ff3c7a219fa79311b32bdae19aad83dd2e23d153ab8864b78acd9",
+                "sha256:b52cdd40cb5080279c4534fcd77aa510b1e7397a687e9d4daf2f8d2028bd738c"
             ],
             "index": "pypi",
-            "version": "==2.1.6"
+            "version": "==2.1.7"
         },
         "identify": {
             "hashes": [
