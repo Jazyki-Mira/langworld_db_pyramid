@@ -1,5 +1,5 @@
-![GitHub Actions](https://github.com/lemontree210/langworld_db_data/actions/workflows/pytest.yml/badge.svg)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/lemontree210/langworld_db_data/master.svg)](https://results.pre-commit.ci/latest/github/lemontree210/langworld_db_data/master)
+![GitHub Actions](https://github.com/Jazyki-Mira/langworld_db_data/actions/workflows/pytest.yml/badge.svg)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Jazyki-Mira/langworld_db_data/master.svg)](https://results.pre-commit.ci/latest/github/Jazyki-Mira/langworld_db_data/master)
 [![codecov](https://codecov.io/gh/Jazyki-Mira/langworld_db_data/graph/badge.svg?token=MAG06T2QAF)](https://codecov.io/gh/Jazyki-Mira/langworld_db_data)
 
 # "Languages of the World": data files
@@ -19,5 +19,9 @@ Most of these files are meant to be edited by hand
 [CLDF](https://cldf.clld.org/) 
 `StructureDataset` [here](data/cldf) is generated programmatically using 
 [*pycldf*](https://github.com/cldf/pycldf).
+
+## For editors of feature profiles
+
+Converter from Excel to CSV can be found in [`langworld_db_data/tools/convert_from_excel/`](langworld_db_data/tools/convert_from_excel).
 
 [![License](https://licensebuttons.net/l/by/4.0/88x31.png)](https://creativecommons.org/licenses/by/4.0/)

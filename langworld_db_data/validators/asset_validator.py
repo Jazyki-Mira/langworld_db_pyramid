@@ -1,8 +1,12 @@
 from collections import Counter
 from pathlib import Path
 
+from tinybear.csv_xls import (
+    read_dicts_from_csv,
+    read_plain_rows_from_csv,
+)
+
 from langworld_db_data.constants.paths import ASSETS_DIR, FILE_WITH_DOCULECTS
-from langworld_db_data.filetools.csv_xls import read_dicts_from_csv, read_plain_rows_from_csv
 from langworld_db_data.validators.validator import Validator, ValidatorError
 
 
@@ -64,4 +68,4 @@ class AssetValidator(Validator):
 
 
 if __name__ == "__main__":
-    AssetValidator().validate()
+    AssetValidator().validate()  # pragma: no cover
