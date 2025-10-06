@@ -1,11 +1,11 @@
 from collections.abc import Iterable
 from typing import Any
 
+from langworld_db_data.constants.literals import ID_SEPARATOR
 from pyramid.request import Request
 from pyramid.view import view_config
 from sqlalchemy import select
 
-from langworld_db_data.constants.literals import ID_SEPARATOR
 from langworld_db_pyramid import models
 from langworld_db_pyramid.dbutils.query_helpers import get_all
 from langworld_db_pyramid.locale.in_code_translation_strings import (
