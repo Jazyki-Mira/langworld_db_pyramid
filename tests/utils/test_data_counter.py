@@ -1,8 +1,9 @@
 from pathlib import Path
 from typing import Dict, Set, Tuple
 
+from tinybear.csv_xls import read_dicts_from_csv
+
 from langworld_db_data.constants.literals import ATOMIC_VALUE_SEPARATOR
-from langworld_db_data.tools.files.csv_xls import read_dicts_from_csv
 from langworld_db_pyramid import models
 
 

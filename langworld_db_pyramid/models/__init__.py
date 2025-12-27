@@ -7,7 +7,10 @@ from sqlalchemy.orm import configure_mappers, sessionmaker
 from langworld_db_pyramid.models.association_tables import (
     DoculectToFeatureValue,
     DoculectToGlottocode,
+    DoculectToGrambankCode,
     DoculectToIso639P3Code,
+    DoculectToPhoibleCode,
+    DoculectToWalsCode,
 )
 from langworld_db_pyramid.models.country import Country
 from langworld_db_pyramid.models.doculect import Doculect
@@ -21,14 +24,18 @@ from langworld_db_pyramid.models.feature_category import FeatureCategory
 from langworld_db_pyramid.models.feature_value import FeatureValue
 from langworld_db_pyramid.models.feature_value_type import FeatureValueType
 from langworld_db_pyramid.models.glottocode import Glottocode
+from langworld_db_pyramid.models.grambank_code import GrambankCode
 from langworld_db_pyramid.models.iso_639p3_code import Iso639P3Code
+from langworld_db_pyramid.models.phoible_code import PhoibleCode
 from langworld_db_pyramid.models.wals_code import WalsCode
 
 # for mypy
 __all__ = [
     "DoculectToFeatureValue",
     "DoculectToGlottocode",
+    "DoculectToGrambankCode",
     "DoculectToIso639P3Code",
+    "DoculectToPhoibleCode",
     "DoculectToWalsCode",
     "Country",
     "Doculect",
@@ -42,7 +49,9 @@ __all__ = [
     "FeatureValue",
     "FeatureValueType",
     "Glottocode",
+    "GrambankCode",
     "Iso639P3Code",
+    "PhoibleCode",
     "WalsCode",
 ]
 
