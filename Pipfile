@@ -40,7 +40,6 @@ pytest = "~=8.3.5"
 pytest-cov = "~=6.0.0"
 WebTest = "~=3.0.0"
 black = "*"
-isort = "*"
 ruff = "*"
 pre-commit = "*"
 
