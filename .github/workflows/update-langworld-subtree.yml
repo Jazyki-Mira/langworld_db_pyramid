@@ -17,17 +17,19 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Subtree pull and push (only if changed)
+      - name: Subtree pull and push (if new commit created)
         env:
           DATA_REPO_URL: https://github.com/Jazyki-Mira/langworld_db_data.git
           DATA_BRANCH: master
           PREFIX: langworld_db_data
         run: |
+          before="$(git rev-parse HEAD)"
           git subtree pull --prefix "$PREFIX" "$DATA_REPO_URL" "$DATA_BRANCH" --squash
-          if git diff --quiet; then
-            echo "No changes after subtree pull; nothing to commit."
+          after="$(git rev-parse HEAD)"
+      
+          if [ "$before" = "$after" ]; then
+            echo "No new subtree commit created; nothing to push."
             exit 0
           fi
-          git add "$PREFIX"
-          git commit -m "chore(data): subtree update from ${{ github.event.client_payload.sha }}"
+          
           git push
