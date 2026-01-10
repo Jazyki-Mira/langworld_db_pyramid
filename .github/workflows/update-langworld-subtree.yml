@@ -24,7 +24,11 @@ jobs:
           PREFIX: langworld_db_data
         run: |
           before="$(git rev-parse HEAD)"
-          git subtree pull --prefix "$PREFIX" "$DATA_REPO_URL" "$DATA_BRANCH" --squash
+          git subtree pull \
+            --prefix "$PREFIX" \
+            "$DATA_REPO_URL" "$DATA_BRANCH" \
+            --squash \
+            --message "chore(data): subtree update from ${{ github.event.client_payload.sha }}"
           after="$(git rev-parse HEAD)"
       
           if [ "$before" = "$after" ]; then
