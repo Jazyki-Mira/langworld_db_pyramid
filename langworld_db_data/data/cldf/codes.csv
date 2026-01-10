@@ -101,7 +101,7 @@ A-19-5,A-19,Retroflex,,Ретрофлексные
 A-19-6,A-19,Dental and alveolar,,Дентальные и альвеолярные
 A-19-7,A-19,Dental and interdental,,Дентальные и интердентальные
 A-19-8,A-19,Dental and retroflex,,Дентальные и ретрофлексные
-A-19-9,A-19,Dental and postlaveolar,,Дентальные и постальвеолярные
+A-19-9,A-19,Dental and postalveolar,,Дентальные и постальвеолярные
 A-19-10,A-19,Dental and alveopalatal,,Дентальные и альвео-палатальные
 A-19-11,A-19,"Dental, interdental and alveolar",,"Дентальные, интердентальные и альвеолярные"
 A-19-12,A-19,"Dental, interdental and retroflex",,"Дентальные, интердентальные и ретрофлексные"
@@ -336,7 +336,7 @@ C-1-4,C-1,Both null and non-null onset possible,,Есть прикрытые и 
 C-2-1,C-2,Only null coda possible,,Запрещен
 C-2-2,C-2,Most syllables have a non-null coda,,Большинство слогов закрытые
 C-2-3,C-2,Most syllables have a null coda,,Большинство слогов открытые
-C-2-4,C-2,Both null and non-null ocoda possible,,Есть закрытые и открытые слоги
+C-2-4,C-2,Both null and non-null coda possible,,Есть закрытые и открытые слоги
 C-3-1,C-3,Consonant clusters are absent,,Стечения согласных не встречаются
 C-3-2,C-3,Consonant clusters are only possible at the onset of syllable,,Стечения согласных возможны только в начале слога
 C-3-3,C-3,Consonant clusters are only possible at the coda of syllable,,Стечения согласных возможны только в конце слога
