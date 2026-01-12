@@ -2,6 +2,9 @@
 
 # pulls project from repository, re-populates the database, re-compiles localization message catalog
 
+# strict mode: make sure errors don't pass silently
+set -euo pipefail
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd ${SCRIPT_DIR}/../
 
