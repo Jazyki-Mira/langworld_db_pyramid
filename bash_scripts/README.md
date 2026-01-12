@@ -8,3 +8,11 @@
 
 ## For running on the web server
 - [`server_side_sample.sh`](server_side_sample.sh) pulls `langworld_db_pyramid` from GitHub, populates the SQL database, compiles `Babel` message catalog for i18n. **This script is a sample** - copy it to `server_side.sh` and modify it to fit particular requirements of your server. For example, PythonAnywhere may not support pipenv and you will need to modify the script to temporarily create requirements.txt file and use `pip` instead of `pipenv`.
+
+If you're using PythonAnywhere: to schedule daily running of the script, go to Tasks tab and create a task with the absolute path to the server-side script.
+
+Get the absolute path by changing into the directory with the scripts and running:
+
+```bash
+realpath server_side.sh
+```
