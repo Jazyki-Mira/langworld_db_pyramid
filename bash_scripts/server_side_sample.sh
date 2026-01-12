@@ -11,3 +11,8 @@ git merge origin/master
 pipenv install
 
 ${SCRIPT_DIR}/init_compile.sh
+
+# For PythonAnywhere: touching WSGI file is equivalent to clicking "Reload Web App" button
+# https://help.pythonanywhere.com/pages/ReloadWebApp/
+# Replace with actual path to WSGI file
+touch /var/www/<file_name_wsgi>.py
