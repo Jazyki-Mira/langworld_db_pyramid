@@ -11,6 +11,7 @@ cd ${SCRIPT_DIR}/../
 git fetch origin
 git reset --hard origin/master
 
+pip install pipenv
 pipenv install
 
 ${SCRIPT_DIR}/init_compile.sh
