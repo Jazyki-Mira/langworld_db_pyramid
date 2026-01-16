@@ -34,6 +34,8 @@ Copy `.ini` files from [`/config/default/`](config/default) to [`/config/`](conf
 One thing that is missing there and **must** be entered is a [MapBox](https://www.mapbox.com/) token 
 (`mapbox_access_token` key in `[app:main]` section).
 
+> Make sure you enable requests coming from URL of your deployed site in [MapBox token settings](https://console.mapbox.com/account/access-tokens).
+
 No `.ini` files in [`/config/`](config) directory will be checked into VCS
 (as per [`.gitignore`](.gitignore)).
 
