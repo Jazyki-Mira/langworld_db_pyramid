@@ -2,9 +2,9 @@ from pyramid.config import Configurator
 
 
 def includeme(config: Configurator) -> None:
-    config.add_static_view("css", "static/css", cache_max_age=3600)
-    config.add_static_view("img", "static/images", cache_max_age=3600)
-    config.add_static_view("scripts", "static/js", cache_max_age=3600)
+    config.add_static_view("css", "langworld_db_pyramid:static/css", cache_max_age=3600)
+    config.add_static_view("img", "langworld_db_pyramid:static/images", cache_max_age=3600)
+    config.add_static_view("scripts", "langworld_db_pyramid:static/js", cache_max_age=3600)
     add_routes_for_page_views_with_i18n(config)
     config.add_route("home_empty", "/")  # '/' and '/home' will lead to the same page
 
