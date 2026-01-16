@@ -1,0 +1,30 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TIMEWEB_HOST }}
+          username: mitya
+          key: ${{ secrets.TIMEWEB_SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd /home/mitya/langworld_db_pyramid
+            
+            # BOOTSTRAP: Update the code to the latest version
+            git fetch origin master
+            git reset --hard origin/master
+            
+            # Make sure the script is executable
+            chmod +x bash_scripts/server_side.sh
+            
+            # Execute the (now updated) script
+            ./bash_scripts/server_side.sh
