@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.TIMEWEB_SSH_PRIVATE_KEY }}
           script: |
             set -e
-            cd /home/mitya/langworld_db_pyramid
+            cd /home/${{ secrets.TIMEWEB_LOGIN }}/langworld_db_pyramid
             
             # BOOTSTRAP: Update the code to the latest version
             git fetch origin master
