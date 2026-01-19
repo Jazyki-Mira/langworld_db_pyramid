@@ -13,7 +13,7 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.TIMEWEB_HOST }}
-          username: mitya
+          username: ${{ secrets.TIMEWEB_LOGIN }}
           key: ${{ secrets.TIMEWEB_SSH_PRIVATE_KEY }}
           script: |
             set -e
@@ -24,7 +24,7 @@ jobs:
             git reset --hard origin/master
             
             # Make sure the script is executable
-            chmod +x bash_scripts/server_side.sh
+            chmod +x ${{ secrets.TIMEWEB_RELPATH_TO_SCRIPT }}
             
             # Execute the (now updated) script
-            ./bash_scripts/server_side.sh
+            ./${{ secrets.TIMEWEB_RELPATH_TO_SCRIPT }}
