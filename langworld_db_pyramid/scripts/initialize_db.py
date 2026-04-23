@@ -49,6 +49,7 @@ class CustomModelInitializer:
             models.association_tables.DoculectToIso639P3Code,
             models.association_tables.DoculectToWalsCode,
             models.association_tables.DoculectToGrambankCode,
+            models.association_tables.DoculectToPhoibleCode,
             models.association_tables.EncyclopediaMapToDoculect,
             models.association_tables.FeatureValueCompoundToElement,
             models.Doculect,
@@ -64,6 +65,7 @@ class CustomModelInitializer:
             models.FeatureCategory,
             models.Glottocode,
             models.Iso639P3Code,
+            models.PhoibleCode,
         )
 
         self.dbsession = dbsession
