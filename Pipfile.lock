@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6ef45bd9807c6781059069db3f4ae0a87463a531494e953a9f2514092babb4e3"
+            "sha256": "9234288284d99a03974f17b01c1f4abc7a211892c5e4343f87ebf49d2e08ac97"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -1824,11 +1824,11 @@
         },
         "asttokens": {
             "hashes": [
-                "sha256:0dcd8baa8d62b0c1d118b399b2ddba3c4aff271d0d7a9e0d4c1681c79035bbc7",
-                "sha256:e3078351a059199dd5138cb1c706e6430c05eff2ff136af5eb4790f9d28932e2"
+                "sha256:15a3ebc0f43c2d0a50eeafea25e19046c68398e487b9f1f5b517f7c0f40f976a",
+                "sha256:71a4ee5de0bde6a31d64f6b13f2293ac190344478f081c3d1bccfcf5eacb0cb7"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==3.0.0"
+            "version": "==3.0.1"
         },
         "beautifulsoup4": {
             "hashes": [
@@ -2179,11 +2179,11 @@
         },
         "icecream": {
             "hashes": [
-                "sha256:10b1c39dcb54cb28eb487bac56c35dbf9c2b2f406d24340e1a615c3f17274852",
-                "sha256:37269bbc62b02f0d85bfaf3a0eb4df272c967fad059f7ddcdaee5303ea2b2a62"
+                "sha256:9d7f244187f00a13f4ac77d176990e187e9c279d6cac4f7548e338291ad97343",
+                "sha256:f8df7343b3e787023eec22f42fbe4722df2f93099d394fd820b91e16b2e6cb56"
             ],
             "index": "pypi",
-            "version": "==2.1.8"
+            "version": "==2.2.0"
         },
         "identify": {
             "hashes": [
