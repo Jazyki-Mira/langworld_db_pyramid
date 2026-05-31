@@ -95,6 +95,8 @@ pserve config/development.ini --reload
 ```bash
 pytest --cov
 ```
+(works only if the project was installed in development mode)
+
 
 ## Deployment to VPS
 
@@ -369,5 +371,3 @@ Once configured, every push to the `master` branch will:
 
 No manual intervention required.
 
-```
-(works only if the project was installed in development mode)
