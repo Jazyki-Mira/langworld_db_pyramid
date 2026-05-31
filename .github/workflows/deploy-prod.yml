@@ -25,7 +25,8 @@ jobs:
             git reset --hard origin/master
             
             # Make sure the script is executable
-            chmod +x ${{ secrets.VPS_RELPATH_TO_SCRIPT }}
+            # NOTE: this assumes the script was copied from server_side_sample.sh and modified accordingly
+            chmod +x bash_scripts/server_side.sh
             
             # Execute the (now updated) script
-            ./${{ secrets.VPS_RELPATH_TO_SCRIPT }}
+            ./bash_scripts/server_side.sh
