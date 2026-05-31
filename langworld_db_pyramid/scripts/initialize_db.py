@@ -471,7 +471,23 @@ class CustomModelInitializer:
                     for element in value.elements:
                         doculect.feature_values.append(element)
 
-                    # 2. Processing comment
+                        # comment and page numbers have to be processed for each element, 
+                        # otherwise lookup won't succeed when rendering individual elements of compound value
+                        if (
+                            feature_profile_row["comment_ru"]
+                            or feature_profile_row["comment_en"]
+                            or feature_profile_row["page_numbers"]
+                        ):
+                            models.DoculectFeatureValueInfo(
+                                doculect=doculect,
+                                feature_value=element,
+                                page_numbers=feature_profile_row["page_numbers"],
+                                text_en=feature_profile_row["comment_en"],
+                                text_ru=feature_profile_row["comment_ru"],
+                            )
+
+                    # 2. Processing comment and page numbers
+                    # (info also gets created for compound values, this is a known redundancy)
                     if (
                         feature_profile_row["comment_ru"]
                         or feature_profile_row["comment_en"]
