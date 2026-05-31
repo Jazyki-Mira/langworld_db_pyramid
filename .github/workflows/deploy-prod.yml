@@ -12,19 +12,20 @@ jobs:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.TIMEWEB_HOST }}
-          username: ${{ secrets.TIMEWEB_LOGIN }}
-          key: ${{ secrets.TIMEWEB_SSH_PRIVATE_KEY }}
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_LOGIN }}
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
           script: |
             set -e
-            cd /home/${{ secrets.TIMEWEB_LOGIN }}/langworld_db_pyramid
+            cd /home/${{ secrets.VPS_LOGIN }}/langworld_db_pyramid
             
             # BOOTSTRAP: Update the code to the latest version
             git fetch origin master
             git reset --hard origin/master
             
             # Make sure the script is executable
-            chmod +x ${{ secrets.TIMEWEB_RELPATH_TO_SCRIPT }}
+            chmod +x ${{ secrets.VPS_RELPATH_TO_SCRIPT }}
             
             # Execute the (now updated) script
-            ./${{ secrets.TIMEWEB_RELPATH_TO_SCRIPT }}
+            ./${{ secrets.VPS_RELPATH_TO_SCRIPT }}
