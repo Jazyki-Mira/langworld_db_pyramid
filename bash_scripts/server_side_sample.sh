@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# pulls project from repository, re-populates the database, re-compiles localization message catalog
+# Deployment script: pulls latest code, installs dependencies, compiles localization, restarts service
 
 # strict mode: make sure errors don't pass silently
 set -euo pipefail
@@ -16,7 +16,9 @@ pipenv install
 
 ${SCRIPT_DIR}/init_compile.sh
 
-# For PythonAnywhere: touching WSGI file is equivalent to clicking "Reload Web App" button
-# https://help.pythonanywhere.com/pages/ReloadWebApp/
-# Replace with actual path to WSGI file
-touch /var/www/<file_name_wsgi>.py
+# Restart the systemd service to apply changes
+# Note: assumes a systemd service called 'langworld.service' was created during VPS setup
+sudo systemctl restart langworld.service
+
+# Display service status to confirm successful restart
+sudo systemctl status langworld.service --no-pager
