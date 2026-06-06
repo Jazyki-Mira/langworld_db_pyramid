@@ -1,6 +1,7 @@
 {% extends "base_depth1_single_full_width.jinja2" %}
 {% set name_attr = "name_" + request.locale_name %}
 {% set aliases_attr = "aliases_" + request.locale_name %}
+{% set custom_title_attr = "custom_title_" + request.locale_name %}
 
 {% macro comment(value, add_parentheses_and_note=False) -%}
     {# comments are only available in Russian so far #}
@@ -27,7 +28,13 @@
 {%- endmacro %}
 
 
-{% block title %}{{ doculect[name_attr] }} {{ doculect.type[name_attr] }} {% if doculect.is_extinct %}†{% endif %}{% endblock title %}
+{% block title %}
+    {% if doculect[custom_title_attr] %}
+        {{ doculect[custom_title_attr] }}{% if doculect.is_extinct %}†{% endif %}
+    {% else %}
+        {{ doculect[name_attr] }} {{ doculect.type[name_attr] }}{% if doculect.is_extinct %}†{% endif %}
+    {% endif %}
+{% endblock title %}
 {% block h1 %}{{ self.title() }}{% endblock h1 %}
 
 {% block full_width %}
