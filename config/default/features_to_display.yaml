@@ -1,0 +1,11 @@
+# Sample configuration for selecting features to populate in the database.
+# Both a plain list of IDs and a dictionary with a 'features' key are supported.
+# You can initialize database without this list if you want to populate all features.
+# In such case, do NOT copy this file to config/ and remove --file-with-features flag 
+# from initialization commands in bash_scripts/init_compile.sh and bash_scripts/pull_data.sh.
+
+- A-1  # Number of degrees of vowel height
+- A-2  # Vowel height degrees
+- A-3  # Opposition in openness/closedness for vowel height degrees
+- A-4  # Degrees of vowel backness
+- A-5  # Presence of length degrees

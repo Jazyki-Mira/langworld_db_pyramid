@@ -7,7 +7,7 @@ echo "Applying alembic migrations (if any)"
 pipenv run alembic -c config/production.ini upgrade head
 
 echo "Re-populating the database"
-pipenv run initialize_langworld_db_pyramid_db config/production.ini
+pipenv run initialize_langworld_db_pyramid_db config/production.ini --features-file config/features_to_display.yaml
 
 echo "Compiling translated strings for internationalization"
 pipenv run pybabel compile --directory=langworld_db_pyramid/locale --locale=en

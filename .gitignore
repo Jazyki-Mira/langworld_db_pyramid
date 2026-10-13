@@ -25,4 +25,5 @@ test
 /testing.sqlite-journal
 .vscode/
 /config/*.ini
+/config/*.yaml
 /bash_scripts/server_side.sh

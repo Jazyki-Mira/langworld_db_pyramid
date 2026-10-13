@@ -1,8 +1,11 @@
 from pathlib import Path
 
+import yaml
 from sqlalchemy import select
 
 from langworld_db_pyramid import models
+from langworld_db_pyramid.scripts.initialize_db import CustomModelInitializer
+from tests.conftest import PATHS_FOR_DB_INITIALIZER
 
 from .utils.test_data_counter import TestDataCounter
 
@@ -172,6 +175,40 @@ class TestCustomModelInitializer:
         for model in test_db_initializer.ALL_MODELS:
             items = dbsession.scalars(select(model)).all()
             assert not items
+
+    def test_setup_models_with_feature_ids_filter(self, dbsession, tmp_path):
+        filter_file = tmp_path / "filter.yaml"
+        filter_file.write_text(yaml.dump(["A-1", "A-3"]))
+
+        initializer = CustomModelInitializer(
+            dbsession=dbsession,
+            file_with_feature_ids_filter=filter_file,
+            **PATHS_FOR_DB_INITIALIZER,
+        )
+        initializer.setup_models()
+
+        # Check features
+        features = dbsession.scalars(select(models.Feature)).all()
+        assert len(features) == 2
+        assert {f.man_id for f in features} == {"A-1", "A-3"}
+
+        # Check categories: only 'A' should be present
+        categories = dbsession.scalars(select(models.FeatureCategory)).all()
+        assert len(categories) == 1
+        assert categories[0].man_id == "A"
+
+        # Check listed values: all belong to A-1 or A-3
+        listed_values = dbsession.scalars(
+            select(models.FeatureValue).where(models.FeatureValue.type.has(name="listed"))
+        ).all()
+        for lv in listed_values:
+            assert lv.feature.man_id in {"A-1", "A-3"}
+
+        # Check doculect feature values: only values from A-1 or A-3
+        doculects = dbsession.scalars(select(models.Doculect)).all()
+        for doc in doculects:
+            for fv in doc.feature_values:
+                assert fv.feature.man_id in {"A-1", "A-3"}
 
 
 def test_initialize_db_with_real_data(dbsession):

@@ -4,14 +4,14 @@ from copy import copy
 from pathlib import Path
 from typing import Optional, Union, cast
 
+from langworld_db_data.constants import paths
+from langworld_db_data.constants.literals import ATOMIC_VALUE_SEPARATOR
 from pyramid.paster import bootstrap, setup_logging
 from sqlalchemy import delete
 from sqlalchemy.exc import OperationalError
 from tinybear.csv_xls import read_dicts_from_csv
 from tinybear.json_toml_yaml import read_json_toml_yaml
 
-from langworld_db_data.constants import paths
-from langworld_db_data.constants.literals import ATOMIC_VALUE_SEPARATOR
 from langworld_db_pyramid import models
 
 
@@ -27,7 +27,7 @@ class CustomModelInitializer:
     to create separate methods for separate tasks, and to enable testing.
     """
 
-    def __init__(  # type: ignore[no-untyped-def]  # noqa: PLR0913
+    def __init__(  # type: ignore[no-untyped-def]  # noqa: PLR0913, PLR0917
         self,
         dbsession,
         dir_with_feature_profiles: Path = paths.FEATURE_PROFILES_DIR,
@@ -42,6 +42,7 @@ class CustomModelInitializer:
         file_with_listed_values: Path = paths.FILE_WITH_LISTED_VALUES,
         file_with_names_of_features: Path = paths.FILE_WITH_NAMES_OF_FEATURES,
         file_with_value_types: Path = paths.FILE_WITH_VALUE_TYPES,
+        file_with_feature_ids_filter: Optional[Path] = None,
     ):
         self.ALL_MODELS = (
             models.association_tables.DoculectToFeatureValue,
@@ -81,6 +82,12 @@ class CustomModelInitializer:
         self.file_with_listed_values = file_with_listed_values
         self.file_with_names_of_features = file_with_names_of_features
         self.file_with_value_types = file_with_value_types
+        self.file_with_feature_ids_filter = file_with_feature_ids_filter
+        self.allowed_feature_ids: Optional[set[str]] = (
+            self._load_allowed_feature_ids(file_with_feature_ids_filter)
+            if file_with_feature_ids_filter is not None
+            else None
+        )
 
         self.genealogy_names_for_id = {
             row["id"]: {"en": row["en"], "ru": row["ru"]}
@@ -120,6 +127,20 @@ class CustomModelInitializer:
             ),
         }
 
+    @staticmethod
+    def _load_allowed_feature_ids(file_path: Path) -> set[str]:
+        data = read_json_toml_yaml(file_path)
+        if isinstance(data, list):
+            return {str(item) for item in data}
+        if isinstance(data, dict):
+            if "features" in data and isinstance(data["features"], list):
+                return {str(item) for item in data["features"]}
+            raise ValueError(
+                f"YAML file {file_path} must either be a list of feature IDs "
+                "or a mapping with a 'features' list key"
+            )
+        raise TypeError(f"Unexpected content type in {file_path}: {type(data)}")
+
     def setup_models(self) -> None:
         self._delete_all_data()
         self._populate_all()
@@ -147,7 +168,18 @@ class CustomModelInitializer:
         # Putting these in one method to emphasize tight coupling
         # between the three operations
 
+        feature_rows = read_dicts_from_csv(self.file_with_names_of_features)
+        if self.allowed_feature_ids is not None:
+            feature_rows = [
+                row for row in feature_rows if row["id"] in self.allowed_feature_ids
+            ]
+
+        # Only populate categories that are actually used by the features
+        used_category_ids = {row["id"].split("-")[0] for row in feature_rows}
+
         for category_row in read_dicts_from_csv(self.file_with_categories):
+            if category_row["id"] not in used_category_ids:
+                continue
             category = models.FeatureCategory(
                 man_id=category_row["id"],
                 name_en=category_row["en"],
@@ -164,7 +196,7 @@ class CustomModelInitializer:
             self.value_type_for_name[value_type_row["id"]] = value_type
             self.dbsession.add(value_type)
 
-        for feature_row in read_dicts_from_csv(self.file_with_names_of_features):
+        for feature_row in feature_rows:
             feature = models.Feature(
                 man_id=feature_row["id"],
                 name_en=feature_row["en"],
@@ -197,6 +229,11 @@ class CustomModelInitializer:
 
         # populating values of type 'listed': from file with listed values
         for value_row in read_dicts_from_csv(self.file_with_listed_values):
+            if (
+                self.allowed_feature_ids is not None
+                and value_row["feature_id"] not in self.allowed_feature_ids
+            ):
+                continue
             value = models.FeatureValue(
                 # This will be set to False later if there are no doculects. See comment in
                 # models/feature_value.py about conscious choice of this suboptimal algorithm
@@ -342,7 +379,7 @@ class CustomModelInitializer:
                     self.iso639p3code_for_id[item] = iso_code
                     self.dbsession.add(iso_code)
 
-    def _populate_doculects_compound_and_custom_feature_values_and_comments(
+    def _populate_doculects_compound_and_custom_feature_values_and_comments(  # noqa: PLR0912
         self,
     ) -> None:
         doculect_rows = read_dicts_from_csv(self.file_with_doculects)
@@ -463,6 +500,12 @@ class CustomModelInitializer:
                             )
                         continue
 
+                    if (
+                        self.allowed_feature_ids is not None
+                        and feature_profile_row["feature_id"] not in self.allowed_feature_ids
+                    ):
+                        continue
+
                     # 1. Processing value
                     value = self._process_value(feature_profile_row)
                     doculect.feature_values.append(value)
@@ -471,8 +514,9 @@ class CustomModelInitializer:
                     for element in value.elements:
                         doculect.feature_values.append(element)
 
-                        # comment and page numbers have to be processed for each element, 
-                        # otherwise lookup won't succeed when rendering individual elements of compound value
+                        # comment and page numbers have to be processed for each element,
+                        # otherwise lookup won't succeed when rendering individual
+                        # elements of compound value
                         if (
                             feature_profile_row["comment_ru"]
                             or feature_profile_row["comment_en"]
@@ -576,12 +620,18 @@ class CustomModelInitializer:
                 value.is_listed_and_has_doculects = False
 
 
-def setup_models(dbsession) -> None:  # type: ignore
+def setup_models(  # type: ignore
+    dbsession,
+    file_with_feature_ids_filter: Optional[Path] = None,
+) -> None:
     """
     Add or update models / fixtures in the database.
 
     """
-    CustomModelInitializer(dbsession).setup_models()
+    CustomModelInitializer(
+        dbsession,
+        file_with_feature_ids_filter=file_with_feature_ids_filter,
+    ).setup_models()
 
 
 def parse_args(argv):  # type: ignore
@@ -589,6 +639,13 @@ def parse_args(argv):  # type: ignore
     parser.add_argument(
         "config_uri",
         help="Configuration file, e.g., development.ini",
+    )
+    parser.add_argument(
+        "--features-file",
+        dest="file_with_feature_ids_filter",
+        type=Path,
+        default=None,
+        help="Path to YAML file specifying feature IDs to populate in the database",
     )
     return parser.parse_args(argv[1:])
 
@@ -602,7 +659,10 @@ def main(argv=sys.argv):  # type: ignore
     try:
         with env["request"].tm:
             dbsession = env["request"].dbsession
-            setup_models(dbsession)
+            setup_models(
+                dbsession,
+                file_with_feature_ids_filter=args.file_with_feature_ids_filter,
+            )
     except OperationalError as e:
         print(  # noqa: T201
             """

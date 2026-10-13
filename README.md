@@ -27,16 +27,18 @@ for this package are stored in a [separate directory](tests).
 git clone https://github.com/Jazyki-Mira/langworld_db_pyramid/; cd langworld_db_pyramid
 ```
 
-### Copy default [PasteDeploy](https://pastedeploy.readthedocs.io/en/latest/index.html) `.ini` files and edit them if necessary
+### Copy default configuration files and edit them if necessary
 
-Copy `.ini` files from [`/config/default/`](config/default) to [`/config/`](config). Edit if necessary (e.g. `sqlalchemy.url` for the database). 
+Copy `.ini` files and `features_to_display.yaml` from [`/config/default/`](config/default) to [`/config/`](config). Edit `.ini` files if necessary (e.g. `sqlalchemy.url` for the database).
 
-One thing that is missing there and **must** be entered is a [MapBox](https://www.mapbox.com/) token 
+In `features_to_display.yaml`, you can configure which features should be populated in the database (or omit `--features-file` when running the database initialization script to populate all features).
+
+One thing that is missing in `.ini` files and **must** be entered is a [MapBox](https://www.mapbox.com/) token 
 (`mapbox_access_token` key in `[app:main]` section).
 
 > Make sure you enable requests coming from URL of your deployed site in [MapBox token settings](https://console.mapbox.com/account/access-tokens).
 
-No `.ini` files in [`/config/`](config) directory will be checked into VCS
+No `.ini` or `.yaml` files in [`/config/`](config) directory will be checked into VCS
 (as per [`.gitignore`](.gitignore)).
 
 ### Create a virtual environment and install dependencies (from [`Pipfile`](Pipfile))
@@ -158,16 +160,16 @@ pip install pipenv
 pipenv install
 ```
 
-#### 2.3 Copy default [PasteDeploy](https://pastedeploy.readthedocs.io/en/latest/index.html) `.ini` files and edit `production.ini`
+#### 2.3 Copy default configuration files and edit `production.ini`
 
-Copy `production.ini` from [`/config/default/`](config/default) to [`/config/`](config). Edit if needed (e.g. `sqlalchemy.url` for the database). 
+Copy `production.ini` and `features_to_display.yaml` from [`/config/default/`](config/default) to [`/config/`](config). Edit if needed (e.g. `sqlalchemy.url` for the database). 
 
 One thing that is missing there and **must** be entered is a [MapBox](https://www.mapbox.com/) token 
 (`mapbox_access_token` key in `[app:main]` section).
 
 > Make sure you enable requests coming from URL of your deployed site in [MapBox token settings](https://console.mapbox.com/account/access-tokens).
 
-No `.ini` files in [`/config/`](config) directory will be checked into VCS
+No `.ini` or `.yaml` files in [`/config/`](config) directory will be checked into VCS
 (as per [`.gitignore`](.gitignore)).
 
 #### 2.4 Create deployment script
